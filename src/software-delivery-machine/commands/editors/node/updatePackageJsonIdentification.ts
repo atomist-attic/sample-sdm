@@ -16,7 +16,7 @@
 
 import { HandlerContext, logger } from "@atomist/automation-client";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
-import { PersonByChatId } from "../../../../typings/types";
+import { PersonByChatId } from "@atomist/sdm/typings/types";
 
 export function updatePackageJsonIdentification(appName: string,
                                                 description: string,
@@ -26,7 +26,6 @@ export function updatePackageJsonIdentification(appName: string,
     return async (project, context) => {
         const author = await nameAuthor(context, screenName);
         logger.info("Updating JSON. Author is " + author);
-
         return doWithJson(project, "package.json", pkg => {
             const repoUrl = `https://github.com/${target.owner}/${target.repo}`;
             pkg.name = appName;

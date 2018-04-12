@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
@@ -29,6 +28,7 @@ import {
     DefaultDockerImageNameCreator,
     executeDockerBuild,
 } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
+import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import {
     DockerBuildGoal,
     TagGoal,
@@ -40,12 +40,12 @@ import {
 } from "@atomist/sdm/common/delivery/goals/common/npmGoals";
 import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
+import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
+import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
 import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
-import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
-import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 
 /**
  * Configuration common to Node SDMs, wherever they deploy

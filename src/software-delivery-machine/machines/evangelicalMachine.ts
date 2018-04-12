@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
-import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
@@ -27,6 +25,8 @@ import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
+import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../blueprint/deploy/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";

@@ -16,8 +16,8 @@
 
 import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { MavenFingerprinter } from "@atomist/sdm/common/delivery/code/fingerprint/maven/MavenFingerprinter";
-import { addCheckstyleSupport, CheckstyleSupportOptions } from "./checkstyleSupport";
 import { AddAtomistJavaHeader } from "../../blueprint/code/autofix/addAtomistHeader";
+import { addCheckstyleSupport, CheckstyleSupportOptions } from "./checkstyleSupport";
 
 export type JavaSupportOptions = CheckstyleSupportOptions;
 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
@@ -22,10 +21,11 @@ import { LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal } from "@
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
-import { mavenSourceDeployer } from "@atomist/sdm/common/deploy/localSpringBootDeployOnSuccessStatus";
+import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
+import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployOnSuccessStatus";
 
 /**
  * Configuration common to Spring SDMs, wherever they deploy

@@ -30,6 +30,7 @@ import {
 } from "@atomist/sdm/common/delivery/build/local/npm/npmBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
+import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import {
     AutofixGoal,
     NoGoals,
@@ -91,7 +92,6 @@ import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootD
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import {
     addJavaSupport,
     JavaSupportOptions,

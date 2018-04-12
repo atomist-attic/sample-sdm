@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import axios from "axios";
 import {
     AutofixRegistration,
     editorAutofixRegistration,
 } from "@atomist/sdm/common/delivery/code/autofix/AutofixRegistration";
 import { hasFile } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
+import axios from "axios";
 
 export const LicenseFilename = "LICENSE";
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import * as assert from "power-assert";
 import {
     JavaIdentifierRegExp,
     JavaPackageRegExp,
     MavenGroupIdRegExp,
 } from "@atomist/sdm/common/command/javaPatterns";
+import * as assert from "power-assert";
 
 describe("javaPatterns", () => {
 

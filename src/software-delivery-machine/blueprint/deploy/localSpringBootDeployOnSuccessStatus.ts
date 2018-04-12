@@ -15,6 +15,8 @@
  */
 
 import { logger } from "@atomist/automation-client";
+import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
+import { Deployer } from "@atomist/sdm//spi/deploy/Deployer";
 import { FunctionalUnit } from "@atomist/sdm/blueprint/FunctionalUnit";
 import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
 import {
@@ -31,8 +33,6 @@ import {
     StagingUndeploymentGoal,
 } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
-import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
-import { Deployer } from "@atomist/sdm//spi/deploy/Deployer";
 import { DefaultArtifactStore } from "../artifactStore";
 
 export const LocalExecutableJarDeployer: Deployer<ManagedDeploymentTargetInfo> = executableJarDeployer({

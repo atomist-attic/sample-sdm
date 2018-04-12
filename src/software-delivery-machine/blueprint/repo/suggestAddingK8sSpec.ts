@@ -15,8 +15,8 @@
  */
 
 import { buttonForCommand } from "@atomist/automation-client/spi/message/MessageClient";
-import * as slack from "@atomist/slack-messages/SlackMessages";
 import { ChannelLinkListener } from "@atomist/sdm/common/listener/ChannelLinkListenerInvocation";
+import * as slack from "@atomist/slack-messages/SlackMessages";
 import { AddK8sSpecCommandName } from "../../commands/editors/k8s/addK8sSpec";
 
 /**

@@ -18,7 +18,7 @@ import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoI
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 
 import * as assert from "power-assert";
-import { CloudFoundryManifestPath } from "../../../../src/common/delivery/deploy/pcf/CloudFoundryTarget";
+import { CloudFoundryManifestPath } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
 import {
     addCloudFoundryManifestEditor, AtomistConfigTsPath,
     StartAutomationClientCommand,

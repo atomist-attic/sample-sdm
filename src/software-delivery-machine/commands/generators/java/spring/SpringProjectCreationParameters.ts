@@ -16,8 +16,8 @@
 
 import { Parameter } from "@atomist/automation-client";
 import { GitHubNameRegExp } from "@atomist/automation-client/operations/common/params/gitHubPatterns";
-import { camelize } from "tslint/lib/utils";
 import { JavaIdentifierRegExp } from "@atomist/sdm/common/command/javaPatterns";
+import { camelize } from "tslint/lib/utils";
 import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
 import { JavaProjectCreationParameters } from "../JavaProjectCreationParameters";
 

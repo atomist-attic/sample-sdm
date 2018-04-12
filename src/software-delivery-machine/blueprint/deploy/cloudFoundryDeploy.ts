@@ -27,8 +27,8 @@ import {
 } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { CodeReactionListener } from "@atomist/sdm/common/listener/CodeReactionListener";
 import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
-import { setDeployEnablement } from "../../../handlers/commands/SetDeployEnablement";
-import { ArtifactStore } from "../../../spi/artifact/ArtifactStore";
+import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "../../commands/editors/pcf/addCloudFoundryManifest";
 
 export const CloudFoundryStagingTarget = new EnvironmentCloudFoundryTarget("staging");

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import * as assert from "power-assert";
 import { HttpServiceGoals } from "@atomist/sdm/common/delivery/goals/common/httpServiceGoals";
 import { goalsToDot } from "@atomist/sdm/common/delivery/goals/graph/graphGoalsToSlack";
+import * as assert from "power-assert";
 
 const DesiredDot = `digraph HTTP_Service {
     fontname="Arial";

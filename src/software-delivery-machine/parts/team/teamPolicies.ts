@@ -17,12 +17,12 @@
 import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { GraphGoalsToSlack } from "@atomist/sdm/common/delivery/goals/graph/graphGoalsToSlack";
 import { OnDryRunBuildComplete } from "@atomist/sdm/handlers/events/dry-run/OnDryRunBuildComplete";
-import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
+import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
-import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
+import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 
 /**
  * Set up team policies
@@ -38,7 +38,7 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         )
         .addNewRepoWithCodeActions(
             PublishNewRepo)
-        //.addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
+        // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListeners(PostToDeploymentsChannel)
         .addSupportingEvents(OnDryRunBuildComplete);
     // .addFingerprintDifferenceListeners(diff1)

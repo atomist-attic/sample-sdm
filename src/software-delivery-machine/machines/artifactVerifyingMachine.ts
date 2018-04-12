@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import * as fs from "fs";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
@@ -24,6 +23,7 @@ import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
+import * as fs from "fs";
 import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 

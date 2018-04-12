@@ -18,6 +18,7 @@ import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { K8sAutomationBuilder } from "@atomist/sdm/common/delivery/build/k8s/K8AutomationBuilder";
+import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import { NoGoals, ProductionDeploymentGoal, StagingDeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { HttpServiceGoals, LocalDeploymentGoals } from "@atomist/sdm/common/delivery/goals/common/httpServiceGoals";
 import { LibraryGoals } from "@atomist/sdm/common/delivery/goals/common/libraryGoals";
@@ -37,7 +38,6 @@ import { K8sProductionDomain, K8sTestingDomain, NoticeK8sProdDeployCompletion, N
 import { SuggestAddingK8sSpec } from "../blueprint/repo/suggestAddingK8sSpec";
 import { addK8sSpec } from "../commands/editors/k8s/addK8sSpec";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import { addJavaSupport, JavaSupportOptions } from "../parts/stacks/javaSupport";
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
