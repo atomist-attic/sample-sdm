@@ -1,6 +1,0 @@
-query SCMProvider($providerId: String!) {
-  SCMProvider(providerId: $providerId) {
-    providerId
-    apiUrl
-  }
-}

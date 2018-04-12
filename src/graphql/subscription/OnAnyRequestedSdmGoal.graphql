@@ -1,6 +1,0 @@
-subscription OnAnyRequestedSdmGoal {
-  SdmGoal(state: ["requested"]) {
-    ...SdmGoalFields
-    ...SdmGoalRepo
-  }
-}
