@@ -28,7 +28,6 @@ import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/d
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { MaterialChangeToJavaRepo } from "@atomist/sdm/common/listener/support/pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "@atomist/sdm/common/listener/support/pushtest/jvm/springPushTests";
-import { HasK8Spec } from "@atomist/sdm/common/listener/support/pushtest/k8s/k8sSpecPushTest";
 import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
@@ -42,6 +41,7 @@ import { addJavaSupport, JavaSupportOptions } from "../parts/stacks/javaSupport"
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 
 export type K8sMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 
