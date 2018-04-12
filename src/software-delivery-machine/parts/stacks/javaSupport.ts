@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "../../../blueprint/SoftwareDeliveryMachine";
-import { MavenFingerprinter } from "../../../common/delivery/code/fingerprint/maven/MavenFingerprinter";
-import { AddAtomistJavaHeader } from "../../blueprint/code/autofix/addAtomistHeader";
+import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { MavenFingerprinter } from "@atomist/sdm/common/delivery/code/fingerprint/maven/MavenFingerprinter";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "./checkstyleSupport";
+import { AddAtomistJavaHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 
 export type JavaSupportOptions = CheckstyleSupportOptions;
 

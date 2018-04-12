@@ -16,10 +16,10 @@
 
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "../../blueprint/SoftwareDeliveryMachine";
-import { EphemeralLocalArtifactStore } from "../../common/artifact/local/EphemeralLocalArtifactStore";
-import { tagRepo } from "../../common/listener/support/tagRepo";
-import { CachingProjectLoader } from "../../common/repo/CachingProjectLoader";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { EphemeralLocalArtifactStore } from "@atomist/sdm/common/artifact/local/EphemeralLocalArtifactStore";
+import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
 import { springBootGenerator } from "../commands/generators/java/spring/springBootGenerator";
 import { nodeGenerator } from "../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig, CommonJavaGeneratorConfig } from "./generatorConfig";

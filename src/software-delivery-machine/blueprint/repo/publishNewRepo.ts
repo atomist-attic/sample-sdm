@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ListenerInvocation, SdmListener } from "../../../common/listener/Listener";
+import { ListenerInvocation, SdmListener } from "@atomist/sdm/common/listener/Listener";
 
 /**
  * Send a message to the #general channel in the current

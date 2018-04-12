@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-export interface DockerOptions {
-    registry: string;
-    user: string;
-    password: string;
-}
+import { PredicatePushTest, predicatePushTest } from "@atomist/sdm/common/listener/PushTest";
+import { AtomistK8sSpecFile } from "./addK8sSpec";
+
+export const HasK8Spec: PredicatePushTest = predicatePushTest(
+    "Has K8Spec",
+    async p => !!(await p.getFile(AtomistK8sSpecFile)),
+);

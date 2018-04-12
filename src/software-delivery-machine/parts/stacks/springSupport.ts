@@ -15,14 +15,14 @@
  */
 
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
-import * as deploy from "../../../blueprint/dsl/deployDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "../../../blueprint/SoftwareDeliveryMachine";
-import { ManagedDeploymentTargeter } from "../../../common/delivery/deploy/local/appManagement";
-import { LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal } from "../../../common/delivery/goals/common/commonGoals";
-import { IsMaven } from "../../../common/listener/support/pushtest/jvm/jvmPushTests";
-import { tagRepo } from "../../../common/listener/support/tagRepo";
-import { listLocalDeploys } from "../../../handlers/commands/listLocalDeploys";
-import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployOnSuccessStatus";
+import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
+import { LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
+import { mavenSourceDeployer } from "@atomist/sdm/common/deploy/localSpringBootDeployOnSuccessStatus";
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";

@@ -18,34 +18,34 @@ import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
-} from "../../../blueprint/SoftwareDeliveryMachine";
-import { executeTag } from "../../../common/delivery/build/executeTag";
-import { NodeProjectVersioner } from "../../../common/delivery/build/local/npm/nodeProjectVersioner";
+} from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { executeTag } from "@atomist/sdm/common/delivery/build/executeTag";
+import { NodeProjectVersioner } from "@atomist/sdm/common/delivery/build/local/npm/nodeProjectVersioner";
 import {
     executeVersioner,
-} from "../../../common/delivery/build/local/projectVersioner";
-import { tslintFix } from "../../../common/delivery/code/autofix/node/tslint";
+} from "@atomist/sdm/common/delivery/build/local/projectVersioner";
+import { tslintFix } from "@atomist/sdm/common/delivery/code/autofix/node/tslint";
 import {
     DefaultDockerImageNameCreator,
     executeDockerBuild,
-} from "../../../common/delivery/docker/executeDockerBuild";
+} from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import {
     DockerBuildGoal,
     TagGoal,
     VersionGoal,
-} from "../../../common/delivery/goals/common/commonGoals";
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import {
     ProductionDockerDeploymentGoal,
     StagingDockerDeploymentGoal,
-} from "../../../common/delivery/goals/common/npmGoals";
-import { IsNode } from "../../../common/listener/support/pushtest/node/nodePushTests";
-import { tagRepo } from "../../../common/listener/support/tagRepo";
-import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
-import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
+} from "@atomist/sdm/common/delivery/goals/common/npmGoals";
+import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
+import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
-import { DockerOptions } from "./dockerSupport";
+import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
+import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
+import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 
 /**
  * Configuration common to Node SDMs, wherever they deploy

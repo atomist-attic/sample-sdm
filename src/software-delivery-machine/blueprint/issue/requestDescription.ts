@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NewIssueInvocation } from "../../../common/listener/NewIssueListener";
+import { NewIssueInvocation } from "@atomist/sdm/common/listener/NewIssueListener";
 
 export async function requestDescription(inv: NewIssueInvocation) {
     if (!inv.issue.body || inv.issue.body.length < 10) {

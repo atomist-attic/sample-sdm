@@ -17,14 +17,14 @@
 import {
     AutofixRegistration,
     editorAutofixRegistration,
-} from "../../../../common/delivery/code/autofix/AutofixRegistration";
-import { PushTest } from "../../../../common/listener/PushTest";
-import { hasFileContaining } from "../../../../common/listener/support/pushtest/commonPushTests";
-import { IsJava } from "../../../../common/listener/support/pushtest/jvm/jvmPushTests";
-import { IsTypeScript } from "../../../../common/listener/support/pushtest/node/tsPushTests";
-import { allSatisfied } from "../../../../common/listener/support/pushtest/pushTestUtils";
-import { AddHeaderParameters, addHeaderProjectEditor } from "../../../commands/editors/license/addHeader";
+} from "@atomist/sdm/common/delivery/code/autofix/AutofixRegistration";
+import { PushTest } from "@atomist/sdm/common/listener/PushTest";
+import { hasFileContaining } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
+import { IsJava } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { IsTypeScript } from "@atomist/sdm/common/listener/support/pushtest/node/tsPushTests";
+import { allSatisfied } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
 import { LicenseFilename } from "./addLicenseFile";
+import { AddHeaderParameters, addHeaderProjectEditor } from "../../../commands/editors/license/addHeader";
 
 export const AddAtomistJavaHeader: AutofixRegistration = addAtomistHeader("Java header", "**/*.java", IsJava);
 

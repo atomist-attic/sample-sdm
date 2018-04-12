@@ -19,7 +19,7 @@ import {
     JavaIdentifierRegExp,
     JavaPackageRegExp,
     MavenGroupIdRegExp,
-} from "../../../../src/common/command/javaPatterns";
+} from "@atomist/sdm/common/command/javaPatterns";
 
 describe("javaPatterns", () => {
 

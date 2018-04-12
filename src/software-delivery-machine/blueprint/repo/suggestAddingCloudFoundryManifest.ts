@@ -17,12 +17,12 @@
 import { logger } from "@atomist/automation-client";
 import { buttonForCommand } from "@atomist/automation-client/spi/message/MessageClient";
 import * as slack from "@atomist/slack-messages/SlackMessages";
-import { ChannelLinkListener } from "../../../common/listener/ChannelLinkListenerInvocation";
-import { ProjectPredicate } from "../../../common/listener/PushTest";
-import { IsMaven } from "../../../common/listener/support/pushtest/jvm/jvmPushTests";
-import { HasSpringBootApplicationClass } from "../../../common/listener/support/pushtest/jvm/springPushTests";
-import { IsNode } from "../../../common/listener/support/pushtest/node/nodePushTests";
-import { allPredicatesSatisfied, anyPredicateSatisfied } from "../../../common/listener/support/pushtest/projectPredicateUtils";
+import { ChannelLinkListener } from "@atomist/sdm/common/listener/ChannelLinkListenerInvocation";
+import { ProjectPredicate } from "@atomist/sdm/common/listener/PushTest";
+import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { HasSpringBootApplicationClass } from "@atomist/sdm/common/listener/support/pushtest/jvm/springPushTests";
+import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
+import { allPredicatesSatisfied, anyPredicateSatisfied } from "@atomist/sdm/common/listener/support/pushtest/projectPredicateUtils";
 import { AddCloudFoundryManifestCommandName } from "../../commands/editors/pcf/addCloudFoundryManifest";
 
 /**

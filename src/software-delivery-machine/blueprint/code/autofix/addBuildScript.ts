@@ -21,8 +21,8 @@ import * as _ from "lodash";
 import {
     AutofixRegistration,
     editorAutofixRegistration,
-} from "../../../../common/delivery/code/autofix/AutofixRegistration";
-import { IsNode } from "../../../../common/listener/support/pushtest/node/nodePushTests";
+} from "@atomist/sdm/common/delivery/code/autofix/AutofixRegistration";
+import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 
 export const AddBuildScript: AutofixRegistration = editorAutofixRegistration({
     name: "Make sure there is a build script",

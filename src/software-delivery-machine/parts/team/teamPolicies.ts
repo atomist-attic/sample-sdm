@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "../../../blueprint/SoftwareDeliveryMachine";
-import { GraphGoalsToSlack } from "../../../common/delivery/goals/graph/graphGoalsToSlack";
-import { OnDryRunBuildComplete } from "../../../handlers/events/dry-run/OnDryRunBuildComplete";
-import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
+import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { GraphGoalsToSlack } from "@atomist/sdm/common/delivery/goals/graph/graphGoalsToSlack";
+import { OnDryRunBuildComplete } from "@atomist/sdm/handlers/events/dry-run/OnDryRunBuildComplete";
+import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
-import { NoPushToDefaultBranchWithoutPullRequest } from "../../blueprint/repo/noPushToDefaultBranchWithoutPullRequest";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
-import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
+import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 
 /**
  * Set up team policies

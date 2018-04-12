@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { CodeActionRegistration } from "../../../common/delivery/code/CodeActionRegistration";
-import { DeploySpec } from "../../../common/delivery/deploy/executeDeploy";
-import { CloudFoundryBlueGreenDeployer } from "../../../common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
-import { CloudFoundryInfo } from "../../../common/delivery/deploy/pcf/CloudFoundryTarget";
-import { EnvironmentCloudFoundryTarget } from "../../../common/delivery/deploy/pcf/EnvironmentCloudFoundryTarget";
+import { CodeActionRegistration } from "@atomist/sdm/common/delivery/code/CodeActionRegistration";
+import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
+import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
+import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
+import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/common/delivery/deploy/pcf/EnvironmentCloudFoundryTarget";
 import {
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     StagingDeploymentGoal,
     StagingEndpointGoal,
-} from "../../../common/delivery/goals/common/commonGoals";
-import { CodeReactionListener } from "../../../common/listener/CodeReactionListener";
-import { ProjectLoader } from "../../../common/repo/ProjectLoader";
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import { CodeReactionListener } from "@atomist/sdm/common/listener/CodeReactionListener";
+import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
 import { setDeployEnablement } from "../../../handlers/commands/SetDeployEnablement";
 import { ArtifactStore } from "../../../spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "../../commands/editors/pcf/addCloudFoundryManifest";

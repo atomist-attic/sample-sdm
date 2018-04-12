@@ -15,8 +15,8 @@
  */
 
 import { TokenCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
-import { NewIssueInvocation } from "../../../common/listener/NewIssueListener";
-import { updateIssue } from "../../../util/github/ghub";
+import { NewIssueInvocation } from "@atomist/sdm/common/listener/NewIssueListener";
+import { updateIssue } from "@atomist/sdm/util/github/ghub";
 
 /**
  * Capitalize the first letter of an issue

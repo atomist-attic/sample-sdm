@@ -17,7 +17,7 @@
 import { logger } from "@atomist/automation-client";
 import { ProjectReview } from "@atomist/automation-client/operations/review/ReviewResult";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { ReviewerRegistration } from "../../../common/delivery/code/review/ReviewerRegistration";
+import { ReviewerRegistration } from "@atomist/sdm/common/delivery/code/review/ReviewerRegistration";
 
 const Problems = [{
     watchFor: /^import sprintf from "sprintf-js"/m,

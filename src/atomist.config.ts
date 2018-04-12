@@ -15,12 +15,12 @@
  */
 
 import { Configuration } from "@atomist/automation-client/configuration";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "./blueprint/SoftwareDeliveryMachine";
-import { CachingProjectLoader } from "./common/repo/CachingProjectLoader";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { CachingProjectLoader } from "@atomist/github-sdm/src/common/repo/CachingProjectLoader";
 import { DefaultArtifactStore } from "./software-delivery-machine/blueprint/artifactStore";
 import { greeting } from "./software-delivery-machine/misc/greeting";
-import { DockerOptions } from "./software-delivery-machine/parts/stacks/dockerSupport";
 import { JavaSupportOptions } from "./software-delivery-machine/parts/stacks/javaSupport";
+import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 

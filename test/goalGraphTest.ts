@@ -15,8 +15,8 @@
  */
 
 import * as assert from "power-assert";
-import { HttpServiceGoals } from "../src/common/delivery/goals/common/httpServiceGoals";
-import { goalsToDot } from "../src/common/delivery/goals/graph/graphGoalsToSlack";
+import { HttpServiceGoals } from "@atomist/sdm/common/delivery/goals/common/httpServiceGoals";
+import { goalsToDot } from "@atomist/sdm/common/delivery/goals/graph/graphGoalsToSlack";
 
 const DesiredDot = `digraph HTTP_Service {
     fontname="Arial";

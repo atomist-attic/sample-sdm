@@ -19,9 +19,9 @@ import {
     ProductionEndpointGoal,
     StagingDeploymentGoal,
     StagingEndpointGoal,
-} from "../../../common/delivery/goals/common/commonGoals";
-import { NoticeK8sTestDeployCompletionOnStatus } from "../../../handlers/events/delivery/deploy/k8s/NoticeK8sDeployCompletion";
-import { NoticeK8sProdDeployCompletionOnStatus } from "../../../handlers/events/delivery/deploy/k8s/NoticeK8sProdDeployCompletion";
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import { NoticeK8sTestDeployCompletionOnStatus } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/NoticeK8sDeployCompletion";
+import { NoticeK8sProdDeployCompletionOnStatus } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/NoticeK8sProdDeployCompletion";
 
 export const K8sTestingDomain = "testing";
 export const K8sProductionDomain = "production";

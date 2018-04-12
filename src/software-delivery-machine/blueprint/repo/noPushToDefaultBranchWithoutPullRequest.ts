@@ -15,7 +15,7 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { CodeActionRegistration } from "../../../common/delivery/code/CodeActionRegistration";
+import { CodeActionRegistration } from "@atomist/sdm/common/delivery/code/CodeActionRegistration";
 import { PullRequestForSha } from "../../../typings/types";
 
 import * as _ from "lodash";

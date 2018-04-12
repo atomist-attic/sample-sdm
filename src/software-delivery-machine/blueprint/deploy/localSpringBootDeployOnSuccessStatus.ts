@@ -15,24 +15,24 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { FunctionalUnit } from "../../../blueprint/FunctionalUnit";
-import { DeploySpec } from "../../../common/delivery/deploy/executeDeploy";
+import { FunctionalUnit } from "@atomist/sdm/blueprint/FunctionalUnit";
+import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
 import {
     ManagedDeploymentTargeter,
     ManagedDeploymentTargetInfo,
     targetInfoForAllBranches,
-} from "../../../common/delivery/deploy/local/appManagement";
-import { executableJarDeployer } from "../../../common/delivery/deploy/local/jar/executableJarDeployer";
-import { StartupInfo } from "../../../common/delivery/deploy/local/LocalDeployerOptions";
-import { mavenDeployer } from "../../../common/delivery/deploy/local/maven/mavenSourceDeployer";
+} from "@atomist/sdm/common/delivery/deploy/local/appManagement";
+import { executableJarDeployer } from "@atomist/sdm/common/delivery/deploy/local/jar/executableJarDeployer";
+import { StartupInfo } from "@atomist/sdm/common/delivery/deploy/local/LocalDeployerOptions";
+import { mavenDeployer } from "@atomist/sdm/common/delivery/deploy/local/maven/mavenSourceDeployer";
 import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingUndeploymentGoal,
-} from "../../../common/delivery/goals/common/commonGoals";
-import { ProjectLoader } from "../../../common/repo/ProjectLoader";
-import { OnSupersededStatus } from "../../../handlers/events/delivery/superseded/OnSuperseded";
-import { Deployer } from "../../../spi/deploy/Deployer";
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
+import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
+import { Deployer } from "@atomist/sdm//spi/deploy/Deployer";
 import { DefaultArtifactStore } from "../artifactStore";
 
 export const LocalExecutableJarDeployer: Deployer<ManagedDeploymentTargetInfo> = executableJarDeployer({

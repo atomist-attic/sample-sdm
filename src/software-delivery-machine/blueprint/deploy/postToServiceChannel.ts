@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DeploymentListener } from "../../../common/listener/DeploymentListener";
+import { DeploymentListener } from "@atomist/sdm/common/listener/DeploymentListener";
 
 export const PostToServiceChannel: DeploymentListener =
     inv => {
