@@ -3,6 +3,7 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { editorCommand } from "@atomist/sdm";
+import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
 
@@ -14,6 +15,9 @@ export class AddHeaderParameters extends RequestedCommitParameters {
 
     @Parameter({required: false})
     public glob: string = CFamilyLanguageSourceFiles;
+
+    @Parameter({required: false})
+    public excludeGlob: string;
 
     @Parameter({required: false})
     public license: "apache" = "apache";
@@ -66,6 +70,9 @@ export async function addHeaderProjectEditor(p: Project,
     let headersAdded = 0;
     let matchingFiles = 0;
     await doWithFiles(p, params.glob, async f => {
+        if (params.excludeGlob && minimatch(f.path, params.excludeGlob)) {
+            return;
+        }
         ++matchingFiles;
         const content = await f.getContent();
         if (content.includes(params.header)) {

@@ -54,6 +54,31 @@ describe("addHeaderEditor", () => {
         assert(content.startsWith(ApacheHeader));
     });
 
+    it("should respect exclude glob", async () => {
+        const content = "export class Thing1 {}";
+        const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
+            {path: "src/Thing.ts", content: TsWithApacheHeader},
+            {path: "src/Thing1.ts", content});
+        const params = new AddHeaderParameters();
+        params.excludeGlob = "src/Thing1.ts";
+        await addHeaderProjectEditor(p, fakeContext(), params);
+        assert(p.fileExistsSync("src/Thing1.ts"));
+        const newContent = p.findFileSync("src/Thing1.ts").getContentSync();
+        assert.equal(newContent, content);
+    });
+
+    it("should ignore irrelevant exclude glob", async () => {
+        const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
+            {path: "src/Thing.ts", content: TsWithApacheHeader},
+            {path: "src/Thing1.ts", content: "export class Thing1 {}"});
+        const params = new AddHeaderParameters();
+        params.excludeGlob = "other.thing";
+        await addHeaderProjectEditor(p, fakeContext(), params);
+        assert(p.fileExistsSync("src/Thing1.ts"));
+        const content = p.findFileSync("src/Thing1.ts").getContentSync();
+        assert(content.startsWith(ApacheHeader));
+    });
+
     it("should add header to JS when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             {path: "src/Thing.js", content: TsWithApacheHeader},
