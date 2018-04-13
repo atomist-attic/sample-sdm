@@ -26,8 +26,6 @@ import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/common/delivery/goal
 import { FromAtomist, ToDefaultBranch, ToPublicRepo } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { MaterialChangeToJavaRepo } from "@atomist/sdm/common/listener/support/pushtest/jvm/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "@atomist/sdm/common/listener/support/pushtest/jvm/springPushTests";
 import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
@@ -42,6 +40,8 @@ import { addJavaSupport, JavaSupportOptions } from "../parts/stacks/javaSupport"
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
+import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
 export type K8sMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 
