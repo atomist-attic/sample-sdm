@@ -22,8 +22,8 @@ import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
-import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 import { slocCommand } from "../../commands/editors/helper/sloc";
+import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 
 /**
  * Set up team policies

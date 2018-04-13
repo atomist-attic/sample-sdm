@@ -1,9 +1,9 @@
 import { Project } from "@atomist/automation-client/project/Project";
 
-import * as sloc from "sloc";
-import { saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
 import { File } from "@atomist/automation-client/project/File";
+import { saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
 import * as _ from "lodash";
+import * as sloc from "sloc";
 
 export interface CodeStats {
     total: number;

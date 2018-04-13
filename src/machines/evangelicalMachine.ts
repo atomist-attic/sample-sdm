@@ -19,8 +19,6 @@ import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomis
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
 import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { MaterialChangeToJavaRepo } from "@atomist/sdm/common/listener/support/pushtest/jvm/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "@atomist/sdm/common/listener/support/pushtest/jvm/springPushTests";
 import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
@@ -31,6 +29,8 @@ import { EnableDeployOnCloudFoundryManifestAddition } from "../blueprint/deploy/
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
+import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
 export type EvangelicalMachineOptions = SoftwareDeliveryMachineOptions;
 
