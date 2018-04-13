@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { MavenFingerprinter } from "@atomist/sdm/common/delivery/code/fingerprint/maven/MavenFingerprinter";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { MavenFingerprinter } from "@atomist/sdm";
 import { AddAtomistJavaHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "./checkstyleSupport";
 

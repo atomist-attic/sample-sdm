@@ -16,8 +16,8 @@
 
 import { Configuration } from "@atomist/automation-client/configuration";
 import { CachingProjectLoader } from "@atomist/github-sdm/src/common/repo/CachingProjectLoader";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { DockerOptions } from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { greeting } from "./misc/greeting";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";

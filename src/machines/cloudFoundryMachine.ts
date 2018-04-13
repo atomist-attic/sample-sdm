@@ -17,20 +17,17 @@
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
-import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
+import { whenPushSatisfies } from "@atomist/sdm";
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
-import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
+} from "@atomist/sdm";
 import {
-    nodeRunBuildBuilder,
-    nodeRunCompileBuilder,
-} from "@atomist/sdm/common/delivery/build/local/npm/npmBuilder";
-import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
+    AnyPush,
+    FromAtomist,
+    ToDefaultBranch,
+    ToPublicRepo,
+} from "@atomist/sdm";
 import {
     AutofixGoal,
     NoGoals,
@@ -40,7 +37,16 @@ import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingUndeploymentGoal,
-} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+} from "@atomist/sdm";
+import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
+import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
+import {
+    nodeRunBuildBuilder,
+    nodeRunCompileBuilder,
+} from "@atomist/sdm/common/delivery/build/local/npm/npmBuilder";
+import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
+import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import {
     HttpServiceGoals,
     LocalDeploymentGoals,
@@ -57,12 +63,6 @@ import {
 import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { DoNotSetAnyGoals } from "@atomist/sdm/common/listener/PushMapping";
 import { HasTravisFile } from "@atomist/sdm/common/listener/support/pushtest/ci/ciPushTests";
-import {
-    AnyPush,
-    FromAtomist,
-    ToDefaultBranch,
-    ToPublicRepo,
-} from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
 import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";

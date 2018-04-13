@@ -18,8 +18,8 @@ import { MappedParameter, MappedParameters, Parameter } from "@atomist/automatio
 import { BaseSeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/BaseSeedDrivenGeneratorParameters";
 
 import { Parameters } from "@atomist/automation-client/decorators";
-import { SemVerRegExp } from "@atomist/sdm/common/command/commonPatterns";
-import { GeneratorConfig } from "@atomist/sdm/common/command/generator/GeneratorConfig";
+import { SemVerRegExp } from "@atomist/sdm";
+import { GeneratorConfig } from "@atomist/sdm";
 
 /**
  * Parameters for creating a Node project.

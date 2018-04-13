@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { affirmationEditor } from "../../commands/editors/demo/affirmationEditor";
 import { breakJavaBuildEditor, unbreakJavaBuildEditor } from "../../commands/editors/demo/breakJavaBuild";
 import { breakNodeBuildEditor, unbreakNodeBuildEditor } from "../../commands/editors/demo/breakNodeBuild";

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CodeActionRegistration } from "@atomist/sdm/common/delivery/code/CodeActionRegistration";
+import { CodeActionRegistration } from "@atomist/sdm";
 import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
 import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
 import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";

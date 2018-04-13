@@ -19,7 +19,7 @@ import {
     ProductionEndpointGoal,
     StagingDeploymentGoal,
     StagingEndpointGoal,
-} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+} from "@atomist/sdm";
 import { NoticeK8sTestDeployCompletionOnStatus } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/NoticeK8sDeployCompletion";
 import { NoticeK8sProdDeployCompletionOnStatus } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/NoticeK8sProdDeployCompletion";
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NewIssueInvocation } from "@atomist/sdm/common/listener/NewIssueListener";
+import { NewIssueInvocation } from "@atomist/sdm";
 
 /**
  * Fun issue automations: Not for real use

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { GitHubReleaseArtifactStore } from "@atomist/sdm/common/artifact/github/GitHubReleaseArtifactStore";
-import { EphemeralLocalArtifactStore } from "@atomist/sdm/common/artifact/local/EphemeralLocalArtifactStore";
+import { GitHubReleaseArtifactStore } from "@atomist/sdm";
+import { EphemeralLocalArtifactStore } from "@atomist/sdm";
 
 export const DefaultArtifactStore = process.env.USE_LOCAL_ARTIFACT_STORE === "true" ?
     new EphemeralLocalArtifactStore() :

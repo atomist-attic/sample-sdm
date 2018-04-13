@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { EphemeralLocalArtifactStore } from "@atomist/sdm/common/artifact/local/EphemeralLocalArtifactStore";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";

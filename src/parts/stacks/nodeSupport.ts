@@ -17,29 +17,29 @@
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { executeTag } from "@atomist/sdm/common/delivery/build/executeTag";
-import { NodeProjectVersioner } from "@atomist/sdm/common/delivery/build/local/npm/nodeProjectVersioner";
+} from "@atomist/sdm";
+import { executeTag } from "@atomist/sdm";
+import { NodeProjectVersioner } from "@atomist/sdm";
 import {
     executeVersioner,
-} from "@atomist/sdm/common/delivery/build/local/projectVersioner";
-import { tslintFix } from "@atomist/sdm/common/delivery/code/autofix/node/tslint";
+} from "@atomist/sdm";
+import { tslintFix } from "@atomist/sdm";
 import {
     DefaultDockerImageNameCreator,
     executeDockerBuild,
-} from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
+} from "@atomist/sdm";
+import { DockerOptions } from "@atomist/sdm";
 import {
     DockerBuildGoal,
     TagGoal,
     VersionGoal,
-} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+} from "@atomist/sdm";
 import {
     ProductionDockerDeploymentGoal,
     StagingDockerDeploymentGoal,
-} from "@atomist/sdm/common/delivery/goals/common/npmGoals";
-import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
-import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+} from "@atomist/sdm";
+import { IsNode } from "@atomist/sdm";
+import { tagRepo } from "@atomist/sdm";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";

@@ -15,8 +15,8 @@
  */
 
 import { HandleCommand, Parameter, Parameters } from "@atomist/automation-client";
-import { dryRunEditor } from "@atomist/sdm/common/command/editor/dry-run/dryRunEditor";
-import { EditModeSuggestion } from "@atomist/sdm/common/command/editor/EditModeSuggestion";
+import { dryRunEditor } from "@atomist/sdm";
+import { EditModeSuggestion } from "@atomist/sdm";
 import { setSpringBootVersionEditor } from "@atomist/spring-automation/commands/editor/spring/setSpringBootVersionEditor";
 import { UnleashPhilParameters } from "@atomist/spring-automation/commands/editor/spring/unleashPhil";
 import { CurrentSpringBootVersion } from "@atomist/spring-automation/commands/reviewer/spring/SpringBootVersionReviewer";

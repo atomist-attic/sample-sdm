@@ -15,8 +15,8 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { checkstyleReviewerRegistration } from "@atomist/sdm/common/delivery/code/review/checkstyle/checkstyleReviewer";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { checkstyleReviewerRegistration } from "@atomist/sdm";
 
 export interface CheckstyleSupportOptions {
     useCheckstyle: boolean;

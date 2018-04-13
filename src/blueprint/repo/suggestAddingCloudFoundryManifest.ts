@@ -16,14 +16,14 @@
 
 import { logger } from "@atomist/automation-client";
 import { buttonForCommand } from "@atomist/automation-client/spi/message/MessageClient";
-import { ChannelLinkListener } from "@atomist/sdm/common/listener/ChannelLinkListenerInvocation";
-import { ProjectPredicate } from "@atomist/sdm/common/listener/PushTest";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { HasSpringBootApplicationClass } from "@atomist/sdm/common/listener/support/pushtest/jvm/springPushTests";
-import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
-import { allPredicatesSatisfied, anyPredicateSatisfied } from "@atomist/sdm/common/listener/support/pushtest/projectPredicateUtils";
+import { ChannelLinkListener } from "@atomist/sdm";
+import { ProjectPredicate } from "@atomist/sdm";
+import { IsMaven } from "@atomist/sdm";
+import { IsNode } from "@atomist/sdm";
+import { allPredicatesSatisfied, anyPredicateSatisfied } from "@atomist/sdm";
 import * as slack from "@atomist/slack-messages/SlackMessages";
 import { AddCloudFoundryManifestCommandName } from "../../commands/editors/pcf/addCloudFoundryManifest";
+import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
 
 /**
  * PushTest to determine whether we know how to deploy a project

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ClosedIssueInvocation } from "@atomist/sdm/common/listener/ClosedIssueListener";
+import { ClosedIssueInvocation } from "@atomist/sdm";
 
 export async function thankYouYouRock(inv: ClosedIssueInvocation) {
     await inv.context.messageClient.addressUsers(

@@ -20,8 +20,8 @@ import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
 import {
     AutofixRegistration,
     editorAutofixRegistration,
-} from "@atomist/sdm/common/delivery/code/autofix/AutofixRegistration";
-import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
+} from "@atomist/sdm";
+import { IsNode } from "@atomist/sdm";
 import * as _ from "lodash";
 
 export const AddBuildScript: AutofixRegistration = editorAutofixRegistration({

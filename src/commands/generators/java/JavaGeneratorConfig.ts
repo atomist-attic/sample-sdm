@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GeneratorConfig } from "@atomist/sdm/common/command/generator/GeneratorConfig";
+import { GeneratorConfig } from "@atomist/sdm";
 
 export interface JavaGeneratorConfig extends GeneratorConfig {
 

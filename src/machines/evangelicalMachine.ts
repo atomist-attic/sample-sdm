@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
+import { whenPushSatisfies } from "@atomist/sdm";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
 import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";

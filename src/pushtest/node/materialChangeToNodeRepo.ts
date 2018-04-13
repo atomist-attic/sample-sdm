@@ -15,13 +15,13 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import * as _ from "lodash";
+import { PushTest, pushTest } from "@atomist/sdm";
 import {
     anyFileChangedSuchThat,
     anyFileChangedWithExtension,
     filesChangedSince,
 } from "@atomist/sdm/util/git/filesChangedSince";
-import { PushTest, pushTest } from "@atomist/sdm/common/listener/PushTest";
+import * as _ from "lodash";
 
 const FilesWithExtensionToWatch = ["js", "ts", "json", "yml", "xml", "html", "graphql", "jsx", "tsx", "sh"];
 const FilesToWatch = ["Dockerfile"];
@@ -29,9 +29,6 @@ const FilesToWatch = ["Dockerfile"];
 /**
  * Veto if change to deployment unit doesn't seem important enough to
  * build and deploy
- * @param {PushListenerInvocation} pci
- * @return {Promise<void>}
- * @constructor
  */
 export const MaterialChangeToNodeRepo: PushTest = pushTest("Material change to Node repo", async pci => {
     const beforeSha: string = _.get(pci, "push.before.sha");

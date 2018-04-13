@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { CodeActionRegistration } from "@atomist/sdm/common/delivery/code/CodeActionRegistration";
-import { CodeReactionInvocation } from "@atomist/sdm/common/listener/CodeReactionListener";
+import { CodeActionRegistration } from "@atomist/sdm";
+import { CodeReactionInvocation } from "@atomist/sdm";
 
 /**
  * React to a push by listing changed files to any Slack channels

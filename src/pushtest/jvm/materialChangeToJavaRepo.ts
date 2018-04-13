@@ -15,8 +15,8 @@
  */
 
 import { logger } from "@atomist/automation-client";
+import { PushTest, pushTest } from "@atomist/sdm";
 import { anyFileChangedWithExtension, filesChangedSince } from "@atomist/sdm/util/git/filesChangedSince";
-import { PushTest, pushTest } from "@atomist/sdm/common/listener/PushTest";
 
 import * as _ from "lodash";
 
@@ -25,11 +25,8 @@ const FileToWatch = ["java", "html", "json", "yml", "xml", "sh"];
 /**
  * Veto if change to deployment unit doesn't seem important enough to
  * build and deploy
- * @param {PushListenerInvocation} pci
- * @return {Promise<void>}
- * @constructor
  */
-export const MaterialChangeToJavaRepo = pushTest("Material change to Java repo", async pci => {
+export const MaterialChangeToJavaRepo: PushTest = pushTest("Material change to Java repo", async pci => {
     const beforeSha: string = _.get(pci, "push.before.sha");
     const changedFiles = await filesChangedSince(pci.project, beforeSha);
     if (!changedFiles) {

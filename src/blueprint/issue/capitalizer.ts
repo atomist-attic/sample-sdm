@@ -15,7 +15,7 @@
  */
 
 import { TokenCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
-import { NewIssueInvocation } from "@atomist/sdm/common/listener/NewIssueListener";
+import { NewIssueInvocation } from "@atomist/sdm";
 import { updateIssue } from "@atomist/sdm/util/github/ghub";
 
 /**

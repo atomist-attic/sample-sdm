@@ -15,24 +15,24 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
-import { Deployer } from "@atomist/sdm//spi/deploy/Deployer";
-import { FunctionalUnit } from "@atomist/sdm/blueprint/FunctionalUnit";
-import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
+import { executableJarDeployer } from "@atomist/sdm";
+import { Deployer } from "@atomist/sdm";
+import { FunctionalUnit } from "@atomist/sdm";
+import { DeploySpec } from "@atomist/sdm";
 import {
     ManagedDeploymentTargeter,
     ManagedDeploymentTargetInfo,
     targetInfoForAllBranches,
-} from "@atomist/sdm/common/delivery/deploy/local/appManagement";
-import { executableJarDeployer } from "@atomist/sdm/common/delivery/deploy/local/jar/executableJarDeployer";
-import { StartupInfo } from "@atomist/sdm/common/delivery/deploy/local/LocalDeployerOptions";
-import { mavenDeployer } from "@atomist/sdm/common/delivery/deploy/local/maven/mavenSourceDeployer";
+} from "@atomist/sdm";
+import { ProjectLoader } from "@atomist/sdm";
+import { StartupInfo } from "@atomist/sdm";
+import { mavenDeployer } from "@atomist/sdm";
 import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingUndeploymentGoal,
-} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
-import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
+} from "@atomist/sdm";
+import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
 import { DefaultArtifactStore } from "../artifactStore";
 
 export const LocalExecutableJarDeployer: Deployer<ManagedDeploymentTargetInfo> = executableJarDeployer({

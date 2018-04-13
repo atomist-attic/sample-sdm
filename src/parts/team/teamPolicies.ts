@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { GraphGoalsToSlack } from "@atomist/sdm/common/delivery/goals/graph/graphGoalsToSlack";
-import { OnDryRunBuildComplete } from "@atomist/sdm/handlers/events/dry-run/OnDryRunBuildComplete";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { GraphGoalsToSlack } from "@atomist/sdm";
+import { OnDryRunBuildComplete } from "@atomist/sdm";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";

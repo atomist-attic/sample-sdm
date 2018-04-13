@@ -17,12 +17,12 @@
 import {
     AutofixRegistration,
     editorAutofixRegistration,
-} from "@atomist/sdm/common/delivery/code/autofix/AutofixRegistration";
-import { PushTest } from "@atomist/sdm/common/listener/PushTest";
-import { hasFileContaining } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
-import { IsJava } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { IsTypeScript } from "@atomist/sdm/common/listener/support/pushtest/node/tsPushTests";
-import { allSatisfied } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
+} from "@atomist/sdm";
+import { PushTest } from "@atomist/sdm";
+import { hasFileContaining } from "@atomist/sdm";
+import { IsJava } from "@atomist/sdm";
+import { IsTypeScript } from "@atomist/sdm";
+import { allSatisfied } from "@atomist/sdm";
 import { AddHeaderParameters, addHeaderProjectEditor } from "../../../commands/editors/license/addHeader";
 import { LicenseFilename } from "./addLicenseFile";
 

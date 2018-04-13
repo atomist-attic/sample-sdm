@@ -17,9 +17,9 @@
 import {
     AutofixRegistration,
     editorAutofixRegistration,
-} from "@atomist/sdm/common/delivery/code/autofix/AutofixRegistration";
-import { hasFile } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
-import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
+} from "@atomist/sdm";
+import { hasFile } from "@atomist/sdm";
+import { not } from "@atomist/sdm";
 import axios from "axios";
 
 export const LicenseFilename = "LICENSE";

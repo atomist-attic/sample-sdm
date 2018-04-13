@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import { predicatePushTest, PredicatePushTest } from "@atomist/sdm";
 import { SpringBootProjectStructure } from "@atomist/spring-automation/commands/generator/spring/SpringBootProjectStructure";
-import { predicatePushTest, PredicatePushTest } from "@atomist/sdm/common/listener/PushTest";
 
 /**
  * Does this project have a Spring Boot application class?

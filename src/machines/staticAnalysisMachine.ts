@@ -17,16 +17,16 @@
 import { ProjectReviewer } from "@atomist/automation-client/operations/review/projectReviewer";
 import { DefaultReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { EphemeralLocalArtifactStore } from "@atomist/sdm/common/artifact/local/EphemeralLocalArtifactStore";
-import { ReviewGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
-import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
-import { IsJava } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { MaterialChangeToJavaRepo } from "@atomist/sdm/common/listener/support/pushtest/jvm/materialChangeToJavaRepo";
-import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
+import { whenPushSatisfies } from "@atomist/sdm";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { EphemeralLocalArtifactStore } from "@atomist/sdm";
+import { ReviewGoal } from "@atomist/sdm";
+import { Goals } from "@atomist/sdm";
+import { IsJava } from "@atomist/sdm";
+import { CachingProjectLoader } from "@atomist/sdm";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "../parts/stacks/checkstyleSupport";
+import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 
 export type StaticAnalysisMachineOptions = SoftwareDeliveryMachineOptions & CheckstyleSupportOptions;
 

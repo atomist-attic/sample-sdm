@@ -22,10 +22,10 @@ import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPu
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
+import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployOnSuccessStatus";
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
-import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployOnSuccessStatus";
 
 /**
  * Configuration common to Spring SDMs, wherever they deploy

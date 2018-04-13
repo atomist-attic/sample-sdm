@@ -15,16 +15,13 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { CodeActionRegistration } from "@atomist/sdm/common/delivery/code/CodeActionRegistration";
-import { PullRequestForSha } from "@atomist/sdm/typings/types";
+import { CodeActionRegistration } from "@atomist/sdm";
+import { PullRequestForSha } from "@atomist/sdm";
 
 import * as _ from "lodash";
 
 /**
  * DM a user who made a push to the default branch that doesn't have an associated pull request
- * @param {PushListenerInvocation} pli
- * @return {Promise<any>}
- * @constructor
  */
 export const NoPushToDefaultBranchWithoutPullRequest: CodeActionRegistration = {
     name: "NoPushToDefaultBranchWithoutPullRequest",

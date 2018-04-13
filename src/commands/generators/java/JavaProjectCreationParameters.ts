@@ -18,8 +18,8 @@ import { MappedParameter, MappedParameters, Parameter } from "@atomist/automatio
 import { Parameters } from "@atomist/automation-client/decorators";
 import { BaseSeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/BaseSeedDrivenGeneratorParameters";
 import { SmartParameters } from "@atomist/automation-client/SmartParameters";
-import { SemVerRegExp } from "@atomist/sdm/common/command/commonPatterns";
-import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp } from "@atomist/sdm/common/command/javaPatterns";
+import { SemVerRegExp } from "@atomist/sdm";
+import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/spring-automation/commands/generator/java/JavaProjectParameters";
 
 /**

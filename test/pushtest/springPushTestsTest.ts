@@ -16,8 +16,8 @@
 
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 
+import { PushListenerInvocation } from "@atomist/sdm";
 import * as assert from "power-assert";
-import { PushListenerInvocation } from "@atomist/sdm/common/listener/PushListener";
 import { HasSpringBootApplicationClass } from "../../src/pushtest/jvm/springPushTests";
 import { springBootPom } from "../editors/TestPoms";
 

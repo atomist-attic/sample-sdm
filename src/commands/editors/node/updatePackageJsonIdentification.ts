@@ -16,7 +16,7 @@
 
 import { HandlerContext, logger } from "@atomist/automation-client";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
-import { PersonByChatId } from "@atomist/sdm/typings/types";
+import { PersonByChatId } from "@atomist/sdm";
 
 export function updatePackageJsonIdentification(appName: string,
                                                 description: string,

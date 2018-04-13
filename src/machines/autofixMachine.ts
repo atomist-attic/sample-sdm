@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { onAnyPush } from "@atomist/sdm/blueprint/dsl/goalDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
-import { AutofixGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
-import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
-import { CloningProjectLoader } from "@atomist/sdm/common/repo/cloningProjectLoader";
+import { onAnyPush } from "@atomist/sdm";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { AutofixGoal } from "@atomist/sdm";
+import { Goals } from "@atomist/sdm";
+import { CloningProjectLoader } from "@atomist/sdm";
 import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
