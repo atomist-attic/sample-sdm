@@ -23,6 +23,7 @@ import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
 import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
+import { slocCommand } from "../../commands/editors/helper/sloc";
 
 /**
  * Set up team policies
@@ -40,6 +41,7 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
             PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListeners(PostToDeploymentsChannel)
+        .addSupportingCommands(() => slocCommand)
         .addSupportingEvents(OnDryRunBuildComplete);
     // .addFingerprintDifferenceListeners(diff1)
 }
