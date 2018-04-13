@@ -46,6 +46,7 @@ import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
 import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
+import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
 
 /**
  * Configuration common to Node SDMs, wherever they deploy
@@ -71,7 +72,10 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
             tslintFix,
             AddBuildScript,
         )
-    .addReviewerRegistrations(CommonTypeScriptErrors)
+    .addReviewerRegistrations(
+        CommonTypeScriptErrors,
+        DontImportOwnIndex,
+    )
     .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,

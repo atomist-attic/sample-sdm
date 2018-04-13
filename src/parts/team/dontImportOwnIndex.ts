@@ -16,11 +16,14 @@
 
 import { regexpReviewer, ReviewerRegistration } from "@atomist/sdm";
 
-export const CommonTypeScriptErrors: ReviewerRegistration = regexpReviewer(
-    "Dangerous TypeScript Errors of the Past",
+/**
+ * Importing a project's index file is a recipe for circular import hell
+ */
+export const DontImportOwnIndex: ReviewerRegistration = regexpReviewer(
+    "Don't import own index.ts",
     {globPattern: "**/*.ts", severity: "error"},
     {
-        antiPattern: /^import sprintf from "sprintf-js"/m,
-        shouldBe: `import { sprintf } from "sprintf-js"`,
+        antiPattern: /^import.*from ".*index"/,
+        shouldBe: `import from relevant file, not index"`,
     },
 );
