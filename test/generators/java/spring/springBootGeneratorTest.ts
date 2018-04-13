@@ -24,10 +24,10 @@ import * as assert from "power-assert";
 import {
     replaceReadmeTitle, setAtomistTeamInApplicationYml,
     springBootGenerator,
-} from "../../../../../src/software-delivery-machine/commands/generators/java/spring/springBootGenerator";
+} from "../../../../src/commands/generators/java/spring/springBootGenerator";
 import {
     SpringProjectCreationParameters,
-} from "../../../../../src/software-delivery-machine/commands/generators/java/spring/SpringProjectCreationParameters";
+} from "../../../../src/commands/generators/java/spring/SpringProjectCreationParameters";
 
 const Readme1 = `# spring-rest-seed
 

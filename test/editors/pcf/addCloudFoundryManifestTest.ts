@@ -22,7 +22,7 @@ import { CloudFoundryManifestPath } from "@atomist/sdm/common/delivery/deploy/pc
 import {
     addCloudFoundryManifestEditor, AtomistConfigTsPath,
     StartAutomationClientCommand,
-} from "../../../../src/software-delivery-machine/commands/editors/pcf/addCloudFoundryManifest";
+} from "../../../src/commands/editors/pcf/addCloudFoundryManifest";
 import { fakeContext } from "../../FakeContext";
 import { NonSpringPom, springBootPom } from "../TestPoms";
 

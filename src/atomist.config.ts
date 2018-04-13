@@ -18,9 +18,9 @@ import { Configuration } from "@atomist/automation-client/configuration";
 import { CachingProjectLoader } from "@atomist/github-sdm/src/common/repo/CachingProjectLoader";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
-import { DefaultArtifactStore } from "./software-delivery-machine/blueprint/artifactStore";
-import { greeting } from "./software-delivery-machine/misc/greeting";
-import { JavaSupportOptions } from "./software-delivery-machine/parts/stacks/javaSupport";
+import { DefaultArtifactStore } from "./blueprint/artifactStore";
+import { greeting } from "./misc/greeting";
+import { JavaSupportOptions } from "./parts/stacks/javaSupport";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
@@ -68,7 +68,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
  */
 
 const machineName = process.env.MACHINE_NAME ||  "cloudFoundryMachine";
-const machinePath = process.env.MACHINE_PATH || "./software-delivery-machine/machines";
+const machinePath = process.env.MACHINE_PATH || "./machines";
 
 function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliveryMachine {
     const machineFunction = require(machinePath + "/" + machineName)[machineName];

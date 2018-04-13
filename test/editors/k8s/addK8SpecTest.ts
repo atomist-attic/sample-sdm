@@ -21,7 +21,7 @@ import * as assert from "power-assert";
 import {
     addK8sSpecEditor,
     AtomistK8sSpecFile,
-} from "../../../../src/software-delivery-machine/commands/editors/k8s/addK8sSpec";
+} from "../../../src/commands/editors/k8s/addK8sSpec";
 
 describe("addK8SpecEditor", () => {
 

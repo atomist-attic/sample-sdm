@@ -22,7 +22,7 @@ import {
     AddHeaderParameters,
     addHeaderProjectEditor,
     ApacheHeader,
-} from "../../../../src/software-delivery-machine/commands/editors/license/addHeader";
+} from "../../../src/commands/editors/license/addHeader";
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { NodeFsLocalProject } from "@atomist/automation-client/project/local/NodeFsLocalProject";
