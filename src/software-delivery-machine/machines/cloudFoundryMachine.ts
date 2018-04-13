@@ -66,10 +66,8 @@ import {
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
 import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { MaterialChangeToJavaRepo } from "@atomist/sdm/common/listener/support/pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "@atomist/sdm/common/listener/support/pushtest/jvm/springPushTests";
 import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
-import { MaterialChangeToNodeRepo } from "@atomist/sdm/common/listener/support/pushtest/node/materialChangeToNodeRepo";
 import {
     HasAtomistBuildFile,
     IsNode,
@@ -99,6 +97,8 @@ import {
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
+import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
 
 export type CloudFoundryMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 
