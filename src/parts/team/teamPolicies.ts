@@ -42,6 +42,8 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListeners(PostToDeploymentsChannel)
         .addSupportingCommands(() => slocCommand)
-        .addSupportingEvents(OnDryRunBuildComplete);
+        .addSupportingEvents(OnDryRunBuildComplete)
+        .addUserJoiningChannelListeners(je =>
+            je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
 }
