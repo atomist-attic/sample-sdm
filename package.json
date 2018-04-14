@@ -1,5 +1,5 @@
 {
-  "name": "software-delivery-machine",
+  "name": "@atomist/software-delivery-machine",
   "version": "0.1.0",
   "description": "an Atomist automation for software delivery",
   "author": "Rod Johnson",
