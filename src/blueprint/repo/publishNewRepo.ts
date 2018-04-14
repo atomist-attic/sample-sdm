@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import { ListenerInvocation, SdmListener } from "@atomist/sdm";
+import { RepoListener } from "@atomist/sdm";
 
 /**
  * Send a message to the #general channel in the current
  * Slack team on creation of a new repo
- * @param {ListenerInvocation} i
  * @return {Promise<any>}
  */
-export const PublishNewRepo: SdmListener = (i: ListenerInvocation) => {
+export const PublishNewRepo: RepoListener = i => {
     return i.context.messageClient.addressChannels(
         `A new repo was created: \`${i.id.owner}:${i.id.repo}\``, "general");
 };
