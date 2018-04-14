@@ -15,31 +15,26 @@
  */
 
 import {
+    DefaultDockerImageNameCreator,
+    DockerBuildGoal,
+    DockerOptions,
+    executeDockerBuild,
+    executeTag,
+    executeVersioner,
+    IsNode,
+    NodeProjectIdentifier,
+    NodeProjectVersioner,
+    NpmPublishGoal,
+    ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm";
-import { executeTag } from "@atomist/sdm";
-import { NodeProjectVersioner } from "@atomist/sdm";
-import {
-    executeVersioner,
-} from "@atomist/sdm";
-import { tslintFix } from "@atomist/sdm";
-import {
-    DefaultDockerImageNameCreator,
-    executeDockerBuild,
-} from "@atomist/sdm";
-import { DockerOptions } from "@atomist/sdm";
-import {
-    DockerBuildGoal,
+    StagingDockerDeploymentGoal,
     TagGoal,
+    tagRepo,
+    tslintFix,
     VersionGoal,
 } from "@atomist/sdm";
-import {
-    ProductionDockerDeploymentGoal,
-    StagingDockerDeploymentGoal,
-} from "@atomist/sdm";
-import { IsNode } from "@atomist/sdm";
-import { tagRepo } from "@atomist/sdm";
+import { executePublish } from "@atomist/sdm/common/delivery/build/local/npm/executePublish";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
@@ -81,7 +76,9 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
         executeDockerBuild(options.projectLoader, DefaultDockerImageNameCreator, options))
     .addGoalImplementation("nodeTag", TagGoal,
-        executeTag(options.projectLoader));
+        executeTag(options.projectLoader))
+    .addGoalImplementation("nodePublish", NpmPublishGoal,
+        executePublish(options.projectLoader, NodeProjectIdentifier));
 
     sdm.goalFulfillmentMapper.addSideEffect({
         goal: StagingDockerDeploymentGoal,
