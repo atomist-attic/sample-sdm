@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
-import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
-
 import {
     AnyPush,
     AutofixGoal,
@@ -26,6 +23,7 @@ import {
     HttpServiceGoals,
     LibraryGoals,
     LocalDeploymentGoals,
+    nodeBuilder,
     NoGoals,
     not,
     NpmBuildGoals,
@@ -46,20 +44,21 @@ import {
     UndeployEverywhereGoals,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
+import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
 import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
-import {
-    nodeRunBuildBuilder,
-    nodeRunCompileBuilder,
-} from "@atomist/sdm/common/delivery/build/local/npm/npmBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import { HasTravisFile } from "@atomist/sdm/common/listener/support/pushtest/ci/ciPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
-import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import {
+    IsLein,
+    IsMaven,
+} from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
 import {
     HasAtomistBuildFile,
@@ -143,8 +142,8 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
             .setGoals(NpmBuildGoals),
     );
 
-    const runBuildBuilder = nodeRunBuildBuilder(options.projectLoader);
-    const runCompileBuilder = nodeRunCompileBuilder(options.projectLoader);
+    const runBuildBuilder = nodeBuilder(options.projectLoader, "npm ci", "npm run build");
+    const runCompileBuilder = nodeBuilder(options.projectLoader, "npm ci", "npm run compile");
 
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)
