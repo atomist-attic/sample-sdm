@@ -21,7 +21,13 @@ import { saveFromFilesAsync } from "@atomist/automation-client/project/util/proj
 import * as _ from "lodash";
 import * as sloc from "sloc";
 
+export interface Language {
+    name: string;
+    extensions: string[];
+}
+
 export interface CodeStats {
+    language: Language;
     total: number;
     source: number;
     comment: number;
@@ -34,15 +40,21 @@ export interface FileReport {
     stats: CodeStats;
 
     file: File;
+
 }
 
-export class SlocReport {
+export class LanguageReport {
 
-    constructor(public fileReports: FileReport[]) {
+    constructor(public language: Language, public fileReports: FileReport[]) {
     }
 
+    /**
+     * Return stats for each language
+     * @return {CodeStats[]}
+     */
     get stats(): CodeStats {
         return {
+            language: this.language,
             total: _.sum(this.fileReports.map(r => r.stats.total)),
             source: _.sum(this.fileReports.map(r => r.stats.source)),
             comment: _.sum(this.fileReports.map(r => r.stats.comment)),
@@ -50,24 +62,63 @@ export class SlocReport {
             block: _.sum(this.fileReports.map(r => r.stats.block)),
         };
     }
+
+}
+
+export class LanguagesReport {
+
+    constructor(public languageReports: LanguageReport[]) {
+    }
+
+    get languagesScanned(): Language[] {
+        return _.uniq(this.languageReports.map(lr => lr.language));
+    }
+
+    /**
+     * Return only the found languages
+     * @return {CodeStats[]}
+     */
+    get relevantLanguageReports(): LanguageReport[] {
+        return this.languageReports.filter(lr => lr.stats.total > 0);
+    }
+
+}
+
+export interface LanguageReportRequest {
+
+    language: Language;
+
+    /**
+     * Narrow down search--eg to exclude test
+     */
+    glob?: string;
 }
 
 /**
  * Use the sloc library to compute code statistics
  * @param {Project} p
- * @param {string} extension
- * @param {string} glob
- * @return {Promise<SlocReport>}
+ * @param {string} request
+ * @return {Promise<LanguageReport>}
  */
-export async function slocReport(p: Project, extension: string, glob?: string): Promise<SlocReport> {
-    const globToUse = glob || `**/*.${extension}`;
+export async function reportForLanguage(p: Project, request: LanguageReportRequest): Promise<LanguageReport> {
+    if (request.language.extensions.length > 1) {
+        throw new Error("Only one extension supported in " + JSON.stringify(request.language));
+    }
+    const extension = request.language.extensions[0];
+    const globToUse = request.glob || `**/*.${extension}`;
     const fileReports = await saveFromFilesAsync<FileReport>(p, globToUse, async f => {
         const content = await f.getContent();
         const stats = sloc(content, extension);
         return {
             stats,
             file: f,
+            language: request.language,
         };
     });
-    return new SlocReport(fileReports);
+    return new LanguageReport(request.language, fileReports);
+}
+
+export async function reportForLanguages(p: Project, ...requests: LanguageReportRequest[]): Promise<LanguagesReport> {
+    const languageReports = await Promise.all(requests.map(r => reportForLanguage(p, r)));
+    return new LanguagesReport(languageReports);
 }

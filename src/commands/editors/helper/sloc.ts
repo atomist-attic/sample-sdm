@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-import { HandleCommand, HandlerContext, Parameter } from "@atomist/automation-client";
-import { Parameters } from "@atomist/automation-client/decorators";
+import { HandleCommand, HandlerContext } from "@atomist/automation-client";
 import { Project } from "@atomist/automation-client/project/Project";
-import { editorCommand } from "@atomist/sdm";
-import { slocReport } from "../../../misc/slocReport";
+import { editorCommand, EmptyParameters } from "@atomist/sdm";
+import { JavaLanguage, JavaScriptLanguage, KotlinLanguage, TypeScriptLanguage } from "../../../misc/languages";
+import { LanguageReport, reportForLanguages } from "../../../misc/slocReport";
 
-@Parameters()
-export class SlocParams {
-
-    @Parameter({required: false})
-    public extension: string = "ts";
-}
-
-export const slocCommand: HandleCommand = editorCommand<SlocParams>(
+export const slocCommand: HandleCommand = editorCommand<EmptyParameters>(
     () => computeSloc,
     "sloc",
-    SlocParams, {
+    EmptyParameters, {
         intent: ["compute sloc", "sloc"],
     });
 
-async function computeSloc(p: Project, ctx: HandlerContext, params: SlocParams) {
-    const report = await slocReport(p, params.extension);
-    await ctx.messageClient.respond(
-        `${report.stats.total} loc, ${report.stats.comment} in comments, ${report.fileReports.length} ${params.extension} files`);
+async function computeSloc(p: Project, ctx: HandlerContext, params: EmptyParameters) {
+    const report = await reportForLanguages(p,
+        {language: TypeScriptLanguage},
+        {language: JavaScriptLanguage},
+        {language: JavaLanguage},
+        {language: KotlinLanguage},
+    );
+    const message = report.relevantLanguageReports.map(formatLanguageReport).join("\n");
+    await ctx.messageClient.respond(message);
     return p;
+}
+
+function formatLanguageReport(report: LanguageReport): string {
+    return `*${report.language.name}*: ${Number(report.stats.total).toLocaleString()} loc, ` +
+        `${Number(report.stats.comment).toLocaleString()} in comments, ` +
+        `${Number(report.fileReports.length).toLocaleString()} \`.${report.language.extensions[0]}\` files`;
 }

@@ -17,13 +17,14 @@
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import * as assert from "power-assert";
-import { slocReport } from "../../src/misc/slocReport";
+import { JavaLanguage, TypeScriptLanguage } from "../../src/misc/languages";
+import { reportForLanguage, reportForLanguages } from "../../src/misc/slocReport";
 
-describe("slocReport", () => {
+describe("reportForLanguage", () => {
 
     it("should work on TypeScript", async () => {
         const p = InMemoryProject.of(new InMemoryFile("thing.ts", "// Comment\n\nconst x = 10;\n"));
-        const r = await slocReport(p, "ts");
+        const r = await reportForLanguage(p, {language: TypeScriptLanguage });
         assert.equal(r.fileReports.length, 1);
         const f0 = r.fileReports[0];
         assert.equal(r.stats.total, 3);
@@ -34,13 +35,25 @@ describe("slocReport", () => {
 
     it("should work on Java", async () => {
         const p = InMemoryProject.of(new InMemoryFile("src/Thing.java", "// Comment\n\nclass Foo{}\n"));
-        const r = await slocReport(p, "java");
+        const r = await reportForLanguage(p, { language: JavaLanguage});
         assert.equal(r.fileReports.length, 1);
         const f0 = r.fileReports[0];
         assert.equal(r.stats.total, 3);
         assert.equal(r.stats.source, 1);
         assert.equal(f0.stats.total, 3);
         assert.equal(f0.stats.source, 1);
+    });
+
+    it("should work on Java and TypeScript", async () => {
+        const p = InMemoryProject.of(
+            new InMemoryFile("thing.ts", "// Comment\n\nconst x = 10;\n"),
+            new InMemoryFile("src/Thing.java", "// Comment\n\nclass Foo{}\n"),
+        );
+        const r = await reportForLanguages(p, { language: JavaLanguage}, { language: TypeScriptLanguage});
+        assert(r.languageReports.length === 2);
+        assert(r.relevantLanguageReports.length === 2);
+        assert(r.languageReports.some(l => l.language === JavaLanguage));
+        assert(r.languageReports.some(l => l.language === TypeScriptLanguage));
     });
 
 });
