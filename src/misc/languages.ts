@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { Language } from "./slocReport";
 
 export const JavaLanguage: Language = {name: "Java", extensions: ["java"]};
