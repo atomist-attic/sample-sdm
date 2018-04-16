@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Parameter } from "@atomist/automation-client";
+import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
 import { GitHubNameRegExp } from "@atomist/automation-client/operations/common/params/gitHubPatterns";
 import { JavaIdentifierRegExp } from "@atomist/sdm";
 import { camelize } from "tslint/lib/utils";
@@ -25,6 +25,9 @@ import { JavaProjectCreationParameters } from "../JavaProjectCreationParameters"
  * Parameters for creating Spring Boot apps.
  */
 export class SpringProjectCreationParameters extends JavaProjectCreationParameters {
+
+    @MappedParameter(MappedParameters.SlackUserName)
+    public screenName: string;
 
     @Parameter({
         displayName: "Class Name",

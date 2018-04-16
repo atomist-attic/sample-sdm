@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { HandlerContext, logger } from "@atomist/automation-client";
+import { logger } from "@atomist/automation-client";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
-import { PersonByChatId } from "@atomist/sdm";
+import { findAuthorName } from "../../generators/common/findAuthorName";
 
 export function updatePackageJsonIdentification(appName: string,
                                                 description: string,
@@ -24,7 +24,7 @@ export function updatePackageJsonIdentification(appName: string,
                                                 screenName: string,
                                                 target: { owner: string, repo: string }) {
     return async (project, context) => {
-        const author = await nameAuthor(context, screenName);
+        const author = await findAuthorName(context, screenName);
         logger.info("Updating JSON. Author is " + author);
         return doWithJson(project, "package.json", pkg => {
             const repoUrl = `https://github.com/${target.owner}/${target.repo}`;
@@ -42,23 +42,4 @@ export function updatePackageJsonIdentification(appName: string,
             };
         });
     };
-}
-
-async function nameAuthor(ctx: HandlerContext, screenName: string): Promise<string> {
-    const personResult: PersonByChatId.Query = await ctx.graphClient.query(
-        { name: "PersonQuery", variables: {screenName}});
-    if (!personResult || !personResult.ChatId || personResult.ChatId.length === 0 || !personResult.ChatId[0].person) {
-        logger.info("No person; defaulting author to blank");
-        return "";
-    }
-    const person = personResult.ChatId[0].person;
-    if (person.forename && person.surname) {
-        return `${person.forename} ${person.surname}`;
-    }
-    if (person.gitHubId) {
-        return person.gitHubId.login;
-    }
-    if (person.emails.length > 0) {
-        return person.emails[0].address;
-    }
 }

@@ -45,7 +45,7 @@ import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
 
 /**
- * Configuration common to Node SDMs, wherever they deploy
+ * Add configuration common to Node SDMs, wherever they deploy
  * @param {SoftwareDeliveryMachine} sdm
  */
 export function addNodeSupport(sdm: SoftwareDeliveryMachine,
