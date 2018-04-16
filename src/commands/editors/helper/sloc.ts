@@ -17,8 +17,7 @@
 import { HandleCommand, HandlerContext } from "@atomist/automation-client";
 import { Project } from "@atomist/automation-client/project/Project";
 import { editorCommand, EmptyParameters } from "@atomist/sdm";
-import { JavaLanguage, JavaScriptLanguage, KotlinLanguage, TypeScriptLanguage } from "../../../misc/languages";
-import { LanguageReport, reportForLanguages } from "../../../misc/slocReport";
+import { LanguageReport, reportForLanguages } from "@atomist/sdm/util/sloc/slocReport";
 
 export const slocCommand: HandleCommand = editorCommand<EmptyParameters>(
     () => computeSloc,
@@ -28,12 +27,7 @@ export const slocCommand: HandleCommand = editorCommand<EmptyParameters>(
     });
 
 async function computeSloc(p: Project, ctx: HandlerContext, params: EmptyParameters) {
-    const report = await reportForLanguages(p,
-        {language: TypeScriptLanguage},
-        {language: JavaScriptLanguage},
-        {language: JavaLanguage},
-        {language: KotlinLanguage},
-    );
+    const report = await reportForLanguages(p);
     const message = report.relevantLanguageReports.map(formatLanguageReport).join("\n");
     await ctx.messageClient.respond(message);
     return p;
