@@ -78,7 +78,7 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         executeDockerBuild(
             options.projectLoader,
             NodeProjectVersioner,
-            async () => Success, // TODO CD at the least the compile step to this
+            async () => Success, // TODO CD at least add the compile step to this
             DefaultDockerImageNameCreator,
             {
                 registry: options.registry,
