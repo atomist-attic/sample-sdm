@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { SuccessPromise } from "@atomist/automation-client";
 import {
     DefaultDockerImageNameCreator,
     DockerBuildGoal,
@@ -74,7 +75,16 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
     .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
-        executeDockerBuild(options.projectLoader, DefaultDockerImageNameCreator, options))
+        executeDockerBuild(
+            options.projectLoader,
+            NodeProjectVersioner,
+            () => SuccessPromise, // TODO CD at the least the compile step to this
+            DefaultDockerImageNameCreator,
+            {
+                registry: options.registry,
+                user: options.user,
+                password: options.password,
+            }))
     .addGoalImplementation("nodeTag", TagGoal,
         executeTag(options.projectLoader))
     .addGoalImplementation("nodePublish", NpmPublishGoal,
