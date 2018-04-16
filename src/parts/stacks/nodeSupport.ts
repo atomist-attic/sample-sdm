@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Success } from "@atomist/automation-client";
 import {
     DefaultDockerImageNameCreator,
     DockerBuildGoal,
@@ -42,7 +43,6 @@ import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
-import { Success } from "@atomist/automation-client";
 
 /**
  * Configuration common to Node SDMs, wherever they deploy
