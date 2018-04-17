@@ -25,7 +25,7 @@ import {
     IsNode,
     NodeProjectIdentifier,
     NodeProjectVersioner,
-    NpmPublishGoal,
+    NpmPublishGoal, PackageLockFingerprinter,
     ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
@@ -47,6 +47,7 @@ import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
 /**
  * Add configuration common to Node SDMs, wherever they deploy
  * @param {SoftwareDeliveryMachine} sdm
+ * @param options config options
  */
 export function addNodeSupport(sdm: SoftwareDeliveryMachine,
                                options: SoftwareDeliveryMachineOptions & DockerOptions) {
@@ -72,6 +73,7 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         CommonTypeScriptErrors,
         DontImportOwnIndex,
     )
+        .addFingerprinterRegistrations(new PackageLockFingerprinter())
     .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,

@@ -18,7 +18,7 @@
     "url": "https://github.com/spring-team/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "https://r.atomist.com/H1maEGbz3G",
+    "@atomist/sdm": "https://r.atomist.com/HJXcyemQnG",
     "@atomist/slack-messages": "^0.12.1",
     "npm": "^5.8.0"
   },
