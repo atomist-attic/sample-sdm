@@ -13,16 +13,16 @@ import { RequestedCommitParameters } from "../support/RequestedCommitParameters"
 @Parameters()
 export class AddHeaderParameters extends RequestedCommitParameters {
 
-    @Parameter({required: false})
+    @Parameter({ required: false })
     public glob: string = CFamilyLanguageSourceFiles;
 
-    @Parameter({required: false})
+    @Parameter({ required: false })
     public excludeGlob: string;
 
-    @Parameter({required: false})
+    @Parameter({ required: false })
     public license: "apache" = "apache";
 
-    @Parameter({required: false})
+    @Parameter({ required: false })
     public readonly successEmoji = ":carousel_horse:";
 
     constructor() {
@@ -31,9 +31,9 @@ export class AddHeaderParameters extends RequestedCommitParameters {
 
     get header(): string {
         switch (this.license) {
-            case "apache" :
+            case "apache":
                 return ApacheHeader;
-            default :
+            default:
                 throw new Error(`'${this.license}' is not a supported license`);
         }
     }
@@ -64,9 +64,12 @@ export const addApacheLicenseHeaderEditor: HandleCommand = editorCommand(
         editMode: ahp => ahp.editMode
     });
 
-export async function addHeaderProjectEditor(p: Project,
-                                             ctx: HandlerContext,
-                                             params: AddHeaderParameters): Promise<Project> {
+export async function addHeaderProjectEditor(
+    p: Project,
+    ctx: HandlerContext,
+    params: AddHeaderParameters
+): Promise<Project> {
+
     let headersAdded = 0;
     let matchingFiles = 0;
     await doWithFiles(p, params.glob, async f => {
@@ -79,7 +82,8 @@ export async function addHeaderProjectEditor(p: Project,
             return;
         }
         if (hasDifferentHeader(params.header, content)) {
-            return ctx.messageClient.respond(`\`${f.path}\` already has a different header`);
+            logger.debug(`\`${f.path}\` already has a different header`);
+            return;
         }
         logger.info("Adding header of length %d to %s", params.header.length, f.path);
         ++headersAdded;
