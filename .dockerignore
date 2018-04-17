@@ -2,6 +2,7 @@
 .npm*
 .*travis.yml
 C*.md
+assets/kube/
 node_modules/
 scripts/
 src/
