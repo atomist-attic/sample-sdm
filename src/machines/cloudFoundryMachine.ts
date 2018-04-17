@@ -19,7 +19,7 @@ import {
     AutofixGoal,
     DoNotSetAnyGoals,
     FromAtomist,
-    Goals,
+    Goals, hasFile,
     HttpServiceGoals,
     LibraryGoals,
     LocalDeploymentGoals,
@@ -142,22 +142,27 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
             .setGoals(NpmBuildGoals),
     );
 
-    const runBuildBuilder = nodeBuilder(options.projectLoader, "npm ci", "npm run build");
-    const runCompileBuilder = nodeBuilder(options.projectLoader, "npm ci", "npm run compile");
+    const hasPackageLock = hasFile("package-lock.json");
 
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)
             .itMeans("Custom build script")
             .set(npmCustomBuilder(options.artifactStore, options.projectLoader)),
-        build.when(IsNode, ToDefaultBranch)
+        build.when(IsNode, ToDefaultBranch, hasPackageLock)
             .itMeans("npm run compile")
-            .set(runBuildBuilder),
+            .set(nodeBuilder(options.projectLoader, "npm ci", "npm run build")),
+        build.when(IsNode, hasPackageLock)
+            .itMeans("npm compile")
+            .set(nodeBuilder(options.projectLoader, "npm ci", "npm run compile")),
+        build.when(IsNode, ToDefaultBranch)
+            .itMeans("npm run compile - no package lock")
+            .set(nodeBuilder(options.projectLoader, "npm i", "npm run build")),
+        build.when(IsNode)
+            .itMeans("npm compile - no package lock")
+            .set(nodeBuilder(options.projectLoader, "npm i", "npm run compile")),
         build.when(IsLein)
             .itMeans("Lein build")
             .set(leinBuilder(options.projectLoader)),
-        build.when(IsNode)
-            .itMeans("Just compile")
-            .set(runCompileBuilder),
         build.setDefault(new MavenBuilder(options.artifactStore,
             createEphemeralProgressLog, options.projectLoader)));
     sdm.addDeployRules(
