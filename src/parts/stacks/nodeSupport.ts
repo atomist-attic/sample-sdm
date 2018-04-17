@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
+import { automationClientInstance } from "@atomist/automation-client/automationClient";
+import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import {
+    DefaultDockerImageNameCreator,
+    DockerBuildGoal,
     DockerOptions,
+    executeDockerBuild,
     executeTag,
     executeVersioner,
     IsNode,
     NodeProjectIdentifier,
     NodeProjectVersioner,
+    NpmPreparations,
     NpmPublishGoal,
     PackageLockFingerprinter,
     ProductionDockerDeploymentGoal,
@@ -33,7 +39,9 @@ import {
     VersionGoal,
 } from "@atomist/sdm";
 import { executePublish } from "@atomist/sdm/common/delivery/build/local/npm/executePublish";
+import { SdmGoal } from "@atomist/sdm/ingesters/sdmGoalIngester";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
+import * as path from "path";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
 import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
@@ -49,47 +57,46 @@ import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
 export function addNodeSupport(sdm: SoftwareDeliveryMachine,
                                options: SoftwareDeliveryMachineOptions & DockerOptions) {
     sdm.addGenerators(() => nodeGenerator({
-            ...CommonGeneratorConfig,
-            seedRepo: "typescript-express-seed",
-            intent: "create node",
-        }))
+        ...CommonGeneratorConfig,
+        seedRepo: "typescript-express-seed",
+        intent: "create node",
+    }))
         .addGenerators(() => nodeGenerator({
             ...CommonGeneratorConfig,
             seedRepo: "minimal-node-seed",
             intent: "create minimal node",
         }))
         .addNewRepoWithCodeActions(
-            tagRepo(nodeTagger),
-        )
+        tagRepo(nodeTagger),
+    )
         .addAutofixes(
-            AddAtomistTypeScriptHeader,
-            tslintFix,
-            AddBuildScript,
-        )
-    .addReviewerRegistrations(
+        AddAtomistTypeScriptHeader,
+        tslintFix,
+        AddBuildScript,
+    )
+        .addReviewerRegistrations(
         CommonTypeScriptErrors,
         DontImportOwnIndex,
     )
         .addFingerprinterRegistrations(new PackageLockFingerprinter())
-    .addGoalImplementation("nodeVersioner", VersionGoal,
+        .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
-    // .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
-    //     executeDockerBuild(
-    //         options.projectLoader,
-    //         async () => "", // TODO CD this is very broken but fixed on my branch
-    //         async () => Success, // TODO CD at least add the compile step to this
-    //         DefaultDockerImageNameCreator,
-    //         {
-    //             registry: options.registry,
-    //             user: options.user,
-    //             password: options.password,
-    //
-    //             dockerfileFinder: async () => "Dockerfile",
-    //         }))
-    .addGoalImplementation("nodeTag", TagGoal,
+        .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
+        executeDockerBuild(
+            options.projectLoader,
+            DefaultDockerImageNameCreator,
+            [],
+            {
+                registry: options.registry,
+                user: options.user,
+                password: options.password,
+
+                dockerfileFinder: async () => "Dockerfile",
+            }))
+        .addGoalImplementation("nodeTag", TagGoal,
         executeTag(options.projectLoader))
-    .addGoalImplementation("nodePublish", NpmPublishGoal,
-        executePublish(options.projectLoader, NodeProjectIdentifier));
+        .addGoalImplementation("nodePublish", NpmPublishGoal,
+        executePublish(options.projectLoader, NodeProjectIdentifier, NpmPreparations));
 
     sdm.goalFulfillmentMapper.addSideEffect({
         goal: StagingDockerDeploymentGoal,
@@ -100,4 +107,53 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         pushTest: IsNode,
         sideEffectName: "@atomist/k8-automation",
     });
+
+    sdm.goalFulfillmentMapper.addFullfillmentCallback({
+        goalTest: goal => goal.name === StagingDockerDeploymentGoal.name,
+        goalCallback: async (goal, ctx) => {
+            return options.projectLoader.doWithProject({
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true,
+            }, async p => {
+                return createKubernetesData(goal, "testing", p);
+            });
+        },
+    });
+    sdm.goalFulfillmentMapper.addFullfillmentCallback({
+        goalTest: goal => goal.name === ProductionDockerDeploymentGoal.name,
+        goalCallback: async (goal, ctx) => {
+            return options.projectLoader.doWithProject({
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true,
+            }, async p => {
+                return createKubernetesData(goal, "production", p);
+            });
+        },
+    });
+}
+
+async function createKubernetesData(goal: SdmGoal, env: string, p: GitProject): Promise<SdmGoal> {
+    const deploymentSpec = await readKubernetesSpec(p, "deployment.json");
+    const serviceSpec = await readKubernetesSpec(p, "service.json");
+    return {
+        ...goal,
+        data: JSON.stringify({
+            kubernetes: {
+                environment: automationClientInstance().configuration.environment,
+                ns: env,
+                name: goal.repo.name,
+                port: 2866,
+                imagePullSecret: "atomistjfrog", // <- make that configurable
+                deploymentSpec,
+                serviceSpec,
+            },
+        }),
+    };
+}
+
+async function readKubernetesSpec(p: GitProject, name: string): Promise<string> {
+    const specPath = path.join(".atomist", "kubernetes", name);
+    if (p.fileExistsSync(specPath)) {
+        return (await p.getFile(specPath)).getContent();
+    } else {
+        return undefined;
+    }
 }

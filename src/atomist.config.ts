@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client/configuration";
-import { CachingProjectLoader, LoggingProgressLog } from "@atomist/sdm";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { DockerOptions } from "@atomist/sdm";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
+import { Configuration } from "@atomist/automation-client";
+import {
+    CachingProjectLoader,
+    configureForSdm,
+    createEphemeralProgressLog,
+    DockerOptions,
+    LoggingProgressLog,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+    WriteToAllProgressLog,
+} from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
-
-const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
+import { configureLogzio } from "./util/logzio";
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
 
@@ -70,7 +73,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
  * start with any of these and change it to make it your own!
  */
 
-const machineName = process.env.MACHINE_NAME ||  "cloudFoundryMachine";
+const machineName = process.env.MACHINE_NAME || "cloudFoundryMachine";
 const machinePath = process.env.MACHINE_PATH || "./machines";
 
 function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliveryMachine {
@@ -81,8 +84,6 @@ function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliver
 const machine = createMachine(SdmOptions);
 
 export const configuration: Configuration = {
-    commands: machine.commandHandlers.concat([]),
-    events: machine.eventHandlers.concat([]),
     policy: "ephemeral",
     http: {
         auth: {
@@ -96,15 +97,8 @@ export const configuration: Configuration = {
     cluster: {
         workers: 1,
     },
-    statsd: {
-        host: "dd-agent",
-        port: 8125,
-    },
     logging: {
-        level: !notLocal ? "info" : "debug",
         file: {
-            enabled: !notLocal,
-            level: "debug",
             name: "./log/github-sdm.log",
         },
         banner: () => ({
@@ -113,4 +107,8 @@ export const configuration: Configuration = {
             color: "green",
         }),
     },
+    postProcessors: [
+        configureLogzio,
+        configureForSdm(machine),
+    ],
 };
