@@ -25,7 +25,7 @@ import {
     IsNode,
     NodeProjectIdentifier,
     NodeProjectVersioner,
-    NpmPublishGoal, PackageLockFingerprinter,
+    NpmPublishGoal,
     ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
@@ -36,6 +36,7 @@ import {
     VersionGoal,
 } from "@atomist/sdm";
 import { executePublish } from "@atomist/sdm/common/delivery/build/local/npm/executePublish";
+import { NpmPreparations } from "@atomist/sdm/common/delivery/build/local/npm/npmBuilder";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
@@ -73,15 +74,13 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         CommonTypeScriptErrors,
         DontImportOwnIndex,
     )
-        .addFingerprinterRegistrations(new PackageLockFingerprinter())
     .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
         executeDockerBuild(
             options.projectLoader,
-            NodeProjectVersioner,
-            async () => Success, // TODO CD at least add the compile step to this
             DefaultDockerImageNameCreator,
+            NpmPreparations,
             {
                 registry: options.registry,
                 user: options.user,

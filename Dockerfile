@@ -10,19 +10,19 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
     && npm i -g npm
 
 ADD https://storage.googleapis.com/kubernetes-release/release/v1.6.4/bin/linux/amd64/kubectl /usr/local/bin/kubectl
-RUN set -x && \
-    apk add --no-cache curl ca-certificates && \
-    chmod +x /usr/local/bin/kubectl && \
-    kubectl version --client
+RUN chmod +x /usr/local/bin/kubectl \
+    && kubectl version --client
 
-RUN apt-get -yqq update && apt-get -yqq install docker.io
+RUN apt-get -yqq update \
+    && apt-get -yqq install docker.io
 
 ENV DUMB_INIT_VERSION=1.2.1
 RUN curl -s -L -O https://github.com/Yelp/dumb-init/releases/download/v$DUMB_INIT_VERSION/dumb-init_${DUMB_INIT_VERSION}_amd64.deb \
     && dpkg -i dumb-init_${DUMB_INIT_VERSION}_amd64.deb \
     && rm -f dumb-init_${DUMB_INIT_VERSION}_amd64.deb
 
-RUN git config --global user.email "bot@atomist.com" &&  git config --global user.name "Atomist Bot"
+RUN git config --global user.email "bot@atomist.com" \
+    &&  git config --global user.name "Atomist Bot"
 
 # Create app directory
 RUN mkdir -p /app
