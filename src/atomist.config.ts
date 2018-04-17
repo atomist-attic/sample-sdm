@@ -15,9 +15,13 @@
  */
 
 import { Configuration } from "@atomist/automation-client/configuration";
-import { CachingProjectLoader } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { DockerOptions } from "@atomist/sdm";
+import {
+    CachingProjectLoader,
+    configureForSdm,
+    DockerOptions,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { greeting } from "./misc/greeting";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
@@ -78,8 +82,6 @@ function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliver
 const machine = createMachine(SdmOptions);
 
 export const configuration: Configuration = {
-    commands: machine.commandHandlers.concat([]),
-    events: machine.eventHandlers.concat([]),
     policy: "ephemeral",
     http: {
         auth: {
@@ -91,6 +93,7 @@ export const configuration: Configuration = {
         },
     },
     cluster: {
+        enabled: true,
         workers: 1,
     },
     statsd: {
@@ -98,7 +101,7 @@ export const configuration: Configuration = {
         port: 8125,
     },
     logging: {
-        level: !notLocal ? "info" : "debug",
+        level: "debug",
         file: {
             enabled: !notLocal,
             level: "debug",
@@ -106,4 +109,7 @@ export const configuration: Configuration = {
         },
         banner: greeting(),
     },
+    postProcessors: [
+        configureForSdm(machine),
+    ]
 };

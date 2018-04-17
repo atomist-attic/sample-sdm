@@ -9,6 +9,12 @@ RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
     && apt-get install -y nodejs \
     && npm i -g npm
 
+ADD https://storage.googleapis.com/kubernetes-release/release/v1.6.4/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+RUN set -x && \
+    apk add --no-cache curl ca-certificates && \
+    chmod +x /usr/local/bin/kubectl && \
+    kubectl version --client
+
 RUN apt-get -yqq update && apt-get -yqq install docker.io
 
 ENV DUMB_INIT_VERSION=1.2.1
@@ -30,7 +36,7 @@ ENV NPM_CONFIG_LOGLEVEL warn
 ENV SUPPRESS_NO_CONFIG_WARNING true
 ENV NODE_ENV production
 
-RUN npm install
+RUN npm ci
 
 # Bundle app source
 COPY . /app

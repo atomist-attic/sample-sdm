@@ -1,26 +1,25 @@
 {
-  "name": "@atomist/software-delivery-machine",
-  "version": "0.1.0",
+  "name": "@atomist/sample-sdm",
+  "version": "0.0.2",
   "description": "an Atomist automation for software delivery",
-  "author": "Rod Johnson",
+  "author": "Atomist, Inc.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/spring-team/sample-sdm.git"
+    "url": "https://github.com/atomist/sample-sdm.git"
   },
   "keywords": [
     "atomist",
     "automation",
     "github"
   ],
-  "homepage": "https://github.com/spring-team/sample-sdm#readme",
+  "homepage": "https://github.com/atomist/sample-sdm#readme",
   "bugs": {
-    "url": "https://github.com/spring-team/sample-sdm/issues"
+    "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "https://r.atomist.com/HymhWOmX2f",
-    "@atomist/slack-messages": "^0.12.1",
-    "npm": "^5.8.0"
+    "@atomist/sdm": "https://r.atomist.com/SyX1HNimnM",
+    "@atomist/slack-messages": "^0.12.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.48",
@@ -76,7 +75,7 @@
     "watch": "supervisor --watch build --quiet --exec npm -- run start"
   },
   "engines": {
-    "node": "8.x.x",
+    "node": "9.x.x",
     "npm": "5.x.x"
   }
 }
