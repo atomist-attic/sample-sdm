@@ -111,5 +111,5 @@ export const configuration: Configuration = {
     },
     postProcessors: [
         configureForSdm(machine),
-    ]
+    ],
 };

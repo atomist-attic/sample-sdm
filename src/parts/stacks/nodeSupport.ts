@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { Success } from "@atomist/automation-client";
 import {
     DefaultDockerImageNameCreator,
     DockerBuildGoal,
