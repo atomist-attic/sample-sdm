@@ -32,12 +32,11 @@ export const AddBuildScript: AutofixRegistration = editorAutofixRegistration({
 
 export async function addBuildScriptEditor(p: Project,
                                            ctx: HandlerContext): Promise<Project> {
-    return doWithJson(p, "package.json", (packageJson => {
-            if (_.get<string>(packageJson, "scripts.build")) {
-                return;
-            }
-            // todo: what would work on both linuxy and windows?
-            return _.merge(packageJson, {scripts: {build: "echo 'The build goes here'"}});
+    return doWithJson(p, "package.json", packageJson => {
+        if (_.get(packageJson, "scripts.build")) {
+            return;
         }
-    ));
+        // todo: what would work on both linuxy and windows?
+        return _.merge(packageJson, { scripts: { build: "echo 'The build goes here'" } });
+    });
 }
