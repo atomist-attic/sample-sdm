@@ -79,7 +79,7 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
         executeDockerBuild(
             options.projectLoader,
-            NodeProjectVersioner,
+            async () => "", // TODO CD this is very broken but fixed on my branch
             async () => Success, // TODO CD at least add the compile step to this
             DefaultDockerImageNameCreator,
             {
