@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-import { ProjectReviewer } from "@atomist/automation-client/operations/review/projectReviewer";
 import { DefaultReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { whenPushSatisfies } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { EphemeralLocalArtifactStore } from "@atomist/sdm";
-import { ReviewGoal } from "@atomist/sdm";
-import { Goals } from "@atomist/sdm";
-import { IsJava } from "@atomist/sdm";
-import { CachingProjectLoader } from "@atomist/sdm";
+import {
+    CachingProjectLoader,
+    EphemeralLocalArtifactStore,
+    Goals,
+    IsJava,
+    ReviewerRegistration,
+    ReviewGoal,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+    whenPushSatisfies
+} from "@atomist/sdm";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "../parts/stacks/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
@@ -49,26 +52,24 @@ export function staticAnalysisMachine(opts: Partial<StaticAnalysisMachineOptions
             .itMeans("Change to Java")
             .setGoals(new Goals("Review only", ReviewGoal)));
     addCheckstyleSupport(sdm, options);
-    sdm.addReviewerRegistrations({
-        name: "YML-hater",
-        action: cri => rodHatesYml(cri.project, cri.context),
-        options: {considerOnlyChangedFiles: false},
-    });
+    sdm.addReviewerRegistrations(rodHatesYaml);
 
     addDemoEditors(sdm);
     return sdm;
 }
 
-const rodHatesYml: ProjectReviewer = async p => {
-    return {
-        repoId: p.id,
-        comments: await saveFromFiles(p, "**/*.yml", f =>
-            new DefaultReviewComment("info", "yml-reviewer",
-                `Found YML in \`${f.path}\`: Rod regards the format as an insult to computer science`,
-                {
-                    path: f.path,
-                    lineFrom1: 1,
-                    offset: -1,
-                })),
-    };
+const rodHatesYaml: ReviewerRegistration = {
+    name: "rodHatesYaml",
+    action: async cri => ({
+        repoId: cri.project.id,
+        comments:
+            await saveFromFiles(cri.project, "**/*.yml", f =>
+                new DefaultReviewComment("info", "yml-reviewer",
+                    `Found YML in \`${f.path}\`: Rod regards the format as an insult to computer science`,
+                    {
+                        path: f.path,
+                        lineFrom1: 1,
+                        offset: -1,
+                    })),
+    }),
 };
