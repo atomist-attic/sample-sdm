@@ -25,7 +25,7 @@ import {
     ReviewGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
-    whenPushSatisfies
+    whenPushSatisfies,
 } from "@atomist/sdm";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "../parts/stacks/checkstyleSupport";
