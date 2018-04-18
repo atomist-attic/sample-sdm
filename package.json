@@ -1,21 +1,21 @@
 {
-  "name": "@atomist/software-delivery-machine",
-  "version": "0.0.8",
+  "name": "@atomist/sample-sdm",
+  "version": "0.5.0",
   "description": "an Atomist automation for software delivery",
-  "author": "Rod Johnson",
+  "author": "Atomist, Inc.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/spring-team/sample-sdm.git"
+    "url": "https://github.com/atomist/sample-sdm.git"
   },
   "keywords": [
     "atomist",
     "automation",
     "github"
   ],
-  "homepage": "https://github.com/spring-team/sample-sdm#readme",
+  "homepage": "https://github.com/atomist/sample-sdm#readme",
   "bugs": {
-    "url": "https://github.com/spring-team/sample-sdm/issues"
+    "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
     "@atomist/sdm": "https://r.atomist.com/rkCeyfZ8NnG",
