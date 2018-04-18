@@ -52,7 +52,7 @@ export function staticAnalysisMachine(opts: Partial<StaticAnalysisMachineOptions
             .itMeans("Change to Java")
             .setGoals(new Goals("Review only", ReviewGoal)));
     addCheckstyleSupport(sdm, options);
-    sdm.addReviewerRegistrations(rodHatesYaml);
+    sdm.addReviewerRegistrations(rodHatesYaml, hasNoReadMe);
 
     addDemoEditors(sdm);
     return sdm;
@@ -71,5 +71,21 @@ const rodHatesYaml: ReviewerRegistration = {
                         lineFrom1: 1,
                         offset: -1,
                     })),
+    }),
+};
+
+const hasNoReadMe: ReviewerRegistration = {
+    name: "hasNoReadme",
+    action: async cri => ({
+        repoId: cri.project.id,
+        comments: !!(await cri.project.getFile("README.me")) ?
+            [] :
+            [new DefaultReviewComment("info", "readme",
+                "Project has no README",
+                {
+                    path: "README.md",
+                    lineFrom1: 1,
+                    offset: -1,
+                })],
     }),
 };
