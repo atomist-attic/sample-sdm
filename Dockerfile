@@ -1,6 +1,6 @@
 FROM ubuntu
 
-LABEL maintainer="Christian Dupuis <cd@atmoist.com>"
+LABEL maintainer="Christian Dupuis <cd@atomist.com>"
 
 RUN apt-get -yqq update && apt-get install -yqq \
     curl
