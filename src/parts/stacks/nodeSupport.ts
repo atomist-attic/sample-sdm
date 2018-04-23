@@ -25,7 +25,9 @@ import {
     IsNode,
     NodeProjectIdentifier,
     NodeProjectVersioner,
-    NpmPublishGoal, PackageLockFingerprinter,
+    NpmPreparations,
+    NpmPublishGoal,
+    PackageLockFingerprinter,
     ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
@@ -73,15 +75,14 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         CommonTypeScriptErrors,
         DontImportOwnIndex,
     )
-        .addFingerprinterRegistrations(new PackageLockFingerprinter())
+    .addFingerprinterRegistrations(new PackageLockFingerprinter())
     .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
     .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
         executeDockerBuild(
             options.projectLoader,
-            async () => "", // TODO CD this is very broken but fixed on my branch
-            async () => Success, // TODO CD at least add the compile step to this
             DefaultDockerImageNameCreator,
+            NpmPreparations,
             {
                 registry: options.registry,
                 user: options.user,
@@ -92,7 +93,7 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
     .addGoalImplementation("nodeTag", TagGoal,
         executeTag(options.projectLoader))
     .addGoalImplementation("nodePublish", NpmPublishGoal,
-        executePublish(options.projectLoader, NodeProjectIdentifier));
+        executePublish(options.projectLoader, NodeProjectIdentifier, NpmPreparations));
 
     sdm.goalFulfillmentMapper.addSideEffect({
         goal: StagingDockerDeploymentGoal,
