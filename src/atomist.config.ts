@@ -93,7 +93,6 @@ export const configuration: Configuration = {
         },
     },
     cluster: {
-        enabled: true,
         workers: 1,
     },
     statsd: {
@@ -101,7 +100,6 @@ export const configuration: Configuration = {
         port: 8125,
     },
     logging: {
-        level: "debug",
         file: {
             enabled: !notLocal,
             level: "debug",
