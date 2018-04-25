@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { Success } from "@atomist/automation-client";
+import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import {
     DefaultDockerImageNameCreator,
     DockerBuildGoal,
@@ -37,6 +39,7 @@ import {
     VersionGoal,
 } from "@atomist/sdm";
 import { executePublish } from "@atomist/sdm/common/delivery/build/local/npm/executePublish";
+import { SdmGoal } from "@atomist/sdm/ingesters/sdmGoalIngester";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
@@ -44,6 +47,7 @@ import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
+import * as path from "path";
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy
@@ -103,4 +107,51 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         pushTest: IsNode,
         sideEffectName: "@atomist/k8-automation",
     });
+
+    sdm.goalFulfillmentMapper.addFullfillmentCallback({
+        goalTest: goal => goal.name === StagingDockerDeploymentGoal.name,
+        goalCallback: async (goal, ctx) => {
+            return options.projectLoader.doWithProject({
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true},async p => {
+                return createKubernetesData(goal, "testing", p);
+            });
+        }
+    });
+    sdm.goalFulfillmentMapper.addFullfillmentCallback({
+        goalTest: goal => goal.name === ProductionDockerDeploymentGoal.name,
+        goalCallback: async (goal, ctx) => {
+            return options.projectLoader.doWithProject({
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true},async p => {
+                return createKubernetesData(goal, "production", p);
+            });
+        }
+    });
+}
+
+async function createKubernetesData(goal: SdmGoal, env: string, p: GitProject): Promise<SdmGoal> {
+    const deploymentSpec = await readKubernetesSpec(p, "deployment-spec.json");
+    const serviceSpec = await readKubernetesSpec(p, "service-spec.json");
+    return {
+        ...goal,
+        data: JSON.stringify({
+            kubernetes: {
+                environment: "local", // <- make that configurable
+                ns: env,
+                name: goal.repo.name,
+                port: 2866,
+                imagePullSecret: "atomistjfrog", // <- make that configurable
+                deploymentSpec,
+                serviceSpec
+            }
+        })
+    };
+}
+
+async function readKubernetesSpec(p: GitProject, name: string): Promise<string> {
+    const specPath = path.join(".atomist", "kubernetes", name);
+    if (p.fileExistsSync(specPath)) {
+        return await (await p.getFile(specPath)).getContent();
+    } else {
+        return undefined;
+    }
 }
