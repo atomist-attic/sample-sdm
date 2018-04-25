@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Success } from "@atomist/automation-client";
 import {
     DefaultDockerImageNameCreator,
     DockerBuildGoal,
@@ -24,7 +25,8 @@ import {
     IsNode,
     NodeProjectIdentifier,
     NodeProjectVersioner,
-    NpmPublishGoal, PackageLockFingerprinter,
+    NpmPublishGoal,
+    PackageLockFingerprinter,
     ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
