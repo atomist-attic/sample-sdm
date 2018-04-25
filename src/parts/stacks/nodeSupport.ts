@@ -109,19 +109,19 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         goalTest: goal => goal.name === StagingDockerDeploymentGoal.name,
         goalCallback: async (goal, ctx) => {
             return options.projectLoader.doWithProject({
-                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true},async p => {
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true}, async p => {
                 return createKubernetesData(goal, "testing", p);
             });
-        }
+        },
     });
     sdm.goalFulfillmentMapper.addFullfillmentCallback({
         goalTest: goal => goal.name === ProductionDockerDeploymentGoal.name,
         goalCallback: async (goal, ctx) => {
             return options.projectLoader.doWithProject({
-                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true},async p => {
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true}, async p => {
                 return createKubernetesData(goal, "production", p);
             });
-        }
+        },
     });
 }
 
@@ -138,16 +138,16 @@ async function createKubernetesData(goal: SdmGoal, env: string, p: GitProject): 
                 port: 2866,
                 imagePullSecret: "atomistjfrog", // <- make that configurable
                 deploymentSpec,
-                serviceSpec
-            }
-        })
+                serviceSpec,
+            },
+        }),
     };
 }
 
 async function readKubernetesSpec(p: GitProject, name: string): Promise<string> {
     const specPath = path.join(".atomist", "kubernetes", name);
     if (p.fileExistsSync(specPath)) {
-        return await (await p.getFile(specPath)).getContent();
+        return (await p.getFile(specPath)).getContent();
     } else {
         return undefined;
     }
