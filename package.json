@@ -1,6 +1,6 @@
 {
   "name": "@atomist/sample-sdm",
-  "version": "0.0.11",
+  "version": "0.0.15",
   "description": "an Atomist automation for software delivery",
   "author": "Atomist, Inc.",
   "license": "Apache-2.0",
@@ -18,7 +18,8 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "https://r.atomist.com/Sk7vWblE3z",
+    "@atomist/sdm": "https://r.atomist.com/Sy7u3NoonM",
+    "@atomist/automation-client": "https://r.atomist.com/rJ45nZCP2G",
     "@atomist/slack-messages": "^0.12.1"
   },
   "devDependencies": {
