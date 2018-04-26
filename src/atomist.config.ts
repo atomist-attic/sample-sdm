@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client/configuration";
+import { Configuration } from "@atomist/automation-client";
 import {
     CachingProjectLoader,
     configureForSdm,
@@ -23,10 +23,8 @@ import {
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
-import { greeting } from "./misc/greeting";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
-
-const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
+import { configureLogzio } from "./util/logzio";
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
 
@@ -71,7 +69,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
  * start with any of these and change it to make it your own!
  */
 
-const machineName = process.env.MACHINE_NAME ||  "cloudFoundryMachine";
+const machineName = process.env.MACHINE_NAME || "cloudFoundryMachine";
 const machinePath = process.env.MACHINE_PATH || "./machines";
 
 function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliveryMachine {
@@ -82,32 +80,16 @@ function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliver
 const machine = createMachine(SdmOptions);
 
 export const configuration: Configuration = {
-    policy: "ephemeral",
-    http: {
-        auth: {
-            basic: {
-                enabled: true,
-                username: "admin",
-                password: process.env.LOCAL_ATOMIST_ADMIN_PASSWORD,
-            },
-        },
-    },
     cluster: {
         workers: 1,
     },
-    statsd: {
-        host: "dd-agent",
-        port: 8125,
-    },
     logging: {
         file: {
-            enabled: !notLocal,
-            level: "debug",
             name: "./log/github-sdm.log",
         },
-        banner: greeting(),
     },
     postProcessors: [
+        configureLogzio,
         configureForSdm(machine),
     ],
 };
