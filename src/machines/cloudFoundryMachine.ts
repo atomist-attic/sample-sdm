@@ -167,7 +167,6 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
             createEphemeralProgressLog, options.projectLoader)));
     sdm.addDeployRules(
         deploy.when(IsMaven)
-            .itMeans("mvn test")
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
             .using(
                 {
@@ -176,7 +175,6 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
                 },
             ),
         deploy.when(IsMaven)
-            .itMeans("Maven production")
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(options)),
         deploy.when(IsNode)
