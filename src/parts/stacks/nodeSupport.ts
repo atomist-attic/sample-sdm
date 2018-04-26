@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { automationClientInstance } from "@atomist/automation-client/automationClient";
 import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import {
     DefaultDockerImageNameCreator,
@@ -56,31 +57,31 @@ import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
 export function addNodeSupport(sdm: SoftwareDeliveryMachine,
                                options: SoftwareDeliveryMachineOptions & DockerOptions) {
     sdm.addGenerators(() => nodeGenerator({
-            ...CommonGeneratorConfig,
-            seedRepo: "typescript-express-seed",
-            intent: "create node",
-        }))
+        ...CommonGeneratorConfig,
+        seedRepo: "typescript-express-seed",
+        intent: "create node",
+    }))
         .addGenerators(() => nodeGenerator({
             ...CommonGeneratorConfig,
             seedRepo: "minimal-node-seed",
             intent: "create minimal node",
         }))
         .addNewRepoWithCodeActions(
-            tagRepo(nodeTagger),
-        )
+        tagRepo(nodeTagger),
+    )
         .addAutofixes(
-            AddAtomistTypeScriptHeader,
-            tslintFix,
-            AddBuildScript,
-        )
-    .addReviewerRegistrations(
+        AddAtomistTypeScriptHeader,
+        tslintFix,
+        AddBuildScript,
+    )
+        .addReviewerRegistrations(
         CommonTypeScriptErrors,
         DontImportOwnIndex,
     )
-    .addFingerprinterRegistrations(new PackageLockFingerprinter())
-    .addGoalImplementation("nodeVersioner", VersionGoal,
+        .addFingerprinterRegistrations(new PackageLockFingerprinter())
+        .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
-    .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
+        .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
         executeDockerBuild(
             options.projectLoader,
             DefaultDockerImageNameCreator,
@@ -92,9 +93,9 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
 
                 dockerfileFinder: async () => "Dockerfile",
             }))
-    .addGoalImplementation("nodeTag", TagGoal,
+        .addGoalImplementation("nodeTag", TagGoal,
         executeTag(options.projectLoader))
-    .addGoalImplementation("nodePublish", NpmPublishGoal,
+        .addGoalImplementation("nodePublish", NpmPublishGoal,
         executePublish(options.projectLoader, NodeProjectIdentifier, NpmPreparations));
 
     sdm.goalFulfillmentMapper.addSideEffect({
@@ -111,7 +112,8 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         goalTest: goal => goal.name === StagingDockerDeploymentGoal.name,
         goalCallback: async (goal, ctx) => {
             return options.projectLoader.doWithProject({
-                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true}, async p => {
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true,
+            }, async p => {
                 return createKubernetesData(goal, "testing", p);
             });
         },
@@ -120,7 +122,8 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         goalTest: goal => goal.name === ProductionDockerDeploymentGoal.name,
         goalCallback: async (goal, ctx) => {
             return options.projectLoader.doWithProject({
-                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true}, async p => {
+                credentials: ctx.credentials, id: ctx.id, context: ctx.context, readOnly: true,
+            }, async p => {
                 return createKubernetesData(goal, "production", p);
             });
         },
@@ -128,13 +131,13 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
 }
 
 async function createKubernetesData(goal: SdmGoal, env: string, p: GitProject): Promise<SdmGoal> {
-    const deploymentSpec = await readKubernetesSpec(p, "deployment-spec.json");
-    const serviceSpec = await readKubernetesSpec(p, "service-spec.json");
+    const deploymentSpec = await readKubernetesSpec(p, "deployment.json");
+    const serviceSpec = await readKubernetesSpec(p, "service.json");
     return {
         ...goal,
         data: JSON.stringify({
             kubernetes: {
-                environment: "local", // <- make that configurable
+                environment: automationClientInstance().configuration.environment,
                 ns: env,
                 name: goal.repo.name,
                 port: 2866,
