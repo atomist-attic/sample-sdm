@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { NewIssueInvocation } from "@atomist/sdm";
+import { NewIssueListenerInvocation } from "@atomist/sdm";
 
 /**
  * Fun issue automations: Not for real use
  */
 
-export async function stopRaisingIssues(inv: NewIssueInvocation) {
+export async function stopRaisingIssues(inv: NewIssueListenerInvocation) {
     await inv.context.messageClient.addressUsers(
         `${inv.issue.openedBy.person.name}, *please* stop raising issues!! :crying_cat_face:`,
         inv.issue.openedBy.person.chatId.screenName);
 }
 
-export async function ohTheHorror(inv: NewIssueInvocation) {
+export async function ohTheHorror(inv: NewIssueListenerInvocation) {
     return inv.addressChannels("Oh no, not another issue :thumbsdown:");
 }

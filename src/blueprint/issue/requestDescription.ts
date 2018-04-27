@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { NewIssueInvocation } from "@atomist/sdm";
+import { NewIssueListenerInvocation } from "@atomist/sdm";
 
-export async function requestDescription(inv: NewIssueInvocation) {
+export async function requestDescription(inv: NewIssueListenerInvocation) {
     if (!inv.issue.body || inv.issue.body.length < 10) {
         await inv.context.messageClient.addressUsers(
             `Please add a description for new issue ${inv.issue.number}: _${inv.issue.title}_: ${inv.id.url}/issues/${inv.issue.number}`,

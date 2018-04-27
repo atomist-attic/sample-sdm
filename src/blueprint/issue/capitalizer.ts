@@ -15,7 +15,7 @@
  */
 
 import { TokenCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
-import { NewIssueInvocation } from "@atomist/sdm";
+import { NewIssueListenerInvocation } from "@atomist/sdm";
 import { updateIssue } from "@atomist/sdm/util/github/ghub";
 
 /**
@@ -23,7 +23,7 @@ import { updateIssue } from "@atomist/sdm/util/github/ghub";
  * @param {NewIssueInvocation} inv
  * @return {Promise<void>}
  */
-export async function capitalizer(inv: NewIssueInvocation) {
+export async function capitalizer(inv: NewIssueListenerInvocation) {
     const title = inv.issue.title;
     const firstChar = title.charAt(0);
     if (firstChar !== firstChar.toUpperCase()) {

@@ -15,16 +15,14 @@
  */
 
 import { CodeActionRegistration } from "@atomist/sdm";
-import { CodeReactionInvocation } from "@atomist/sdm";
 
 /**
  * React to a push by listing changed files to any Slack channels
  * associated with the repo
- * @param {CodeReactionInvocation} i
  * @return {Promise<any>}
  */
 export const listChangedFiles: CodeActionRegistration = {
-    action(i: CodeReactionInvocation) {
+    action: i => {
         return i.addressChannels(`Files changed:\n${i.filesChanged.map(n => "- `" + n + "`").join("\n")}`);
     },
     name: "List files changed",

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CodeActionRegistration } from "@atomist/sdm";
+import { CodeActionRegistration, PushImpactListener } from "@atomist/sdm";
 import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
 import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
 import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
@@ -25,7 +25,6 @@ import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
 } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
-import { CodeReactionListener } from "@atomist/sdm/common/listener/CodeReactionListener";
 import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
 import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
@@ -60,14 +59,14 @@ export function cloudFoundryProductionDeploySpec(opts: {artifactStore: ArtifactS
     };
 }
 
-const EnableDeployOnCloudFoundryManifestAdditionListener: CodeReactionListener = async cri => {
-    const commit = cri.commit;
+const EnableDeployOnCloudFoundryManifestAdditionListener: PushImpactListener = async pil => {
+    const commit = pil.commit;
     const repo = commit.repo;
     const push = commit.pushes[0];
 
     if (push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
         await setDeployEnablement(true)
-        (cri.context, {repo: repo.name, owner: repo.owner, providerId: repo.org.provider.providerId});
+        (pil.context, {repo: repo.name, owner: repo.owner, providerId: repo.org.provider.providerId});
     }
 };
 
