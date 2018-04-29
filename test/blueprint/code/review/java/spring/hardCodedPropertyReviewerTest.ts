@@ -20,7 +20,7 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { PushListenerInvocation } from "@atomist/sdm";
-import { HardCodedPropertyReviewer } from "../../../../../src/blueprint/code/review/spring/hardcodedPropertyReviewer";
+import { HardCodedPropertyReviewer } from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
 
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import * as assert from "power-assert";
