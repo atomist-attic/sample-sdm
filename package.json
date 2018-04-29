@@ -18,10 +18,12 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "https://r.atomist.com/SJmIPaLgpG",
-    "@atomist/spring-automation": "https://r.atomist.com/H17-l06zpM",
     "@atomist/automation-client": "https://r.atomist.com/SkHgerlMaG",
-    "@atomist/slack-messages": "^0.12.1"
+    "@atomist/sdm": "https://r.atomist.com/SJmIPaLgpG",
+    "@atomist/slack-messages": "^0.12.1",
+    "@atomist/spring-automation": "https://r.atomist.com/H17-l06zpM",
+    "@types/properties-reader": "0.0.1",
+    "properties-reader": "0.0.16"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.48",

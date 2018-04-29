@@ -15,9 +15,22 @@
  */
 
 import { DefaultReviewComment, ReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
+import { File } from "@atomist/automation-client/project/File";
 import { Project } from "@atomist/automation-client/project/Project";
-import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
 import { IsMaven, ReviewerRegistration } from "@atomist/sdm";
+
+import * as props from "properties-reader";
+
+import { logger } from "@atomist/automation-client";
+import * as _ from "lodash";
+
+const PropertyKeysToCheck = [
+    "server.port",
+    "spring.datasource.url",
+    "spring.datasource.username",
+    "spring.datasource.password",
+];
 
 /**
  * Reviewer that finds hard-coded properties
@@ -34,12 +47,50 @@ export const HardCodedPropertyReviewer: ReviewerRegistration = {
 };
 
 async function badPropertiesStrings(p: Project): Promise<ReviewComment[]> {
-    return saveFromFiles(p, "**/*", f =>
-        new DefaultReviewComment("info", "hater",
-            `Found a file at \`${f.path}\`: We hate all files`,
-            {
-                path: f.path,
-                lineFrom1: 1,
-                offset: -1,
-            }));
+    const arrArr = saveFromFilesAsync(p, "src/main/resource/*.properties",
+        badPropertiesIn);
+    return _.flatten(await arrArr);
+}
+
+async function badPropertiesIn(f: File): Promise<ReviewComment[]> {
+    const content = await f.getContent();
+    const read = props(undefined);
+    read.read(content);
+    const comments: ReviewComment[] = [];
+    const obj = read.getAllProperties();
+    for (const toLookAt of PropertyKeysToCheck) {
+        const val = obj[toLookAt];
+        if (!!val) {
+            if (hardcoded(val)) {
+                logger.info("Value of %s: '%s' is hard coded", toLookAt, val);
+                comments.push(new DefaultReviewComment("info", "properties",
+                    `Hardcoded property`,
+                    {
+                        path: f.path,
+                        lineFrom1: 1,
+                        offset: -1,
+                    }));
+            } else {
+                logger.info("Value of %s: '%s' is not hard coded", toLookAt, val);
+            }
+        }
+    }
+
+    return comments;
+}
+
+function hardcoded(value: props.Value) {
+    const s = value.toString();
+    if (s === "true" || s === "false") {
+        return true;
+    }
+    try {
+        const n = parseInt(s, 10);
+        if (!isNaN(n)) {
+            return true;
+        }
+    } catch {
+        // Ok
+    }
+    return false;
 }

@@ -15,9 +15,16 @@
  */
 
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import {
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
-import { LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import {
+    LocalDeploymentGoal,
+    LocalEndpointGoal,
+    LocalUndeploymentGoal,
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
@@ -64,10 +71,11 @@ export function addSpringSupport(softwareDeliveryMachine: SoftwareDeliveryMachin
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
         );
+    addCloudReadinessChecks(softwareDeliveryMachine);
 }
 
-function cloudReadinessChecks(sdm: SoftwareDeliveryMachine) {
-    sdm.addReviewerRegistrations(
+function addCloudReadinessChecks(softwareDeliveryMachine: SoftwareDeliveryMachine) {
+    softwareDeliveryMachine.addReviewerRegistrations(
         HardCodedPropertyReviewer,
         ProvidedDependenciesReviewer,
     );
