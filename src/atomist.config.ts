@@ -19,7 +19,6 @@ import { CachingProjectLoader } from "@atomist/sdm";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { DockerOptions } from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
-import { greeting } from "./misc/greeting";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";

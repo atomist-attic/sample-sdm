@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { IsMaven, ReviewerRegistration } from "@atomist/sdm";
-import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { DefaultReviewComment, ReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { Project } from "@atomist/automation-client/project/Project";
+import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { IsMaven, ReviewerRegistration } from "@atomist/sdm";
 
 /**
  * Reviewer that finds hard-coded properties
