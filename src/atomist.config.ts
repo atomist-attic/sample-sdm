@@ -104,6 +104,10 @@ export const configuration: Configuration = {
             level: "debug",
             name: "./log/github-sdm.log",
         },
-        banner: greeting(),
+        banner: () => ({
+            banner: "consider the elephant",
+            asciify: true,
+            color: "yellow",
+        }),
     },
 };

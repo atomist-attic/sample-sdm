@@ -26,6 +26,8 @@ import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeplo
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
+import { HardCodedPropertyReviewer } from "../../blueprint/code/review/spring/hardcodedPropertyReviewer";
+import { ProvidedDependenciesReviewer } from "../../blueprint/code/review/spring/providedDependenciesPropertyReviewer";
 
 /**
  * Configuration common to Spring SDMs, wherever they deploy
@@ -53,7 +55,20 @@ export function addSpringSupport(softwareDeliveryMachine: SoftwareDeliveryMachin
             seedRepo: "spring-rest-seed",
             intent: "create spring",
         }))
+        .addGenerators(() => springBootGenerator({
+            ...CommonJavaGeneratorConfig,
+            seedOwner: "johnsonr",
+            seedRepo: "flux-flix-service",
+            intent: "create spring kotlin",
+        }))
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
         );
+}
+
+function cloudReadinessChecks(sdm: SoftwareDeliveryMachine) {
+    sdm.addReviewerRegistrations(
+        HardCodedPropertyReviewer,
+        ProvidedDependenciesReviewer,
+    );
 }
