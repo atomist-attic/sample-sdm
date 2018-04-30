@@ -104,9 +104,9 @@ export const configuration: Configuration = {
             name: "./log/github-sdm.log",
         },
         banner: () => ({
-            banner: "consider the elephant",
+            banner: "upgrade to spring boot 2.0.1!",
             asciify: true,
-            color: "yellow",
+            color: "green",
         }),
     },
 };
