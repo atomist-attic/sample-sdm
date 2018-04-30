@@ -27,6 +27,7 @@ import {
     SoftwareDeliveryMachineOptions,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "../parts/stacks/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
@@ -43,6 +44,7 @@ export function staticAnalysisMachine(opts: Partial<StaticAnalysisMachineOptions
         projectLoader: new CachingProjectLoader(),
         useCheckstyle: true,
         reviewOnlyChangedFiles: false,
+        logFactory: createEphemeralProgressLog,
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine(

@@ -17,6 +17,7 @@
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { EphemeralLocalArtifactStore } from "@atomist/sdm/common/artifact/local/EphemeralLocalArtifactStore";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
@@ -36,6 +37,7 @@ export function projectCreationMachine(opts: Partial<ProjectCreationMachineOptio
     const options: ProjectCreationMachineOptions = {
         artifactStore: new EphemeralLocalArtifactStore(),
         projectLoader: new CachingProjectLoader(),
+        logFactory: createEphemeralProgressLog,
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine("Project creation machine", options);

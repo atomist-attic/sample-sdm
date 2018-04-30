@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import {
+    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { K8sAutomationBuilder } from "@atomist/sdm/common/delivery/build/k8s/K8AutomationBuilder";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import { NoGoals, ProductionDeploymentGoal, StagingDeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";

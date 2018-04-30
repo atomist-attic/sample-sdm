@@ -19,6 +19,7 @@ import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomis
 import { AutofixGoal } from "@atomist/sdm";
 import { Goals } from "@atomist/sdm";
 import { CloningProjectLoader } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
@@ -34,6 +35,7 @@ export function autofixMachine(opts: Partial<AutofixMachineOptions> = {}): Softw
     const options = {
         artifactStore: DefaultArtifactStore,
         projectLoader: CloningProjectLoader,
+        logFactory: createEphemeralProgressLog,
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine("Autofix machine", options,

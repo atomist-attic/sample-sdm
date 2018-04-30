@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
+import {
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { ArtifactGoal, JustBuildGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
@@ -37,6 +40,7 @@ export function artifactVerifyingMachine(opts: Partial<ArtifactVerifyingMachineO
     const options = {
         artifactStore: DefaultArtifactStore,
         projectLoader: new CachingProjectLoader(),
+        logFactory: createEphemeralProgressLog,
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine("Artifact verifying machine", options,

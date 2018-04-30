@@ -15,9 +15,12 @@
  */
 
 import { Configuration } from "@atomist/automation-client/configuration";
-import { CachingProjectLoader } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { CachingProjectLoader, LoggingProgressLog } from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { DockerOptions } from "@atomist/sdm";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
+import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
 
@@ -28,6 +31,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
     // SDM Options
     artifactStore: DefaultArtifactStore,
     projectLoader: new CachingProjectLoader(),
+    logFactory: async name => new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), new LoggingProgressLog(name, "info")),
 
     // Java options
     useCheckstyle: process.env.USE_CHECKSTYLE === "true",

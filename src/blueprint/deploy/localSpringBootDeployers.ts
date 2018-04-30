@@ -35,16 +35,19 @@ import {
 import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
 import { DefaultArtifactStore } from "../artifactStore";
 
-/** Successs pattern when Spring Boot starts
+/** Successs patterns when Spring Boot starts
  * @type {RegExp}
  */
-const SpringBootSuccessPattern = /Started [A-Za-z0-9_$]+ in [0-9].[0-9]+ seconds/;
+export const SpringBootSuccessPatterns = [
+    /Tomcat started on port/,
+    /Started [A-Za-z0-9_$]+ in [0-9]+.[0-9]+ seconds/,
+];
 
 export const LocalExecutableJarDeployer: Deployer<ManagedDeploymentTargetInfo> = executableJarDeployer({
     baseUrl: "http://localhost",
     lowerPort: 8082,
     commandLineArgumentsFor: springBootExecutableJarArgs,
-    successPattern: SpringBootSuccessPattern,
+    successPatterns: SpringBootSuccessPatterns,
 });
 
 /**
@@ -85,7 +88,7 @@ export function mavenSourceDeployer(projectLoader: ProjectLoader): Deployer<Mana
         baseUrl: "http://localhost",
         lowerPort: 9090,
         commandLineArgumentsFor: springBootMavenArgs,
-        successPattern: SpringBootSuccessPattern,
+        successPatterns: SpringBootSuccessPatterns,
     });
 }
 

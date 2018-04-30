@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+} from "@atomist/sdm";
+import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
 import {
     LocalDeploymentGoal,
@@ -33,7 +33,7 @@ import { FileIoImportReviewer } from "../../blueprint/code/review/java/fileIoImp
 import { ImportDotStarReviewer } from "../../blueprint/code/review/java/importDotStarReviewer";
 import { ProvidedDependencyReviewer } from "../../blueprint/code/review/java/maven/providedDependencyReviewer";
 import { HardCodedPropertyReviewer } from "../../blueprint/code/review/java/spring/hardcodedPropertyReviewer";
-import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployOnSuccessStatus";
+import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";

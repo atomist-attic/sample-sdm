@@ -15,7 +15,7 @@
  */
 
 import { whenPushSatisfies } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
 import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
