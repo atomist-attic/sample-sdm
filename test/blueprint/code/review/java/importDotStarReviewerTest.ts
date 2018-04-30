@@ -19,8 +19,8 @@ import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFil
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import * as assert from "power-assert";
 import { ImportDotStarReviewer } from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
-import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 import { Bad1 } from "./fileIoImportReviewerTest";
+import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 
 describe("importDotStar", () => {
 
