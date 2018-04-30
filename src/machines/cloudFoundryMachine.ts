@@ -22,7 +22,6 @@ import {
     Goals, hasFile,
     HttpServiceGoals,
     LibraryGoals,
-    LocalDeploymentGoals,
     nodeBuilder,
     NoGoals,
     not,
@@ -91,6 +90,7 @@ import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
+import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 
 export type CloudFoundryMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 
