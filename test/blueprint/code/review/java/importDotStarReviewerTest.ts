@@ -20,6 +20,7 @@ import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemory
 import * as assert from "power-assert";
 import { ImportDotStarReviewer } from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
+import { Bad1 } from "./fileIoImportReviewerTest";
 
 describe("importDotStar", () => {
 
@@ -61,6 +62,16 @@ describe("importDotStar", () => {
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
-});
+    it("flag error in nested package", async () => {
+        const id = new GitHubRepoRef("a", "b");
+        const f = new InMemoryFile("src/main/java/com/atomist/Melb1Application.java",
+            Bad1);
+        const p = InMemoryProject.from(id, f);
+        const r = await ImportDotStarReviewer.action(fakeListenerInvocation(p) as any);
+        assert.equal(r.comments.length, 1);
+        const comment = r.comments[0];
+        assert.equal(comment.category, "import-dot-star");
+        assert.equal(comment.sourceLocation.path, f.path);
+    });
 
-/* tslint:disable */
+});

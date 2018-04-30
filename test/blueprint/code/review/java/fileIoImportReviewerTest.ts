@@ -61,6 +61,34 @@ describe("fileIoImport", () => {
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
+    it("flag error in nested package", async () => {
+        const id = new GitHubRepoRef("a", "b");
+        const f = new InMemoryFile("src/main/java/com/atomist/Melb1Application.java",
+            Bad1);
+        const p = InMemoryProject.from(id, f);
+        const r = await FileIoImportReviewer.action(fakeListenerInvocation(p) as any);
+        assert.equal(r.comments.length, 1);
+        const comment = r.comments[0];
+        assert.equal(comment.category, "file-import");
+        assert.equal(comment.sourceLocation.path, f.path);
+    });
+
 });
 
 /* tslint:disable */
+
+export const Bad1 = `package com.atomist;
+import java.io.File;
+
+import java.util.*;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Melb1Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Melb1Application.class, args);
+	}
+}`;

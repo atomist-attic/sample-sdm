@@ -21,7 +21,7 @@ export const ImportDotStarReviewer: ReviewerRegistration = regexpReviewer(
     "import-dot-star",
     {globPattern: JavaAndKotlinSource, severity: "info"},
     {
-        antiPattern: /^import .*\.\*/,
+        antiPattern: /import .*\.\*/,
         shouldBe: "Don't import .*, organize imports!",
     },
 );
