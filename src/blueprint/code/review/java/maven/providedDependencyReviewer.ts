@@ -59,6 +59,5 @@ async function findProvidedProperties(p: Project): Promise<ReviewComment[]> {
 async function parsePom(pom: File): Promise<any> {
     const xml = await pom.getContent();
     const parser = new xml2js.Parser();
-    const parsed = await promisify(parser.parseString)(xml);
-    return parsed;
+    return promisify(parser.parseString)(xml);
 }
