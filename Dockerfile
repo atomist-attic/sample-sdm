@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:17.10
 
 LABEL maintainer="Christian Dupuis <cd@atomist.com>"
 
@@ -16,7 +16,8 @@ RUN curl -s -L -O https://github.com/Yelp/dumb-init/releases/download/v$DUMB_INI
     && dpkg -i dumb-init_${DUMB_INIT_VERSION}_amd64.deb \
     && rm -f dumb-init_${DUMB_INIT_VERSION}_amd64.deb
 
-RUN git config --global user.email "bot@atomist.com" &&  git config --global user.name "Atomist Bot"
+RUN git config --global user.email "bot@atomist.com" \
+    &&  git config --global user.name "Atomist Bot"
 
 # Create app directory
 RUN mkdir -p /app
@@ -30,7 +31,7 @@ ENV NPM_CONFIG_LOGLEVEL warn
 ENV SUPPRESS_NO_CONFIG_WARNING true
 ENV NODE_ENV production
 
-RUN npm install
+RUN npm ci
 
 # Bundle app source
 COPY . /app
