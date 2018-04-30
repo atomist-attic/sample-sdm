@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import { regexpReviewer, ReviewerRegistration } from "@atomist/sdm";
+import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
 import { JavaAndKotlinSource } from "./Globs";
 
-export const ImportDotStarReviewer: ReviewerRegistration = regexpReviewer(
+export const ImportDotStarReviewer: ReviewerRegistration = patternMatchReviewer(
     "import-dot-star",
     {globPattern: JavaAndKotlinSource, severity: "info"},
     {
+        name: "import .*",
         antiPattern: /import .*\.\*/,
-        shouldBe: "Don't import .*, organize imports!",
+        comment: "Don't import .*, organize imports!",
     },
 );

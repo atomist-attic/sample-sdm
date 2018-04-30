@@ -35,7 +35,10 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         .addNewIssueListeners(requestDescription, capitalizer)
         .addClosedIssueListeners(thankYouYouRock)
         .addGoalsSetListeners(GraphGoalsToSlack)
-        .addReviewListeners(SlackReviewListener)
+        .addReviewListeners(
+            async r => console.log(JSON.stringify(r.review)),
+            SlackReviewListener,
+        )
         .addEditors(
             () => addApacheLicenseHeaderEditor,
         )

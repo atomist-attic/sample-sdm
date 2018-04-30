@@ -77,19 +77,19 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
         .addFingerprinterRegistrations(new PackageLockFingerprinter())
     .addGoalImplementation("nodeVersioner", VersionGoal,
         executeVersioner(options.projectLoader, NodeProjectVersioner))
-    .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
-        executeDockerBuild(
-            options.projectLoader,
-            async () => "", // TODO CD this is very broken but fixed on my branch
-            async () => Success, // TODO CD at least add the compile step to this
-            DefaultDockerImageNameCreator,
-            {
-                registry: options.registry,
-                user: options.user,
-                password: options.password,
-
-                dockerfileFinder: async () => "Dockerfile",
-            }))
+    // .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
+    //     executeDockerBuild(
+    //         options.projectLoader,
+    //         async () => "", // TODO CD this is very broken but fixed on my branch
+    //         async () => Success, // TODO CD at least add the compile step to this
+    //         DefaultDockerImageNameCreator,
+    //         {
+    //             registry: options.registry,
+    //             user: options.user,
+    //             password: options.password,
+    //
+    //             dockerfileFinder: async () => "Dockerfile",
+    //         }))
     .addGoalImplementation("nodeTag", TagGoal,
         executeTag(options.projectLoader))
     .addGoalImplementation("nodePublish", NpmPublishGoal,

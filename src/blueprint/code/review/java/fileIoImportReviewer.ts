@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import { regexpReviewer, ReviewerRegistration } from "@atomist/sdm";
+import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
 import { JavaAndKotlinSource } from "./Globs";
 
-export const FileIoImportReviewer: ReviewerRegistration = regexpReviewer(
+export const FileIoImportReviewer: ReviewerRegistration = patternMatchReviewer(
     "file-import",
     {globPattern: JavaAndKotlinSource, severity: "warn"},
     {
-        antiPattern: /import java.io.File/,
-        shouldBe: "Don't use the file system in a cloud native app!",
+        name: "import-file",
+        antiPattern: "import java.io.File",
+        comment: "Don't use the file system in a cloud native app!",
     },
 );

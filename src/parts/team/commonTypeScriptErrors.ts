@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { regexpReviewer, ReviewerRegistration } from "@atomist/sdm";
+import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
 
-export const CommonTypeScriptErrors: ReviewerRegistration = regexpReviewer(
+export const CommonTypeScriptErrors: ReviewerRegistration = patternMatchReviewer(
     "Dangerous TypeScript Errors of the Past",
     {globPattern: "**/*.ts", severity: "error"},
     {
+        name: "sprintf",
         antiPattern: /^import sprintf from "sprintf-js"/m,
-        shouldBe: `import { sprintf } from "sprintf-js"`,
+        comment: `import { sprintf } from "sprintf-js"`,
     },
 );
