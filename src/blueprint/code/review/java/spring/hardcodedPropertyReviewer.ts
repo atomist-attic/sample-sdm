@@ -82,16 +82,5 @@ async function badPropertiesIn(f: File): Promise<ReviewComment[]> {
 
 function hardcoded(value: props.Value) {
     const s = value.toString();
-    if (s === "true" || s === "false") {
-        return true;
-    }
-    try {
-        const n = parseInt(s, 10);
-        if (!isNaN(n)) {
-            return true;
-        }
-    } catch {
-        // Ok
-    }
-    return false;
+    return !s.includes("${");
 }

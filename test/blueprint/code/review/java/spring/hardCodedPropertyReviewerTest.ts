@@ -59,6 +59,13 @@ describe("HardCodePropertyReviewer", () => {
         assert.equal(r.comments.length, 0);
     });
 
+    it("reject hard-coded password", async () => {
+        const id = new GitHubRepoRef("a", "b");
+        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resource/application.properties", "spring.datasource.password=tiger"));
+        const r = await HardCodedPropertyReviewer.action(fakeListenerInvocation(p) as any);
+        assert.equal(r.comments.length, 1);
+    });
+
 });
 
 export function fakeListenerInvocation(project: Project): PushListenerInvocation {

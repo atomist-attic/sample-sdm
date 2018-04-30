@@ -35,6 +35,8 @@ import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeplo
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
+import { FileIoImportReviewer } from "../../blueprint/code/review/java/fileIoImportReviewer";
+import { ImportDotStarReviewer } from "../../blueprint/code/review/java/importDotStarReviewer";
 
 /**
  * Configuration common to Spring SDMs, wherever they deploy
@@ -78,5 +80,7 @@ function addCloudReadinessChecks(softwareDeliveryMachine: SoftwareDeliveryMachin
     softwareDeliveryMachine.addReviewerRegistrations(
         HardCodedPropertyReviewer,
         ProvidedDependencyReviewer,
+        FileIoImportReviewer,
+        ImportDotStarReviewer,
     );
 }
