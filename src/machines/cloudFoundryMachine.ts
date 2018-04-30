@@ -80,6 +80,7 @@ import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootD
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import {
     addJavaSupport,
     JavaSupportOptions,
@@ -90,7 +91,6 @@ import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
-import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 
 export type CloudFoundryMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 

@@ -15,12 +15,11 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
+import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import * as assert from "power-assert";
-import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
-import { FileIoImportReviewer } from "../../../../../src/blueprint/code/review/java/fileIoImportReviewer";
-import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import { ImportDotStarReviewer } from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
+import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 
 describe("importDotStar", () => {
 
