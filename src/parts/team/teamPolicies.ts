@@ -17,7 +17,7 @@
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { OnDryRunBuildComplete } from "@atomist/sdm";
 import { GraphGoalsToSlack } from "@atomist/sdm";
-import { SlackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
+import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
@@ -36,8 +36,7 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         .addClosedIssueListeners(thankYouYouRock)
         .addGoalsSetListeners(GraphGoalsToSlack)
         .addReviewListeners(
-            async r => console.log(JSON.stringify(r.review)),
-            SlackReviewListener,
+            slackReviewListener(),
         )
         .addEditors(
             () => addApacheLicenseHeaderEditor,
