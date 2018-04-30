@@ -18,12 +18,13 @@ import { DefaultReviewComment, ReviewComment } from "@atomist/automation-client/
 import { File } from "@atomist/automation-client/project/File";
 import { Project } from "@atomist/automation-client/project/Project";
 import { saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
-import { IsMaven, ReviewerRegistration } from "@atomist/sdm";
+import { ReviewerRegistration } from "@atomist/sdm";
 
 import * as props from "properties-reader";
 
 import { logger } from "@atomist/automation-client";
 import * as _ from "lodash";
+import { HasSpringPom } from "../../../../../pushtest/jvm/springPushTests";
 
 const PropertyKeysToCheck = [
     "server.port",
@@ -37,7 +38,7 @@ const PropertyKeysToCheck = [
  */
 export const HardCodedPropertyReviewer: ReviewerRegistration = {
     name: "HardcodedProperties",
-    pushTest: IsMaven,
+    pushTest: HasSpringPom,
     action: async pil => {
         return {
             repoId: pil.id,
