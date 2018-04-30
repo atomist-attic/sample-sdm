@@ -15,13 +15,24 @@
  */
 
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
+import {
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm/blueprint/SoftwareDeliveryMachine";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
-import { LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import {
+    LocalDeploymentGoal,
+    LocalEndpointGoal,
+    LocalUndeploymentGoal,
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
+import { FileIoImportReviewer } from "../../blueprint/code/review/java/fileIoImportReviewer";
+import { ImportDotStarReviewer } from "../../blueprint/code/review/java/importDotStarReviewer";
+import { ProvidedDependencyReviewer } from "../../blueprint/code/review/java/maven/providedDependencyReviewer";
+import { HardCodedPropertyReviewer } from "../../blueprint/code/review/java/spring/hardcodedPropertyReviewer";
 import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployOnSuccessStatus";
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
@@ -53,7 +64,23 @@ export function addSpringSupport(softwareDeliveryMachine: SoftwareDeliveryMachin
             seedRepo: "spring-rest-seed",
             intent: "create spring",
         }))
+        .addGenerators(() => springBootGenerator({
+            ...CommonJavaGeneratorConfig,
+            seedOwner: "johnsonr",
+            seedRepo: "flux-flix-service",
+            intent: "create spring kotlin",
+        }))
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
         );
+    addCloudReadinessChecks(softwareDeliveryMachine);
+}
+
+function addCloudReadinessChecks(softwareDeliveryMachine: SoftwareDeliveryMachine) {
+    softwareDeliveryMachine.addReviewerRegistrations(
+        HardCodedPropertyReviewer,
+        ProvidedDependencyReviewer,
+        FileIoImportReviewer,
+        ImportDotStarReviewer,
+    );
 }

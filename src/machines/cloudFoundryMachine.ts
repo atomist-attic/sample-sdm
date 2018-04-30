@@ -22,7 +22,6 @@ import {
     Goals, hasFile,
     HttpServiceGoals,
     LibraryGoals,
-    LocalDeploymentGoals,
     nodeBuilder,
     NoGoals,
     not,
@@ -81,6 +80,7 @@ import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootD
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import {
     addJavaSupport,
     JavaSupportOptions,

@@ -36,3 +36,14 @@ export const HasSpringBootPom: PredicatePushTest = predicatePushTest(
         return (await pom.getContent()).includes("spring-boot");
     },
 );
+
+export const HasSpringPom: PredicatePushTest = predicatePushTest(
+    "Has Spring POM",
+    async p => {
+        const pom = await p.getFile("pom.xml");
+        if (!pom) {
+            return false;
+        }
+        return (await pom.getContent()).includes("springframework");
+    },
+);
