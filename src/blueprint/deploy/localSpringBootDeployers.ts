@@ -67,10 +67,10 @@ const LocalExecutableJarDeploySpec: DeploySpec<ManagedDeploymentTargetInfo> = {
     },
 };
 
-const UndeployOnSuperseded = new OnSupersededStatus(inv => {
+const UndeployOnSuperseded = new OnSupersededStatus([inv => {
     logger.info("Will undeploy application %j", inv.id);
     return LocalExecutableJarDeploySpec.deployer.undeploy(targetInfoForAllBranches(inv.id), undefined, undefined);
-});
+}]);
 
 /* tslint:disable:no-unused-variable */
 
