@@ -17,8 +17,10 @@
 import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
 import { JavaAndKotlinSource } from "./Globs";
 
+export const ImportDotStarCategory = "import-dot-star";
+
 export const ImportDotStarReviewer: ReviewerRegistration = patternMatchReviewer(
-    "import-dot-star",
+    ImportDotStarCategory,
     {globPattern: JavaAndKotlinSource, severity: "info"},
     {
         name: "import .*",

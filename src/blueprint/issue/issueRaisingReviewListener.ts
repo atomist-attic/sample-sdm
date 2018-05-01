@@ -23,16 +23,35 @@ import { authHeaders } from "@atomist/sdm/util/github/ghub";
 import axios from "axios";
 import { ProjectOperationCredentials, TokenCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
+import { ImportDotStarCategory } from "../code/review/java/importDotStarReviewer";
+import { OnFirstPushToRepo } from "@atomist/sdm";
+import Push = OnFirstPushToRepo.Push;
+import * as slack from "@atomist/slack-messages";
+import * as _ from "lodash";
 
 const CloudReadinessIssueTitle = "Cloud Readiness";
+const CloudReadinessReviewCommentCategories = [ImportDotStarCategory];
 
 export const IssueRaisingReviewListener: ReviewListener = async (ri: ReviewListenerInvocation) => {
     if (ri.push.branch !== ri.push.repo.defaultBranch) {
         // We only care about pushers to the default branch
         return;
     }
+    const relevantComments = ri.review.comments.filter( rc => CloudReadinessReviewCommentCategories.includes(rc.category));
     // Find the well-known issue if there is one
-    const existingIssue = findIssue((ri.credentials as TokenCredentials).token, ri.id as GitHubRepoRef, CloudReadinessIssueTitle);
+    const existingIssue = await findIssue((ri.credentials as TokenCredentials).token, ri.id as GitHubRepoRef, CloudReadinessIssueTitle);
+
+    if (relevantComments.length === 0) {
+        logger.debug("0 of %d comments were relevant", ri.review.comments.length);
+        if (existingIssue) {
+            // close it
+            logger.info("Closing issue %d because all comments have been addressed");
+            const congrats: string = `The last review problem was fixed by ${who(ri.push)} when they pushed ${linkToSha(ri.id)}`;
+            await updateIssue(ri.credentials, ri.id, { ...existingIssue, state: "closed", body: congrats});
+        }
+        return;
+    }
+
     if (!existingIssue) {
         // create it
     } else {
@@ -40,9 +59,32 @@ export const IssueRaisingReviewListener: ReviewListener = async (ri: ReviewListe
     }
 };
 
+function who(push: Push) {
+    const screenName: string = _.get(push, "after.committer.person.chatId.screenName");
+    if (screenName) {
+        return slack.user(screenName);
+    }
+    return _.get(push, "after.committer.login", "someone");
+}
+
+function linkToSha(id) {
+    return slack.url(id.url + "/tree/" + id.sha, id.sha.substr(0, 7));
+}
+
 interface KnownIssue extends Issue {
     state: "open" | "closed";
     number: number;
+}
+
+async function updateIssue(credentials: ProjectOperationCredentials,
+                           rr: RemoteRepoRef,
+                           issue: KnownIssue) {
+    const token = (credentials as TokenCredentials).token;
+    const grr = rr as GitHubRepoRef;
+    const url = `${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues/${issue.number}`;
+    console.log(`Request to '${url}' to get issues`);
+    const returnedIssues: KnownIssue[] = await axios.patch(url, authHeaders(token)).then(r => r.data.items);
+    return returnedIssues.filter(i => i.title === title).sort(openFirst)[0];
 }
 
 // find the most recent open (or closed, if none are open) issue with precisely this title
