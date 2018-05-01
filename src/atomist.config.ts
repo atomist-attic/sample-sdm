@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-import {Configuration} from "@atomist/automation-client/configuration";
-import {CachingProjectLoader, firstAvailableProgressLog, LogFactory, LoggingProgressLog, RolarProgressLog} from "@atomist/sdm";
-import {SoftwareDeliveryMachine} from "@atomist/sdm";
-import {DockerOptions} from "@atomist/sdm";
-import {SoftwareDeliveryMachineOptions} from "@atomist/sdm";
-import {createEphemeralProgressLog} from "@atomist/sdm/common/log/EphemeralProgressLog";
-import {WriteToAllProgressLog} from "@atomist/sdm/common/log/WriteToAllProgressLog";
-import {DefaultArtifactStore} from "./blueprint/artifactStore";
-import {JavaSupportOptions} from "./parts/stacks/javaSupport";
+import { Configuration } from "@atomist/automation-client/configuration";
+import { CachingProjectLoader, firstAvailableProgressLog, LogFactory, LoggingProgressLog, ProgressLog, RolarProgressLog } from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { DockerOptions } from "@atomist/sdm";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
+import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
+import { DefaultArtifactStore } from "./blueprint/artifactStore";
+import { JavaSupportOptions } from "./parts/stacks/javaSupport";
+import { logger } from "@atomist/automation-client";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
 // TODO: move this somewhere
 function logFactory(rolarBaseServiceUrl?: string): LogFactory {
-
-    async function persistentLog(name: string) {
-        return rolarBaseServiceUrl ?
-            firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi", name]),
-                new LoggingProgressLog(name, "info")) :
-            new LoggingProgressLog(name, "info");
+    if (rolarBaseServiceUrl) {
+        logger.info("Logging with Rolar at " + rolarBaseServiceUrl);
     }
 
-    return async name => new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), await persistentLog(name));
+    return async sdmGoal => {
+        const persistentLog: ProgressLog = rolarBaseServiceUrl ?
+            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi", name]),
+                new LoggingProgressLog(name, "info")) :
+            new LoggingProgressLog(name, "info");
+
+        return new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), persistentLog);
+    };
 }
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
