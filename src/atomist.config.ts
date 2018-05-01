@@ -31,7 +31,7 @@ function logFactory(rolarBaseServiceUrl?: string): LogFactory {
 
     async function persistentLog(name: string) {
         return rolarBaseServiceUrl ?
-            firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi"]),
+            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi", name]),
                 new LoggingProgressLog(name, "info")) :
             new LoggingProgressLog(name, "info");
     }
