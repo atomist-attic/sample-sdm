@@ -54,7 +54,7 @@ async function findIssue(credentials: ProjectOperationCredentials,
     const url = `${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`;
     console.log(`Request to '${url}' to get issues`);
     const returnedIssues: KnownIssue[] = await axios.get(url, authHeaders(token)).then(r => r.data.items);
-    return returnedIssues.sort(openFirst).filter(i => i.title === title)[0];
+    return returnedIssues.filter(i => i.title === title).sort(openFirst)[0];
 }
 
 function openFirst(a: KnownIssue, b: KnownIssue): number {
