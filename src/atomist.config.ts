@@ -14,24 +14,39 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client/configuration";
-import { CachingProjectLoader, LoggingProgressLog } from "@atomist/sdm";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { DockerOptions } from "@atomist/sdm";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
-import { DefaultArtifactStore } from "./blueprint/artifactStore";
-import { JavaSupportOptions } from "./parts/stacks/javaSupport";
+import {Configuration} from "@atomist/automation-client/configuration";
+import {CachingProjectLoader, firstAvailableProgressLog, LogFactory, LoggingProgressLog, RolarProgressLog} from "@atomist/sdm";
+import {SoftwareDeliveryMachine} from "@atomist/sdm";
+import {DockerOptions} from "@atomist/sdm";
+import {SoftwareDeliveryMachineOptions} from "@atomist/sdm";
+import {createEphemeralProgressLog} from "@atomist/sdm/common/log/EphemeralProgressLog";
+import {WriteToAllProgressLog} from "@atomist/sdm/common/log/WriteToAllProgressLog";
+import {DefaultArtifactStore} from "./blueprint/artifactStore";
+import {JavaSupportOptions} from "./parts/stacks/javaSupport";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
+
+
+// TODO: move this somewhere
+function logFactory(rolarBaseServiceUrl?: string): LogFactory {
+
+    async function persistentLog(name: string) {
+        return rolarBaseServiceUrl ?
+            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi"]),
+                new LoggingProgressLog(name, "info")) :
+            new LoggingProgressLog(name, "info");
+    }
+
+    return async name => new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), await persistentLog(name));
+}
+
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
 
     // SDM Options
     artifactStore: DefaultArtifactStore,
     projectLoader: new CachingProjectLoader(),
-    logFactory: async name => new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), new LoggingProgressLog(name, "info")),
+    logFactory: logFactory(process.env.ROLAR_BASE_URL),
 
     // Java options
     useCheckstyle: process.env.USE_CHECKSTYLE === "true",
@@ -70,7 +85,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
  * start with any of these and change it to make it your own!
  */
 
-const machineName = process.env.MACHINE_NAME ||  "cloudFoundryMachine";
+const machineName = process.env.MACHINE_NAME || "cloudFoundryMachine";
 const machinePath = process.env.MACHINE_PATH || "./machines";
 
 function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliveryMachine {
