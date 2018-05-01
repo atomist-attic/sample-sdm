@@ -98,14 +98,11 @@ export const configuration: Configuration = {
         workers: 1,
     },
     logging: {
+        level: process.env.NODE_ENV === "production" ? "debug" : "info",
         file: {
+            enabled: process.env.NODE_ENV !== "production",
             name: "./log/github-sdm.log",
         },
-        banner: () => ({
-            banner: "upgrade to spring boot 2.0.1!",
-            asciify: true,
-            color: "green",
-        }),
     },
     postProcessors: [
         configureLogzio,
