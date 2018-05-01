@@ -91,6 +91,7 @@ import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
+import { IssueRaisingReviewListener } from "../blueprint/issue/issueRaisingReviewListener";
 
 export type CloudFoundryMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 
@@ -143,6 +144,8 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
     );
 
     const hasPackageLock = hasFile("package-lock.json");
+
+    sdm.addReviewListeners(IssueRaisingReviewListener);
 
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)
