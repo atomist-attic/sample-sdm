@@ -97,14 +97,22 @@ interface KnownIssue extends Issue {
     number: number;
 }
 
+// update the state and body of an issue.
 async function updateIssue(credentials: ProjectOperationCredentials,
                            rr: RemoteRepoRef,
                            issue: KnownIssue) {
+    const safeIssue = {
+        state: issue.state,
+        body: issue.body,
+    };
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
     const url = `${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues/${issue.number}`;
     console.log(`Request to '${url}' to update issue`);
-    await axios.patch(url, issue, authHeaders(token));
+    await axios.patch(url, safeIssue, authHeaders(token)).catch((err) => {
+        logger.error("Failure updating issue. response: %s", stringify(err.response.data));
+        throw err;
+    });
 }
 
 async function createIssue(credentials: ProjectOperationCredentials,
@@ -114,7 +122,7 @@ async function createIssue(credentials: ProjectOperationCredentials,
     const grr = rr as GitHubRepoRef;
     const url = `${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues`;
     console.log(`Request to '${url}' to create issue`);
-    await axios.put(url, issue, authHeaders(token));
+    await axios.post(url, issue, authHeaders(token));
 }
 
 // find the most recent open (or closed, if none are open) issue with precisely this title
