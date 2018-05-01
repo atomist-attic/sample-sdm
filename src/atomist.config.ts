@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { logger } from "@atomist/automation-client";
 import { Configuration } from "@atomist/automation-client/configuration";
 import { CachingProjectLoader, firstAvailableProgressLog, LogFactory, LoggingProgressLog, ProgressLog, RolarProgressLog } from "@atomist/sdm";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
@@ -23,7 +24,6 @@ import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralPro
 import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
-import { logger } from "@atomist/automation-client";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
