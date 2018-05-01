@@ -26,20 +26,18 @@ import {JavaSupportOptions} from "./parts/stacks/javaSupport";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
-
 // TODO: move this somewhere
 function logFactory(rolarBaseServiceUrl?: string): LogFactory {
 
     async function persistentLog(name: string) {
         return rolarBaseServiceUrl ?
-            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi"]),
+            firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi"]),
                 new LoggingProgressLog(name, "info")) :
             new LoggingProgressLog(name, "info");
     }
 
     return async name => new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), await persistentLog(name));
 }
-
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
 
