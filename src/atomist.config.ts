@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
+import { HandlerContext, logger } from "@atomist/automation-client";
 import { Configuration } from "@atomist/automation-client/configuration";
 import { CachingProjectLoader, firstAvailableProgressLog, LogFactory, LoggingProgressLog, ProgressLog, RolarProgressLog } from "@atomist/sdm";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
@@ -24,23 +24,36 @@ import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralPro
 import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
+import { SdmGoal } from "@atomist/sdm/ingesters/sdmGoalIngester";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
 // TODO: move this somewhere
-function logFactory(rolarBaseServiceUrl?: string): LogFactory {
+function logFactory(context: HandlerContext, rolarBaseServiceUrl?: string): LogFactory {
     if (rolarBaseServiceUrl) {
         logger.info("Logging with Rolar at " + rolarBaseServiceUrl);
     }
 
-    return async sdmGoal => {
+    return async (context, sdmGoal) => {
+        const name = sdmGoal.name;
         const persistentLog: ProgressLog = rolarBaseServiceUrl ?
-            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl, ["do", "re", "mi", name]),
+            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl,
+                logPath(context, sdmGoal)),
                 new LoggingProgressLog(name, "info")) :
             new LoggingProgressLog(name, "info");
 
         return new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), persistentLog);
     };
+}
+
+function logPath(context: HandlerContext, sdmGoal: SdmGoal): string[] {
+    // TODO: include team ID
+    return [sdmGoal.repo.owner,
+        sdmGoal.repo.name,
+        sdmGoal.sha,
+        sdmGoal.environment,
+        sdmGoal.name,
+        sdmGoal.goalSetId];
 }
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
