@@ -22,38 +22,46 @@ import { DockerOptions } from "@atomist/sdm";
 import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
+import { SdmGoal } from "@atomist/sdm/ingesters/sdmGoalIngester";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
-import { SdmGoal } from "@atomist/sdm/ingesters/sdmGoalIngester";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
 // TODO: move this somewhere
-function logFactory(context: HandlerContext, rolarBaseServiceUrl?: string): LogFactory {
+function logFactory(rolarBaseServiceUrl?: string): LogFactory {
     if (rolarBaseServiceUrl) {
         logger.info("Logging with Rolar at " + rolarBaseServiceUrl);
     }
 
     return async (context, sdmGoal) => {
         const name = sdmGoal.name;
+        const fallbackLogger = new LoggingProgressLog(name, "info");
         const persistentLog: ProgressLog = rolarBaseServiceUrl ?
-            await firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl,
-                logPath(context, sdmGoal)),
-                new LoggingProgressLog(name, "info")) :
-            new LoggingProgressLog(name, "info");
+            rolarProgressLogFactory(rolarBaseServiceUrl, fallbackLogger)(context, sdmGoal) : fallbackLogger;
+        return new WriteToAllProgressLog(name, await createEphemeralProgressLog(context, sdmGoal), persistentLog);
+    };
+}
 
-        return new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), persistentLog);
+function rolarProgressLogFactory(rolarBaseServiceUrl: string,
+                                 fallback: ProgressLog = new LoggingProgressLog("Rolar is down!", "info")): LogFactory {
+    return async (context, sdmGoal) => {
+        return firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl,
+            logPath(context, sdmGoal)), fallback);
     };
 }
 
 function logPath(context: HandlerContext, sdmGoal: SdmGoal): string[] {
-    // TODO: include team ID
-    return [sdmGoal.repo.owner,
+    return [
+        context.teamId,
+        sdmGoal.repo.owner,
         sdmGoal.repo.name,
         sdmGoal.sha,
         sdmGoal.environment,
         sdmGoal.name,
-        sdmGoal.goalSetId];
+        sdmGoal.goalSetId,
+        context.correlationId,
+    ];
 }
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
