@@ -17,12 +17,14 @@
 import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
 import { JavaAndKotlinSource } from "./Globs";
 
+export const ImportFileIoCategory = "Import java.io.File";
+
 export const FileIoImportReviewer: ReviewerRegistration = patternMatchReviewer(
-    "file-import",
+    ImportFileIoCategory,
     {globPattern: JavaAndKotlinSource, severity: "warn"},
     {
-        name: "import-file",
+        name: ImportFileIoCategory,
         antiPattern: "import java.io.File",
-        comment: "Don't use the file system in a cloud native app!",
+        comment: "Don't rely on the file system in a cloud native app.",
     },
 );

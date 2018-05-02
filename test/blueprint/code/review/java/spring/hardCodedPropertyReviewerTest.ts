@@ -20,7 +20,10 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { PushListenerInvocation } from "@atomist/sdm";
-import { HardCodedPropertyReviewer } from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
+import {
+    HardCodedPropertyReviewer,
+    HardcodePropertyCategory
+} from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
 
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import * as assert from "power-assert";
@@ -48,7 +51,7 @@ describe("HardCodePropertyReviewer", () => {
         const r = await HardCodedPropertyReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment =  r.comments[0];
-        assert.equal(comment.category, "properties");
+        assert.equal(comment.category, HardcodePropertyCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 

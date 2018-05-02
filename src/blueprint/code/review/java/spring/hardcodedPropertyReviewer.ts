@@ -33,11 +33,13 @@ const PropertyKeysToCheck = [
     "spring.datasource.password",
 ];
 
+export const HardcodePropertyCategory = "Hardcoded properties";
+
 /**
  * Reviewer that finds hard-coded properties
  */
 export const HardCodedPropertyReviewer: ReviewerRegistration = {
-    name: "HardcodedProperties",
+    name: HardcodePropertyCategory,
     pushTest: HasSpringPom,
     action: async pil => {
         return {
@@ -64,7 +66,8 @@ async function badPropertiesIn(f: File): Promise<ReviewComment[]> {
         if (!!val) {
             if (hardcoded(val)) {
                 logger.info("Value of %s: '%s' is hard coded", toLookAt, val);
-                comments.push(new DefaultReviewComment("info", "properties",
+                comments.push(new DefaultReviewComment("info",
+                    HardcodePropertyCategory,
                     `Hardcoded property`,
                     {
                         path: f.path,

@@ -23,11 +23,13 @@ import * as xml2js from "xml2js";
 
 import * as _ from "lodash";
 
+export const ProvidedDependencyCategory = "Use of `provided` dependencies in Maven POM";
+
 /**
  * Ban Maven "provided" properties
  */
 export const ProvidedDependencyReviewer: ReviewerRegistration = {
-    name: "HardcodedProperties",
+    name: ProvidedDependencyCategory,
     pushTest: IsMaven,
     action: async pil => {
         return {
@@ -43,11 +45,12 @@ async function findProvidedProperties(p: Project): Promise<ReviewComment[]> {
         return [];
     }
     const parsed = await parsePom(pom);
-    const dependencies = _.get<Array<{dependency: { scope: string[] }}>>(parsed, "project.dependencies") || [];
+    const dependencies = _.get<Array<{ dependency: { scope: string[] } }>>(parsed, "project.dependencies") || [];
     return dependencies
         .map(d => d.dependency[0])
         .filter(dep => !!dep.scope && dep.scope.length === 1 && dep.scope[0] === "provided")
-        .map(dep => new DefaultReviewComment("error", "provided-dependency",
+        .map(dep => new DefaultReviewComment("error",
+            ProvidedDependencyCategory,
             `Provided dependency: ${JSON.stringify(dep)}`,
             {
                 path: "pom.xml",

@@ -5,15 +5,21 @@ import { ImportDotStarCategory } from "../code/review/java/importDotStarReviewer
 import { BodyFormatter, singleIssueManagingReviewListener } from "./singleIssueManagingReviewListener";
 
 import * as _ from "lodash";
+import { ImportFileIoCategory } from "../code/review/java/fileIoImportReviewer";
+import { HardcodePropertyCategory } from "../code/review/java/spring/hardcodedPropertyReviewer";
 
 const CloudReadinessIssueTitle = "Service Not Yet Cloud Native";
-const CloudReadinessReviewCommentCategories = [ImportDotStarCategory];
+const CloudReadinessReviewCommentCategories = [
+    ImportDotStarCategory,
+    ImportFileIoCategory,
+    HardcodePropertyCategory,
+];
 
 const CloudReadinessCommentFilter = rc => CloudReadinessReviewCommentCategories.includes(rc.category);
 
 const CloudReadinessBodyFormatter: BodyFormatter = (comments, rr) => {
     const grr = rr as GitHubRepoRef;
-    let body = "# Cloud Readiness Report: Issues Found\n\n";
+    let body = "";
 
     const uniqueCategories = _.uniq(comments.map(c => c.category)).sort();
     uniqueCategories.forEach(category => {
@@ -21,7 +27,7 @@ const CloudReadinessBodyFormatter: BodyFormatter = (comments, rr) => {
         body += comments
             .filter(c => c.category === category)
             .map(c =>
-                `- ${c.detail}: [See](${deepLink(grr, c.sourceLocation)})\n`);
+                `- \`${c.sourceLocation.path || ""}\`: [${c.detail}](${deepLink(grr, c.sourceLocation)})\n`);
     });
     return body;
 };

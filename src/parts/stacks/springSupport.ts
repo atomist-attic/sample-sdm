@@ -19,7 +19,7 @@ import {
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import {
     LocalDeploymentGoal,
     LocalEndpointGoal,
