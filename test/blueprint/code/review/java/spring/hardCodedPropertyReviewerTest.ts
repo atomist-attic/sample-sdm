@@ -22,7 +22,7 @@ import { Project } from "@atomist/automation-client/project/Project";
 import { PushListenerInvocation } from "@atomist/sdm";
 import {
     HardCodedPropertyReviewer,
-    HardcodePropertyCategory
+    HardcodePropertyCategory,
 } from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
 
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";

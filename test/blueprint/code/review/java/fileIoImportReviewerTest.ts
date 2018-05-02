@@ -20,7 +20,7 @@ import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemory
 import * as assert from "power-assert";
 import {
     FileIoImportReviewer,
-    ImportFileIoCategory
+    ImportFileIoCategory,
 } from "../../../../../src/blueprint/code/review/java/fileIoImportReviewer";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 

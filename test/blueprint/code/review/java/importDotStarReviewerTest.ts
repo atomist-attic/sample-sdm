@@ -20,7 +20,7 @@ import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemory
 import * as assert from "power-assert";
 import {
     ImportDotStarCategory,
-    ImportDotStarReviewer
+    ImportDotStarReviewer,
 } from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
 import { Bad1 } from "./fileIoImportReviewerTest";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
