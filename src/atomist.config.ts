@@ -14,55 +14,18 @@
  * limitations under the License.
  */
 
-import { HandlerContext, logger } from "@atomist/automation-client";
-import { Configuration } from "@atomist/automation-client/configuration";
-import { CachingProjectLoader, firstAvailableProgressLog, LogFactory, LoggingProgressLog, ProgressLog, RolarProgressLog } from "@atomist/sdm";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { DockerOptions } from "@atomist/sdm";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
-import { SdmGoal } from "@atomist/sdm/ingesters/sdmGoalIngester";
-import { DefaultArtifactStore } from "./blueprint/artifactStore";
-import { JavaSupportOptions } from "./parts/stacks/javaSupport";
+import {Configuration} from "@atomist/automation-client/configuration";
+import {
+    CachingProjectLoader,
+    DockerOptions,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
+import {DefaultArtifactStore} from "./blueprint/artifactStore";
+import {logFactory} from "./blueprint/log/logFactory";
+import {JavaSupportOptions} from "./parts/stacks/javaSupport";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
-
-// TODO: move this somewhere
-function logFactory(rolarBaseServiceUrl?: string): LogFactory {
-    if (rolarBaseServiceUrl) {
-        logger.info("Logging with Rolar at " + rolarBaseServiceUrl);
-    }
-
-    return async (context, sdmGoal) => {
-        const name = sdmGoal.name;
-        const fallbackLogger = new LoggingProgressLog(name, "info");
-        const persistentLog: ProgressLog = rolarBaseServiceUrl ?
-            rolarProgressLogFactory(rolarBaseServiceUrl, fallbackLogger)(context, sdmGoal) : fallbackLogger;
-        return new WriteToAllProgressLog(name, await createEphemeralProgressLog(context, sdmGoal), persistentLog);
-    };
-}
-
-function rolarProgressLogFactory(rolarBaseServiceUrl: string,
-                                 fallback: ProgressLog = new LoggingProgressLog("Rolar is down!", "info")): LogFactory {
-    return async (context, sdmGoal) => {
-        return firstAvailableProgressLog(new RolarProgressLog(rolarBaseServiceUrl,
-            logPath(context, sdmGoal)), fallback);
-    };
-}
-
-function logPath(context: HandlerContext, sdmGoal: SdmGoal): string[] {
-    return [
-        context.teamId,
-        sdmGoal.repo.owner,
-        sdmGoal.repo.name,
-        sdmGoal.sha,
-        sdmGoal.environment,
-        sdmGoal.name,
-        sdmGoal.goalSetId,
-        context.correlationId,
-    ];
-}
 
 const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions = {
 
