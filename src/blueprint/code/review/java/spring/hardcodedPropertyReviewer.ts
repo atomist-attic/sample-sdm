@@ -50,7 +50,7 @@ export const HardCodedPropertyReviewer: ReviewerRegistration = {
 };
 
 async function badPropertiesStrings(p: Project): Promise<ReviewComment[]> {
-    const arrArr = saveFromFilesAsync(p, "src/main/resource/*.properties",
+    const arrArr = saveFromFilesAsync(p, "src/main/resources/*.properties",
         badPropertiesIn);
     return _.flatten(await arrArr);
 }
@@ -68,7 +68,7 @@ async function badPropertiesIn(f: File): Promise<ReviewComment[]> {
                 logger.info("Value of %s: '%s' is hard coded", toLookAt, val);
                 comments.push(new DefaultReviewComment("info",
                     HardcodePropertyCategory,
-                    `Hardcoded property`,
+                    `Hardcoded property ${toLookAt} should be sourced from environment`,
                     {
                         path: f.path,
                         lineFrom1: 1,
