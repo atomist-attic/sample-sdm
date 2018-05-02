@@ -33,8 +33,8 @@ export const AddAtomistTypeScriptHeader: AutofixRegistration = addAtomistHeader(
 export function addAtomistHeader(name: string, glob: string, pushTest: PushTest): AutofixRegistration {
     const parameters = new AddHeaderParameters();
     parameters.glob = glob;
-    // Stop it continually editing the barrel
-    parameters.excludeGlob = "src/index.ts";
+    // Stop it continually editing the barrel and graphql types
+    parameters.excludeGlob = "src/typings/types.ts,src/index.ts";
     return editorAutofixRegistration({
         name,
         pushTest: allSatisfied(pushTest, hasFileContaining(LicenseFilename, /Apache License/)),

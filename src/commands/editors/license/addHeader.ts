@@ -70,7 +70,7 @@ export async function addHeaderProjectEditor(p: Project,
     let headersAdded = 0;
     let matchingFiles = 0;
     await doWithFiles(p, params.glob, async f => {
-        if (params.excludeGlob && minimatch(f.path, params.excludeGlob)) {
+        if (params.excludeGlob && params.excludeGlob.split(",").some(p => minimatch(f.path, p))) {
             return;
         }
         ++matchingFiles;
