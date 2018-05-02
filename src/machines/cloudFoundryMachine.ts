@@ -19,7 +19,8 @@ import {
     AutofixGoal,
     DoNotSetAnyGoals,
     FromAtomist,
-    Goals, hasFile,
+    Goals,
+    hasFile,
     HttpServiceGoals,
     LibraryGoals,
     nodeBuilder,
@@ -54,23 +55,14 @@ import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDocker
 import { HasTravisFile } from "@atomist/sdm/common/listener/support/pushtest/ci/ciPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
-import {
-    IsLein,
-    IsMaven,
-} from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
-import {
-    HasAtomistBuildFile,
-    IsNode,
-} from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
+import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
@@ -81,17 +73,13 @@ import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddi
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import {
-    addJavaSupport,
-    JavaSupportOptions,
-} from "../parts/stacks/javaSupport";
+import { addJavaSupport, JavaSupportOptions } from "../parts/stacks/javaSupport";
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
-import { IssueRaisingReviewListener } from "../blueprint/issue/issueRaisingReviewListener";
 
 export type CloudFoundryMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
 
@@ -144,8 +132,6 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
     );
 
     const hasPackageLock = hasFile("package-lock.json");
-
-    sdm.addReviewListeners(IssueRaisingReviewListener);
 
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)

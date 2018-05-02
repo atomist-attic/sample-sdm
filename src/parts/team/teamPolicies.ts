@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { OnDryRunBuildComplete } from "@atomist/sdm";
-import { GraphGoalsToSlack } from "@atomist/sdm";
+import { GraphGoalsToSlack, OnDryRunBuildComplete, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
+import { CloudReadinessIssueManager } from "../../blueprint/issue/cloudReadinessIssueManager";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
@@ -37,6 +36,7 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         .addGoalsSetListeners(GraphGoalsToSlack)
         .addReviewListeners(
             slackReviewListener(),
+            CloudReadinessIssueManager,
         )
         .addEditors(
             () => addApacheLicenseHeaderEditor,
