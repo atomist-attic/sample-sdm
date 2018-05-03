@@ -16,10 +16,7 @@
 
 import {
     AnyPush,
-    AutofixGoal,
-    DoNotSetAnyGoals,
     FromAtomist,
-    Goals,
     hasFile,
     HttpServiceGoals,
     LibraryGoals,
@@ -52,7 +49,6 @@ import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/Mav
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
-import { HasTravisFile } from "@atomist/sdm/common/listener/support/pushtest/ci/ciPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
 import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";

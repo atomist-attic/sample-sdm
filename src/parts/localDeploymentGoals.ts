@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CodeReactionGoal, Goals, LocalDeploymentGoal, LocalEndpointGoal, ReviewGoal } from "@atomist/sdm";
+import { CodeReactionGoal, Goals, LocalDeploymentGoal, LocalEndpointGoal } from "@atomist/sdm";
 
 export const LocalDeploymentGoals = new Goals(
     "Local Deployment",
