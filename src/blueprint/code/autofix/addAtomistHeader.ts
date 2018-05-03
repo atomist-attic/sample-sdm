@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,8 +33,8 @@ export const AddAtomistTypeScriptHeader: AutofixRegistration = addAtomistHeader(
 export function addAtomistHeader(name: string, glob: string, pushTest: PushTest): AutofixRegistration {
     const parameters = new AddHeaderParameters();
     parameters.glob = glob;
-    // Stop it continually editing the barrel
-    parameters.excludeGlob = "src/index.ts";
+    // Stop it continually editing the barrel and graphql types
+    parameters.excludeGlob = "src/typings/types.ts,src/index.ts";
     return editorAutofixRegistration({
         name,
         pushTest: allSatisfied(pushTest, hasFileContaining(LicenseFilename, /Apache License/)),

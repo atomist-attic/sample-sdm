@@ -63,7 +63,7 @@ export const ApacheHeader = `/*
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -86,7 +86,7 @@ export async function addHeaderProjectEditor(p: Project,
     let headersAdded = 0;
     let matchingFiles = 0;
     await doWithFiles(p, params.glob, async f => {
-        if (params.excludeGlob && minimatch(f.path, params.excludeGlob)) {
+        if (params.excludeGlob && params.excludeGlob.split(",").some(p => minimatch(f.path, p))) {
             return;
         }
         ++matchingFiles;

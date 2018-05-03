@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,9 +34,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
     // SDM Options
     artifactStore: DefaultArtifactStore,
     projectLoader: new CachingProjectLoader(),
-    logFactory: async (context, sdmGoal) => new WriteToAllProgressLog(context.teamId,
-        await createEphemeralProgressLog(context, sdmGoal),
-        new LoggingProgressLog(context.teamId, "info")),
+    logFactory: logFactory(process.env.ROLAR_BASE_URL),
 
     // Java options
     useCheckstyle: process.env.USE_CHECKSTYLE === "true",
@@ -75,7 +73,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
  * start with any of these and change it to make it your own!
  */
 
-const machineName = process.env.MACHINE_NAME ||  "cloudFoundryMachine";
+const machineName = process.env.MACHINE_NAME || "cloudFoundryMachine";
 const machinePath = process.env.MACHINE_PATH || "./machines";
 
 function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliveryMachine {
