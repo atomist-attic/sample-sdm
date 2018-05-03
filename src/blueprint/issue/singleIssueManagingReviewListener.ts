@@ -107,7 +107,7 @@ function linkToSha(id) {
 interface KnownIssue extends Issue {
     state: "open" | "closed";
     number: number;
-    repository_url: string;
+    url: string;
 }
 
 // update the state and body of an issue.
@@ -147,9 +147,10 @@ async function findIssue(credentials: ProjectOperationCredentials,
     const url = encodeURI(`${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`);
     logger.info(`Request to '${url}' to get issues`);
     const returnedIssues: KnownIssue[] = await axios.get(url, authHeaders(token)).then(r => r.data.items);
+    console.log(stringify(returnedIssues, null, 2))
     return returnedIssues.filter(i =>
         i.title === title
-        && i.repository_url.includes(`/${rr.owner}/${rr.repo}/issues/`))
+        && i.url.includes(`/${rr.owner}/${rr.repo}/issues/`))
         .sort(openFirst)[0];
 }
 
