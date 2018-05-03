@@ -18,12 +18,9 @@ import { Configuration } from "@atomist/automation-client/configuration";
 import {
     CachingProjectLoader,
     DockerOptions,
-    LoggingProgressLog,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
 
