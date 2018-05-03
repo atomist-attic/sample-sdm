@@ -1,19 +1,25 @@
 
 import {logger} from "@atomist/automation-client";
 import {
-    createEphemeralProgressLog, LogFactory, LoggingProgressLog, ProgressLog, rolarProgressLogFactory,
+    createEphemeralProgressLog, firstAvailableProgressLog, LogFactory, LoggingProgressLog, ProgressLog,
+    RolarProgressLog,
     WriteToAllProgressLog,
 } from "@atomist/sdm";
 
 export function logFactory(rolarBaseServiceUrl?: string): LogFactory {
+    let persistentLogFactory = (context, sdmGoal, fallback) => firstAvailableProgressLog(fallback);
     if (rolarBaseServiceUrl) {
         logger.info("Logging with Rolar at " + rolarBaseServiceUrl);
+        persistentLogFactory = (context, sdmGoal, fallback) => {
+            return firstAvailableProgressLog(
+                new RolarProgressLog(rolarBaseServiceUrl, constructLogPath(context, sdmGoal)),
+                fallback
+            );
+        }
     }
     return async (context, sdmGoal) => {
         const name = sdmGoal.name;
-        const fallbackLogger = new LoggingProgressLog(name, "info");
-        const persistentLog: ProgressLog = rolarBaseServiceUrl ?
-            await rolarProgressLogFactory(rolarBaseServiceUrl, fallbackLogger)(context, sdmGoal) : fallbackLogger;
+        const persistentLog: ProgressLog = persistentLogFactory(context, sdmGoal, new LoggingProgressLog(name, "info"));
         return new WriteToAllProgressLog(name, await createEphemeralProgressLog(context, sdmGoal), persistentLog);
     };
 }
