@@ -19,7 +19,10 @@ import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemory
 
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import * as assert from "power-assert";
-import { ProvidedDependencyReviewer } from "../../../../../../src/blueprint/code/review/java/maven/providedDependencyReviewer";
+import {
+    ProvidedDependencyCategory,
+    ProvidedDependencyReviewer
+} from "../../../../../../src/blueprint/code/review/java/maven/providedDependencyReviewer";
 import { NonSpringPom } from "../../../../../editors/TestPoms";
 import { fakeListenerInvocation } from "../spring/hardCodedPropertyReviewerTest";
 
@@ -46,7 +49,7 @@ describe("ProvidedDependencyReviewer", () => {
         const r = await ProvidedDependencyReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment =  r.comments[0];
-        assert.equal(comment.category, "provided-dependency");
+        assert.equal(comment.category, ProvidedDependencyCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
