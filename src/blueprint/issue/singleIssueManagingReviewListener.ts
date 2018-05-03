@@ -140,8 +140,8 @@ async function createIssue(credentials: ProjectOperationCredentials,
 
 // find the most recent open (or closed, if none are open) issue with precisely this title
 async function findIssue(credentials: ProjectOperationCredentials,
-                                rr: RemoteRepoRef,
-                                title: string): Promise<KnownIssue> {
+                         rr: RemoteRepoRef,
+                         title: string): Promise<KnownIssue> {
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
     const url = encodeURI(`${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`);
