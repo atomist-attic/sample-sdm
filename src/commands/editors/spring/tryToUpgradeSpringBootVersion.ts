@@ -30,7 +30,7 @@ export class UpgradeSpringBootParameters implements EditModeSuggestion {
         required: false,
     })
     // TODO this should be in a  object goals
-    public desiredBootVersion: string = CurrentSpringBootVersion;
+    public desiredBootVersion: string = "2.0.1.RELEASE";
 
     private readonly guid = "" + new Date().getTime();
 

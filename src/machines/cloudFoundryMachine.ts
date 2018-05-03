@@ -92,15 +92,6 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
-        whenPushSatisfies(IsLein)
-            .itMeans("Build a Clojure library")
-            .setGoals(LibraryGoals),
-        whenPushSatisfies(HasTravisFile, IsNode)
-            .itMeans("Already builds with Travis")
-            .setGoals(new Goals("Autofix only", AutofixGoal)),
-        whenPushSatisfies(HasTravisFile)
-            .itMeans("Already builds with Travis")
-            .setGoals(DoNotSetAnyGoals),
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
             .itMeans("No material change to Java")
             .setGoals(NoGoals),

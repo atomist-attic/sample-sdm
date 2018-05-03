@@ -66,13 +66,13 @@ export function singleIssueManagingReviewListener(commentFilter: CommentFilter,
 
         // there are some comments
         if (!existingIssue) {
-            logger.info("Creating issue '%s' from review comments", title);
-            await createIssue(ri.credentials, ri.id,
-                {
-                    title,
-                    body: bodyFormatter(relevantComments, ri.id),
-                    // labels? assignees?
-                });
+            const issue = {
+                title,
+                body: bodyFormatter(relevantComments, ri.id),
+                // labels? assignees?
+            };
+            logger.info("Creating issue %j from review comments", issue);
+            await createIssue(ri.credentials, ri.id, issue);
         } else {
             // Update the issue if necessary, reopening it if need be
             const body = bodyFormatter(relevantComments, ri.id);

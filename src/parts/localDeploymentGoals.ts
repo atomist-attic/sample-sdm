@@ -19,6 +19,5 @@ import { CodeReactionGoal, Goals, LocalDeploymentGoal, LocalEndpointGoal, Review
 export const LocalDeploymentGoals = new Goals(
     "Local Deployment",
     CodeReactionGoal,
-    ReviewGoal,
     LocalDeploymentGoal,
     LocalEndpointGoal);
