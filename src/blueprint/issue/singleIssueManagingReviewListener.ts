@@ -54,7 +54,7 @@ export function singleIssueManagingReviewListener(commentFilter: CommentFilter,
             return;
         }
         const relevantComments = ri.review.comments.filter(commentFilter);
-        const existingIssue = await findIssue((ri.credentials as TokenCredentials).token, ri.id as GitHubRepoRef, title);
+        const existingIssue = await findIssue(ri.credentials, ri.id as GitHubRepoRef, title);
         if (relevantComments.length === 0) {
             if (existingIssue) {
                 logger.info("Closing issue %d because all comments have been addressed", existingIssue.number);
@@ -107,6 +107,7 @@ function linkToSha(id) {
 interface KnownIssue extends Issue {
     state: "open" | "closed";
     number: number;
+    repository_url: string;
 }
 
 // update the state and body of an issue.
@@ -119,7 +120,7 @@ async function updateIssue(credentials: ProjectOperationCredentials,
     };
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
-    const url = `${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues/${issue.number}`;
+    const url = encodeURI(`${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues/${issue.number}`);
     logger.info(`Request to '${url}' to update issue`);
     await axios.patch(url, safeIssue, authHeaders(token)).catch(err => {
         logger.error("Failure updating issue. response: %s", stringify(err.response.data));
@@ -139,14 +140,17 @@ async function createIssue(credentials: ProjectOperationCredentials,
 
 // find the most recent open (or closed, if none are open) issue with precisely this title
 async function findIssue(credentials: ProjectOperationCredentials,
-                         rr: RemoteRepoRef,
-                         title: string): Promise<KnownIssue> {
+                                rr: RemoteRepoRef,
+                                title: string): Promise<KnownIssue> {
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
-    const url = `${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`;
+    const url = encodeURI(`${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`);
     logger.info(`Request to '${url}' to get issues`);
     const returnedIssues: KnownIssue[] = await axios.get(url, authHeaders(token)).then(r => r.data.items);
-    return returnedIssues.filter(i => i.title === title).sort(openFirst)[0];
+    return returnedIssues.filter(i =>
+        i.title === title
+        && i.repository_url.includes(`/${rr.owner}/${rr.repo}/issues/`))
+        .sort(openFirst)[0];
 }
 
 function openFirst(a: KnownIssue, b: KnownIssue): number {
