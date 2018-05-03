@@ -35,10 +35,18 @@ import Push = OnPushToAnyBranch.Push;
 
 export type CommentFilter = (r: ReviewComment) => boolean;
 
-export type BodyFormatter = (comments: ReviewComment[], rr: RemoteRepoRef) => string;
+/**
+ * Format the body of an issue based on this comment
+ */
+export type CommentFormatter = (comment: ReviewComment, rr: RemoteRepoRef) => string;
 
 /**
- * Manage a single issue for all these review problems
+ * Format the body of an issue based on these comments
+ */
+export type CommentsFormatter = (comments: ReviewComment[], rr: RemoteRepoRef) => string;
+
+/**
+ * Manage a single issue for a subset of review problems
  * @param commentFilter filter for relevant review comments
  * @param title title of the issue to manage
  * @param bodyFormatter function to create body from comments
@@ -47,10 +55,10 @@ export type BodyFormatter = (comments: ReviewComment[], rr: RemoteRepoRef) => st
  */
 export function singleIssueManagingReviewListener(commentFilter: CommentFilter,
                                                   title: string,
-                                                  bodyFormatter: BodyFormatter): ReviewListener {
+                                                  bodyFormatter: CommentsFormatter): ReviewListener {
     return async (ri: ReviewListenerInvocation) => {
         if (ri.push.branch !== ri.push.repo.defaultBranch) {
-            // We only care about pushers to the default branch
+            // We only care about pushes to the default branch
             return;
         }
         const relevantComments = ri.review.comments.filter(commentFilter);
@@ -89,6 +97,54 @@ export function singleIssueManagingReviewListener(commentFilter: CommentFilter,
             }
         }
         // Should we catch exceptions and not fail the Goal if this doesn't work?
+    };
+}
+
+/**
+ * Take this subset of issues and maintain an issue for each
+ * @param {CommentFilter} commentFilter
+ * @param {CommentsFormatter} bodyFormatter
+ * @return {ReviewListener}
+ */
+export function multiIssueManagingReviewListener(commentFilter: CommentFilter,
+                                                 bodyFormatter: CommentFormatter): ReviewListener {
+    return async (ri: ReviewListenerInvocation) => {
+        if (ri.push.branch !== ri.push.repo.defaultBranch) {
+            // We only care about pushes to the default branch
+            return;
+        }
+        const relevantComments = ri.review.comments.filter(commentFilter);
+        for (const comment of relevantComments) {
+            // TODO disambiguate
+            const title = comment.detail;
+            const existingIssue = await findIssue(ri.credentials, ri.id as GitHubRepoRef, title);
+
+            // there are some comments
+            if (!existingIssue) {
+                const issue = {
+                    title,
+                    body: bodyFormatter(comment, ri.id),
+                    // labels? assignees?
+                };
+                logger.info("Creating issue %j from review comment", issue);
+                await createIssue(ri.credentials, ri.id, issue);
+            } else {
+                // Update the issue if necessary, reopening it if need be
+                const body = bodyFormatter(comment, ri.id);
+                if (body !== existingIssue.body) {
+                    logger.info("Updating issue %d with the latest ", existingIssue.number);
+                    await updateIssue(ri.credentials, ri.id,
+                        {
+                            ...existingIssue,
+                            state: "open",
+                            body,
+                        });
+                } else {
+                    logger.info("Not updating issue %d as body has not changed", existingIssue.number);
+                }
+            }
+            // Should we catch exceptions and not fail the Goal if this doesn't work?
+        }
     };
 }
 
@@ -147,13 +203,18 @@ async function findIssue(credentials: ProjectOperationCredentials,
     const url = encodeURI(`${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`);
     logger.info(`Request to '${url}' to get issues`);
     const returnedIssues: KnownIssue[] = await axios.get(url, authHeaders(token)).then(r => r.data.items);
-    console.log(stringify(returnedIssues, null, 2))
     return returnedIssues.filter(i =>
         i.title === title
         && i.url.includes(`/${rr.owner}/${rr.repo}/issues/`))
         .sort(openFirst)[0];
 }
 
+/**
+ * Compare giving open issues a lower sort order
+ * @param {KnownIssue} a
+ * @param {KnownIssue} b
+ * @return {number}
+ */
 function openFirst(a: KnownIssue, b: KnownIssue): number {
     if (a.state === "open" && b.state === "closed") {
         return -1;

@@ -15,10 +15,13 @@
  */
 
 import { Configuration } from "@atomist/automation-client/configuration";
-import { CachingProjectLoader, LoggingProgressLog } from "@atomist/sdm";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { DockerOptions } from "@atomist/sdm";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import {
+    CachingProjectLoader,
+    DockerOptions,
+    LoggingProgressLog,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions
+} from "@atomist/sdm";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
@@ -31,7 +34,9 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
     // SDM Options
     artifactStore: DefaultArtifactStore,
     projectLoader: new CachingProjectLoader(),
-    logFactory: async name => new WriteToAllProgressLog(name, await createEphemeralProgressLog(name), new LoggingProgressLog(name, "info")),
+    logFactory: async (context, sdmGoal) => new WriteToAllProgressLog(context.teamId,
+        await createEphemeralProgressLog(context, sdmGoal),
+        new LoggingProgressLog(context.teamId, "info")),
 
     // Java options
     useCheckstyle: process.env.USE_CHECKSTYLE === "true",
@@ -108,7 +113,7 @@ export const configuration: Configuration = {
             name: "./log/github-sdm.log",
         },
         banner: () => ({
-            banner: "upgrade to spring boot 2.0.1!",
+            banner: "hello VOXXED",
             asciify: true,
             color: "green",
         }),

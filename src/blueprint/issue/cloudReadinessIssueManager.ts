@@ -18,7 +18,7 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { deepLink } from "@atomist/automation-client/util/gitHub";
 import { ReviewListener } from "@atomist/sdm/common/listener/ReviewListener";
 import { ImportDotStarCategory } from "../code/review/java/importDotStarReviewer";
-import { BodyFormatter, singleIssueManagingReviewListener } from "./singleIssueManagingReviewListener";
+import { CommentsFormatter, singleIssueManagingReviewListener } from "./issueManagingReviewListeners";
 
 import * as _ from "lodash";
 import { ImportFileIoCategory } from "../code/review/java/fileIoImportReviewer";
@@ -33,7 +33,7 @@ const CloudReadinessReviewCommentCategories = [
 
 const CloudReadinessCommentFilter = rc => CloudReadinessReviewCommentCategories.includes(rc.category);
 
-const CloudReadinessBodyFormatter: BodyFormatter = (comments, rr) => {
+const CloudReadinessBodyFormatter: CommentsFormatter = (comments, rr) => {
     const grr = rr as GitHubRepoRef;
     let body = "";
 

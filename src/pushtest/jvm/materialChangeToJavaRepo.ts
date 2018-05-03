@@ -20,7 +20,7 @@ import { anyFileChangedWithExtension, filesChangedSince } from "@atomist/sdm/uti
 
 import * as _ from "lodash";
 
-const FileToWatch = ["java", "html", "json", "yml", "xml", "sh", "kt"];
+const FileToWatch = ["java", "html", "json", "yml", "xml", "sh", "kt", ".properties"];
 
 /**
  * Veto if change to deployment unit doesn't seem important enough to
