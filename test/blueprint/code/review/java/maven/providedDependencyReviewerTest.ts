@@ -21,7 +21,7 @@ import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFil
 import * as assert from "power-assert";
 import {
     ProvidedDependencyCategory,
-    ProvidedDependencyReviewer
+    ProvidedDependencyReviewer,
 } from "../../../../../../src/blueprint/code/review/java/maven/providedDependencyReviewer";
 import { NonSpringPom } from "../../../../../editors/TestPoms";
 import { fakeListenerInvocation } from "../spring/hardCodedPropertyReviewerTest";
