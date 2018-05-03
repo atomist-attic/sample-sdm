@@ -17,12 +17,14 @@
 import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
 import { JavaAndKotlinSource } from "./Globs";
 
+export const ImportDotStarCategory = "Lazy import";
+
 export const ImportDotStarReviewer: ReviewerRegistration = patternMatchReviewer(
-    "import-dot-star",
+    ImportDotStarCategory,
     {globPattern: JavaAndKotlinSource, severity: "info"},
     {
-        name: "import .*",
+        name: ImportDotStarCategory,
         antiPattern: /import .*\.\*/,
-        comment: "Don't import .*, organize imports!",
+        comment: "Don't import .*. Import types individually",
     },
 );

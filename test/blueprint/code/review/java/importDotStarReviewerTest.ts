@@ -18,7 +18,10 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import * as assert from "power-assert";
-import { ImportDotStarReviewer } from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
+import {
+    ImportDotStarCategory,
+    ImportDotStarReviewer,
+} from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
 import { Bad1 } from "./fileIoImportReviewerTest";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 
@@ -46,7 +49,7 @@ describe("importDotStar", () => {
         const r = await ImportDotStarReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment = r.comments[0];
-        assert.equal(comment.category, "import-dot-star");
+        assert.equal(comment.category, ImportDotStarCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
@@ -58,7 +61,7 @@ describe("importDotStar", () => {
         const r = await ImportDotStarReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment = r.comments[0];
-        assert.equal(comment.category, "import-dot-star");
+        assert.equal(comment.category, ImportDotStarCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
@@ -70,7 +73,7 @@ describe("importDotStar", () => {
         const r = await ImportDotStarReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment = r.comments[0];
-        assert.equal(comment.category, "import-dot-star");
+        assert.equal(comment.category, ImportDotStarCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 

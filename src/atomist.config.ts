@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-import {Configuration} from "@atomist/automation-client/configuration";
+import { Configuration } from "@atomist/automation-client/configuration";
 import {
     CachingProjectLoader,
     DockerOptions,
+    LoggingProgressLog,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
-import {DefaultArtifactStore} from "./blueprint/artifactStore";
-import {logFactory} from "./blueprint/log/logFactory";
-import {JavaSupportOptions} from "./parts/stacks/javaSupport";
+import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
+import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
+import { DefaultArtifactStore } from "./blueprint/artifactStore";
+import { JavaSupportOptions } from "./parts/stacks/javaSupport";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
@@ -109,7 +111,7 @@ export const configuration: Configuration = {
             name: "./log/github-sdm.log",
         },
         banner: () => ({
-            banner: "upgrade to spring boot 2.0.1!",
+            banner: "hello VOXXED",
             asciify: true,
             color: "green",
         }),

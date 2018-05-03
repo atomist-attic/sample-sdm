@@ -20,7 +20,10 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { PushListenerInvocation } from "@atomist/sdm";
-import { HardCodedPropertyReviewer } from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
+import {
+    HardCodedPropertyReviewer,
+    HardcodePropertyCategory,
+} from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
 
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import * as assert from "power-assert";
@@ -36,32 +39,32 @@ describe("HardCodePropertyReviewer", () => {
 
     it("pass harmless properties file", async () => {
         const id = new GitHubRepoRef("a", "b");
-        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resource/application.properties", "thing=1"));
+        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resources/application.properties", "thing=1"));
         const r = await HardCodedPropertyReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 0);
     });
 
     it("flag bad port property", async () => {
         const id = new GitHubRepoRef("a", "b");
-        const f = new InMemoryFile("src/main/resource/application.properties", "server.port=8080");
+        const f = new InMemoryFile("src/main/resources/application.properties", "server.port=8080");
         const p = InMemoryProject.from(id, f);
         const r = await HardCodedPropertyReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment =  r.comments[0];
-        assert.equal(comment.category, "properties");
+        assert.equal(comment.category, HardcodePropertyCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
     it("accept good port property", async () => {
         const id = new GitHubRepoRef("a", "b");
-        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resource/application.properties", "server.port=${PORT}"));
+        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resources/application.properties", "server.port=${PORT}"));
         const r = await HardCodedPropertyReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 0);
     });
 
     it("reject hard-coded password", async () => {
         const id = new GitHubRepoRef("a", "b");
-        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resource/application.properties", "spring.datasource.password=tiger"));
+        const p = InMemoryProject.from(id, new InMemoryFile("src/main/resources/application.properties", "spring.datasource.password=tiger"));
         const r = await HardCodedPropertyReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
     });

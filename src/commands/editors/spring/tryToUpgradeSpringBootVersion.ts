@@ -17,7 +17,6 @@
 import { HandleCommand, Parameter, Parameters } from "@atomist/automation-client";
 import { dryRunEditor, EditModeSuggestion } from "@atomist/sdm";
 import { setSpringBootVersionEditor } from "@atomist/spring-automation/commands/editor/spring/setSpringBootVersionEditor";
-import { CurrentSpringBootVersion } from "@atomist/spring-automation/commands/reviewer/spring/SpringBootVersionReviewer";
 
 @Parameters()
 export class UpgradeSpringBootParameters implements EditModeSuggestion {
@@ -30,7 +29,7 @@ export class UpgradeSpringBootParameters implements EditModeSuggestion {
         required: false,
     })
     // TODO this should be in a  object goals
-    public desiredBootVersion: string = CurrentSpringBootVersion;
+    public desiredBootVersion: string = "2.0.1.RELEASE";
 
     private readonly guid = "" + new Date().getTime();
 

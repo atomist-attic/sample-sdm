@@ -18,7 +18,10 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 import * as assert from "power-assert";
-import { FileIoImportReviewer } from "../../../../../src/blueprint/code/review/java/fileIoImportReviewer";
+import {
+    FileIoImportReviewer,
+    ImportFileIoCategory,
+} from "../../../../../src/blueprint/code/review/java/fileIoImportReviewer";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 
 describe("fileIoImport", () => {
@@ -45,7 +48,7 @@ describe("fileIoImport", () => {
         const r = await FileIoImportReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment = r.comments[0];
-        assert.equal(comment.category, "file-import");
+        assert.equal(comment.category, ImportFileIoCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
@@ -57,7 +60,7 @@ describe("fileIoImport", () => {
         const r = await FileIoImportReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment = r.comments[0];
-        assert.equal(comment.category, "file-import");
+        assert.equal(comment.category, ImportFileIoCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 
@@ -69,7 +72,7 @@ describe("fileIoImport", () => {
         const r = await FileIoImportReviewer.action(fakeListenerInvocation(p) as any);
         assert.equal(r.comments.length, 1);
         const comment = r.comments[0];
-        assert.equal(comment.category, "file-import");
+        assert.equal(comment.category, ImportFileIoCategory);
         assert.equal(comment.sourceLocation.path, f.path);
     });
 

@@ -16,10 +16,8 @@
 
 import {
     AnyPush,
-    AutofixGoal,
-    DoNotSetAnyGoals,
     FromAtomist,
-    Goals, hasFile,
+    hasFile,
     HttpServiceGoals,
     LibraryGoals,
     nodeBuilder,
@@ -51,26 +49,16 @@ import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/Mav
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
-import { HasTravisFile } from "@atomist/sdm/common/listener/support/pushtest/ci/ciPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
-import {
-    IsLein,
-    IsMaven,
-} from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
-import {
-    HasAtomistBuildFile,
-    IsNode,
-} from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
+import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
@@ -81,10 +69,7 @@ import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddi
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import {
-    addJavaSupport,
-    JavaSupportOptions,
-} from "../parts/stacks/javaSupport";
+import { addJavaSupport, JavaSupportOptions } from "../parts/stacks/javaSupport";
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
@@ -103,15 +88,6 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
-        whenPushSatisfies(IsLein)
-            .itMeans("Build a Clojure library")
-            .setGoals(LibraryGoals),
-        whenPushSatisfies(HasTravisFile, IsNode)
-            .itMeans("Already builds with Travis")
-            .setGoals(new Goals("Autofix only", AutofixGoal)),
-        whenPushSatisfies(HasTravisFile)
-            .itMeans("Already builds with Travis")
-            .setGoals(DoNotSetAnyGoals),
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
             .itMeans("No material change to Java")
             .setGoals(NoGoals),
