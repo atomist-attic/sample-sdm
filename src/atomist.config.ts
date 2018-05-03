@@ -23,6 +23,7 @@ import {
 } from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
+import { logFactory } from "./blueprint/log/logFactory";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
