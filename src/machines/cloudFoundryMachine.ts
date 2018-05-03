@@ -47,7 +47,7 @@ import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
