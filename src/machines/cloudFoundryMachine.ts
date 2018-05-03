@@ -49,7 +49,7 @@ import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/appManagement";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
 import { HasTravisFile } from "@atomist/sdm/common/listener/support/pushtest/ci/ciPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
