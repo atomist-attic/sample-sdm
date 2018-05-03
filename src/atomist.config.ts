@@ -20,7 +20,7 @@ import {
     DockerOptions,
     LoggingProgressLog,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions
+    SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { WriteToAllProgressLog } from "@atomist/sdm/common/log/WriteToAllProgressLog";
