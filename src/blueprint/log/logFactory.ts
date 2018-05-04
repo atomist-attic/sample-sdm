@@ -17,12 +17,12 @@
 import {logger} from "@atomist/automation-client";
 import {
     constructLogPath,
-    createEphemeralProgressLog, firstAvailableProgressLog, LogFactory, LoggingProgressLog,
+    createEphemeralProgressLog, firstAvailableProgressLog, ProgressLogFactory, LoggingProgressLog,
     RolarProgressLog,
     WriteToAllProgressLog,
 } from "@atomist/sdm";
 
-export function logFactory(rolarBaseServiceUrl?: string): LogFactory {
+export function logFactory(rolarBaseServiceUrl?: string): ProgressLogFactory {
     let persistentLogFactory = (context, sdmGoal, fallback) => firstAvailableProgressLog(fallback);
     if (rolarBaseServiceUrl) {
         logger.info("Logging with Rolar at " + rolarBaseServiceUrl);

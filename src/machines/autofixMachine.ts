@@ -24,6 +24,7 @@ import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 export type AutofixMachineOptions = SoftwareDeliveryMachineOptions;
 
@@ -36,6 +37,7 @@ export function autofixMachine(opts: Partial<AutofixMachineOptions> = {}): Softw
         artifactStore: DefaultArtifactStore,
         projectLoader: CloningProjectLoader,
         logFactory: createEphemeralProgressLog,
+        credentialsResolver: new GitHubCredentialsResolver(),
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine("Autofix machine", options,

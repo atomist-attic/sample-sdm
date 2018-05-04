@@ -24,6 +24,7 @@ import { springBootTagger } from "@atomist/spring-automation/commands/tag/spring
 import { springBootGenerator } from "../commands/generators/java/spring/springBootGenerator";
 import { nodeGenerator } from "../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig, CommonJavaGeneratorConfig } from "./generatorConfig";
+import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 export type ProjectCreationMachineOptions = SoftwareDeliveryMachineOptions;
 
@@ -38,6 +39,7 @@ export function projectCreationMachine(opts: Partial<ProjectCreationMachineOptio
         artifactStore: new EphemeralLocalArtifactStore(),
         projectLoader: new CachingProjectLoader(),
         logFactory: createEphemeralProgressLog,
+        credentialsResolver: new GitHubCredentialsResolver(),
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine("Project creation machine", options);

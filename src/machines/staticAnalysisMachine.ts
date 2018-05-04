@@ -31,6 +31,7 @@ import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralPro
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport, CheckstyleSupportOptions } from "../parts/stacks/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
+import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 export type StaticAnalysisMachineOptions = SoftwareDeliveryMachineOptions & CheckstyleSupportOptions;
 
@@ -44,6 +45,7 @@ export function staticAnalysisMachine(opts: Partial<StaticAnalysisMachineOptions
         projectLoader: new CachingProjectLoader(),
         useCheckstyle: true,
         reviewOnlyChangedFiles: false,
+        credentialsResolver: new GitHubCredentialsResolver(),
         logFactory: createEphemeralProgressLog,
         ...opts,
     };

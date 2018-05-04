@@ -29,6 +29,7 @@ import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoa
 import * as fs from "fs";
 import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 export type ArtifactVerifyingMachineOptions = SoftwareDeliveryMachineOptions;
 
@@ -41,6 +42,7 @@ export function artifactVerifyingMachine(opts: Partial<ArtifactVerifyingMachineO
         artifactStore: DefaultArtifactStore,
         projectLoader: new CachingProjectLoader(),
         logFactory: createEphemeralProgressLog,
+        credentialsResolver: new GitHubCredentialsResolver(),
         ...opts,
     };
     const sdm = new SoftwareDeliveryMachine("Artifact verifying machine", options,
