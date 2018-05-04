@@ -15,6 +15,7 @@ git-info.json
 
 community.sh
 spring-team.sh
+multi-org.sh
 atomisthq.sh
 
 *.log
