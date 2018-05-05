@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { BasicAuthCredentials } from "@atomist/automation-client/operations/common/BasicAuthCredentials";
 import { HandlerContext } from "@atomist/automation-client";
+import { BasicAuthCredentials } from "@atomist/automation-client/operations/common/BasicAuthCredentials";
 import { CredentialsResolver } from "@atomist/sdm/handlers/common/CredentialsResolver";
 
 export class DefaultCredentialsResolver implements CredentialsResolver {

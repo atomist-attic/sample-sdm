@@ -26,10 +26,10 @@ import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
+import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 import * as fs from "fs";
 import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 export type ArtifactVerifyingMachineOptions = SoftwareDeliveryMachineOptions;
 

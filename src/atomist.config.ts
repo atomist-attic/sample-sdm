@@ -23,9 +23,8 @@ import {
 } from "@atomist/sdm";
 import { DefaultArtifactStore } from "./blueprint/artifactStore";
 import { logFactory } from "./blueprint/log/logFactory";
+import { DefaultCredentialsResolver } from "./parts/DefaultCredentialsResolver";
 import { JavaSupportOptions } from "./parts/stacks/javaSupport";
-import { GitHubCredentialsFactory } from "@atomist/sdm/handlers/common/GitHubCredentialsFactory";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
 
@@ -35,7 +34,7 @@ const SdmOptions: SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOp
     artifactStore: DefaultArtifactStore,
     projectLoader: new CachingProjectLoader(),
     logFactory: logFactory(process.env.ROLAR_BASE_URL),
-    credentialsResolver: new GitHubCredentialsResolver(),
+    credentialsResolver: new DefaultCredentialsResolver(),
 
     // Java options
     useCheckstyle: process.env.USE_CHECKSTYLE === "true",
@@ -85,10 +84,10 @@ function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliver
 const machine = createMachine(SdmOptions);
 
 export const configuration: Configuration = {
-    endpoints: {
-        api: "https://automation-staging.atomist.services/registration",
-        graphql: "https://automation-staging.atomist.services/graphql/team",
-    },
+    // endpoints: {
+    //     api: "https://automation-staging.atomist.services/registration",
+    //     graphql: "https://automation-staging.atomist.services/graphql/team",
+    // },
     commands: machine.commandHandlers.concat([]),
     events: machine.eventHandlers.concat([]),
     policy: "ephemeral",

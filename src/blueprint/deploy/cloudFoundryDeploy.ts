@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CodeActionRegistration, PushImpactListener } from "@atomist/sdm";
+import { PushImpactListener, PushReactionRegistration } from "@atomist/sdm";
 import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
 import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
 import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
@@ -73,7 +73,7 @@ const EnableDeployOnCloudFoundryManifestAdditionListener: PushImpactListener = a
 /**
  * Enable deployment when a PCF manifest is added to the default branch.
  */
-export const EnableDeployOnCloudFoundryManifestAddition: CodeActionRegistration = {
+export const EnableDeployOnCloudFoundryManifestAddition: PushReactionRegistration = {
     name: "EnableDeployOnCloudFoundryManifestAddition",
     action: EnableDeployOnCloudFoundryManifestAdditionListener,
 };

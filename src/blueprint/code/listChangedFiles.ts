@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { CodeActionRegistration } from "@atomist/sdm";
+import { PushReactionRegistration } from "@atomist/sdm";
 
 /**
  * React to a push by listing changed files to any Slack channels
  * associated with the repo
  * @return {Promise<any>}
  */
-export const listChangedFiles: CodeActionRegistration = {
+export const listChangedFiles: PushReactionRegistration = {
     action: i => {
         return i.addressChannels(`Files changed:\n${i.filesChanged.map(n => "- `" + n + "`").join("\n")}`);
     },

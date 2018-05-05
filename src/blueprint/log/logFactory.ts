@@ -17,7 +17,7 @@
 import {logger} from "@atomist/automation-client";
 import {
     constructLogPath,
-    createEphemeralProgressLog, firstAvailableProgressLog, ProgressLogFactory, LoggingProgressLog,
+    createEphemeralProgressLog, firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory,
     RolarProgressLog,
     WriteToAllProgressLog,
 } from "@atomist/sdm";

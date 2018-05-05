@@ -73,7 +73,7 @@ export function evangelicalMachine(options: EvangelicalMachineOptions): Software
             enableDeploy,
             disableDeploy,
         )
-        .addCodeReactions(EnableDeployOnCloudFoundryManifestAddition);
+        .addPushReactions(EnableDeployOnCloudFoundryManifestAddition);
 
     // addTeamPolicies(sdm);
     addDemoEditors(sdm);

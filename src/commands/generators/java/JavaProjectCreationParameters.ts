@@ -64,6 +64,8 @@ export class JavaProjectCreationParameters extends BaseSeedDrivenGeneratorParame
         return this.target.description;
     }
 
+    // TODO need to parameterize target creation. Arg?
+
     public bindAndValidate() {
         if (!this.artifactId) {
             this.artifactId = this.target.repo;

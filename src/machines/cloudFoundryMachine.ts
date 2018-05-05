@@ -175,7 +175,7 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
             disableDeploy,
             isDeployEnabledCommand,
         )
-        .addCodeReactions(EnableDeployOnCloudFoundryManifestAddition)
+        .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
     addJavaSupport(sdm, options);
     addSpringSupport(sdm, options);

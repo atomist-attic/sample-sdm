@@ -15,16 +15,16 @@
  */
 
 import { onAnyPush } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { AutofixGoal } from "@atomist/sdm";
 import { Goals } from "@atomist/sdm";
 import { CloningProjectLoader } from "@atomist/sdm";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
+import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 
 export type AutofixMachineOptions = SoftwareDeliveryMachineOptions;
 
