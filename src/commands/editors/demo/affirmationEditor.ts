@@ -53,9 +53,13 @@ const affirmations = [
     "I believe in you. You can do the thing!",
     "You are the delta in what you do, not the things you did in the past",
     "It’s only a thought, and a thought can be changed.",
-    "As I say yes to life, life says yes to me.",
-    "Deep at the center of my being is an infinite well of love.",
-    "I come from the loving space of my heart, and I know that love opens all doors.",
+    "Life is psychologically difficult for everybody.",
+    "Our bodies and minds are capable of far more than our psyche will let us achieve.",
+    "Make new mistakes as fast as you can.",
+    "Finite games are played within boundaries. Infinite games play with boundaries.",
+    "You belong everywhere you are.",
+    "No need to say 'I can do it.' You ARE doing it!",
+    "Life is its own reason for being. It is beautiful to have a sense of beauty.",
 ];
 
 function randomAffirmation() {
