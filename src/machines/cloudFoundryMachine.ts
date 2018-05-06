@@ -125,16 +125,16 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
             .itMeans("Custom build script")
             .set(npmCustomBuilder(options.artifactStore, options.projectLoader)),
         build.when(IsNode, ToDefaultBranch, hasPackageLock)
-            .itMeans("npm run compile")
+            .itMeans("npm run build")
             .set(nodeBuilder(options.projectLoader, "npm ci", "npm run build")),
         build.when(IsNode, hasPackageLock)
-            .itMeans("npm compile")
+            .itMeans("npm run compile")
             .set(nodeBuilder(options.projectLoader, "npm ci", "npm run compile")),
         build.when(IsNode, ToDefaultBranch)
-            .itMeans("npm run compile - no package lock")
+            .itMeans("npm run build - no package lock")
             .set(nodeBuilder(options.projectLoader, "npm i", "npm run build")),
         build.when(IsNode)
-            .itMeans("npm compile - no package lock")
+            .itMeans("npm run compile - no package lock")
             .set(nodeBuilder(options.projectLoader, "npm i", "npm run compile")),
         build.when(IsLein)
             .itMeans("Lein build")
