@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
-import { executableJarDeployer } from "@atomist/sdm";
-import { Deployer } from "@atomist/sdm";
-import { FunctionalUnit } from "@atomist/sdm";
-import { DeploySpec } from "@atomist/sdm";
 import {
-    ManagedDeploymentTargeter,
+    Deployer,
+    executableJarDeployer,
     ManagedDeploymentTargetInfo,
-    targetInfoForAllBranches,
+    mavenDeployer,
+    ProjectLoader,
+    StartupInfo,
 } from "@atomist/sdm";
-import { ProjectLoader } from "@atomist/sdm";
-import { StartupInfo } from "@atomist/sdm";
-import { mavenDeployer } from "@atomist/sdm";
-import {
-    StagingDeploymentGoal,
-    StagingEndpointGoal,
-    StagingUndeploymentGoal,
-} from "@atomist/sdm";
-import { OnSupersededStatus } from "@atomist/sdm//handlers/events/delivery/superseded/OnSuperseded";
-import { DefaultArtifactStore } from "../artifactStore";
 
 /** Successs patterns when Spring Boot starts
  * @type {RegExp}
@@ -49,32 +37,6 @@ export const LocalExecutableJarDeployer: Deployer<ManagedDeploymentTargetInfo> =
     commandLineArgumentsFor: springBootExecutableJarArgs,
     successPatterns: SpringBootSuccessPatterns,
 });
-
-/**
- * Deploy to the automation client node
- */
-
-const LocalExecutableJarDeploySpec: DeploySpec<ManagedDeploymentTargetInfo> = {
-    implementationName: "DeployFromLocalExecutableJar",
-    deployGoal: StagingDeploymentGoal,
-    endpointGoal: StagingEndpointGoal,
-    artifactStore: DefaultArtifactStore,
-    deployer: LocalExecutableJarDeployer,
-    targeter: ManagedDeploymentTargeter,
-    undeploy: {
-        goal: StagingUndeploymentGoal,
-        implementationName: "UndeployFromLocalJar",
-    },
-};
-
-const UndeployOnSuperseded = new OnSupersededStatus([inv => {
-    logger.info("Will undeploy application %j", inv.id);
-    return LocalExecutableJarDeploySpec.deployer.undeploy(targetInfoForAllBranches(inv.id), undefined, undefined);
-}]);
-
-/* tslint:disable:no-unused-variable */
-
-const undeployLocalOnSuperseded: FunctionalUnit = {eventHandlers: [() => UndeployOnSuperseded], commandHandlers: []};
 
 function springBootExecutableJarArgs(si: StartupInfo): string[] {
     return [

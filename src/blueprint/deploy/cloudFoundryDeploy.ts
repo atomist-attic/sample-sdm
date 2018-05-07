@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { PushImpactListener, PushReactionRegistration } from "@atomist/sdm";
-import { DeploySpec } from "@atomist/sdm/common/delivery/deploy/executeDeploy";
+import { DeployerInfo, PushImpactListener, PushReactionRegistration } from "@atomist/sdm";
 import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
 import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
 import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/common/delivery/deploy/pcf/EnvironmentCloudFoundryTarget";
@@ -37,23 +36,16 @@ export const CloudFoundryProductionTarget = new EnvironmentCloudFoundryTarget("p
 /**
  * Deploy everything to the same Cloud Foundry space
  */
-export function cloudFoundryStagingDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}): DeploySpec<CloudFoundryInfo> {
+export function cloudFoundryStagingDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}): DeployerInfo<CloudFoundryInfo> {
     return {
-        implementationName: "DeployFromLocalToStaging",
-        deployGoal: StagingDeploymentGoal,
-        endpointGoal: StagingEndpointGoal,
-        artifactStore: opts.artifactStore,
         deployer: new CloudFoundryBlueGreenDeployer(opts.projectLoader),
         targeter: () => CloudFoundryStagingTarget,
     };
 }
 
-export function cloudFoundryProductionDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}): DeploySpec<CloudFoundryInfo> {
+export function cloudFoundryProductionDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}):
+    DeployerInfo<CloudFoundryInfo> {
     return {
-        implementationName: "DeployFromLocalToProd",
-        deployGoal: ProductionDeploymentGoal,
-        endpointGoal: ProductionEndpointGoal,
-        artifactStore: opts.artifactStore,
         deployer: new CloudFoundryBlueGreenDeployer(opts.projectLoader),
         targeter: () => CloudFoundryProductionTarget,
     };

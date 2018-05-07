@@ -19,7 +19,7 @@ import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { editorCommand } from "@atomist/sdm";
 import { AllJavaFiles } from "@atomist/spring-automation/commands/generator/java/javaProjectUtils";
-import { AffirmationParameters } from "./affirmationEditor";
+import { AffirmationParameters, affirmations } from "./affirmationEditor";
 
 /**
  * Harmlessly modify a Java file on master
@@ -34,16 +34,6 @@ export const javaAffirmationEditor: HandleCommand = editorCommand(
         intent: "javakick",
     },
 );
-
-const affirmations = [
-    "You're good enough, you're smart enough, and doggone it, people like you.",
-    "I believe in you. You can do the thing!",
-    "You are the delta in what you do, not the things you did in the past",
-    "It’s only a thought, and a thought can be changed.",
-    "As I say yes to life, life says yes to me.",
-    "Deep at the center of my being is an infinite well of love.",
-    "I come from the loving space of my heart, and I know that love opens all doors.",
-];
 
 function randomAffirmation() {
     return affirmations[getRandomInt(affirmations.length)];
