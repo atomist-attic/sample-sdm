@@ -88,6 +88,19 @@ export function cloudFoundryMachine(options: CloudFoundryMachineOptions): Softwa
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
+
+        // goalContributors(
+        //     whenPush(IsMaven).set(JustBuildGoal),
+        //     whenPush(HasSpringBootApplicationClass, not(ToDefaultBranch)).set(LocalDeploymentGoal),
+        //     whenPush(HasCloudFoundryManifest).set(
+        //         [ArtifactGoal,
+        //             StagingDeploymentGoal,
+        //             StagingEndpointGoal,
+        //             StagingVerifiedGoal,
+        //             ProductionDeploymentGoal,
+        //             ProductionEndpointGoal]),
+        // ),
+
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
             .itMeans("No material change to Java")
             .setGoals(NoGoals),

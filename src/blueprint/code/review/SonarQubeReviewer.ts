@@ -1,8 +1,8 @@
-import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
-import { asSpawnCommand, spawnAndWatch } from "@atomist/sdm/util/misc/spawned";
-import { ReviewerRegistration } from "@atomist/sdm/common/delivery/code/review/ReviewerRegistration";
-import { StringCapturingProgressLog } from "@atomist/sdm/common/log/StringCapturingProgressLog";
 import { logger } from "@atomist/automation-client";
+import { ReviewerRegistration } from "@atomist/sdm/common/delivery/code/review/ReviewerRegistration";
+import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
+import { StringCapturingProgressLog } from "@atomist/sdm/common/log/StringCapturingProgressLog";
+import { asSpawnCommand, spawnAndWatch } from "@atomist/sdm/util/misc/spawned";
 
 const OrgKey = "johnsonr-github";
 
