@@ -18,6 +18,6 @@ export const OWASPDependencyCheck: ArtifactListenerRegistration = {
         );
         await ali.addressChannels(`Dependency check success`);
         const json = fs.readFileSync(`${ali.deployableArtifact.cwd}/dependency-check-report.json`).toString();
-        await ali.addressChannels(json);
+        // await ali.addressChannels(json);
     },
 };
