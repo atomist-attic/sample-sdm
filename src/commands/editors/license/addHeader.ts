@@ -15,15 +15,15 @@
  */
 
 import { HandleCommand, HandlerContext, logger, Parameter, Parameters } from "@atomist/automation-client";
+import { File } from "@atomist/automation-client/project/File";
 import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
-import { File } from "@atomist/automation-client/project/File";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
 import { editorCommand } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
-import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
 
 /**
  * Default glob pattern matches all C family languages

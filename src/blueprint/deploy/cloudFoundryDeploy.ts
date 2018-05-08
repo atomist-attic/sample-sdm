@@ -18,12 +18,6 @@ import { DeployerInfo, PushImpactListener, PushReactionRegistration } from "@ato
 import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
 import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
 import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/common/delivery/deploy/pcf/EnvironmentCloudFoundryTarget";
-import {
-    ProductionDeploymentGoal,
-    ProductionEndpointGoal,
-    StagingDeploymentGoal,
-    StagingEndpointGoal,
-} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
 import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
