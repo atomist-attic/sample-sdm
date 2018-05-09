@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-import { onAnyPush } from "@atomist/sdm";
-import { AutofixGoal } from "@atomist/sdm";
-import { Goals } from "@atomist/sdm";
-import { CloningProjectLoader } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
-import { DefaultArtifactStore } from "../blueprint/artifactStore";
-import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
+import { Configuration } from "@atomist/automation-client";
+import {
+    AutofixGoal,
+    Goals,
+    onAnyPush,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
+import {
+    AddAtomistJavaHeader,
+    AddAtomistTypeScriptHeader,
+} from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-
-export type AutofixMachineOptions = SoftwareDeliveryMachineOptions;
 
 /**
  * Assemble a machine that performs only autofixes.
  * @return {SoftwareDeliveryMachine}
  */
-export function autofixMachine(opts: Partial<AutofixMachineOptions> = {}): SoftwareDeliveryMachine {
-    const options = {
-        artifactStore: DefaultArtifactStore,
-        projectLoader: CloningProjectLoader,
-        logFactory: createEphemeralProgressLog,
-        credentialsResolver: new GitHubCredentialsResolver(),
-        ...opts,
-    };
+export function autofixMachine(options: SoftwareDeliveryMachineOptions,
+                               configuration: Configuration): SoftwareDeliveryMachine {
+
     const sdm = new SoftwareDeliveryMachine("Autofix machine", options,
         onAnyPush
             .setGoals(new Goals("Autofix", AutofixGoal)));

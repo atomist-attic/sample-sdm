@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import { whenPushSatisfies } from "@atomist/sdm";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
@@ -32,15 +33,14 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
-export type EvangelicalMachineOptions = SoftwareDeliveryMachineOptions;
-
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
 
 /**
  * Assemble a machine that suggests the potential to use more SDM features
  */
-export function evangelicalMachine(options: EvangelicalMachineOptions): SoftwareDeliveryMachine {
+export function evangelicalMachine(options: SoftwareDeliveryMachineOptions,
+                                   configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = new SoftwareDeliveryMachine(
         "Helpful software delivery machine. You need to be saved.",
         options,

@@ -14,43 +14,65 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import {
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
 import { K8sAutomationBuilder } from "@atomist/sdm/common/delivery/build/k8s/K8AutomationBuilder";
-import { DockerOptions } from "@atomist/sdm/common/delivery/docker/executeDockerBuild";
-import { NoGoals, ProductionDeploymentGoal, StagingDeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
-import { HttpServiceGoals, LocalDeploymentGoals } from "@atomist/sdm/common/delivery/goals/common/httpServiceGoals";
+import {
+    NoGoals,
+    ProductionDeploymentGoal,
+    StagingDeploymentGoal,
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import {
+    HttpServiceGoals,
+    LocalDeploymentGoals,
+} from "@atomist/sdm/common/delivery/goals/common/httpServiceGoals";
 import { LibraryGoals } from "@atomist/sdm/common/delivery/goals/common/libraryGoals";
-import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/common/delivery/goals/common/npmGoals";
-import { FromAtomist, ToDefaultBranch, ToPublicRepo } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
+import {
+    NpmBuildGoals,
+    NpmDeployGoals,
+} from "@atomist/sdm/common/delivery/goals/common/npmGoals";
+import {
+    FromAtomist,
+    ToDefaultBranch,
+    ToPublicRepo,
+} from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
-import { K8sProductionDomain, K8sTestingDomain, NoticeK8sProdDeployCompletion, NoticeK8sTestDeployCompletion } from "../blueprint/deploy/k8sDeploy";
+import {
+    K8sProductionDomain,
+    K8sTestingDomain,
+    NoticeK8sProdDeployCompletion,
+    NoticeK8sTestDeployCompletion,
+} from "../blueprint/deploy/k8sDeploy";
 import { SuggestAddingK8sSpec } from "../blueprint/repo/suggestAddingK8sSpec";
 import { addK8sSpec } from "../commands/editors/k8s/addK8sSpec";
 import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { addJavaSupport, JavaSupportOptions } from "../parts/stacks/javaSupport";
+import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
-export type K8sMachineOptions = SoftwareDeliveryMachineOptions & JavaSupportOptions & DockerOptions;
-
-export function k8sMachine(opts: K8sMachineOptions): SoftwareDeliveryMachine {
+export function k8sMachine(options: SoftwareDeliveryMachineOptions,
+                           configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = new SoftwareDeliveryMachine(
         "K8s software delivery machine",
-        opts,
+        options,
         whenPushSatisfies(IsMaven, not(MaterialChangeToJavaRepo))
             .itMeans("Immaterial change")
             .setGoals(NoGoals),
@@ -100,9 +122,9 @@ export function k8sMachine(opts: K8sMachineOptions): SoftwareDeliveryMachine {
             }),
         );
 
-    addJavaSupport(sdm, opts);
-    addSpringSupport(sdm, opts);
-    addNodeSupport(sdm, opts);
+    addJavaSupport(sdm, options);
+    addSpringSupport(sdm);
+    addNodeSupport(sdm);
     addTeamPolicies(sdm);
 
     addDemoEditors(sdm);

@@ -40,18 +40,18 @@ import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
 
 /**
  * Configuration common to Spring SDMs, wherever they deploy
- * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
+ * @param {SoftwareDeliveryMachine} sdm
  * @param {{useCheckstyle: boolean}} options
  */
-export function addSpringSupport(softwareDeliveryMachine: SoftwareDeliveryMachine, options: SoftwareDeliveryMachineOptions) {
-    softwareDeliveryMachine
+export function addSpringSupport(sdm: SoftwareDeliveryMachine) {
+    sdm
         .addDeployRules(
             deploy.when(IsMaven)
                 .itMeans("Maven local deploy")
                 .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
                 .using(
                     {
-                        deployer: mavenSourceDeployer(options.projectLoader),
+                        deployer: mavenSourceDeployer(sdm.opts.projectLoader),
                         targeter: ManagedDeploymentTargeter,
                     },
                 ))
@@ -73,7 +73,7 @@ export function addSpringSupport(softwareDeliveryMachine: SoftwareDeliveryMachin
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
         );
-    addCloudReadinessChecks(softwareDeliveryMachine);
+    addCloudReadinessChecks(sdm);
 }
 
 function addCloudReadinessChecks(softwareDeliveryMachine: SoftwareDeliveryMachine) {

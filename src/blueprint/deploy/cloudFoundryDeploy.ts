@@ -23,17 +23,13 @@ import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEna
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "../../commands/editors/pcf/addCloudFoundryManifest";
 
-export const CloudFoundryStagingTarget = new EnvironmentCloudFoundryTarget("staging");
-
-export const CloudFoundryProductionTarget = new EnvironmentCloudFoundryTarget("production");
-
 /**
  * Deploy everything to the same Cloud Foundry space
  */
 export function cloudFoundryStagingDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}): DeployerInfo<CloudFoundryInfo> {
     return {
         deployer: new CloudFoundryBlueGreenDeployer(opts.projectLoader),
-        targeter: () => CloudFoundryStagingTarget,
+        targeter: () => new EnvironmentCloudFoundryTarget("staging"),
     };
 }
 
@@ -41,7 +37,7 @@ export function cloudFoundryProductionDeploySpec(opts: {artifactStore: ArtifactS
     DeployerInfo<CloudFoundryInfo> {
     return {
         deployer: new CloudFoundryBlueGreenDeployer(opts.projectLoader),
-        targeter: () => CloudFoundryProductionTarget,
+        targeter: () => new EnvironmentCloudFoundryTarget("production"),
     };
 }
 

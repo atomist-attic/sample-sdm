@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import { DefaultReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
 import {
-    CachingProjectLoader,
-    EphemeralLocalArtifactStore,
     Goals,
     IsJava,
     ReviewerRegistration,
@@ -27,28 +26,17 @@ import {
     SoftwareDeliveryMachineOptions,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { addCheckstyleSupport, CheckstyleSupportOptions } from "../parts/stacks/checkstyleSupport";
+import { addCheckstyleSupport } from "../parts/stacks/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
-
-export type StaticAnalysisMachineOptions = SoftwareDeliveryMachineOptions & CheckstyleSupportOptions;
 
 /**
  * Assemble a machine that performs only static analysis.
  * @return {SoftwareDeliveryMachine}
  */
-export function staticAnalysisMachine(opts: Partial<StaticAnalysisMachineOptions> = {}): SoftwareDeliveryMachine {
-    const options: StaticAnalysisMachineOptions = {
-        artifactStore: new EphemeralLocalArtifactStore(),
-        projectLoader: new CachingProjectLoader(),
-        useCheckstyle: true,
-        reviewOnlyChangedFiles: false,
-        credentialsResolver: new GitHubCredentialsResolver(),
-        logFactory: createEphemeralProgressLog,
-        ...opts,
-    };
+export function staticAnalysisMachine(options: SoftwareDeliveryMachineOptions,
+                                      configuration: Configuration): SoftwareDeliveryMachine {
+
     const sdm = new SoftwareDeliveryMachine(
         "Static analysis SDM",
         options,
