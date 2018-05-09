@@ -16,7 +16,6 @@
 
 import {
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";

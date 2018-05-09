@@ -15,7 +15,7 @@ export const SonarQubeReviewer: ReviewerRegistration = {
     -Dsonar.organization=${OrgKey} \
     -Dsonar.login=${process.env.SONAR_TOKEN}`;
         const log = new StringCapturingProgressLog();
-        const childProcess = await spawnAndWatch(
+        await spawnAndWatch(
             asSpawnCommand(command),
             {
                 cwd: pli.project.baseDir,

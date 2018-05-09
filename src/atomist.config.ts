@@ -16,7 +16,6 @@
 
 import { Configuration } from "@atomist/automation-client/configuration";
 import {
-    ConfigureOptions,
     configureSdm,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,

@@ -19,7 +19,6 @@ import {
     NodeProjectVersioner,
     PackageLockFingerprinter,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     tagRepo,
     tslintFix,
     VersionGoal,
