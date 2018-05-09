@@ -18,6 +18,8 @@
 import { HandlerContext } from "@atomist/automation-client";
 import { BasicAuthCredentials } from "@atomist/automation-client/operations/common/BasicAuthCredentials";
 import { CredentialsResolver } from "@atomist/sdm/handlers/common/CredentialsResolver";
+import { ProjectOperationCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
+import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 
 export class DefaultCredentialsResolver implements CredentialsResolver {
 
@@ -26,6 +28,10 @@ export class DefaultCredentialsResolver implements CredentialsResolver {
             username: "rod",
             password: "atomist",
         };
+    }
+
+    commandHandlerCredentials(context: HandlerContext, id: RemoteRepoRef): ProjectOperationCredentials {
+        throw new Error("Unimplemented");
     }
 
 }

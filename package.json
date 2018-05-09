@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@atomist/automation-client": "https://r.atomist.com/SkDUQkI0Tz",
-    "@atomist/sdm": "https://r.atomist.com/S1PzKRXa6G",
+    "@atomist/sdm": "https://registry.npmjs.org/@atomist/sdm/-/@atomist/sdm-0.0.1-20180509012335.tgz",
     "@atomist/slack-messages": "^0.12.1",
     "@atomist/spring-automation": "https://r.atomist.com/H17-l06zpM",
     "@types/properties-reader": "0.0.1",
