@@ -16,6 +16,7 @@
 
 import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
 import { GitHubNameRegExp } from "@atomist/automation-client/operations/common/params/gitHubPatterns";
+import { SmartParameters } from "@atomist/automation-client/SmartParameters";
 import { JavaIdentifierRegExp } from "@atomist/sdm";
 import { camelize } from "tslint/lib/utils";
 import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
@@ -24,7 +25,7 @@ import { JavaProjectCreationParameters } from "../JavaProjectCreationParameters"
 /**
  * Parameters for creating Spring Boot apps.
  */
-export class SpringProjectCreationParameters extends JavaProjectCreationParameters {
+export class SpringProjectCreationParameters extends JavaProjectCreationParameters implements SmartParameters {
 
     @MappedParameter(MappedParameters.SlackUserName)
     public screenName: string;
@@ -56,7 +57,6 @@ export class SpringProjectCreationParameters extends JavaProjectCreationParamete
     }
 
     public bindAndValidate() {
-        super.bindAndValidate();
         this.source.repo = this.seed;
         this.serviceClassName = !!this.serviceClassName ?
             toInitialCap(this.serviceClassName) :

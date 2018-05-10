@@ -121,7 +121,7 @@ describe("springBootGenerator", () => {
                 },
             } as any as HandlerContext;
             const params = new SpringProjectCreationParameters(config);
-            params.artifactId = "artifact";
+            params.enteredArtifactId = "artifact";
             params.rootPackage = "atomist.test";
             params.target.owner = "whoever";
             params.target.repo = "whatever";

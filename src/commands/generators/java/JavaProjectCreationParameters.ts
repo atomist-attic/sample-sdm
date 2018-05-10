@@ -17,24 +17,22 @@
 import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { BaseSeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/BaseSeedDrivenGeneratorParameters";
-import { SmartParameters } from "@atomist/automation-client/SmartParameters";
-import { SemVerRegExp } from "@atomist/sdm";
-import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp } from "@atomist/sdm";
+import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp, SemVerRegExp } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/spring-automation/commands/generator/java/JavaProjectParameters";
 
 /**
  * Superclass for all Java project generator parameters.
  */
 @Parameters()
-export class JavaProjectCreationParameters extends BaseSeedDrivenGeneratorParameters
-    implements SmartParameters, VersionedArtifact {
+export class JavaProjectCreationParameters extends BaseSeedDrivenGeneratorParameters implements VersionedArtifact {
 
     @Parameter({
         ...MavenArtifactIdRegExp,
+        displayName: "artifactId",
         required: false,
         order: 51,
     })
-    public artifactId: string = "";
+    public enteredArtifactId: string = "";
 
     @Parameter({
         ...MavenGroupIdRegExp,
@@ -64,12 +62,8 @@ export class JavaProjectCreationParameters extends BaseSeedDrivenGeneratorParame
         return this.target.description;
     }
 
-    // TODO need to parameterize target creation. Arg?
-
-    public bindAndValidate() {
-        if (!this.artifactId) {
-            this.artifactId = this.target.repo;
-        }
+    get artifactId() {
+        return this.enteredArtifactId || this.target.repo;
     }
 
 }
