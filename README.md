@@ -11,7 +11,7 @@ It automates all steps in the flow from commit to production (potentially via st
 
 The concept is explained in detail in Rod Johnson's blog [Why you need a Software Delivery Machine](https://the-composition.com/why-you-need-a-software-delivery-machine-85e8399cdfc0). This [video](https://vimeo.com/260496136) shows it in action.
 
-Please see the [Atomist SDM library](https://github.com/atomist/github-sdm) for explanation on what an SDM can do. The present document describes how to get yours running.
+Please see the [Atomist SDM library](https://github.com/atomist/sdm) for explanation on what an SDM can do. The present document describes how to get yours running.
 
 
 ## Get Started
