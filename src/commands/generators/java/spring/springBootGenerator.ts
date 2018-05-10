@@ -47,7 +47,7 @@ export function springBootGenerator(config: JavaGeneratorConfig,
             // p.target = new BitBucketRepoCreationParameters();
             return p;
         },
-        `springBootGenerator-${config.seedRepo}`,
+        `springBootGenerator-${config.seed.repo}`,
         {
             tags: ["spring", "boot", "java", "generator"],
             ...details,

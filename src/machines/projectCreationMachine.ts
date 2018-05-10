@@ -15,6 +15,7 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
+import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
@@ -43,17 +44,17 @@ export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
     sdm.addGenerators(
         () => springBootGenerator({
             ...CommonJavaGeneratorConfig,
-            seedRepo: "spring-rest-seed",
+            seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
             intent: "create spring",
         }),
         () => nodeGenerator({
             ...CommonGeneratorConfig,
-            seedRepo: "typescript-express-seed",
+            seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
         }),
         () => nodeGenerator({
             ...CommonGeneratorConfig,
-            seedRepo: "minimal-node-seed",
+            seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
             intent: "create minimal node",
         }))
         .addNewRepoWithCodeActions(

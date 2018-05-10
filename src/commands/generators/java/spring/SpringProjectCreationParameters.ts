@@ -50,8 +50,15 @@ export class SpringProjectCreationParameters extends JavaProjectCreationParamete
 
     constructor(config: JavaGeneratorConfig) {
         super();
-        this.source.owner = config.seedOwner;
-        this.seed = config.seedRepo;
+        if (this.seed) {
+            config.seed.repo = this.seed;
+        }
+        this.source = {
+            repoRef: config.seed,
+            owner: config.seed.owner,
+            repo: config.seed.repo,
+            sha: config.seed.sha,
+        };
         this.groupId = config.groupId;
         this.addAtomistWebhook = config.addAtomistWebhook;
     }

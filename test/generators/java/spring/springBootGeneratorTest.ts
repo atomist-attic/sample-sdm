@@ -59,8 +59,7 @@ describe("springBootGenerator", () => {
             const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
                 {path: "README.md", content: Readme1});
             const params = new SpringProjectCreationParameters({
-                seedOwner: "foo",
-                seedRepo: "bar",
+                seed: new GitHubRepoRef("foo", "bar"),
                 intent: "whatever",
                 groupId: "atomist",
                 addAtomistWebhook: false,
@@ -91,8 +90,7 @@ describe("springBootGenerator", () => {
 
         it("should put in Atomist team id and ensure valid Java", async () => {
             const config = {
-                seedOwner: "spring-team",
-                seedRepo: "spring-rest-seed",
+                seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
                 intent: "whatever",
                 groupId: "atomist",
                 addAtomistWebhook: false,
@@ -100,7 +98,7 @@ describe("springBootGenerator", () => {
             let result: Project;
             const gen = springBootGenerator(config, {
                 repoLoader: () => () => GitCommandGitProject.cloned({token: null},
-                    new GitHubRepoRef(config.seedOwner, config.seedRepo)),
+                    new GitHubRepoRef(config.seed.owner, config.seed.repo)),
                 projectPersister: async p => {
                     result = p;
                     return {target: p, success: true};

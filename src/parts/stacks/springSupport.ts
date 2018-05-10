@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
@@ -60,13 +61,12 @@ export function addSpringSupport(sdm: SoftwareDeliveryMachine) {
         )
         .addGenerators(() => springBootGenerator({
             ...CommonJavaGeneratorConfig,
-            seedRepo: "spring-rest-seed",
+            seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
             intent: "create spring",
         }))
         .addGenerators(() => springBootGenerator({
             ...CommonJavaGeneratorConfig,
-            seedOwner: "johnsonr",
-            seedRepo: "flux-flix-service",
+            seed: new GitHubRepoRef("johnsonr", "flux-flix-service"),
             intent: "create spring kotlin",
         }))
         .addNewRepoWithCodeActions(

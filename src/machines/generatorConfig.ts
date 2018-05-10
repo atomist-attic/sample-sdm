@@ -19,7 +19,6 @@
  * @type {{seedOwner: string; addAtomistWebhook: boolean}}
  */
 export const CommonGeneratorConfig = {
-    seedOwner: "spring-team",
     addAtomistWebhook: true,
 };
 

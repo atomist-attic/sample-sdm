@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
     PackageLockFingerprinter,
     SoftwareDeliveryMachine,
@@ -36,12 +37,12 @@ import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
 export function addNodeSupport(sdm: SoftwareDeliveryMachine) {
     sdm.addGenerators(() => nodeGenerator({
             ...CommonGeneratorConfig,
-            seedRepo: "typescript-express-seed",
+            seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
         }))
         .addGenerators(() => nodeGenerator({
             ...CommonGeneratorConfig,
-            seedRepo: "minimal-node-seed",
+            seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
             intent: "create minimal node",
         }))
         .addNewRepoWithCodeActions(
