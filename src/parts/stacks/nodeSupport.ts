@@ -15,13 +15,10 @@
  */
 
 import {
-    executeVersioner,
-    NodeProjectVersioner,
     PackageLockFingerprinter,
     SoftwareDeliveryMachine,
     tagRepo,
     tslintFix,
-    VersionGoal,
 } from "@atomist/sdm";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
@@ -59,8 +56,5 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine) {
             CommonTypeScriptErrors,
             DontImportOwnIndex,
         )
-        .addFingerprinterRegistrations(new PackageLockFingerprinter())
-        .addGoalImplementation("nodeVersioner", VersionGoal,
-            executeVersioner(sdm.opts.projectLoader, NodeProjectVersioner));
-
+        .addFingerprinterRegistrations(new PackageLockFingerprinter());
 }

@@ -5,7 +5,6 @@ import {
     asSpawnCommand,
     spawnAndWatch,
 } from "@atomist/sdm/util/misc/spawned";
-import * as fs from "fs";
 
 export const OWASPDependencyCheck: ArtifactListenerRegistration = {
     name: "OWASP dependency check",
@@ -20,7 +19,7 @@ export const OWASPDependencyCheck: ArtifactListenerRegistration = {
             new LoggingProgressLog(command),
         );
         await ali.addressChannels(`Dependency check success`);
-        fs.readFileSync(`${ali.deployableArtifact.cwd}/dependency-check-report.json`).toString();
+        // const json = fs.readFileSync(`${ali.deployableArtifact.cwd}/dependency-check-report.json`).toString();
         // await ali.addressChannels(json);
     },
 };

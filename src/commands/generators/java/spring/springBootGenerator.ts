@@ -17,11 +17,11 @@
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import {
     GeneratorCommandDetails,
-    generatorHandler,
 } from "@atomist/automation-client/operations/generate/generatorToCommand";
 import * as utils from "@atomist/automation-client/project/util/projectUtils";
 
 import { HandleCommand } from "@atomist/automation-client";
+import { generatorHandler } from "@atomist/sdm/common/command/generator/generatorHandler";
 import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
 import { transformSeedToCustomProject } from "./transformSeedToCustomProject";
@@ -42,7 +42,11 @@ export function springBootGenerator(config: JavaGeneratorConfig,
             setAtomistTeamInApplicationYml(params, ctx),
             transformSeedToCustomProject(params),
         ),
-        () => new SpringProjectCreationParameters(config),
+        () => {
+            const p = new SpringProjectCreationParameters(config);
+            // p.target = new BitBucketRepoCreationParameters();
+            return p;
+        },
         `springBootGenerator-${config.seedRepo}`,
         {
             tags: ["spring", "boot", "java", "generator"],
