@@ -15,9 +15,11 @@
  */
 
 import { HandleCommand, HandlerContext, logger, Parameter, Parameters } from "@atomist/automation-client";
+import { File } from "@atomist/automation-client/project/File";
 import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
 import { editorCommand } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
@@ -85,6 +87,7 @@ export async function addHeaderProjectEditor(p: Project,
                                              params: AddHeaderParameters): Promise<Project> {
     let headersAdded = 0;
     let matchingFiles = 0;
+    let filesWithDifferentHeaders = [];
     await doWithFiles(p, params.glob, async f => {
         if (params.excludeGlob && params.excludeGlob.split(",").some(p => minimatch(f.path, p))) {
             return;
@@ -95,7 +98,8 @@ export async function addHeaderProjectEditor(p: Project,
             return;
         }
         if (hasDifferentHeader(params.header, content)) {
-            return ctx.messageClient.respond(`\`${f.path}\` already has a different header`);
+            filesWithDifferentHeaders.push(f);
+            return;
         }
         logger.info("Adding header of length %d to %s", params.header.length, f.path);
         ++headersAdded;
@@ -103,11 +107,21 @@ export async function addHeaderProjectEditor(p: Project,
     });
     const sha: string = !!(p as GitProject).gitStatus ? (await (p as GitProject).gitStatus()).sha : p.id.sha;
     logger.info("%d files matched [%s]. %s headers added. %d files skipped", matchingFiles, params.glob, headersAdded, matchingFiles - headersAdded);
+    await reportAboutDifferentHeaders(ctx.messageClient, filesWithDifferentHeaders);
     if (headersAdded > 0) {
         await ctx.messageClient.respond(`*License header editor* on \`${sha.substring(0, 5)}\`: ${matchingFiles} files matched \`${params.glob}\`. ` +
             `${headersAdded} headers added. ${matchingFiles - headersAdded} files skipped ${params.successEmoji}`);
     }
     return p;
+}
+
+function reportAboutDifferentHeaders(messageClient: MessageClient, offendingFiles: File[]) {
+    if (offendingFiles.length === 0) {
+        return;
+    }
+    const message = offendingFiles.length === 1 ? `${offendingFiles[0].path} has a different header` :
+        `Add Header autofix: ${offendingFiles.length} files have a different header`;
+    return messageClient.respond(message);
 }
 
 function hasDifferentHeader(header: string, content: string): boolean {
