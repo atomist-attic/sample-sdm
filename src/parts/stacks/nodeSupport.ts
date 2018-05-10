@@ -19,9 +19,7 @@ import {
     executeTag,
     executeVersioner,
     IsNode,
-    NodeProjectIdentifier,
     NodeProjectVersioner,
-    NpmPublishGoal,
     PackageLockFingerprinter,
     ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
@@ -32,7 +30,6 @@ import {
     tslintFix,
     VersionGoal,
 } from "@atomist/sdm";
-import { executePublish } from "@atomist/sdm/common/delivery/build/local/npm/executePublish";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
