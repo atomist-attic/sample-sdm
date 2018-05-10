@@ -30,7 +30,10 @@ export function fakeContext(teamId: string = "T123") {
                 return Promise.resolve({});
             },
         },
-
-        context: {name: "fakeContextName", version: "v0.0", operation: "fakeOperation" },
+        graphClient: {
+            query() {
+                return Promise.resolve(false);
+            },
+        },
     } as any as HandlerContext;
 }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { HandlerContext } from "@atomist/automation-client";
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoId";
 import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
@@ -22,12 +21,12 @@ import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemory
 import { Project } from "@atomist/automation-client/project/Project";
 import * as assert from "power-assert";
 import {
-    replaceReadmeTitle, setAtomistTeamInApplicationYml,
+    replaceReadmeTitle,
+    setAtomistTeamInApplicationYml,
     springBootGenerator,
 } from "../../../../src/commands/generators/java/spring/springBootGenerator";
-import {
-    SpringProjectCreationParameters,
-} from "../../../../src/commands/generators/java/spring/SpringProjectCreationParameters";
+import { SpringProjectCreationParameters } from "../../../../src/commands/generators/java/spring/SpringProjectCreationParameters";
+import { fakeContext } from "../../../FakeContext";
 
 const Readme1 = `# spring-rest-seed
 
@@ -65,12 +64,12 @@ describe("springBootGenerator", () => {
                 addAtomistWebhook: false,
             });
             params.target.repo = "repoName";
-            params.serviceClassName = "foo";
-            params.bindAndValidate();
+            params.enteredServiceClassName = "foo";
             await replaceReadmeTitle(params)(p);
             const readmeContent = p.findFileSync("README.md").getContentSync();
             assert(readmeContent.includes("# repoName"), "Should include repo name");
-            assert(readmeContent.includes("seed project \`foo:bar"));
+            assert(readmeContent.includes("seed project \`foo:bar"),
+                `Unexpected readme content:\n${readmeContent}`);
         });
     });
 
@@ -88,7 +87,7 @@ describe("springBootGenerator", () => {
 
     describe("run end to end", () => {
 
-        it("should put in Atomist team id and ensure valid Java", async () => {
+        it("should put in Atomist team id and ensure valid Java with default service class name", async () => {
             const config = {
                 seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
                 intent: "whatever",
@@ -105,31 +104,50 @@ describe("springBootGenerator", () => {
                 },
             });
 
-            const ctx = {
-                teamId: "T1000",
-                messageClient: {
-                    respond() {
-                        return Promise.resolve();
-                    },
-                },
-                graphClient: {
-                    query() {
-                        return Promise.resolve(false);
-                    },
-                },
-            } as any as HandlerContext;
+            const ctx = fakeContext("T1000");
             const params = new SpringProjectCreationParameters(config);
             params.enteredArtifactId = "artifact";
             params.rootPackage = "atomist.test";
             params.target.owner = "whoever";
             params.target.repo = "whatever";
-            params.bindAndValidate();
             await gen.handle(ctx, params);
 
             const yml = result.findFileSync("src/main/resources/application.yml").getContentSync();
             assert(yml.includes("/teams/T1000"), "Should include Atomist team");
             result.findFileSync("src/main/java/atomist/test/ArtifactApplication.java").getContentSync();
         }).timeout(18000);
+
+        it("should put in Atomist team id and ensure valid Java with entered service class name", async () => {
+            const config = {
+                seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
+                intent: "whatever",
+                groupId: "atomist",
+                addAtomistWebhook: false,
+            };
+            let result: Project;
+            const gen = springBootGenerator(config, {
+                repoLoader: () => () => GitCommandGitProject.cloned({token: null},
+                    new GitHubRepoRef(config.seed.owner, config.seed.repo)),
+                projectPersister: async p => {
+                    result = p;
+                    return {target: p, success: true};
+                },
+            });
+
+            const ctx = fakeContext("T1000");
+            const params = new SpringProjectCreationParameters(config);
+            params.enteredArtifactId = "artifact";
+            params.rootPackage = "atomist.test";
+            params.target.owner = "whoever";
+            params.target.repo = "whatever";
+            params.enteredServiceClassName = "Dog";
+            await gen.handle(ctx, params);
+
+            const yml = result.findFileSync("src/main/resources/application.yml").getContentSync();
+            assert(yml.includes("/teams/T1000"), "Should include Atomist team");
+            result.findFileSync("src/main/java/atomist/test/DogApplication.java").getContentSync();
+        }).timeout(18000);
+
     });
 
 });

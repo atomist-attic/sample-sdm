@@ -53,9 +53,6 @@ export class NodeProjectCreationParameters extends BaseSeedDrivenGeneratorParame
 
     constructor(config: GeneratorConfig) {
         super();
-        // if (this.seed) {
-        //     config.seed.repo = this.seed;
-        // }
         this.source = {
             repoRef: config.seed,
             owner: config.seed.owner,

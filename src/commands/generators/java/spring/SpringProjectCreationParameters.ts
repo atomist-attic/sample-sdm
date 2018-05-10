@@ -16,7 +16,6 @@
 
 import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
 import { GitHubNameRegExp } from "@atomist/automation-client/operations/common/params/gitHubPatterns";
-import { SmartParameters } from "@atomist/automation-client/SmartParameters";
 import { JavaIdentifierRegExp } from "@atomist/sdm";
 import { camelize } from "tslint/lib/utils";
 import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
@@ -25,7 +24,7 @@ import { JavaProjectCreationParameters } from "../JavaProjectCreationParameters"
 /**
  * Parameters for creating Spring Boot apps.
  */
-export class SpringProjectCreationParameters extends JavaProjectCreationParameters implements SmartParameters {
+export class SpringProjectCreationParameters extends JavaProjectCreationParameters {
 
     @MappedParameter(MappedParameters.SlackUserName)
     public screenName: string;
@@ -36,7 +35,7 @@ export class SpringProjectCreationParameters extends JavaProjectCreationParamete
         ...JavaIdentifierRegExp,
         required: false,
     })
-    public serviceClassName: string;
+    public enteredServiceClassName: string;
 
     @Parameter({
         displayName: "Seed repo",
@@ -46,11 +45,11 @@ export class SpringProjectCreationParameters extends JavaProjectCreationParamete
         maxLength: 50,
         required: false,
     })
-    public seed: string = "spring-rest-seed";
+    public seed: string;
 
     constructor(config: JavaGeneratorConfig) {
         super();
-        if (this.seed) {
+        if (!!this.seed) {
             config.seed.repo = this.seed;
         }
         this.source = {
@@ -63,10 +62,9 @@ export class SpringProjectCreationParameters extends JavaProjectCreationParamete
         this.addAtomistWebhook = config.addAtomistWebhook;
     }
 
-    public bindAndValidate() {
-        this.source.repo = this.seed;
-        this.serviceClassName = !!this.serviceClassName ?
-            toInitialCap(this.serviceClassName) :
+    get serviceClassName() {
+        return !!this.enteredServiceClassName ?
+            toInitialCap(this.enteredServiceClassName) :
             toInitialCap(camelize(this.artifactId));
     }
 
