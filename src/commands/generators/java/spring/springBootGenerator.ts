@@ -81,7 +81,7 @@ function titleBlock(params: SpringProjectCreationParameters): string {
     return `# ${params.target.repo}
 ${params.target.description}
 
-Based on seed project \`${params.source.owner}:${params.source.repo}\`
+Based on seed project \`${params.source.repoRef.owner}:${params.source.repoRef.repo}\`
 
 ## `;
 }

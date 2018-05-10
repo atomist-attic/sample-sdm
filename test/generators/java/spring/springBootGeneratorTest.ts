@@ -54,7 +54,7 @@ describe("springBootGenerator", () => {
 
     describe("update README", () => {
 
-        it("should get correct content", async () => {
+        it("should get correct content: default seed", async () => {
             const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
                 {path: "README.md", content: Readme1});
             const params = new SpringProjectCreationParameters({
@@ -71,6 +71,26 @@ describe("springBootGenerator", () => {
             assert(readmeContent.includes("seed project \`foo:bar"),
                 `Unexpected readme content:\n${readmeContent}`);
         });
+
+        it("should get correct content: entered seed", async () => {
+            const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
+                {path: "README.md", content: Readme1});
+            const params = new SpringProjectCreationParameters({
+                seed: new GitHubRepoRef("foo", "bar"),
+                intent: "whatever",
+                groupId: "atomist",
+                addAtomistWebhook: false,
+            });
+            params.target.repo = "repoName";
+            params.enteredServiceClassName = "foo";
+            params.seed = "turtles";
+            await replaceReadmeTitle(params)(p);
+            const readmeContent = p.findFileSync("README.md").getContentSync();
+            assert(readmeContent.includes("# repoName"), "Should include repo name");
+            assert(readmeContent.includes("seed project \`foo:turtles"),
+                `Unexpected readme content:\n${readmeContent}`);
+        });
+
     });
 
     describe("update YML", () => {

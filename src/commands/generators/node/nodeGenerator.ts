@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HandleCommand, HandlerContext } from "@atomist/automation-client";
+import { HandleCommand } from "@atomist/automation-client";
 import { AnyProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import {
@@ -39,12 +39,12 @@ export function nodeGenerator(config: GeneratorConfig,
         });
 }
 
-function transformSeed(params: NodeProjectCreationParameters, ctx: HandlerContext): AnyProjectEditor<NodeProjectCreationParameters> {
+function transformSeed(params: NodeProjectCreationParameters): AnyProjectEditor<NodeProjectCreationParameters> {
     return chainEditors(
         updatePackageJsonIdentification(params.appName, params.target.description,
             params.version,
             params.screenName,
-            params.target),
+            params.target.repoRef),
         updateReadmeTitle(params.appName, params.target.description),
     );
 }

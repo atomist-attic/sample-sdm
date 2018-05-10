@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
+import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
-import { BaseSeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/BaseSeedDrivenGeneratorParameters";
-import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp, SemVerRegExp } from "@atomist/sdm";
+import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/spring-automation/commands/generator/java/JavaProjectParameters";
+import { AbstractCreationParameters } from "../common/AbstractCreationParameters";
 
 /**
  * Superclass for all Java project generator parameters.
  */
 @Parameters()
-export class JavaProjectCreationParameters extends BaseSeedDrivenGeneratorParameters implements VersionedArtifact {
+export abstract class JavaProjectCreationParameters extends AbstractCreationParameters implements VersionedArtifact {
 
     @Parameter({
         ...MavenArtifactIdRegExp,
@@ -42,25 +42,11 @@ export class JavaProjectCreationParameters extends BaseSeedDrivenGeneratorParame
     public groupId: string;
 
     @Parameter({
-        ...SemVerRegExp,
-        required: true,
-        order: 52,
-    })
-    public version: string = "0.1.0-SNAPSHOT";
-
-    @Parameter({
         ...JavaPackageRegExp,
         required: true,
         order: 53,
     })
     public rootPackage: string;
-
-    @MappedParameter(MappedParameters.SlackTeam)
-    public slackTeam: string;
-
-    get description() {
-        return this.target.description;
-    }
 
     get artifactId() {
         return this.enteredArtifactId || this.target.repo;

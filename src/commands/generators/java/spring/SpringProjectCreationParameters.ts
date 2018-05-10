@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
-import { GitHubNameRegExp } from "@atomist/automation-client/operations/common/params/gitHubPatterns";
+import { Parameter } from "@atomist/automation-client";
 import { JavaIdentifierRegExp } from "@atomist/sdm";
 import { camelize } from "tslint/lib/utils";
 import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
@@ -26,9 +25,6 @@ import { JavaProjectCreationParameters } from "../JavaProjectCreationParameters"
  */
 export class SpringProjectCreationParameters extends JavaProjectCreationParameters {
 
-    @MappedParameter(MappedParameters.SlackUserName)
-    public screenName: string;
-
     @Parameter({
         displayName: "Class Name",
         description: "name for the service class",
@@ -37,27 +33,8 @@ export class SpringProjectCreationParameters extends JavaProjectCreationParamete
     })
     public enteredServiceClassName: string;
 
-    @Parameter({
-        displayName: "Seed repo",
-        description: "Seed repo",
-        ...GitHubNameRegExp,
-        minLength: 1,
-        maxLength: 50,
-        required: false,
-    })
-    public seed: string;
-
     constructor(config: JavaGeneratorConfig) {
-        super();
-        if (!!this.seed) {
-            config.seed.repo = this.seed;
-        }
-        this.source = {
-            repoRef: config.seed,
-            owner: config.seed.owner,
-            repo: config.seed.repo,
-            sha: config.seed.sha,
-        };
+        super(config);
         this.groupId = config.groupId;
         this.addAtomistWebhook = config.addAtomistWebhook;
     }

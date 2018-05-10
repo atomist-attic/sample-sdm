@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-import { MappedParameter, MappedParameters, Parameter } from "@atomist/automation-client";
-import { BaseSeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/BaseSeedDrivenGeneratorParameters";
+import { Parameter } from "@atomist/automation-client";
 
 import { Parameters } from "@atomist/automation-client/decorators";
-import { SemVerRegExp } from "@atomist/sdm";
+import { GitHubRepoCreationParameters } from "@atomist/automation-client/operations/generate/GitHubRepoCreationParameters";
+import { NewRepoCreationParameters } from "@atomist/automation-client/operations/generate/NewRepoCreationParameters";
 import { GeneratorConfig } from "@atomist/sdm";
+import { AbstractCreationParameters } from "../common/AbstractCreationParameters";
 
 /**
  * Parameters for creating a Node project.
  */
 @Parameters()
-export class NodeProjectCreationParameters extends BaseSeedDrivenGeneratorParameters {
-
-    @MappedParameter(MappedParameters.SlackUserName)
-    public screenName: string;
+export class NodeProjectCreationParameters extends AbstractCreationParameters {
 
     @Parameter({
         displayName: "App name",
@@ -43,22 +41,10 @@ export class NodeProjectCreationParameters extends BaseSeedDrivenGeneratorParame
     })
     public appName: string;
 
-    @Parameter({
-        displayName: "Version",
-        ...SemVerRegExp,
-        required: true,
-        order: 52,
-    })
-    public version: string = "0.1.0";
+    public target: NewRepoCreationParameters = new GitHubRepoCreationParameters();
 
     constructor(config: GeneratorConfig) {
-        super();
-        this.source = {
-            repoRef: config.seed,
-            owner: config.seed.owner,
-            repo: config.seed.repo,
-            sha: config.seed.sha,
-        };
-        this.addAtomistWebhook = config.addAtomistWebhook;
+        super(config);
     }
+
 }
