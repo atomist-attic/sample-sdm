@@ -20,13 +20,13 @@ import { Parameters } from "@atomist/automation-client/decorators";
 import { GitHubRepoCreationParameters } from "@atomist/automation-client/operations/generate/GitHubRepoCreationParameters";
 import { NewRepoCreationParameters } from "@atomist/automation-client/operations/generate/NewRepoCreationParameters";
 import { GeneratorConfig } from "@atomist/sdm";
-import { AbstractCreationParameters } from "../common/AbstractCreationParameters";
+import { SeedDrivenGeneratorParametersSupport } from "@atomist/sdm/common/command/generator/SeedDrivenGeneratorParametersSupport";
 
 /**
  * Parameters for creating a Node project.
  */
 @Parameters()
-export class NodeProjectCreationParameters extends AbstractCreationParameters {
+export class NodeProjectCreationParameters extends SeedDrivenGeneratorParametersSupport {
 
     @Parameter({
         displayName: "App name",

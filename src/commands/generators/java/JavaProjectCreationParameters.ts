@@ -17,14 +17,14 @@
 import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { JavaPackageRegExp, MavenArtifactIdRegExp, MavenGroupIdRegExp } from "@atomist/sdm";
+import { SeedDrivenGeneratorParametersSupport } from "@atomist/sdm/common/command/generator/SeedDrivenGeneratorParametersSupport";
 import { VersionedArtifact } from "@atomist/spring-automation/commands/generator/java/JavaProjectParameters";
-import { AbstractCreationParameters } from "../common/AbstractCreationParameters";
 
 /**
  * Superclass for all Java project generator parameters.
  */
 @Parameters()
-export abstract class JavaProjectCreationParameters extends AbstractCreationParameters implements VersionedArtifact {
+export abstract class JavaProjectCreationParameters extends SeedDrivenGeneratorParametersSupport implements VersionedArtifact {
 
     @Parameter({
         ...MavenArtifactIdRegExp,
