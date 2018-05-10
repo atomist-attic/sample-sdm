@@ -87,9 +87,7 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
     //             dockerfileFinder: async () => "Dockerfile",
     //         }))
     .addGoalImplementation("nodeTag", TagGoal,
-        executeTag(options.projectLoader))
-    .addGoalImplementation("nodePublish", NpmPublishGoal,
-        executePublish(options.projectLoader, NodeProjectIdentifier));
+        executeTag(options.projectLoader));
 
     sdm.goalFulfillmentMapper.addSideEffect({
         goal: StagingDockerDeploymentGoal,
