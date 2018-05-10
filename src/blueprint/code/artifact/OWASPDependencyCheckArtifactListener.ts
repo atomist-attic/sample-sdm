@@ -1,7 +1,10 @@
 import { ArtifactListenerRegistration } from "@atomist/sdm/common/listener/ArtifactListener";
 import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { LoggingProgressLog } from "@atomist/sdm/common/log/LoggingProgressLog";
-import { asSpawnCommand, spawnAndWatch } from "@atomist/sdm/util/misc/spawned";
+import {
+    asSpawnCommand,
+    spawnAndWatch,
+} from "@atomist/sdm/util/misc/spawned";
 
 export const OWASPDependencyCheck: ArtifactListenerRegistration = {
     name: "OWASP dependency check",

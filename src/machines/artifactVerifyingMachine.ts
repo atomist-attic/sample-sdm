@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
@@ -21,30 +22,22 @@ import {
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
-import { ArtifactGoal, JustBuildGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import {
+    ArtifactGoal,
+    JustBuildGoal,
+} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 import * as fs from "fs";
-import { DefaultArtifactStore } from "../blueprint/artifactStore";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-
-export type ArtifactVerifyingMachineOptions = SoftwareDeliveryMachineOptions;
 
 /**
  * Assemble a machine that only builds and verifies Java artifacts.
  * @return {SoftwareDeliveryMachine}
  */
-export function artifactVerifyingMachine(opts: Partial<ArtifactVerifyingMachineOptions> = {}): SoftwareDeliveryMachine {
-    const options = {
-        artifactStore: DefaultArtifactStore,
-        projectLoader: new CachingProjectLoader(),
-        logFactory: createEphemeralProgressLog,
-        credentialsResolver: new GitHubCredentialsResolver(),
-        ...opts,
-    };
+export function artifactVerifyingMachine(options: SoftwareDeliveryMachineOptions,
+                                         configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = new SoftwareDeliveryMachine("Artifact verifying machine", options,
         whenPushSatisfies(IsMaven)
             .itMeans("Push to Maven repo")

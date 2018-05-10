@@ -15,10 +15,11 @@
  */
 
 import { Configuration } from "@atomist/automation-client/configuration";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { SdmOptions } from "./sdmOptions";
-
-const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging";
+import {
+    configureSdm,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
 
 /*
  * The provided software delivery machines include
@@ -50,21 +51,27 @@ const notLocal = process.env.NODE_ENV === "production" || process.env.NODE_ENV =
 const machineName = process.env.MACHINE_NAME || "cloudFoundryMachine";
 const machinePath = process.env.MACHINE_PATH || "./machines";
 
-function createMachine(options: SoftwareDeliveryMachineOptions): SoftwareDeliveryMachine {
-    const machineFunction = require(machinePath + "/" + machineName)[machineName];
-    return machineFunction(options);
-}
+const Options = {
+    requiredConfigurationValues: [
+        "sdm.cloudfoundry.user",
+        "sdm.cloudfoundry.password",
+        "sdm.cloudfoundry.org",
+        "sdm.cloudfoundry.spaces.production",
+        "sdm.cloudfoundry.spaces.staging",
+    ],
+};
 
-const machine = createMachine(SdmOptions);
+function createMachine(options: SoftwareDeliveryMachineOptions,
+                       config: Configuration): SoftwareDeliveryMachine {
+    const machineFunction = require(machinePath + "/" + machineName)[machineName];
+    return machineFunction(options, config);
+}
 
 export const configuration: Configuration = {
     // endpoints: {
     //     api: "https://automation-staging.atomist.services/registration",
     //     graphql: "https://automation-staging.atomist.services/graphql/team",
     // },
-    commands: machine.commandHandlers.concat([]),
-    events: machine.eventHandlers.concat([]),
-    policy: "ephemeral",
     http: {
         auth: {
             basic: {
@@ -77,21 +84,10 @@ export const configuration: Configuration = {
     cluster: {
         workers: 1,
     },
-    statsd: {
-        host: "dd-agent",
-        port: 8125,
-    },
     logging: {
-        level: !notLocal ? "info" : "debug",
-        file: {
-            enabled: !notLocal,
-            level: "debug",
-            name: "./log/github-sdm.log",
-        },
-        banner: () => ({
-            banner: "hello VOXXED",
-            asciify: true,
-            color: "green",
-        }),
+        level: "info",
     },
+    postProcessors: [
+        configureSdm(createMachine, Options),
+    ],
 };

@@ -15,20 +15,10 @@
  */
 
 import {
-    DockerOptions,
-    executeTag,
-    executeVersioner,
-    IsNode,
-    NodeProjectVersioner,
     PackageLockFingerprinter,
-    ProductionDockerDeploymentGoal,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
-    StagingDockerDeploymentGoal,
-    TagGoal,
     tagRepo,
     tslintFix,
-    VersionGoal,
 } from "@atomist/sdm";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
@@ -43,8 +33,7 @@ import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
  * @param {SoftwareDeliveryMachine} sdm
  * @param options config options
  */
-export function addNodeSupport(sdm: SoftwareDeliveryMachine,
-                               options: SoftwareDeliveryMachineOptions & DockerOptions) {
+export function addNodeSupport(sdm: SoftwareDeliveryMachine) {
     sdm.addGenerators(() => nodeGenerator({
             ...CommonGeneratorConfig,
             seedRepo: "typescript-express-seed",
@@ -63,36 +52,9 @@ export function addNodeSupport(sdm: SoftwareDeliveryMachine,
             tslintFix,
             AddBuildScript,
         )
-    .addReviewerRegistrations(
-        CommonTypeScriptErrors,
-        DontImportOwnIndex,
-    )
-        .addFingerprinterRegistrations(new PackageLockFingerprinter())
-    .addGoalImplementation("nodeVersioner", VersionGoal,
-        executeVersioner(options.projectLoader, NodeProjectVersioner))
-    // .addGoalImplementation("nodeDockerBuild", DockerBuildGoal,
-    //     executeDockerBuild(
-    //         options.projectLoader,
-    //         async () => "", // TODO CD this is very broken but fixed on my branch
-    //         async () => Success, // TODO CD at least add the compile step to this
-    //         DefaultDockerImageNameCreator,
-    //         {
-    //             registry: options.registry,
-    //             user: options.user,
-    //             password: options.password,
-    //
-    //             dockerfileFinder: async () => "Dockerfile",
-    //         }))
-    .addGoalImplementation("nodeTag", TagGoal,
-        executeTag(options.projectLoader));
-
-    sdm.goalFulfillmentMapper.addSideEffect({
-        goal: StagingDockerDeploymentGoal,
-        pushTest: IsNode,
-        sideEffectName: "@atomist/k8-automation",
-    }).addSideEffect({
-        goal: ProductionDockerDeploymentGoal,
-        pushTest: IsNode,
-        sideEffectName: "@atomist/k8-automation",
-    });
+        .addReviewerRegistrations(
+            CommonTypeScriptErrors,
+            DontImportOwnIndex,
+        )
+        .addFingerprinterRegistrations(new PackageLockFingerprinter());
 }

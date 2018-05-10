@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
+import {
+    Configuration,
+    logger,
+} from "@atomist/automation-client";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { checkstyleReviewerRegistration } from "@atomist/sdm";
 
 export interface CheckstyleSupportOptions {
-    useCheckstyle: boolean;
+    enabled: boolean;
+    path: boolean;
     reviewOnlyChangedFiles: boolean;
 }
 
@@ -28,13 +32,16 @@ export interface CheckstyleSupportOptions {
  * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
  * @param {{useCheckstyle: boolean}} opts
  */
-export function addCheckstyleSupport(softwareDeliveryMachine: SoftwareDeliveryMachine, opts: CheckstyleSupportOptions) {
-    if (opts.useCheckstyle) {
-        const checkStylePath = process.env.CHECKSTYLE_PATH;
+export function addCheckstyleSupport(softwareDeliveryMachine: SoftwareDeliveryMachine,
+                                     configuration: Configuration) {
+    const opts = configuration.sdm.checkstyle as CheckstyleSupportOptions;
+
+    if (opts.enabled) {
+        const checkStylePath = opts.path;
         if (!!checkStylePath) {
             softwareDeliveryMachine.addReviewerRegistrations(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
         } else {
-            logger.warn("Skipping Checkstyle; to enable it, set CHECKSTYLE_PATH env variable to the location of a downloaded checkstyle jar");
+            logger.warn("Skipping Checkstyle; to enable it, set 'sdm.checkstyle.path' to the location of a downloaded checkstyle jar");
         }
     }
 }

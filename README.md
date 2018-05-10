@@ -151,40 +151,58 @@ To build Node projects on the automation client node, you'll need:
 - `npm` - v 5.8.0 or above
 - `node`
 
-#### Cloud Foundry
+#### Configuration
 
-In order to enable Pivotal Cloud Foundry deployment, the following environment variables are used.
+The following configuration should be in your `~/.atomist/client.config.json` in order to 
+successfully connect your SDM:
 
-Required:
+```$json
+{
+  "token": "<your github token>",
+  "teamIds": [
+    "<your team id>"
+  ],
+  "sdm": {
+    "rolar": {
+      "url": "http://rolar.cfapps.io"
+    },
+    "graphviz": {
+        "url": "<optional url to graphviz service>"
+    },
+    "cloudfoundry": {
+      "api": "https://api.run.pivotal.io",
+      "user": "<your Pivotal Cloud Foundry user name>",
+      "password": "<your Pivotal Cloud Foundry password>",
+      "org": "<your Pivotal Cloud Foundry organization name>",
+      "spaces": {
+        "production": "<your Pivotal Cloud Foundry production space name within your org>",
+        "staging": "<your Pivotal Cloud Foundry staging space name within your org>"
+      }
+    },
+    "checkstyle": {
+      "enabled": false,
+      "reviewOnlyChangedFiles": true,
+      "path": "/Users/cdupuis/Development/atomist/sample-sdm/test/checkstyle-8.8-all.jar"
+    }
+  }
+}
+```
 
-- `PIVOTAL_USER`: your Pivotal Cloud Foundry user name
-- `PIVOTAL_PASSWORD`: your Pivotal Cloud Foundry password 
-- `PCF_ORG`: your Pivotal Cloud Foundry organization name
-- `PCF_SPACE_STAGING`: your Pivotal Cloud Foundry staging space name within `$PCF_ORG`
-- `PCF_SPACE_PRODUCTION`: your Pivotal Cloud Foundry production space name within `$PCF_ORG`
+##### Checkstyle
+ 
+Checkstyle is a style-checker for Java.
+For the optional Checkstyle integration to work, set up two Checkstyle configuration as shown above.
 
-Optional:
+Get `checkstyle-8.8-all.jar` from [Checkstyle's download page](https://sourceforge.net/projects/checkstyle/files/checkstyle/8.8/).
 
-- `PIVOTAL_API`: PCF API to hit. Default if this key is not provided is Pivotal Web Services at `https://api.run.pivotal.io`. Specify a different value to deploy to your own Cloud Foundry instance.
+##### Cloud Foundry
 
+This SDM allows deployment to Pivotal Cloud Foundry. For deployment to work you need to set your user,
+password and org of your Cloud Foundry account. Additionally please configure two spaces to be used for
+staging and production deployments.
 
-#### Kubernetes
+##### Kubernetes
 
 The kubernetesSoftwareDevelopmentMachine included here deploys to an Atomist sandbox kubernetes environment, using
 [k8-automation](https://github.com/atomist/k8-automation) which we run inside our cluster. You can deploy the Spring Boot
 projects created with `@atomist create spring` here, in order to try out the Kubernetes integration with the SDM.
-
-#### Checkstyle
- 
-Checkstyle is a style-checker for Java.
-For the optional Checkstyle integration to work, set up two Checkstyle environment variables as follows:
-
-```
-# Toggle Checkstyle usage
-export USE_CHECKSTYLE=true
-
-# Path to checkstyle JAR
-export CHECKSTYLE_PATH="/Users/rodjohnson/tools/checkstyle-8.8/checkstyle-8.8-all.jar"
-```
-
-Get `checkstyle-8.8-all.jar` from [Checkstyle's download page](https://sourceforge.net/projects/checkstyle/files/checkstyle/8.8/).

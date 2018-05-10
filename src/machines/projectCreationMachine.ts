@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { EphemeralLocalArtifactStore } from "@atomist/sdm/common/artifact/local/EphemeralLocalArtifactStore";
+import { Configuration } from "@atomist/automation-client";
+import {
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { CachingProjectLoader } from "@atomist/sdm/common/repo/CachingProjectLoader";
-import { GitHubCredentialsResolver } from "@atomist/sdm/handlers/common/GitHubCredentialsResolver";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { springBootGenerator } from "../commands/generators/java/spring/springBootGenerator";
 import { nodeGenerator } from "../commands/generators/node/nodeGenerator";
-import { CommonGeneratorConfig, CommonJavaGeneratorConfig } from "./generatorConfig";
-
-export type ProjectCreationMachineOptions = SoftwareDeliveryMachineOptions;
+import {
+    CommonGeneratorConfig,
+    CommonJavaGeneratorConfig,
+} from "./generatorConfig";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -34,14 +35,9 @@ export type ProjectCreationMachineOptions = SoftwareDeliveryMachineOptions;
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function projectCreationMachine(opts: Partial<ProjectCreationMachineOptions> = {}): SoftwareDeliveryMachine {
-    const options: ProjectCreationMachineOptions = {
-        artifactStore: new EphemeralLocalArtifactStore(),
-        projectLoader: new CachingProjectLoader(),
-        logFactory: createEphemeralProgressLog,
-        credentialsResolver: new GitHubCredentialsResolver(),
-        ...opts,
-    };
+export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
+                                       configuration: Configuration): SoftwareDeliveryMachine {
+
     const sdm = new SoftwareDeliveryMachine("Project creation machine", options);
 
     sdm.addGenerators(
