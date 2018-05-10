@@ -16,7 +16,6 @@
 
 import { GraphGoalsToSlack, OnDryRunBuildComplete, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
-import { OWASPDependencyCheck } from "../../blueprint/code/artifact/OWASPDependencyCheckArtifactListener";
 import { SonarQubeReviewer } from "../../blueprint/code/review/SonarQubeReviewer";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
@@ -36,7 +35,7 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         .addNewIssueListeners(requestDescription, capitalizer)
         .addClosedIssueListeners(thankYouYouRock)
         .addGoalsSetListeners(GraphGoalsToSlack)
-        .addArtifactListeners(OWASPDependencyCheck)
+      //  .addArtifactListeners(OWASPDependencyCheck)
         .addReviewerRegistrations(SonarQubeReviewer)
         .addReviewListeners(
             slackReviewListener(),
