@@ -36,7 +36,7 @@ export function addCheckstyleSupport(softwareDeliveryMachine: SoftwareDeliveryMa
                                      configuration: Configuration) {
     const opts = configuration.sdm.checkstyle as CheckstyleSupportOptions;
 
-    if (opts.enabled) {
+    if (opts && opts.enabled) {
         const checkStylePath = opts.path;
         if (!!checkStylePath) {
             softwareDeliveryMachine.addReviewerRegistrations(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
