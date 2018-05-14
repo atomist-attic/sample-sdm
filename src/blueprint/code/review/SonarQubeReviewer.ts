@@ -38,7 +38,7 @@ export function SonarQubeReviewer(options: SonarCubeOptions): ReviewerRegistrati
             };
         },
     };
-};
+}
 
 // ANALYSIS SUCCESSFUL, you can browse https://sonarcloud.io/dashboard/index/com.atomist.springteam:spring-rest-seed
 const Pattern = /ANALYSIS SUCCESSFUL, you can browse ([^\s^[]*)/;

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import {
     GraphGoalsToSlack,
     OnDryRunBuildComplete,
@@ -32,7 +33,6 @@ import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
 import { slocCommand } from "../../commands/editors/helper/sloc";
 import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
-import { Configuration } from "@atomist/automation-client";
 
 /**
  * Set up team policies
