@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-import { GraphGoalsToSlack, OnDryRunBuildComplete, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    GraphGoalsToSlack,
+    OnDryRunBuildComplete,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
-import { SonarQubeReviewer } from "../../blueprint/code/review/SonarQubeReviewer";
+import {
+    SonarCubeOptions,
+    SonarQubeReviewer,
+} from "../../blueprint/code/review/SonarQubeReviewer";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { CloudReadinessIssueManager } from "../../blueprint/issue/cloudReadinessIssueManager";
@@ -25,18 +32,19 @@ import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
 import { slocCommand } from "../../commands/editors/helper/sloc";
 import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
+import { Configuration } from "@atomist/automation-client";
 
 /**
  * Set up team policies
- * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
+ * @param {SoftwareDeliveryMachine} sdm
  */
-export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine) {
-    softwareDeliveryMachine
+export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
+                                configuration: Configuration) {
+    sdm
         .addNewIssueListeners(requestDescription, capitalizer)
         .addClosedIssueListeners(thankYouYouRock)
         .addGoalsSetListeners(GraphGoalsToSlack)
-      //  .addArtifactListeners(OWASPDependencyCheck)
-        .addReviewerRegistrations(SonarQubeReviewer)
+        // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListeners(
             slackReviewListener(),
             CloudReadinessIssueManager,
@@ -53,4 +61,9 @@ export function addTeamPolicies(softwareDeliveryMachine: SoftwareDeliveryMachine
         .addUserJoiningChannelListeners(je =>
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
+
+    if (configuration.sdm.sonar && configuration.sdm.sonar.enabled) {
+        sdm.addReviewerRegistrations(SonarQubeReviewer(configuration.sdm.sonar as SonarCubeOptions));
+    }
+
 }

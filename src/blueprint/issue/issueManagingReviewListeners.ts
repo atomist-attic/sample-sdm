@@ -153,7 +153,7 @@ function who(push: Push) {
     if (screenName) {
         return slack.user(screenName);
     }
-    return _.get(push, "after.committer.login", "someone");
+    return _.get(push, "after.committer.token", "someone");
 }
 
 function linkToSha(id) {

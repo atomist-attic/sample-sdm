@@ -53,6 +53,7 @@ const machinePath = process.env.MACHINE_PATH || "./machines";
 
 const Options = {
     requiredConfigurationValues: [
+        "sdm",
         "sdm.cloudfoundry.user",
         "sdm.cloudfoundry.password",
         "sdm.cloudfoundry.org",

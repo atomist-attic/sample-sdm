@@ -201,7 +201,7 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     addJavaSupport(sdm, configuration);
     addSpringSupport(sdm);
     addNodeSupport(sdm);
-    addTeamPolicies(sdm);
+    addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
     return sdm;
 }
