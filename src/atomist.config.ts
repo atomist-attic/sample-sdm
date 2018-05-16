@@ -20,7 +20,6 @@ import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
-
 import { configureLogzio } from "./util/logzio";
 
 /*
