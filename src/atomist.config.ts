@@ -69,10 +69,6 @@ function createMachine(options: SoftwareDeliveryMachineOptions,
 }
 
 export const configuration: Configuration = {
-    // endpoints: {
-    //     api: "https://automation-staging.atomist.services/registration",
-    //     graphql: "https://automation-staging.atomist.services/graphql/team",
-    // },
     http: {
         auth: {
             basic: {
