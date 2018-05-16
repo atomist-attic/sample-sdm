@@ -1,7 +1,7 @@
 {
   "name": "@atomist/sample-sdm",
   "version": "0.5.1",
-  "description": "an Atomist automation for software delivery",
+  "description": "Sample Atomist automation for software delivery",
   "author": "Atomist, Inc.",
   "license": "Apache-2.0",
   "repository": {
