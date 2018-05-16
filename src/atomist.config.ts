@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client/configuration";
+import { Configuration } from "@atomist/automation-client";
 import {
     configureSdm,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
+
+import { configureLogzio } from "./util/logzio";
 
 /*
  * The provided software delivery machines include
@@ -85,6 +87,7 @@ export const configuration: Configuration = {
         level: "info",
     },
     postProcessors: [
+        configureLogzio,
         configureSdm(createMachine, Options),
     ],
 };
