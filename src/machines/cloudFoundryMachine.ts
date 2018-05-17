@@ -81,6 +81,7 @@ import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../parts/stacks/springSupport";
+import { addDemoPolicies } from "../parts/team/demoPolicies";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
@@ -203,5 +204,6 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
+    // addDemoPolicies(sdm, configuration);
     return sdm;
 }
