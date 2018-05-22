@@ -16,11 +16,11 @@
 
 import {logger} from "@atomist/automation-client";
 import {
-    constructLogPath,
     createEphemeralProgressLog, firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory,
     RolarProgressLog,
     WriteToAllProgressLog,
 } from "@atomist/sdm";
+import { constructLogPath } from "@atomist/sdm/common/log/DashboardDisplayProgressLog";
 
 export function logFactory(rolarBaseServiceUrl?: string): ProgressLogFactory {
     let persistentLogFactory = (context, sdmGoal, fallback) => firstAvailableProgressLog(fallback);

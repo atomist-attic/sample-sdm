@@ -26,6 +26,8 @@ import {
     springBootGenerator,
 } from "../../../../src/commands/generators/java/spring/springBootGenerator";
 import { SpringProjectCreationParameters } from "../../../../src/commands/generators/java/spring/SpringProjectCreationParameters";
+import { transformSeedToCustomProject } from "../../../../src/commands/generators/java/spring/transformSeedToCustomProject";
+import { springBootPom } from "../../../editors/TestPoms";
 import { fakeContext } from "../../../FakeContext";
 
 const Readme1 = `# spring-rest-seed
@@ -52,7 +54,7 @@ atomist:
 
 describe("springBootGenerator", () => {
 
-    describe("update README", () => {
+    describe("update elements", () => {
 
         it("should get correct content: default seed", async () => {
             const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
@@ -70,6 +72,23 @@ describe("springBootGenerator", () => {
             assert(readmeContent.includes("# repoName"), "Should include repo name");
             assert(readmeContent.includes("seed project \`foo:bar"),
                 `Unexpected readme content:\n${readmeContent}`);
+        });
+
+        it("should use new name in pom.name", async () => {
+            const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
+                {path: "README.md", content: Readme1},
+                {path: "pom.xml", content: springBootPom()});
+            const params = new SpringProjectCreationParameters({
+                seed: new GitHubRepoRef("foo", "bar"),
+                intent: "whatever",
+                groupId: "atomist",
+                addAtomistWebhook: false,
+            });
+            params.target.repo = "repoName";
+            params.enteredServiceClassName = "foo";
+            await transformSeedToCustomProject(params)(p, null, null);
+            const pom = p.findFileSync("pom.xml").getContentSync();
+            assert(pom.includes(`<name>${params.target.repo}</name>`), "Name should be repo name");
         });
 
         it("should get correct content: entered seed", async () => {
@@ -135,6 +154,8 @@ describe("springBootGenerator", () => {
             const yml = result.findFileSync("src/main/resources/application.yml").getContentSync();
             assert(yml.includes("/teams/T1000"), "Should include Atomist team");
             result.findFileSync("src/main/java/atomist/test/ArtifactApplication.java").getContentSync();
+            const pom = result.findFileSync("pom.xml").getContentSync();
+            assert(pom.includes(`<name>${params.target.repo}</name>`), "Name should be repo name: had\n" + pom);
         }).timeout(18000);
 
         it("should put in Atomist team id and ensure valid Java with entered service class name", async () => {

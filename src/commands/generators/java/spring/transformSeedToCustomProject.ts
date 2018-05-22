@@ -17,11 +17,9 @@
 import { AnyProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import { cleanReadMe } from "@atomist/automation-client/operations/generate/UniversalSeed";
-import {
-    doUpdatePom,
-    inferStructureAndMovePackage,
-} from "@atomist/spring-automation/commands/generator/java/JavaProjectParameters";
-import { inferSpringStructureAndRename } from "@atomist/spring-automation/commands/generator/spring/SpringBootProjectParameters";
+import { inferStructureAndMovePackage } from "@atomist/spring-automation/commands/generator/java/javaProjectUtils";
+import { updatePom } from "@atomist/spring-automation/commands/generator/java/updatePom";
+import { inferSpringStructureAndRename } from "@atomist/spring-automation/commands/generator/spring/springBootUtils";
 import { curry } from "@typed/curry";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
 
@@ -31,7 +29,7 @@ import { SpringProjectCreationParameters } from "./SpringProjectCreationParamete
 export function transformSeedToCustomProject(params: SpringProjectCreationParameters): AnyProjectEditor<any> {
     return chainEditors(
         curry(cleanReadMe)(params.target.description),
-        curry(doUpdatePom)(params),
+        p => updatePom(p, params.target.repo, params.artifactId, params.groupId, params.version, params.description),
         curry(inferStructureAndMovePackage)(params.rootPackage),
         curry(inferSpringStructureAndRename)(params.serviceClassName),
     );
