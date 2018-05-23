@@ -20,9 +20,13 @@ import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
+import { cloudFoundryMachine } from "./machines/cloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
 
 /*
+ * This sample-sdm includes code for a variety of
+ * software delivery machines. Choose one here.
+ *
  * The provided software delivery machines include
  *
  * Cloud Foundry full delivery (cloudFoundryMachine):
@@ -49,8 +53,10 @@ import { configureLogzio } from "./util/logzio";
  * start with any of these and change it to make it your own!
  */
 
-const machineName = process.env.MACHINE_NAME || "cloudFoundryMachine";
-const machinePath = process.env.MACHINE_PATH || "./machines";
+function createMachine(options: SoftwareDeliveryMachineOptions,
+                       config: Configuration): SoftwareDeliveryMachine {
+    return cloudFoundryMachine(options, config);
+}
 
 const Options = {
     requiredConfigurationValues: [
@@ -62,12 +68,6 @@ const Options = {
         "sdm.cloudfoundry.spaces.staging",
     ],
 };
-
-function createMachine(options: SoftwareDeliveryMachineOptions,
-                       config: Configuration): SoftwareDeliveryMachine {
-    const machineFunction = require(machinePath + "/" + machineName)[machineName];
-    return machineFunction(options, config);
-}
 
 export const configuration: Configuration = {
     http: {
