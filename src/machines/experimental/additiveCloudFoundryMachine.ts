@@ -22,11 +22,11 @@ import {
     JustBuildGoal,
     LocalDeploymentGoal,
     nodeBuilder,
-    not,
+    not, onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    RepositoryDeletionGoals,
+    RepositoryDeletionGoals, ReviewGoal,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
@@ -68,8 +68,7 @@ import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
 
 /**
- * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
- * See generatorConfig.ts to customize generation defaults.
+ * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
  * @return {SoftwareDeliveryMachine}
  */
 export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
@@ -77,7 +76,9 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
+        // Each contributor contributors goals. The infrastructure will assemble them into a goal set.
         goalContributors(
+            onAnyPush.setGoals(ReviewGoal),
             whenPush(IsMaven).set(JustBuildGoal),
             whenPush(HasSpringBootApplicationClass, not(ToDefaultBranch)).set(LocalDeploymentGoal),
             whenPush(HasCloudFoundryManifest).set(

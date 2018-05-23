@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
+import { Configuration, logger } from "@atomist/automation-client";
 import {
     GraphGoalsToSlack,
     OnDryRunBuildComplete,
@@ -63,7 +63,10 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
     // .addFingerprintDifferenceListeners(diff1)
 
     if (configuration.sdm.sonar && configuration.sdm.sonar.enabled) {
+        logger.info("Enabling SonarQube integration");
         sdm.addReviewerRegistrations(SonarQubeReviewer(configuration.sdm.sonar as SonarCubeOptions));
+    } else {
+        logger.info("SonarQube integration not enabled");
     }
 
 }
