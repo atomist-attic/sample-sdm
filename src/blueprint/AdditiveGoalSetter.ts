@@ -32,6 +32,11 @@ export class AdditiveGoalSetter implements GoalSetter {
 
 }
 
+/**
+ * Contribute goals based on a series of rules
+ * @param {PushMapping<Goal | Goal[] | Goals>} contributors
+ * @return {GoalSetter}
+ */
 export function goalContributors(...contributors: Array<PushMapping<Goal | Goal[] | Goals>>): GoalSetter {
     return new AdditiveGoalSetter("Built", ...contributors);
 }
