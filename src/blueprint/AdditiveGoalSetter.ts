@@ -18,6 +18,9 @@ export class AdditiveGoalSetter implements GoalSetter {
             name: c.name,
             async valueForPush(p) {
                 const r = await c.valueForPush(p);
+                if (!r) {
+                    return r as any;
+                }
                 return (isGoals(r)) ? r.goals :
                     isArray(r) ? r : [r];
             },
@@ -26,7 +29,7 @@ export class AdditiveGoalSetter implements GoalSetter {
 
     public async valueForPush(p: PushListenerInvocation): Promise<NeverMatch | Goals | undefined> {
         const contributorGoals: Goal[][] = await Promise.all(this.contributors.map(c => c.valueForPush(p)));
-        const uniqueGoals: Goal[] = _.uniq(_.flatten(contributorGoals));
+        const uniqueGoals: Goal[] = _.uniq(_.flatten(contributorGoals).filter(x => !!x));
         return new Goals(this.name, ...uniqueGoals);
     }
 
