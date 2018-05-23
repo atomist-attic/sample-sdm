@@ -15,7 +15,7 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory, RolarProgressLog, } from "@atomist/sdm";
+import { firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory, RolarProgressLog } from "@atomist/sdm";
 import { constructLogPath } from "@atomist/sdm/common/log/DashboardDisplayProgressLog";
 
 /**
