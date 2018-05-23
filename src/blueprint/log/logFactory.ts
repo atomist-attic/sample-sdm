@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import {logger} from "@atomist/automation-client";
-import {
-    createEphemeralProgressLog, firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory,
-    RolarProgressLog,
-    WriteToAllProgressLog,
-} from "@atomist/sdm";
+import { logger } from "@atomist/automation-client";
+import { firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory, RolarProgressLog, } from "@atomist/sdm";
 import { constructLogPath } from "@atomist/sdm/common/log/DashboardDisplayProgressLog";
 
-export function logFactory(rolarBaseServiceUrl?: string): ProgressLogFactory {
+/**
+ * LogFactory that will try using Rolar
+ * @param {string} rolarBaseServiceUrl
+ * @return {ProgressLogFactory}
+ */
+export function tryRolarLogFactory(rolarBaseServiceUrl?: string): ProgressLogFactory {
     let persistentLogFactory = (context, sdmGoal, fallback) => firstAvailableProgressLog(fallback);
     if (rolarBaseServiceUrl) {
         logger.info("Logging with Rolar at " + rolarBaseServiceUrl);
@@ -35,7 +36,6 @@ export function logFactory(rolarBaseServiceUrl?: string): ProgressLogFactory {
     }
     return async (context, sdmGoal) => {
         const name = sdmGoal.name;
-        const persistentLog = await persistentLogFactory(context, sdmGoal, new LoggingProgressLog(name, "info"));
-        return new WriteToAllProgressLog(name, await createEphemeralProgressLog(context, sdmGoal), persistentLog);
+        return persistentLogFactory(context, sdmGoal, new LoggingProgressLog(name, "info"));
     };
 }

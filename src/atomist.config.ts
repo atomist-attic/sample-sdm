@@ -16,10 +16,12 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
+    ConfigureOptions,
     configureSdm,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
+import { tryRolarLogFactory } from "./blueprint/log/logFactory";
 import { cloudFoundryMachine } from "./machines/cloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
 
@@ -58,7 +60,7 @@ function createMachine(options: SoftwareDeliveryMachineOptions,
     return cloudFoundryMachine(options, config);
 }
 
-const Options = {
+const Options: ConfigureOptions = {
     requiredConfigurationValues: [
         "sdm",
         "sdm.cloudfoundry.user",
@@ -67,6 +69,10 @@ const Options = {
         "sdm.cloudfoundry.spaces.production",
         "sdm.cloudfoundry.spaces.staging",
     ],
+    sdmOptions: {
+        // TODO get this from the config
+        logFactory: tryRolarLogFactory("http://rolar.cfapps.io"),
+    },
 };
 
 export const configuration: Configuration = {
