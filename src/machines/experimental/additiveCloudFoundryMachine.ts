@@ -76,7 +76,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
-        // Each contributor contributors goals. The infrastructure will assemble them into a goal set.
+        // Each contributor contributes goals. The infrastructure assembles them into a goal set.
         goalContributors(
             onAnyPush.setGoals(ReviewGoal),
             whenPush(IsMaven).set(JustBuildGoal),

@@ -9,6 +9,9 @@ import { PushRule } from "@atomist/sdm/common/listener/support/PushRule";
 import * as _ from "lodash";
 import { isArray } from "util";
 
+/**
+ * An additive goal setter assembles the goals contributed by all the contributors.
+ */
 export class AdditiveGoalSetter implements GoalSetter {
 
     private readonly contributors: Array<PushMapping<Goal[]>> = [];
@@ -36,7 +39,8 @@ export class AdditiveGoalSetter implements GoalSetter {
 }
 
 /**
- * Contribute goals based on a series of rules
+ * Contribute goals based on a series of rules.
+ * Duplicates will be removed.
  * @param {PushMapping<Goal | Goal[] | Goals>} contributors
  * @return {GoalSetter}
  */
