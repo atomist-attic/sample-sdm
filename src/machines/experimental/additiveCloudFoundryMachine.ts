@@ -17,17 +17,12 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    FromAtomist,
+    ArtifactGoal,
     hasFile,
-    HttpServiceGoals,
-    LibraryGoals,
+    JustBuildGoal,
+    LocalDeploymentGoal,
     nodeBuilder,
-    NoGoals,
     not,
-    NpmBuildGoals,
-    NpmDeployGoals,
-    NpmDockerGoals,
-    NpmKubernetesDeployGoals,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
@@ -37,8 +32,8 @@ import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingUndeploymentGoal,
+    StagingVerifiedGoal,
     ToDefaultBranch,
-    ToPublicRepo,
     UndeployEverywhereGoals,
     whenPushSatisfies,
 } from "@atomist/sdm";
@@ -49,73 +44,50 @@ import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinB
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
-import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
-import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
 import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { goalContributors, whenPush } from "../../blueprint/AdditiveGoalSetter";
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
-} from "../blueprint/deploy/cloudFoundryDeploy";
-import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
-import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
-import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
-import { addDemoEditors } from "../parts/demo/demoEditors";
-import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { addJavaSupport } from "../parts/stacks/javaSupport";
-import { addNodeSupport } from "../parts/stacks/nodeSupport";
-import { addSpringSupport } from "../parts/stacks/springSupport";
-import { addTeamPolicies } from "../parts/team/teamPolicies";
-import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
-import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
+} from "../../blueprint/deploy/cloudFoundryDeploy";
+import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
+import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
+import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
+import { addDemoEditors } from "../../parts/demo/demoEditors";
+import { addJavaSupport } from "../../parts/stacks/javaSupport";
+import { addNodeSupport } from "../../parts/stacks/nodeSupport";
+import { addSpringSupport } from "../../parts/stacks/springSupport";
+import { addTeamPolicies } from "../../parts/team/teamPolicies";
+import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
-                                    configuration: Configuration): SoftwareDeliveryMachine {
+export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
+                                            configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
-            .itMeans("No material change to Java")
-            .setGoals(NoGoals),
-        whenPushSatisfies(ToDefaultBranch, IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest,
-            ToPublicRepo, not(NamedSeedRepo), not(FromAtomist), IsDeployEnabled)
-            .itMeans("Spring Boot service to deploy")
-            .setGoals(HttpServiceGoals),
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(FromAtomist))
-            .itMeans("Spring Boot service local deploy")
-            .setGoals(LocalDeploymentGoals),
-        whenPushSatisfies(IsMaven)
-            .itMeans("Build Java")
-            .setGoals(LibraryGoals),
-        whenPushSatisfies(IsNode, not(MaterialChangeToNodeRepo))
-            .itMeans("No material change to Node")
-            .setGoals(NoGoals),
-        whenPushSatisfies(IsNode, HasCloudFoundryManifest, IsDeployEnabled, ToDefaultBranch)
-            .itMeans("Build and deploy Node")
-            .setGoals(NpmDeployGoals),
-        whenPushSatisfies(IsNode, HasDockerfile, ToDefaultBranch, IsDeployEnabled)
-            .itMeans("Docker deploy Node")
-            .setGoals(NpmKubernetesDeployGoals),
-        whenPushSatisfies(IsNode, HasDockerfile)
-            .itMeans("Docker build Node")
-            .setGoals(NpmDockerGoals),
-        whenPushSatisfies(IsNode, not(HasDockerfile))
-            .itMeans("Build Node")
-            .setGoals(NpmBuildGoals),
-    );
+        goalContributors(
+            whenPush(IsMaven).set(JustBuildGoal),
+            whenPush(HasSpringBootApplicationClass, not(ToDefaultBranch)).set(LocalDeploymentGoal),
+            whenPush(HasCloudFoundryManifest).set(
+                [ArtifactGoal,
+                    StagingDeploymentGoal,
+                    StagingEndpointGoal,
+                    StagingVerifiedGoal,
+                    ProductionDeploymentGoal,
+                    ProductionEndpointGoal]),
+        ));
 
     const hasPackageLock = hasFile("package-lock.json");
 
