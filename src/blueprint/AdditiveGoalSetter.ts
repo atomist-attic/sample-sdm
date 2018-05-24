@@ -2,8 +2,9 @@ import { Goal } from "@atomist/sdm/common/delivery/goals/Goal";
 import { Goals, isGoals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { GoalSetter } from "@atomist/sdm/common/listener/GoalSetter";
 import { PushListenerInvocation } from "@atomist/sdm/common/listener/PushListener";
-import { NeverMatch, PushMapping } from "@atomist/sdm/common/listener/PushMapping";
+import { PushMapping } from "@atomist/sdm/common/listener/PushMapping";
 
+import { NeverMatch } from "@atomist/sdm";
 import { PushTestPredicate, toPushTest } from "@atomist/sdm/blueprint/dsl/pushTestPredicate";
 import { PushRule } from "@atomist/sdm/common/listener/support/PushRule";
 import * as _ from "lodash";
@@ -19,8 +20,8 @@ export class AdditiveGoalSetter implements GoalSetter {
     constructor(public name: string, ...contributors: Array<PushMapping<Goal | Goal[] | Goals>>) {
         this.contributors = contributors.map(c => ({
             name: c.name,
-            async valueForPush(p) {
-                const r = await c.valueForPush(p);
+            async mapping(p) {
+                const r = await c.mapping(p);
                 if (!r) {
                     return r as any;
                 }
@@ -30,8 +31,8 @@ export class AdditiveGoalSetter implements GoalSetter {
         }));
     }
 
-    public async valueForPush(p: PushListenerInvocation): Promise<NeverMatch | Goals | undefined> {
-        const contributorGoals: Goal[][] = await Promise.all(this.contributors.map(c => c.valueForPush(p)));
+    public async mapping(p: PushListenerInvocation): Promise<NeverMatch | Goals | undefined> {
+        const contributorGoals: Goal[][] = await Promise.all(this.contributors.map(c => c.mapping(p)));
         const uniqueGoals: Goal[] = _.uniq(_.flatten(contributorGoals).filter(x => !!x));
         return new Goals(this.name, ...uniqueGoals);
     }
