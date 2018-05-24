@@ -16,6 +16,7 @@
 
 import { Configuration, logger } from "@atomist/automation-client";
 import {
+    FingerprintListener,
     GraphGoalsToSlack,
     OnDryRunBuildComplete,
     SoftwareDeliveryMachine,
@@ -33,6 +34,7 @@ import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
 import { slocCommand } from "../../commands/editors/helper/sloc";
 import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
+import { codeMetrics } from "../../pack/codemetrics/codeMetrics";
 
 /**
  * Set up team policies
@@ -68,5 +70,10 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
     } else {
         logger.info("SonarQube integration not enabled");
     }
+
+    const pub: FingerprintListener = async fp => {
+        console.log("METRICS ARE\n" + JSON.stringify(fp.fingerprint));
+    };
+    sdm.addCapabilities(codeMetrics(pub));
 
 }
