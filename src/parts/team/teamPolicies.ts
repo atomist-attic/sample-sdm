@@ -22,6 +22,7 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
+import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
 import {
     SonarCubeOptions,
     SonarQubeReviewer,
@@ -34,7 +35,6 @@ import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
 import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 import { codeMetrics } from "../../pack/codemetrics/codeMetrics";
-import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
 
 /**
  * Set up team policies
