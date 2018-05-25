@@ -37,6 +37,7 @@ import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingUndeploymentGoal,
+    summarizeGoalsInGitHubStatus,
     ToDefaultBranch,
     ToPublicRepo,
     UndeployEverywhereGoals,
@@ -181,6 +182,8 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
+    summarizeGoalsInGitHubStatus(sdm);
+
     // addDemoPolicies(sdm, configuration);
     return sdm;
 }
