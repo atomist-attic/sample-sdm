@@ -41,6 +41,7 @@ import {
     ToPublicRepo,
     UndeployEverywhereGoals,
     whenPushSatisfies,
+    summarizeGoalsInGitHubStatus,
 } from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
@@ -181,6 +182,8 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
+    summarizeGoalsInGitHubStatus(sdm);
+
     // addDemoPolicies(sdm, configuration);
     return sdm;
 }
