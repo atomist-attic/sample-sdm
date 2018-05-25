@@ -1,3 +1,4 @@
+import { logger } from "@atomist/automation-client";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import {
     FingerprinterRegistration,
@@ -8,7 +9,6 @@ import {
 import { TypedFingerprint } from "@atomist/sdm/common/delivery/code/fingerprint/support/TypedFingerprint";
 import { FingerprintListener } from "@atomist/sdm/common/listener/FingerprintListener";
 import { CodeStats, reportForLanguages } from "@atomist/sdm/util/sloc/slocReport";
-import { logger } from "@atomist/automation-client";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 
