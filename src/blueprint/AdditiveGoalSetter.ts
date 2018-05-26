@@ -4,8 +4,7 @@ import { GoalSetter } from "@atomist/sdm/common/listener/GoalSetter";
 import { PushListenerInvocation } from "@atomist/sdm/common/listener/PushListener";
 import { PushMapping } from "@atomist/sdm/common/listener/PushMapping";
 
-import { NeverMatch } from "@atomist/sdm";
-import { PushTestPredicate, toPushTest } from "@atomist/sdm/blueprint/dsl/pushTestPredicate";
+import { NeverMatch, PredicateMapping, toPredicateMapping } from "@atomist/sdm";
 import { PushRule } from "@atomist/sdm/common/listener/support/PushRule";
 import * as _ from "lodash";
 import { isArray } from "util";
@@ -49,6 +48,7 @@ export function goalContributors(...contributors: Array<PushMapping<Goal | Goal[
     return new AdditiveGoalSetter("Built", ...contributors);
 }
 
-export function whenPush(guard1: PushTestPredicate, ...guards: PushTestPredicate[]): PushRule<Goals | Goal | Goal[]> {
-    return new PushRule(toPushTest(guard1), guards.map(toPushTest));
+export function whenPush(guard1: PredicateMapping<PushListenerInvocation>,
+                         ...guards: Array<PredicateMapping<PushListenerInvocation>>): PushRule<Goals | Goal | Goal[]> {
+    return new PushRule(toPredicateMapping(guard1), guards.map(toPredicateMapping));
 }
