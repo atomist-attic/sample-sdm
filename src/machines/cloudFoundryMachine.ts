@@ -45,13 +45,12 @@ import {
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
-import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
-import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
@@ -135,9 +134,6 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
         build.when(IsNode)
             .itMeans("npm run compile - no package lock")
             .set(nodeBuilder(options.projectLoader, "npm i", "npm run compile")),
-        build.when(IsLein)
-            .itMeans("Lein build")
-            .set(leinBuilder(options.projectLoader)),
         build.setDefault(new MavenBuilder(options.artifactStore,
             createEphemeralProgressLog, options.projectLoader)));
     sdm.addDeployRules(
