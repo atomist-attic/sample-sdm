@@ -17,7 +17,7 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    FromAtomist,
+    FromAtomist, Goal, Goals,
     hasFile,
     HttpServiceGoals,
     LibraryGoals,
@@ -27,7 +27,7 @@ import {
     NpmBuildGoals,
     NpmDeployGoals,
     NpmDockerGoals,
-    NpmKubernetesDeployGoals,
+    NpmKubernetesDeployGoals, onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
@@ -75,6 +75,7 @@ import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
+import { given } from "@atomist/sdm/blueprint/dsl/decisionTree";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
@@ -86,19 +87,21 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
-            .itMeans("No material change to Java")
-            .setGoals(NoGoals),
-        whenPushSatisfies(ToDefaultBranch, IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest,
-            ToPublicRepo, not(NamedSeedRepo), not(FromAtomist), IsDeployEnabled)
-            .itMeans("Spring Boot service to deploy")
-            .setGoals(HttpServiceGoals),
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(FromAtomist))
-            .itMeans("Spring Boot service local deploy")
-            .setGoals(LocalDeploymentGoals),
-        whenPushSatisfies(IsMaven)
-            .itMeans("Build Java")
-            .setGoals(LibraryGoals),
+        given<Goals>(IsMaven).itMeans("Maven")
+            .then(
+                whenPushSatisfies(HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
+                    .itMeans("No material change to Java")
+                    .setGoals(NoGoals),
+                whenPushSatisfies(ToDefaultBranch, HasSpringBootApplicationClass, HasCloudFoundryManifest,
+                    ToPublicRepo, not(NamedSeedRepo), not(FromAtomist), IsDeployEnabled)
+                    .itMeans("Spring Boot service to deploy")
+                    .setGoals(HttpServiceGoals),
+                whenPushSatisfies(HasSpringBootApplicationClass, not(FromAtomist))
+                    .itMeans("Spring Boot service local deploy")
+                    .setGoals(LocalDeploymentGoals),
+                onAnyPush.itMeans("Build Java library")
+                    .set(LibraryGoals),
+            ),
         whenPushSatisfies(IsNode, not(MaterialChangeToNodeRepo))
             .itMeans("No material change to Node")
             .setGoals(NoGoals),
