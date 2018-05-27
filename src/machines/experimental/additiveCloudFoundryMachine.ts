@@ -41,6 +41,7 @@ import {
 } from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
+import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
@@ -68,7 +69,6 @@ import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
-import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
