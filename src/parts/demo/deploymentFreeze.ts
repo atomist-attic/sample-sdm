@@ -1,4 +1,4 @@
-import { HandleCommand, logger } from "@atomist/automation-client";
+import { logger } from "@atomist/automation-client";
 import { commandHandlerFrom } from "@atomist/automation-client/onCommand";
 import {
     EmptyParameters,
@@ -10,8 +10,15 @@ import {
 import { allOf } from "@atomist/sdm/blueprint/dsl/allOf";
 import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
 
+/**
+ * Goal to explain a deployment freeze to the user
+ * @type {MessageGoal}
+ */
 export const ExplainDeploymentFreezeGoal = new MessageGoal("deploymentFreeze");
 
+/**
+ * Implemented by objects that know how to persist deployment freeze status.
+ */
 export interface DeploymentStatusManager {
 
     setFrozen(flag: boolean);
@@ -19,10 +26,9 @@ export interface DeploymentStatusManager {
     isFrozen: Promise<boolean>;
 }
 
-// TODO need to be able to add push rules
-
 /**
- * Capability to add to an SDM to add deployment freeze
+ * Capability to add to an SDM to add deployment freeze.
+ * Makes the ExplainDeploymentFreezeGoal available.
  * @param {DeploymentStatusManager} dsm
  * @return {SoftwareDeliveryMachineConfigurer}
  */
@@ -36,7 +42,7 @@ export function deploymentFreeze(dsm: DeploymentStatusManager): SoftwareDelivery
             );
             sdm.addGoalImplementation("ExplainDeploymentFreezeGoal",
                 ExplainDeploymentFreezeGoal,
-                executeSendMessageToSlack("Not deploying as deployment is frozen :no_entry:"));
+                executeSendMessageToSlack("*Attention*: Not deploying as deployment is currently frozen :no_entry:"));
         },
     };
 }
@@ -53,7 +59,7 @@ export function isDeploymentFrozen(dsm: DeploymentStatusManager): PushTest {
     });
 }
 
-export function freezeCommand(dsm: DeploymentStatusManager): HandleCommand {
+function freezeCommand(dsm: DeploymentStatusManager) {
     return commandHandlerFrom(
         async ctx => {
             dsm.setFrozen(true);
@@ -66,7 +72,7 @@ export function freezeCommand(dsm: DeploymentStatusManager): HandleCommand {
     );
 }
 
-export function unfreezeCommand(freezeStore: DeploymentStatusManager): HandleCommand {
+function unfreezeCommand(freezeStore: DeploymentStatusManager) {
     return commandHandlerFrom(
         async ctx => {
             freezeStore.setFrozen(false);

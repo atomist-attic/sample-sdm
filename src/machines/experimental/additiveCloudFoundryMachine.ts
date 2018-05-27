@@ -49,7 +49,6 @@ import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralPro
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { goalContributors, whenPush } from "../../blueprint/AdditiveGoalSetter";
 import {
     cloudFoundryProductionDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
@@ -69,6 +68,7 @@ import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
+import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -86,13 +86,14 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         // Each contributor contributes goals. The infrastructure assembles them into a goal set.
         goalContributors(
             onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
-            whenPush(IsDeploymentFrozen).itMeans("deployment freeze in place").set(ExplainDeploymentFreezeGoal),
-            whenPush(IsMaven)
-                .set(JustBuildGoal),
-            whenPush(HasSpringBootApplicationClass, not(ToDefaultBranch))
-                .set(LocalDeploymentGoal),
-            whenPush(HasCloudFoundryManifest, not(IsDeploymentFrozen))
-                .set([ArtifactGoal,
+            whenPushSatisfies(IsDeploymentFrozen)
+                .setGoals(ExplainDeploymentFreezeGoal),
+            whenPushSatisfies(IsMaven)
+                .setGoals(JustBuildGoal),
+            whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
+                .setGoals(LocalDeploymentGoal),
+            whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen))
+                .setGoals([ArtifactGoal,
                     StagingDeploymentGoal,
                     StagingEndpointGoal,
                     StagingVerifiedGoal,
