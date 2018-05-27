@@ -22,7 +22,7 @@ import {
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import { tryRolarLogFactory } from "./blueprint/log/logFactory";
-import { cloudFoundryMachine } from "./machines/cloudFoundryMachine";
+import { additiveCloudFoundryMachine } from "./machines/experimental/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
 
 /*
@@ -57,7 +57,7 @@ import { configureLogzio } from "./util/logzio";
 
 function createMachine(options: SoftwareDeliveryMachineOptions,
                        config: Configuration): SoftwareDeliveryMachine {
-    return cloudFoundryMachine(options, config);
+    return additiveCloudFoundryMachine(options, config);
 }
 
 const Options: ConfigureOptions = {

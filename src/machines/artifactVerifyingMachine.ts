@@ -16,16 +16,16 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
+    ArtifactGoal,
+    JustBuildGoal,
+} from "@atomist/sdm";
+import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
-import {
-    ArtifactGoal,
-    JustBuildGoal,
-} from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";

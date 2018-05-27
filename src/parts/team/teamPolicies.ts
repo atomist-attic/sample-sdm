@@ -15,18 +15,10 @@
  */
 
 import { Configuration, logger } from "@atomist/automation-client";
-import {
-    FingerprintListener,
-    GraphGoalsToSlack,
-    OnDryRunBuildComplete,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
+import { FingerprintListener, GraphGoalsToSlack, OnDryRunBuildComplete, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
 import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
-import {
-    SonarCubeOptions,
-    SonarQubeReviewer,
-} from "../../blueprint/code/review/SonarQubeReviewer";
+import { SonarCubeOptions, SonarQubeReviewer } from "../../blueprint/code/review/SonarQubeReviewer";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { CloudReadinessIssueManager } from "../../blueprint/issue/cloudReadinessIssueManager";
@@ -37,7 +29,7 @@ import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/add
 import { codeMetrics } from "../../pack/codemetrics/codeMetrics";
 
 /**
- * Set up team policies
+ * Set up team policies independent of specific stacks
  * @param {SoftwareDeliveryMachine} sdm
  */
 export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
@@ -76,4 +68,5 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
     };
     sdm.addCapabilities(codeMetrics(pub));
 
+    // sdm.addPushReactions(shutDownDeliveryIf(EverySecondOneGoesThrough));
 }

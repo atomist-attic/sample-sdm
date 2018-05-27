@@ -17,7 +17,7 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    FromAtomist,
+    FromAtomist, Goals,
     hasFile,
     HttpServiceGoals,
     LibraryGoals,
@@ -27,7 +27,7 @@ import {
     NpmBuildGoals,
     NpmDeployGoals,
     NpmDockerGoals,
-    NpmKubernetesDeployGoals,
+    NpmKubernetesDeployGoals, onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
@@ -45,13 +45,13 @@ import {
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
-import { leinBuilder } from "@atomist/sdm/common/delivery/build/local/lein/leinBuilder";
+import { given } from "@atomist/sdm/blueprint/dsl/decisionTree";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
 import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
-import { IsLein, IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
+import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
@@ -87,19 +87,21 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     const sdm = new SoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
-            .itMeans("No material change to Java")
-            .setGoals(NoGoals),
-        whenPushSatisfies(ToDefaultBranch, IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest,
-            ToPublicRepo, not(NamedSeedRepo), not(FromAtomist), IsDeployEnabled)
-            .itMeans("Spring Boot service to deploy")
-            .setGoals(HttpServiceGoals),
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(FromAtomist))
-            .itMeans("Spring Boot service local deploy")
-            .setGoals(LocalDeploymentGoals),
-        whenPushSatisfies(IsMaven)
-            .itMeans("Build Java")
-            .setGoals(LibraryGoals),
+        given<Goals>(IsMaven).itMeans("Maven")
+            .then(
+                whenPushSatisfies(HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
+                    .itMeans("No material change to Java")
+                    .setGoals(NoGoals),
+                whenPushSatisfies(ToDefaultBranch, HasSpringBootApplicationClass, HasCloudFoundryManifest,
+                    ToPublicRepo, not(NamedSeedRepo), not(FromAtomist), IsDeployEnabled)
+                    .itMeans("Spring Boot service to deploy")
+                    .setGoals(HttpServiceGoals),
+                whenPushSatisfies(HasSpringBootApplicationClass, not(FromAtomist))
+                    .itMeans("Spring Boot service local deploy")
+                    .setGoals(LocalDeploymentGoals),
+                onAnyPush.itMeans("Build Java library")
+                    .set(LibraryGoals),
+            ),
         whenPushSatisfies(IsNode, not(MaterialChangeToNodeRepo))
             .itMeans("No material change to Node")
             .setGoals(NoGoals),
@@ -135,9 +137,6 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
         build.when(IsNode)
             .itMeans("npm run compile - no package lock")
             .set(nodeBuilder(options.projectLoader, "npm i", "npm run compile")),
-        build.when(IsLein)
-            .itMeans("Lein build")
-            .set(leinBuilder(options.projectLoader)),
         build.setDefault(new MavenBuilder(options.artifactStore,
             createEphemeralProgressLog, options.projectLoader)));
     sdm.addDeployRules(

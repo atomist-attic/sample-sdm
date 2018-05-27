@@ -18,6 +18,7 @@ import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
     ArtifactGoal,
+    Goals,
     JustBuildGoal,
     LocalDeploymentGoal,
     not,
@@ -25,6 +26,7 @@ import {
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
+    PushReactionGoal,
     RepositoryDeletionGoals,
     ReviewGoal,
     SoftwareDeliveryMachine,
@@ -56,11 +58,21 @@ import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBo
 import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../../parts/demo/demoEditors";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../../parts/demo/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "../../parts/demo/InMemoryDeploymentStatusManager";
 import { addJavaSupport } from "../../parts/stacks/javaSupport";
 import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
+
+const freezeStore = new InMemoryDeploymentStatusManager();
+
+const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
 
 /**
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
@@ -73,12 +85,13 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         options,
         // Each contributor contributes goals. The infrastructure assembles them into a goal set.
         goalContributors(
-            onAnyPush.setGoals(ReviewGoal),
+            onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
+            whenPush(IsDeploymentFrozen).itMeans("deployment freeze in place").set(ExplainDeploymentFreezeGoal),
             whenPush(IsMaven)
                 .set(JustBuildGoal),
             whenPush(HasSpringBootApplicationClass, not(ToDefaultBranch))
                 .set(LocalDeploymentGoal),
-            whenPush(HasCloudFoundryManifest)
+            whenPush(HasCloudFoundryManifest, not(IsDeploymentFrozen))
                 .set([ArtifactGoal,
                     StagingDeploymentGoal,
                     StagingEndpointGoal,
@@ -86,6 +99,8 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                     ProductionDeploymentGoal,
                     ProductionEndpointGoal]),
         ));
+
+    sdm.addCapabilities(deploymentFreeze(freezeStore));
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,
@@ -126,5 +141,6 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);
+
     return sdm;
 }
