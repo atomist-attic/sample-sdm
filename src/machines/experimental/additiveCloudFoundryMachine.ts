@@ -45,6 +45,7 @@ import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/l
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
+import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
@@ -62,8 +63,6 @@ import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
-import { ImmaterialChangeToJava } from "../evangelicalMachine";
-import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
 
 const DeploymentFreezeGoal = new MessageGoal("deploymentFreeze");
 
@@ -95,7 +94,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
 
     sdm.addGoalImplementation("DeploymentFreezeGoal",
         DeploymentFreezeGoal,
-        executeSendMessageToSlack("Not deploying as deployment is frozen :no_entry:"))
+        executeSendMessageToSlack("Not deploying as deployment is frozen :no_entry:"));
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,
