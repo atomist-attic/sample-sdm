@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-import { Configuration, logger } from "@atomist/automation-client";
+import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    ArtifactGoal, Goals,
+    ArtifactGoal,
+    Goals,
     JustBuildGoal,
-    LocalDeploymentGoal, MessageGoal,
+    LocalDeploymentGoal,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
-    ProductionUndeploymentGoal, PushListenerInvocation, PushReactionGoal, PushTest,
+    ProductionUndeploymentGoal,
+    PushReactionGoal,
     RepositoryDeletionGoals,
     ReviewGoal,
     SoftwareDeliveryMachine,
@@ -37,7 +39,6 @@ import {
     UndeployEverywhereGoals,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { allOf } from "@atomist/sdm/blueprint/dsl/allOf";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
@@ -45,7 +46,6 @@ import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/l
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
 import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
@@ -58,13 +58,21 @@ import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBo
 import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../../parts/demo/demoEditors";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../../parts/demo/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "../../parts/demo/InMemoryDeploymentStatusManager";
 import { addJavaSupport } from "../../parts/stacks/javaSupport";
 import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
 
-const DeploymentFreezeGoal = new MessageGoal("deploymentFreeze");
+const freezeStore = new InMemoryDeploymentStatusManager();
+
+const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
 
 /**
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
@@ -78,7 +86,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         // Each contributor contributes goals. The infrastructure assembles them into a goal set.
         goalContributors(
             onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
-            whenPush(IsDeploymentFrozen).itMeans("deployment freeze in place").set(DeploymentFreezeGoal),
+            whenPush(IsDeploymentFrozen).itMeans("deployment freeze in place").set(ExplainDeploymentFreezeGoal),
             whenPush(IsMaven)
                 .set(JustBuildGoal),
             whenPush(HasSpringBootApplicationClass, not(ToDefaultBranch))
@@ -92,9 +100,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                     ProductionEndpointGoal]),
         ));
 
-    sdm.addGoalImplementation("DeploymentFreezeGoal",
-        DeploymentFreezeGoal,
-        executeSendMessageToSlack("Not deploying as deployment is frozen :no_entry:"));
+    sdm.addCapabilities(deploymentFreeze(freezeStore));
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,
@@ -135,11 +141,6 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);
+
     return sdm;
 }
-
-const IsDeploymentFrozen: PushTest = allOf<PushListenerInvocation>(async pu => {
-    const frozen = parseInt(pu.push.after.sha, 16) % 2 === 0;
-    logger.info(`Delivery is frozen for '${pu.push.after.message}' = ${frozen}`);
-    return frozen;
-});
