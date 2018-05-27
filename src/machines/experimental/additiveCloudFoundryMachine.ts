@@ -58,12 +58,14 @@ import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBo
 import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../../parts/demo/demoEditors";
+
+import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
 import {
     deploymentFreeze,
     ExplainDeploymentFreezeGoal,
     isDeploymentFrozen,
-} from "../../parts/demo/deploymentFreeze";
-import { InMemoryDeploymentStatusManager } from "../../parts/demo/InMemoryDeploymentStatusManager";
+} from "@atomist/sdm/capability/freeze/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "@atomist/sdm/capability/freeze/InMemoryDeploymentStatusManager";
 import { addJavaSupport } from "../../parts/stacks/javaSupport";
 import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";

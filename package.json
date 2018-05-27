@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@atomist/automation-client": "https://r.atomist.com/BJxzuM1V20G",
-    "@atomist/sdm": "https://r.atomist.com/Hk8Z3XiJdJm",
+    "@atomist/sdm": "https://r.atomist.com/Hy8-Q5egd1X",
     "@atomist/slack-messages": "^0.12.1",
     "@atomist/spring-automation": "https://r.atomist.com/S1E-JulqWJQ",
     "@commitlint/config-conventional": "^6.1.3",
