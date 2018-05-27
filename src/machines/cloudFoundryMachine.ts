@@ -17,7 +17,7 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    FromAtomist, Goal, Goals,
+    FromAtomist, Goals,
     hasFile,
     HttpServiceGoals,
     LibraryGoals,
@@ -45,6 +45,7 @@ import {
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
+import { given } from "@atomist/sdm/blueprint/dsl/decisionTree";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
@@ -75,7 +76,6 @@ import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
-import { given } from "@atomist/sdm/blueprint/dsl/decisionTree";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry

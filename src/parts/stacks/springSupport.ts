@@ -16,12 +16,12 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
+    LocalDeploymentGoal,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import {
-    LocalDeploymentGoal,
     LocalEndpointGoal,
     LocalUndeploymentGoal,
 } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
