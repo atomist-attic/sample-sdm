@@ -42,6 +42,12 @@ import {
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "@atomist/sdm/capability/freeze/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "@atomist/sdm/capability/freeze/InMemoryDeploymentStatusManager";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
@@ -58,14 +64,6 @@ import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBo
 import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
 import { addDemoEditors } from "../../parts/demo/demoEditors";
-
-import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
-import {
-    deploymentFreeze,
-    ExplainDeploymentFreezeGoal,
-    isDeploymentFrozen,
-} from "@atomist/sdm/capability/freeze/deploymentFreeze";
-import { InMemoryDeploymentStatusManager } from "@atomist/sdm/capability/freeze/InMemoryDeploymentStatusManager";
 import { addJavaSupport } from "../../parts/stacks/javaSupport";
 import { addNodeSupport } from "../../parts/stacks/nodeSupport";
 import { addSpringSupport } from "../../parts/stacks/springSupport";
