@@ -25,8 +25,8 @@ import { fakeRunWithLogContext } from "@atomist/sdm/util/test/fakeRunWithLogCont
 import * as assert from "power-assert";
 
 import { executeAutofixes } from "@atomist/sdm";
-import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
-import { ApacheHeader } from "./license/addHeader";
+import { AddAtomistTypeScriptHeader } from "../../../src/blueprint/code/autofix/addAtomistHeader";
+import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 
 /**
  * Test an autofix end to end

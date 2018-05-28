@@ -34,6 +34,7 @@ import { ImportDotStarReviewer } from "../../blueprint/code/review/java/importDo
 import { ProvidedDependencyReviewer } from "../../blueprint/code/review/java/maven/providedDependencyReviewer";
 import { HardCodedPropertyReviewer } from "../../blueprint/code/review/java/spring/hardcodedPropertyReviewer";
 import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
+import { addSentry } from "../../commands/editors/sentry/addSentryEditor";
 import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
@@ -58,6 +59,7 @@ export function addSpringSupport(sdm: SoftwareDeliveryMachine) {
         .addSupportingCommands(listLocalDeploys)
         .addEditors(
             () => tryToUpgradeSpringBootVersion,
+            () => addSentry,
         )
         .addGenerators(() => springBootGenerator({
             ...CommonJavaGeneratorConfig,
