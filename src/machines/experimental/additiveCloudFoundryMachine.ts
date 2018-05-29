@@ -42,6 +42,7 @@ import {
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import {
     deploymentFreeze,
     ExplainDeploymentFreezeGoal,
@@ -80,7 +81,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  */
 export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
                                             configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = new SoftwareDeliveryMachine(
+    const sdm = createSoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
         // Each contributor contributes goals. The infrastructure assembles them into a goal set.

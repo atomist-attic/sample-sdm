@@ -16,15 +16,16 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
-    ArtifactGoal,
-    JustBuildGoal,
-} from "@atomist/sdm";
-import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
+import {
+    ArtifactGoal,
+    JustBuildGoal,
+} from "@atomist/sdm";
 import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
@@ -38,7 +39,7 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  */
 export function artifactVerifyingMachine(options: SoftwareDeliveryMachineOptions,
                                          configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = new SoftwareDeliveryMachine("Artifact verifying machine", options,
+    const sdm = createSoftwareDeliveryMachine("Artifact verifying machine", options,
         whenPushSatisfies(IsMaven)
             .itMeans("Push to Maven repo")
             .setGoals(new Goals("Verify artifact", JustBuildGoal, ArtifactGoal)),

@@ -26,6 +26,7 @@ import {
     SoftwareDeliveryMachineOptions,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport } from "../parts/stacks/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
@@ -37,7 +38,7 @@ import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRe
 export function staticAnalysisMachine(options: SoftwareDeliveryMachineOptions,
                                       configuration: Configuration): SoftwareDeliveryMachine {
 
-    const sdm = new SoftwareDeliveryMachine(
+    const sdm = createSoftwareDeliveryMachine(
         "Static analysis SDM",
         options,
         whenPushSatisfies(IsJava, MaterialChangeToJavaRepo)

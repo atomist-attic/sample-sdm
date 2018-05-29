@@ -20,6 +20,7 @@ import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
@@ -39,7 +40,7 @@ import {
 export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
                                        configuration: Configuration): SoftwareDeliveryMachine {
 
-    const sdm = new SoftwareDeliveryMachine("Project creation machine", options);
+    const sdm = createSoftwareDeliveryMachine("Project creation machine", options);
 
     sdm.addGenerators(
         () => springBootGenerator({

@@ -16,11 +16,10 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
-    ConfigureOptions,
-    configureSdm,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
+import { ConfigureOptions, configureSdm } from "@atomist/sdm/blueprint/support/configureSdm";
 import { tryRolarLogFactory } from "./blueprint/log/logFactory";
 import { additiveCloudFoundryMachine } from "./machines/experimental/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";

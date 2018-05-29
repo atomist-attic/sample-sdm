@@ -52,7 +52,7 @@ export function addSpringSupport(sdm: SoftwareDeliveryMachine) {
                 .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
                 .using(
                     {
-                        deployer: mavenSourceDeployer(sdm.opts.projectLoader),
+                        deployer: mavenSourceDeployer(sdm.options.projectLoader),
                         targeter: ManagedDeploymentTargeter,
                     },
                 ))

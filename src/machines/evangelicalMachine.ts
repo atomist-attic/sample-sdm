@@ -15,8 +15,9 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import { whenPushSatisfies } from "@atomist/sdm";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { whenPushSatisfies } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
 import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
@@ -41,7 +42,7 @@ export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
  */
 export function evangelicalMachine(options: SoftwareDeliveryMachineOptions,
                                    configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = new SoftwareDeliveryMachine(
+    const sdm = createSoftwareDeliveryMachine(
         "Helpful software delivery machine. You need to be saved.",
         options,
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))

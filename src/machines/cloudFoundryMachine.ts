@@ -46,6 +46,7 @@ import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
 import { given } from "@atomist/sdm/blueprint/dsl/decisionTree";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
@@ -84,7 +85,7 @@ import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeR
  */
 export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
                                     configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = new SoftwareDeliveryMachine(
+    const sdm = createSoftwareDeliveryMachine(
         "CloudFoundry software delivery machine",
         options,
         given<Goals>(IsMaven).itMeans("Maven")

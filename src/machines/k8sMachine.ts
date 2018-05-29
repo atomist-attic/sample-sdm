@@ -16,6 +16,7 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
+    createSoftwareDeliveryMachine,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
@@ -70,7 +71,7 @@ import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
 export function k8sMachine(options: SoftwareDeliveryMachineOptions,
                            configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = new SoftwareDeliveryMachine(
+    const sdm = createSoftwareDeliveryMachine(
         "K8s software delivery machine",
         options,
         whenPushSatisfies(IsMaven, not(MaterialChangeToJavaRepo))
