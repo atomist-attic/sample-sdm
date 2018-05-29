@@ -21,7 +21,6 @@ import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
 import { SonarCubeOptions, SonarQubeReviewer } from "../../blueprint/code/review/SonarQubeReviewer";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
-import { CloudReadinessIssueManager } from "../../blueprint/issue/cloudReadinessIssueManager";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
@@ -41,7 +40,6 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListeners(
             slackReviewListener(),
-            CloudReadinessIssueManager,
         )
         .addEditors(
             () => addApacheLicenseHeaderEditor,
