@@ -60,18 +60,18 @@ import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetD
 import {
     cloudFoundryProductionDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
-} from "../../blueprint/deploy/cloudFoundryDeploy";
-import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
-import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
-import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
-import { CloudReadinessChecks } from "../../pack/cloud-readiness/cloudReadiness";
-import { NodeSupport } from "../../pack/node/nodeSupport";
-import { SentrySupport } from "../../pack/sentry/sentrySupport";
-import { HasSpringBootApplicationClass } from "../../pack/spring/pushtest/springPushTests";
-import { SpringSupport } from "../../pack/spring/springSupport";
-import { addDemoEditors } from "../../parts/demo/demoEditors";
-import { addJavaSupport } from "../../parts/stacks/javaSupport";
-import { addTeamPolicies } from "../../parts/team/teamPolicies";
+} from "../blueprint/deploy/cloudFoundryDeploy";
+import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
+import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
+import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
+import { NodeSupport } from "../pack/node/nodeSupport";
+import { SentrySupport } from "../pack/sentry/sentrySupport";
+import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
+import { SpringSupport } from "../pack/spring/springSupport";
+import { addDemoEditors } from "../parts/demo/demoEditors";
+import { addJavaSupport } from "../parts/stacks/javaSupport";
+import { addTeamPolicies } from "../parts/team/teamPolicies";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
