@@ -147,7 +147,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
-    addJavaSupport(sdm, configuration);
+    addJavaSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);

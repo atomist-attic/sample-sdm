@@ -27,9 +27,9 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
+import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { addCheckstyleSupport } from "../parts/stacks/checkstyleSupport";
 
 /**
  * Assemble a machine that performs only static analysis.
@@ -46,7 +46,7 @@ export function staticAnalysisMachine(options: SoftwareDeliveryMachineOptions,
         whenPushSatisfies(IsJava, MaterialChangeToJavaRepo)
             .itMeans("Change to Java")
             .setGoals(new Goals("Review only", ReviewGoal)));
-    addCheckstyleSupport(sdm, options);
+    sdm.addExtensionPacks(CheckstyleSupport);
     sdm.addReviewerRegistrations(rodHatesYaml, hasNoReadMe);
 
     addDemoEditors(sdm);

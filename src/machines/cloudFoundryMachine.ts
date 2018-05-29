@@ -183,7 +183,7 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
         )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
-    addJavaSupport(sdm, configuration);
+    addJavaSupport(sdm);
 
     sdm.addExtensionPacks(
         SpringSupport,

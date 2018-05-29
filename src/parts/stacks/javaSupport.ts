@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
-import {
-    MavenFingerprinter,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
+import { MavenFingerprinter, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { AddAtomistJavaHeader } from "../../blueprint/code/autofix/addAtomistHeader";
-import { addCheckstyleSupport } from "./checkstyleSupport";
+import { CheckstyleSupport } from "../../pack/checkstyle/checkstyleSupport";
 
 /**
  * Configuration common to Java SDMs, wherever they deploy
  * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
  * @param {{useCheckstyle: boolean}} opts
  */
-export function addJavaSupport(softwareDeliveryMachine: SoftwareDeliveryMachine,
-                               configuration: Configuration) {
-    addCheckstyleSupport(softwareDeliveryMachine, configuration);
+export function addJavaSupport(softwareDeliveryMachine: SoftwareDeliveryMachine) {
+    softwareDeliveryMachine.addExtensionPacks(CheckstyleSupport);
     softwareDeliveryMachine
         .addFingerprinterRegistrations(new MavenFingerprinter())
         .addAutofixes(AddAtomistJavaHeader);
