@@ -64,14 +64,14 @@ import {
 import { LocalExecutableJarDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
 import { SuggestAddingCloudFoundryManifest } from "../../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoundryManifest";
+import { CloudReadinessChecks } from "../../pack/cloud-readiness/cloudReadiness";
+import { NodeSupport } from "../../pack/node/nodeSupport";
+import { SentrySupport } from "../../pack/sentry/sentrySupport";
+import { HasSpringBootApplicationClass } from "../../pack/spring/pushtest/springPushTests";
+import { SpringSupport } from "../../pack/spring/springSupport";
 import { addDemoEditors } from "../../parts/demo/demoEditors";
 import { addJavaSupport } from "../../parts/stacks/javaSupport";
-import { addNodeSupport } from "../../parts/stacks/nodeSupport";
-import { SpringSupport } from "../../pack/spring/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
-import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
-import { SentrySupport } from "../../pack/sentry/sentrySupport";
-import { CloudReadinessChecks } from "../../pack/cloud-readiness/cloudReadiness";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -111,6 +111,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         SpringSupport,
         SentrySupport,
         CloudReadinessChecks,
+        NodeSupport,
     );
 
     sdm.addBuildRules(
@@ -147,7 +148,6 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
     addJavaSupport(sdm, configuration);
-    addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);

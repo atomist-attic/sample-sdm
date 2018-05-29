@@ -17,8 +17,8 @@
 import { Parameter } from "@atomist/automation-client";
 import { JavaIdentifierRegExp } from "@atomist/sdm";
 import { camelize } from "tslint/lib/utils";
-import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
-import { JavaProjectCreationParameters } from "../JavaProjectCreationParameters";
+import { JavaGeneratorConfig } from "../../java/support/JavaGeneratorConfig";
+import { JavaProjectCreationParameters } from "../../java/support/JavaProjectCreationParameters";
 
 /**
  * Parameters for creating Spring Boot apps.

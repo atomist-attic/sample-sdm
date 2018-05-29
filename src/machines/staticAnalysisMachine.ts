@@ -27,9 +27,9 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
+import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addCheckstyleSupport } from "../parts/stacks/checkstyleSupport";
-import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 
 /**
  * Assemble a machine that performs only static analysis.

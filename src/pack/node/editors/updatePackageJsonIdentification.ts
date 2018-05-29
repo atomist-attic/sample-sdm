@@ -16,7 +16,7 @@
 
 import { logger } from "@atomist/automation-client";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
-import { findAuthorName } from "../../generators/common/findAuthorName";
+import { findAuthorName } from "../../../commands/generators/common/findAuthorName";
 
 export function updatePackageJsonIdentification(appName: string,
                                                 description: string,

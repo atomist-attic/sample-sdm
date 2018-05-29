@@ -22,7 +22,7 @@ import * as utils from "@atomist/automation-client/project/util/projectUtils";
 
 import { HandleCommand } from "@atomist/automation-client";
 import { generatorHandler } from "@atomist/sdm/common/command/generator/generatorHandler";
-import { JavaGeneratorConfig } from "../JavaGeneratorConfig";
+import { JavaGeneratorConfig } from "../../java/support/JavaGeneratorConfig";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
 import { transformSeedToCustomProject } from "./transformSeedToCustomProject";
 

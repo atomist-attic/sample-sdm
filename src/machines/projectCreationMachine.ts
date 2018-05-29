@@ -24,8 +24,8 @@ import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFac
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
-import { springBootGenerator } from "../commands/generators/java/spring/springBootGenerator";
-import { nodeGenerator } from "../commands/generators/node/nodeGenerator";
+import { nodeGenerator } from "../pack/node/generators/nodeGenerator";
+import { springBootGenerator } from "../pack/spring/generators/springBootGenerator";
 import {
     CommonGeneratorConfig,
     CommonJavaGeneratorConfig,

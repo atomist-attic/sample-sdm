@@ -15,47 +15,45 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import {
-    PackageLockFingerprinter,
-    SoftwareDeliveryMachine,
-    tagRepo,
-    tslintFix,
-} from "@atomist/sdm";
+import { ExtensionPack, PackageLockFingerprinter, SoftwareDeliveryMachine, tagRepo, tslintFix } from "@atomist/sdm";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
 import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
-import { nodeGenerator } from "../../commands/generators/node/nodeGenerator";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
-import { CommonTypeScriptErrors } from "../team/commonTypeScriptErrors";
-import { DontImportOwnIndex } from "../team/dontImportOwnIndex";
+import { CommonTypeScriptErrors } from "../../parts/team/commonTypeScriptErrors";
+import { DontImportOwnIndex } from "../../parts/team/dontImportOwnIndex";
+import { nodeGenerator } from "./generators/nodeGenerator";
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy
  * @param {SoftwareDeliveryMachine} sdm
  * @param options config options
  */
-export function addNodeSupport(sdm: SoftwareDeliveryMachine) {
-    sdm.addGenerators(() => nodeGenerator({
+export const NodeSupport: ExtensionPack = {
+    name: "Node support",
+    configure: (sdm: SoftwareDeliveryMachine) => {
+        sdm.addGenerators(() => nodeGenerator({
             ...CommonGeneratorConfig,
             seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
         }))
-        .addGenerators(() => nodeGenerator({
-            ...CommonGeneratorConfig,
-            seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
-            intent: "create minimal node",
-        }))
-        .addNewRepoWithCodeActions(
-            tagRepo(nodeTagger),
-        )
-        .addAutofixes(
-            AddAtomistTypeScriptHeader,
-            tslintFix,
-            AddBuildScript,
-        )
-        .addReviewerRegistrations(
-            CommonTypeScriptErrors,
-            DontImportOwnIndex,
-        )
-        .addFingerprinterRegistrations(new PackageLockFingerprinter());
-}
+            .addGenerators(() => nodeGenerator({
+                ...CommonGeneratorConfig,
+                seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
+                intent: "create minimal node",
+            }))
+            .addNewRepoWithCodeActions(
+                tagRepo(nodeTagger),
+            )
+            .addAutofixes(
+                AddAtomistTypeScriptHeader,
+                tslintFix,
+                AddBuildScript,
+            )
+            .addReviewerRegistrations(
+                CommonTypeScriptErrors,
+                DontImportOwnIndex,
+            )
+            .addFingerprinterRegistrations(new PackageLockFingerprinter());
+    },
+};

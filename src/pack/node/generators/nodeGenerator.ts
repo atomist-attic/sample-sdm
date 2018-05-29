@@ -22,8 +22,8 @@ import {
     generatorHandler,
 } from "@atomist/automation-client/operations/generate/generatorToCommand";
 import { GeneratorConfig } from "@atomist/sdm";
-import { updatePackageJsonIdentification } from "../../editors/node/updatePackageJsonIdentification";
-import { updateReadmeTitle } from "../../editors/updateReadmeTitle";
+import { updateReadmeTitle } from "../../../commands/editors/updateReadmeTitle";
+import { updatePackageJsonIdentification } from "../editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParameters } from "./NodeProjectCreationParameters";
 
 export function nodeGenerator(config: GeneratorConfig,

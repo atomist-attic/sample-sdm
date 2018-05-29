@@ -70,17 +70,17 @@ import {
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
+import { NodeSupport } from "../pack/node/nodeSupport";
+import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
+import { SentrySupport } from "../pack/sentry/sentrySupport";
+import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
+import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
+import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
-import { addNodeSupport } from "../parts/stacks/nodeSupport";
-import { SpringSupport } from "../pack/spring/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
-import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
-import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeRepo";
-import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
@@ -189,8 +189,8 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
         SpringSupport,
         SentrySupport,
         CloudReadinessChecks,
+        NodeSupport,
     );
-    addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);

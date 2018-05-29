@@ -24,9 +24,9 @@ import {
     replaceReadmeTitle,
     setAtomistTeamInApplicationYml,
     springBootGenerator,
-} from "../../../../src/commands/generators/java/spring/springBootGenerator";
-import { SpringProjectCreationParameters } from "../../../../src/commands/generators/java/spring/SpringProjectCreationParameters";
-import { transformSeedToCustomProject } from "../../../../src/commands/generators/java/spring/transformSeedToCustomProject";
+} from "../../../../src/pack/spring/generators/springBootGenerator";
+import { SpringProjectCreationParameters } from "../../../../src/pack/spring/generators/SpringProjectCreationParameters";
+import { transformSeedToCustomProject } from "../../../../src/pack/spring/generators/transformSeedToCustomProject";
 import { springBootPom } from "../../../editors/TestPoms";
 import { fakeContext } from "../../../FakeContext";
 

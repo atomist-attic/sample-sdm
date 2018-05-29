@@ -15,8 +15,8 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { whenPushSatisfies } from "@atomist/sdm";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
 import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
 import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
@@ -30,9 +30,9 @@ import { springBootTagger } from "@atomist/spring-automation/commands/tag/spring
 import { EnableDeployOnCloudFoundryManifestAddition } from "../blueprint/deploy/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
 import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
+import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");

@@ -15,18 +15,18 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { ExtensionPack, LocalDeploymentGoal, } from "@atomist/sdm";
+import { ExtensionPack, LocalDeploymentGoal } from "@atomist/sdm";
 import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
-import { LocalEndpointGoal, LocalUndeploymentGoal, } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
+import { LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
 import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
-import { tryToUpgradeSpringBootVersion } from "../../commands/editors/spring/tryToUpgradeSpringBootVersion";
-import { springBootGenerator } from "../../commands/generators/java/spring/springBootGenerator";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
+import { tryToUpgradeSpringBootVersion } from "./editors/tryToUpgradeSpringBootVersion";
+import { springBootGenerator } from "./generators/springBootGenerator";
 
 export const SpringSupport: ExtensionPack = {
     name: "Spring support",

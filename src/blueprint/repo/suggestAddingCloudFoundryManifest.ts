@@ -23,7 +23,7 @@ import { IsNode } from "@atomist/sdm";
 import { allPredicatesSatisfied, anyPredicateSatisfied } from "@atomist/sdm";
 import * as slack from "@atomist/slack-messages/SlackMessages";
 import { AddCloudFoundryManifestCommandName } from "../../commands/editors/pcf/addCloudFoundryManifest";
-import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
+import { HasSpringBootApplicationClass } from "../../pack/spring/pushtest/springPushTests";
 
 /**
  * PushTest to determine whether we know how to deploy a project
