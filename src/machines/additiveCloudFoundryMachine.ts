@@ -17,7 +17,7 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    ArtifactGoal,
+    ArtifactGoal, goalContributors,
     Goals,
     JustBuildGoal,
     LocalDeploymentGoal,
@@ -27,36 +27,34 @@ import {
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
     PushReactionGoal,
-    RepositoryDeletionGoals,
     ReviewGoal,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
     StagingEndpointGoal,
-    StagingUndeploymentGoal,
     StagingVerifiedGoal,
     ToDefaultBranch,
-    UndeployEverywhereGoals,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
-import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
-import { goalContributors } from "@atomist/sdm/blueprint/dsl/goalContribution";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
+import * as build from "@atomist/sdm/dsl/buildDsl";
+import * as deploy from "@atomist/sdm/dsl/deployDsl";
+import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
+import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
+import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
+import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
+import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
+import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import {
     deploymentFreeze,
     ExplainDeploymentFreezeGoal,
     isDeploymentFrozen,
-} from "@atomist/sdm/capability/freeze/deploymentFreeze";
-import { InMemoryDeploymentStatusManager } from "@atomist/sdm/capability/freeze/InMemoryDeploymentStatusManager";
-import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
-import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+} from "@atomist/sdm/pack/freeze/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "@atomist/sdm/pack/freeze/InMemoryDeploymentStatusManager";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import {
     cloudFoundryProductionDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
@@ -97,7 +95,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                 .setGoals(JustBuildGoal),
             whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
                 .setGoals(LocalDeploymentGoal),
-            whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen))
+            whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
                 .setGoals([ArtifactGoal,
                     StagingDeploymentGoal,
                     StagingEndpointGoal,

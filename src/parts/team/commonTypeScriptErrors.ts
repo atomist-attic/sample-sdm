@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
+import { ReviewerRegistration } from "@atomist/sdm";
+import { patternMatchReviewer } from "@atomist/sdm/code/review/patternMatchReviewer";
 
 export const CommonTypeScriptErrors: ReviewerRegistration = patternMatchReviewer(
     "Dangerous TypeScript Errors of the Past",

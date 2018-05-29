@@ -17,51 +17,30 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    FromAtomist,
+    FromAtomist, given,
     Goals,
-    hasFile,
-    HttpServiceGoals,
-    LibraryGoals,
-    nodeBuilder,
-    NoGoals,
+    hasFile, IsDeployEnabled, NamedSeedRepo,
     not,
-    NpmBuildGoals,
-    NpmDeployGoals,
-    NpmDockerGoals,
-    NpmKubernetesDeployGoals,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    RepositoryDeletionGoals,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
     StagingEndpointGoal,
-    StagingUndeploymentGoal,
     ToDefaultBranch,
-    ToPublicRepo,
-    UndeployEverywhereGoals,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
-import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
 
-import { given } from "@atomist/sdm/blueprint/dsl/decisionTree";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
-import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
-import { npmCustomBuilder } from "@atomist/sdm/common/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
-import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
-import { HasDockerfile } from "@atomist/sdm/common/listener/support/pushtest/docker/dockerPushTests";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { NamedSeedRepo } from "@atomist/sdm/common/listener/support/pushtest/NamedSeedRepo";
-import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
-import { HasCloudFoundryManifest } from "@atomist/sdm/common/listener/support/pushtest/pcf/cloudFoundryManifestPushTest";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
+import * as build from "@atomist/sdm/dsl/buildDsl";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
+import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
+import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
+import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
@@ -81,6 +60,29 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
+
+import * as deploy from "@atomist/sdm/dsl/deployDsl";
+import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
+import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
+import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
+
+import { NoGoals, StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
+import {
+    HttpServiceGoals,
+    RepositoryDeletionGoals,
+    UndeployEverywhereGoals,
+} from "@atomist/sdm/goal/common/httpServiceGoals";
+import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
+import {
+    NpmBuildGoals,
+    NpmDeployGoals,
+    NpmDockerGoals,
+    NpmKubernetesDeployGoals,
+} from "@atomist/sdm/goal/common/npmGoals";
+import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
+import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry

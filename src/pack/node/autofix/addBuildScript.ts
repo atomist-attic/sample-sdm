@@ -21,7 +21,7 @@ import {
     AutofixRegistration,
     editorAutofixRegistration,
 } from "@atomist/sdm";
-import { IsNode } from "@atomist/sdm";
+import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import * as _ from "lodash";
 
 export const AddBuildScript: AutofixRegistration = editorAutofixRegistration({

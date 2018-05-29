@@ -16,12 +16,12 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { ExtensionPack, LocalDeploymentGoal } from "@atomist/sdm";
-import * as deploy from "@atomist/sdm/blueprint/dsl/deployDsl";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/common/delivery/deploy/local/ManagedDeployments";
-import { LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/common/delivery/goals/common/commonGoals";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+import * as deploy from "@atomist/sdm/dsl/deployDsl";
+import { LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
+import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";

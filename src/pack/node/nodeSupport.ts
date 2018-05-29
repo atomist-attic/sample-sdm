@@ -15,13 +15,16 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { ExtensionPack, PackageLockFingerprinter, SoftwareDeliveryMachine, tagRepo, tslintFix } from "@atomist/sdm";
+import { ExtensionPack, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { PackageLockFingerprinter } from "@atomist/sdm/pack/node/PackageLockFingerprinter";
+import { tslintFix } from "@atomist/sdm/pack/node/tslint";
+import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
-import { AddBuildScript } from "../../blueprint/code/autofix/addBuildScript";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../../parts/team/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../parts/team/dontImportOwnIndex";
+import { AddBuildScript } from "./autofix/addBuildScript";
 import { nodeGenerator } from "./generators/nodeGenerator";
 
 /**
@@ -36,6 +39,11 @@ export const NodeSupport: ExtensionPack = {
             ...CommonGeneratorConfig,
             seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
+        }));
+        sdm.addGenerators(() => nodeGenerator({
+            ...CommonGeneratorConfig,
+            seed: new GitHubRepoRef("atomist", "sdm"),
+            intent: "copy sdm",
         }))
             .addGenerators(() => nodeGenerator({
                 ...CommonGeneratorConfig,
