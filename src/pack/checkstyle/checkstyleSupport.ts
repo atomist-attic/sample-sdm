@@ -32,7 +32,6 @@ export const CheckstyleSupport: ExtensionPack = {
     name: "Checkstyle",
     configure: (softwareDeliveryMachine: SoftwareDeliveryMachine) => {
         const opts = softwareDeliveryMachine.configuration.sdm.checkstyle as CheckstyleSupportOptions;
-
         if (opts && opts.enabled) {
             const checkStylePath = opts.path;
             if (!!checkStylePath) {

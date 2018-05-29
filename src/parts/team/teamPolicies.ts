@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { Configuration, logger } from "@atomist/automation-client";
+import { logger } from "@atomist/automation-client";
 import { FingerprintListener, GraphGoalsToSlack, OnDryRunBuildComplete, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
 import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
-import { SonarCubeOptions, SonarQubeReviewer } from "../../blueprint/code/review/SonarQubeReviewer";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
@@ -26,13 +25,13 @@ import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
 import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 import { codeMetrics } from "../../pack/codemetrics/codeMetrics";
+import { SonarQubeSupport } from "../../pack/sonarqube/sonarQubeSupport";
 
 /**
  * Set up team policies independent of specific stacks
  * @param {SoftwareDeliveryMachine} sdm
  */
-export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
-                                configuration: Configuration) {
+export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     sdm
         .addNewIssueListeners(requestDescription, capitalizer)
         .addClosedIssueListeners(thankYouYouRock)
@@ -54,9 +53,9 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
 
-    if (configuration.sdm.sonar && configuration.sdm.sonar.enabled) {
+    if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
         logger.info("Enabling SonarQube integration");
-        sdm.addReviewerRegistrations(SonarQubeReviewer(configuration.sdm.sonar as SonarCubeOptions));
+        sdm.addExtensionPacks(SonarQubeSupport);
     } else {
         logger.info("SonarQube integration not enabled");
     }

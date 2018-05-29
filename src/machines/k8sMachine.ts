@@ -126,7 +126,7 @@ export function k8sMachine(options: SoftwareDeliveryMachineOptions,
 
     sdm.addExtensionPacks(SpringSupport);
     addJavaSupport(sdm);
-    addTeamPolicies(sdm, configuration);
+    addTeamPolicies(sdm);
 
     addDemoEditors(sdm);
     return sdm;

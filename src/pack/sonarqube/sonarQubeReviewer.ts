@@ -10,7 +10,7 @@ export interface SonarCubeOptions {
     token: string;
 }
 
-export function SonarQubeReviewer(options: SonarCubeOptions): ReviewerRegistration {
+export function sonarQubeReviewer(options: SonarCubeOptions): ReviewerRegistration {
     return {
         name: "SonarQube review",
         pushTest: ToDefaultBranch,

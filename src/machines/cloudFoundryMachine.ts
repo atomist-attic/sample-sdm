@@ -191,7 +191,7 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
         CloudReadinessChecks,
         NodeSupport,
     );
-    addTeamPolicies(sdm, configuration);
+    addTeamPolicies(sdm);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);
     return sdm;
