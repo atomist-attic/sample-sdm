@@ -1,6 +1,6 @@
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import { editorCommand, VersionedArtifact } from "@atomist/sdm";
+import { editorCommand } from "@atomist/sdm";
 import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
 import { addDependencyEditor } from "@atomist/spring-automation/commands/editor/maven/addDependencyEditor";
@@ -8,6 +8,7 @@ import { addDependencyEditor } from "@atomist/spring-automation/commands/editor/
 import { HandleCommand, Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
+import { VersionedArtifact } from "@atomist/sdm/internal/delivery/build/local/maven/VersionedArtifact";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",

@@ -18,10 +18,10 @@ import { Configuration } from "@atomist/automation-client";
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
-import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { nodeGenerator } from "../pack/node/generators/nodeGenerator";

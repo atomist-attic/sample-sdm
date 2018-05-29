@@ -16,42 +16,31 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
-    createSoftwareDeliveryMachine,
+    FromAtomist, IsDeployEnabled, not,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
+    ToDefaultBranch, whenPushSatisfies,
 } from "@atomist/sdm";
 import {
-    NoGoals,
     ProductionDeploymentGoal,
     StagingDeploymentGoal,
 } from "@atomist/sdm";
-import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
-import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
-import { K8sAutomationBuilder } from "@atomist/sdm/common/delivery/build/k8s/K8AutomationBuilder";
-import {
-    HttpServiceGoals,
-    LocalDeploymentGoals,
-} from "@atomist/sdm/common/delivery/goals/common/httpServiceGoals";
-import { LibraryGoals } from "@atomist/sdm/common/delivery/goals/common/libraryGoals";
-import {
-    NpmBuildGoals,
-    NpmDeployGoals,
-} from "@atomist/sdm/common/delivery/goals/common/npmGoals";
-import {
-    FromAtomist,
-    ToDefaultBranch,
-    ToPublicRepo,
-} from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
-import { IsDeployEnabled } from "@atomist/sdm/common/listener/support/pushtest/deployPushTests";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { IsNode } from "@atomist/sdm/common/listener/support/pushtest/node/nodePushTests";
-import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm/common/verify/lookFor200OnEndpointRootGet";
+import * as build from "@atomist/sdm/dsl/buildDsl";
+import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
+import { HttpServiceGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
+import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
+import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/goal/common/npmGoals";
 import {
     disableDeploy,
     enableDeploy,
 } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
+import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
+import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
+import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import {
     K8sProductionDomain,
     K8sTestingDomain,
@@ -65,6 +54,7 @@ import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChange
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 

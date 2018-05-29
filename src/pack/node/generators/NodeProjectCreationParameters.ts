@@ -19,8 +19,7 @@ import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { GitHubRepoCreationParameters } from "@atomist/automation-client/operations/generate/GitHubRepoCreationParameters";
 import { NewRepoCreationParameters } from "@atomist/automation-client/operations/generate/NewRepoCreationParameters";
-import { GeneratorConfig } from "@atomist/sdm";
-import { SeedDrivenGeneratorParametersSupport } from "@atomist/sdm/common/command/generator/SeedDrivenGeneratorParametersSupport";
+import { GeneratorConfig, SeedDrivenGeneratorParametersSupport } from "@atomist/sdm";
 
 /**
  * Parameters for creating a Node project.

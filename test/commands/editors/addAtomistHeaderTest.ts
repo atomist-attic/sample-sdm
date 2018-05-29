@@ -20,11 +20,11 @@ import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFil
 import { successOn } from "@atomist/automation-client/action/ActionResult";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
-import { SingleProjectLoader } from "@atomist/sdm";
 import { fakeRunWithLogContext } from "@atomist/sdm/util/test/fakeRunWithLogContext";
 import * as assert from "power-assert";
 
-import { executeAutofixes } from "@atomist/sdm";
+import { executeAutofixes } from "@atomist/sdm/code/autofix/executeAutofixes";
+import { SingleProjectLoader } from "@atomist/sdm/util/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/blueprint/code/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 

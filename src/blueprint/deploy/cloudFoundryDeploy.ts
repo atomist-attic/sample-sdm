@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { DeployerInfo, PushImpactListener, PushReactionRegistration } from "@atomist/sdm";
-import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryBlueGreenDeployer";
-import { CloudFoundryInfo } from "@atomist/sdm/common/delivery/deploy/pcf/CloudFoundryTarget";
-import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/common/delivery/deploy/pcf/EnvironmentCloudFoundryTarget";
-import { ProjectLoader } from "@atomist/sdm/common/repo/ProjectLoader";
+import { DeployerInfo, ProjectLoader, PushImpactListener, PushReactionRegistration } from "@atomist/sdm";
 import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/pack/pcf/CloudFoundryBlueGreenDeployer";
+import { CloudFoundryInfo } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";
+import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/pack/pcf/EnvironmentCloudFoundryTarget";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "../../commands/editors/pcf/addCloudFoundryManifest";
 

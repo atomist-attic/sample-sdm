@@ -17,10 +17,11 @@
 import { DefaultReviewComment, ReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { File } from "@atomist/automation-client/project/File";
 import { Project } from "@atomist/automation-client/project/Project";
-import { IsMaven, ReviewerRegistration } from "@atomist/sdm";
+import { ReviewerRegistration } from "@atomist/sdm";
 import { promisify } from "util";
 import * as xml2js from "xml2js";
 
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as _ from "lodash";
 
 export const ProvidedDependencyCategory = "Use of `provided` dependencies in Maven POM";

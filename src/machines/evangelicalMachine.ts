@@ -15,16 +15,19 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import { whenPushSatisfies } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
-import { MessageGoal } from "@atomist/sdm/common/delivery/goals/common/MessageGoal";
-import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { not } from "@atomist/sdm/common/listener/support/pushtest/pushTestUtils";
-import { tagRepo } from "@atomist/sdm/common/listener/support/tagRepo";
-import { executeSendMessageToSlack } from "@atomist/sdm/common/slack/executeSendMessageToSlack";
+import {
+    executeSendMessageToSlack,
+    MessageGoal,
+    not,
+    SoftwareDeliveryMachine,
+    ToDefaultBranch,
+    whenPushSatisfies,
+} from "@atomist/sdm";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
+import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../blueprint/deploy/cloudFoundryDeploy";

@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-import {
-    Deployer,
-    executableJarDeployer,
-    ManagedDeploymentTargetInfo,
-    mavenDeployer,
-    ProjectLoader,
-    StartupInfo,
-} from "@atomist/sdm";
+import { Deployer, ProjectLoader } from "@atomist/sdm";
+import { executableJarDeployer } from "@atomist/sdm/internal/delivery/deploy/local/jar/executableJarDeployer";
+import { StartupInfo } from "@atomist/sdm/internal/delivery/deploy/local/LocalDeployerOptions";
+import { ManagedDeploymentTargetInfo } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
+import { mavenDeployer } from "@atomist/sdm/internal/delivery/deploy/local/maven/mavenSourceDeployer";
 
 /** Successs patterns when Spring Boot starts
  * @type {RegExp}

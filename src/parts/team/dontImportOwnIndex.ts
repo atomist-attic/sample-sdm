@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { patternMatchReviewer, ReviewerRegistration } from "@atomist/sdm";
+import { ReviewerRegistration } from "@atomist/sdm";
+import { patternMatchReviewer } from "@atomist/sdm/code/review/patternMatchReviewer";
 
 /**
  * Importing a project's index file is a recipe for circular import hell

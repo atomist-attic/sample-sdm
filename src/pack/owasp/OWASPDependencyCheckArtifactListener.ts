@@ -1,6 +1,5 @@
-import { ArtifactListenerRegistration } from "@atomist/sdm/common/listener/ArtifactListener";
-import { ToDefaultBranch } from "@atomist/sdm/common/listener/support/pushtest/commonPushTests";
-import { LoggingProgressLog } from "@atomist/sdm/common/log/LoggingProgressLog";
+import { ArtifactListenerRegistration, ToDefaultBranch } from "@atomist/sdm";
+import { LoggingProgressLog } from "@atomist/sdm/log/LoggingProgressLog";
 import {
     asSpawnCommand,
     spawnAndWatch,

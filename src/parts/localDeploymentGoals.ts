@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Goals, LocalDeploymentGoal, LocalEndpointGoal, PushReactionGoal } from "@atomist/sdm";
+import { Goals, LocalDeploymentGoal, PushReactionGoal } from "@atomist/sdm";
+import { LocalEndpointGoal } from "@atomist/sdm/goal/common/commonGoals";
 
 export const LocalDeploymentGoals = new Goals(
     "Local Deployment",

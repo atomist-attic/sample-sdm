@@ -16,10 +16,10 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { deepLink } from "@atomist/automation-client/util/gitHub";
-import { ReviewListener } from "@atomist/sdm/common/listener/ReviewListener";
 import { ImportDotStarCategory } from "../../blueprint/code/review/java/importDotStarReviewer";
 import { CommentsFormatter, singleIssueManagingReviewListener } from "../../blueprint/issue/issueManagingReviewListeners";
 
+import { ReviewListener } from "@atomist/sdm";
 import * as _ from "lodash";
 import { ImportFileIoCategory } from "../../blueprint/code/review/java/fileIoImportReviewer";
 import { HardcodePropertyCategory } from "../../blueprint/code/review/java/spring/hardcodedPropertyReviewer";

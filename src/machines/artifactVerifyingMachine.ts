@@ -15,21 +15,19 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
+import { whenPushSatisfies } from "@atomist/sdm";
 import {
-    SoftwareDeliveryMachine,
+    ArtifactGoal, Goals,
+    JustBuildGoal, SoftwareDeliveryMachine,
+} from "@atomist/sdm";
+import * as build from "@atomist/sdm/dsl/buildDsl";
+import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
+import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import {
     SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm";
-import {
-    ArtifactGoal,
-    JustBuildGoal,
-} from "@atomist/sdm";
-import * as build from "@atomist/sdm/blueprint/dsl/buildDsl";
-import { whenPushSatisfies } from "@atomist/sdm/blueprint/dsl/goalDsl";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
-import { MavenBuilder } from "@atomist/sdm/common/delivery/build/local/maven/MavenBuilder";
-import { Goals } from "@atomist/sdm/common/delivery/goals/Goals";
-import { IsMaven } from "@atomist/sdm/common/listener/support/pushtest/jvm/jvmPushTests";
-import { createEphemeralProgressLog } from "@atomist/sdm/common/log/EphemeralProgressLog";
+} from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as fs from "fs";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 

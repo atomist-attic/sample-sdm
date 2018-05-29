@@ -2,12 +2,11 @@ import { logger } from "@atomist/automation-client";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import {
     ExtensionPack,
-    FingerprinterRegistration,
+    FingerprinterRegistration, FingerprintListener,
     PushTest,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { TypedFingerprint } from "@atomist/sdm/common/delivery/code/fingerprint/support/TypedFingerprint";
-import { FingerprintListener } from "@atomist/sdm/common/listener/FingerprintListener";
+import { TypedFingerprint } from "@atomist/sdm/code/fingerprint/TypedFingerprint";
 import { CodeStats, reportForLanguages } from "@atomist/sdm/util/sloc/slocReport";
 
 const CodeMetricsFingerprintName = "CodeMetrics";

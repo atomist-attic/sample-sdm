@@ -17,9 +17,9 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
-import { ConfigureOptions, configureSdm } from "@atomist/sdm/blueprint/support/configureSdm";
+import { ConfigureOptions, configureSdm } from "@atomist/sdm/internal/machine/configureSdm";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { tryRolarLogFactory } from "./blueprint/log/logFactory";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";

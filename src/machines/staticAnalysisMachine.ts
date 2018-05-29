@@ -19,14 +19,14 @@ import { DefaultReviewComment } from "@atomist/automation-client/operations/revi
 import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
 import {
     Goals,
-    IsJava,
     ReviewerRegistration,
     ReviewGoal,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/blueprint/machineFactory";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { addDemoEditors } from "../parts/demo/demoEditors";

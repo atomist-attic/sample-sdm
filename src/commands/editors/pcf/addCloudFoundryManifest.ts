@@ -19,9 +19,9 @@ import { PullRequest } from "@atomist/automation-client/operations/edit/editMode
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { editorCommand } from "@atomist/sdm";
 import { EmptyParameters } from "@atomist/sdm";
-import { MavenProjectIdentifier } from "@atomist/sdm";
-import { NodeProjectIdentifier } from "@atomist/sdm";
-import { CloudFoundryManifestPath } from "@atomist/sdm";
+import { MavenProjectIdentifier } from "@atomist/sdm/internal/delivery/build/local/maven/pomParser";
+import { NodeProjectIdentifier } from "@atomist/sdm/internal/delivery/build/local/npm/nodeProjectIdentifier";
+import { CloudFoundryManifestPath } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";
 import { HasSpringBootPom } from "../../../pack/spring/pushtest/springPushTests";
 
 export const AddCloudFoundryManifestCommandName = "AddCloudFoundryManifest";

@@ -16,7 +16,7 @@
 
 import { HandlerContext } from "@atomist/automation-client";
 import { logger } from "@atomist/automation-client";
-import { PersonByChatId } from "@atomist/sdm";
+import { PersonByChatId } from "@atomist/sdm/typings/types";
 
 /**
  * Find the author name from the given screen name, which

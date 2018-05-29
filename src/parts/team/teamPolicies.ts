@@ -15,9 +15,11 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { FingerprintListener, GraphGoalsToSlack, OnDryRunBuildComplete, SoftwareDeliveryMachine } from "@atomist/sdm";
-import { slackReviewListener } from "@atomist/sdm/common/delivery/code/review/support/slackReviewListener";
+import { FingerprintListener, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";
+import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
 import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
+import { OnDryRunBuildComplete } from "@atomist/sdm/handlers/events/dry-run/OnDryRunBuildComplete";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";

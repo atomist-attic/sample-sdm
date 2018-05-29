@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { ReviewListener, ReviewListenerInvocation } from "@atomist/sdm/common/listener/ReviewListener";
-
 import { logger } from "@atomist/automation-client";
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
@@ -25,13 +23,14 @@ import {
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import { ReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { Issue } from "@atomist/automation-client/util/gitHub";
-import { OnPushToAnyBranch } from "@atomist/sdm";
+import { ReviewListener, ReviewListenerInvocation } from "@atomist/sdm";
+import Push = OnPushToAnyBranch.Push;
+import { OnPushToAnyBranch } from "@atomist/sdm/typings/types";
 import { authHeaders } from "@atomist/sdm/util/github/ghub";
 import * as slack from "@atomist/slack-messages";
 import axios from "axios";
 import * as stringify from "json-stringify-safe";
 import * as _ from "lodash";
-import Push = OnPushToAnyBranch.Push;
 
 export type CommentFilter = (r: ReviewComment) => boolean;
 

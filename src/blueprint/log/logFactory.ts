@@ -15,8 +15,11 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { firstAvailableProgressLog, LoggingProgressLog, ProgressLogFactory, RolarProgressLog } from "@atomist/sdm";
-import { constructLogPath } from "@atomist/sdm/common/log/DashboardDisplayProgressLog";
+import { ProgressLogFactory } from "@atomist/sdm";
+import { constructLogPath } from "@atomist/sdm/log/DashboardDisplayProgressLog";
+import { firstAvailableProgressLog } from "@atomist/sdm/log/firstAvailableProgressLog";
+import { LoggingProgressLog } from "@atomist/sdm/log/LoggingProgressLog";
+import { RolarProgressLog } from "@atomist/sdm/log/RolarProgressLog";
 
 /**
  * LogFactory that will try using Rolar
