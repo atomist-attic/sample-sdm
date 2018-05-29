@@ -64,10 +64,10 @@ import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addNodeSupport } from "../parts/stacks/nodeSupport";
-import { addSpringSupport } from "../parts/stacks/springSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 import { MaterialChangeToJavaRepo } from "../pushtest/jvm/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
+import { SpringSupport } from "../pack/spring/springSupport";
 
 export function k8sMachine(options: SoftwareDeliveryMachineOptions,
                            configuration: Configuration): SoftwareDeliveryMachine {
@@ -125,8 +125,8 @@ export function k8sMachine(options: SoftwareDeliveryMachineOptions,
             }),
         );
 
+    sdm.addExtensionPacks(SpringSupport);
     addJavaSupport(sdm, options);
-    addSpringSupport(sdm);
     addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
 

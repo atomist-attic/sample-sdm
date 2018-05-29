@@ -67,9 +67,11 @@ import { addCloudFoundryManifest } from "../../commands/editors/pcf/addCloudFoun
 import { addDemoEditors } from "../../parts/demo/demoEditors";
 import { addJavaSupport } from "../../parts/stacks/javaSupport";
 import { addNodeSupport } from "../../parts/stacks/nodeSupport";
-import { addSpringSupport } from "../../parts/stacks/springSupport";
+import { SpringSupport } from "../../pack/spring/springSupport";
 import { addTeamPolicies } from "../../parts/team/teamPolicies";
 import { HasSpringBootApplicationClass } from "../../pushtest/jvm/springPushTests";
+import { SentrySupport } from "../../pack/sentry/sentrySupport";
+import { CloudReadinessChecks } from "../../pack/cloud-readiness/cloudReadiness";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -104,7 +106,12 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                     ProductionEndpointGoal]),
         ));
 
-    sdm.addExtensionPacks(deploymentFreeze(freezeStore));
+    sdm.addExtensionPacks(
+        deploymentFreeze(freezeStore),
+        SpringSupport,
+        SentrySupport,
+        CloudReadinessChecks,
+    );
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,
@@ -140,7 +147,6 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
     addJavaSupport(sdm, configuration);
-    addSpringSupport(sdm);
     addNodeSupport(sdm);
     addTeamPolicies(sdm, configuration);
     addDemoEditors(sdm);
