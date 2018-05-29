@@ -82,8 +82,10 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
 export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
                                             configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
-        "CloudFoundry software delivery machine",
-        options,
+        {
+            name: "CloudFoundry software delivery machine",
+            options, configuration,
+        },
         // Each contributor contributes goals. The infrastructure assembles them into a goal set.
         goalContributors(
             onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
@@ -102,7 +104,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                     ProductionEndpointGoal]),
         ));
 
-    sdm.addCapabilities(deploymentFreeze(freezeStore));
+    sdm.addExtensionPacks(deploymentFreeze(freezeStore));
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,

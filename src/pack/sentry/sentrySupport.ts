@@ -1,7 +1,7 @@
-import { SoftwareDeliveryMachineConfigurer } from "@atomist/sdm";
+import { ExtensionPack } from "@atomist/sdm";
 import { addSentry } from "./addSentryEditor";
 
-export const SentrySupport: SoftwareDeliveryMachineConfigurer = {
+export const SentrySupport: ExtensionPack = {
     name: "Sentry",
     configure:
         sdm => {

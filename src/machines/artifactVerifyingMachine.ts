@@ -39,11 +39,13 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  */
 export function artifactVerifyingMachine(options: SoftwareDeliveryMachineOptions,
                                          configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine("Artifact verifying machine", options,
-        whenPushSatisfies(IsMaven)
+    const sdm = createSoftwareDeliveryMachine({
+            name: "Artifact verifying machine", options,
+            configuration,
+        }, whenPushSatisfies(IsMaven)
             .itMeans("Push to Maven repo")
             .setGoals(new Goals("Verify artifact", JustBuildGoal, ArtifactGoal)),
-            );
+    );
     sdm.addBuildRules(
         build.when(IsMaven)
             .itMeans("build with Maven")

@@ -28,7 +28,7 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
 export function autofixMachine(options: SoftwareDeliveryMachineOptions,
                                configuration: Configuration): SoftwareDeliveryMachine {
 
-    const sdm = createSoftwareDeliveryMachine("Autofix machine", options,
+    const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", options, configuration},
         onAnyPush
             .setGoals(new Goals("Autofix", AutofixGoal)));
     sdm.addAutofixes(

@@ -86,8 +86,11 @@ import { MaterialChangeToNodeRepo } from "../pushtest/node/materialChangeToNodeR
 export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
                                     configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
-        "CloudFoundry software delivery machine",
-        options,
+        {
+            name: "CloudFoundry software delivery machine",
+            options,
+            configuration,
+        },
         given<Goals>(IsMaven).itMeans("Maven")
             .then(
                 whenPushSatisfies(HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))

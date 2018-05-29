@@ -1,10 +1,10 @@
 import { logger } from "@atomist/automation-client";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import {
+    ExtensionPack,
     FingerprinterRegistration,
     PushTest,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineConfigurer,
 } from "@atomist/sdm";
 import { TypedFingerprint } from "@atomist/sdm/common/delivery/code/fingerprint/support/TypedFingerprint";
 import { FingerprintListener } from "@atomist/sdm/common/listener/FingerprintListener";
@@ -17,7 +17,7 @@ const CodeMetricsFingerprintName = "CodeMetrics";
  * @param publisher listener that will publish relevant fingerprints
  */
 export function codeMetrics(publisher: FingerprintListener,
-                            pushTest?: PushTest): SoftwareDeliveryMachineConfigurer {
+                            pushTest?: PushTest): ExtensionPack {
     return {
         name: CodeMetricsFingerprintName,
         configure: addCodeMetrics(publisher, pushTest),

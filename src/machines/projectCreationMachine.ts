@@ -40,7 +40,7 @@ import {
 export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
                                        configuration: Configuration): SoftwareDeliveryMachine {
 
-    const sdm = createSoftwareDeliveryMachine("Project creation machine", options);
+    const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", options, configuration});
 
     sdm.addGenerators(
         () => springBootGenerator({

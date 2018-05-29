@@ -70,7 +70,7 @@ export function addSpringSupport(sdm: SoftwareDeliveryMachine) {
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
         )
-        .addCapabilities(
+        .addExtensionPacks(
             SentrySupport,
             CloudReadinessChecks,
         );

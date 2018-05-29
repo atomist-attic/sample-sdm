@@ -43,8 +43,7 @@ export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
 export function evangelicalMachine(options: SoftwareDeliveryMachineOptions,
                                    configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
-        "Helpful software delivery machine. You need to be saved.",
-        options,
+        {name: "Helpful software delivery machine. You need to be saved.", options, configuration},
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
             .itMeans("No material change to Java")
             .setGoals(ImmaterialChangeToJava),

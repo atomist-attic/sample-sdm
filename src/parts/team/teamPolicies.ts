@@ -64,7 +64,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine,
     const pub: FingerprintListener = async fp => {
         // ("METRICS ARE\n" + JSON.stringify(fp.fingerprint));
     };
-    sdm.addCapabilities(codeMetrics(pub));
+    sdm.addExtensionPacks(codeMetrics(pub));
 
     // sdm.addPushReactions(shutDownDeliveryIf(EverySecondOneGoesThrough));
 }

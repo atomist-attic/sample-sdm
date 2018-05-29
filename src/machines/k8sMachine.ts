@@ -71,9 +71,11 @@ import { HasSpringBootApplicationClass } from "../pushtest/jvm/springPushTests";
 
 export function k8sMachine(options: SoftwareDeliveryMachineOptions,
                            configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine(
-        "K8s software delivery machine",
-        options,
+    const sdm = createSoftwareDeliveryMachine({
+            name: "K8s software delivery machine",
+            options,
+            configuration,
+        },
         whenPushSatisfies(IsMaven, not(MaterialChangeToJavaRepo))
             .itMeans("Immaterial change")
             .setGoals(NoGoals),
