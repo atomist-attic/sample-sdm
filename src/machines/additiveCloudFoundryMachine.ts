@@ -17,7 +17,8 @@
 import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    ArtifactGoal, goalContributors,
+    ArtifactGoal,
+    goalContributors,
     Goals,
     JustBuildGoal,
     LocalDeploymentGoal,
@@ -45,7 +46,6 @@ import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/M
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import {
@@ -70,6 +70,7 @@ import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -79,7 +80,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
  * @return {SoftwareDeliveryMachine}
  */
-export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
+export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                             configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {

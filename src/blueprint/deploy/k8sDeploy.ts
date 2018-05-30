@@ -30,6 +30,7 @@ export const NoticeK8sTestDeployCompletion = new NoticeK8sTestDeployCompletionOn
     StagingDeploymentGoal,
     StagingEndpointGoal);
 
-export const NoticeK8sProdDeployCompletion = new NoticeK8sProdDeployCompletionOnStatus(
+export const noticeK8sProdDeployCompletion = repoRefResolver => new NoticeK8sProdDeployCompletionOnStatus(
     ProductionDeploymentGoal,
-    ProductionEndpointGoal);
+    ProductionEndpointGoal,
+    repoRefResolver);

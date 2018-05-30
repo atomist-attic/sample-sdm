@@ -25,7 +25,7 @@ import {
 } from "@atomist/sdm";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
@@ -36,6 +36,7 @@ import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundry
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
@@ -43,7 +44,7 @@ export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
 /**
  * Assemble a machine that suggests the potential to use more SDM features
  */
-export function evangelicalMachine(options: SoftwareDeliveryMachineOptions,
+export function evangelicalMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                    configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {name: "Helpful software delivery machine. You need to be saved.", options, configuration},

@@ -15,27 +15,21 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import { whenPushSatisfies } from "@atomist/sdm";
-import {
-    ArtifactGoal, Goals,
-    JustBuildGoal, SoftwareDeliveryMachine,
-} from "@atomist/sdm";
+import { ArtifactGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import {
-    SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as fs from "fs";
 import { addDemoEditors } from "../parts/demo/demoEditors";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 /**
  * Assemble a machine that only builds and verifies Java artifacts.
  * @return {SoftwareDeliveryMachine}
  */
-export function artifactVerifyingMachine(options: SoftwareDeliveryMachineOptions,
+export function artifactVerifyingMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                          configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "Artifact verifying machine", options,

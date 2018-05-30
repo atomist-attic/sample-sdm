@@ -20,7 +20,7 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
@@ -30,6 +30,7 @@ import {
     CommonGeneratorConfig,
     CommonJavaGeneratorConfig,
 } from "./generatorConfig";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -37,9 +38,8 @@ import {
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
+export function projectCreationMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                        configuration: Configuration): SoftwareDeliveryMachine {
-
     const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", options, configuration});
 
     sdm.addGenerators(

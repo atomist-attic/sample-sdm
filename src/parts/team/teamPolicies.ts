@@ -50,7 +50,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListeners(PostToDeploymentsChannel)
         .addSupportingCommands(() => slocCommand)
-        .addSupportingEvents(OnDryRunBuildComplete)
+        .addSupportingEvents(() => new OnDryRunBuildComplete(sdm.options.repoRefResolver))
         .addUserJoiningChannelListeners(je =>
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
