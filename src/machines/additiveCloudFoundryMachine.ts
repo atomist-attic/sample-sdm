@@ -49,7 +49,7 @@ import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLo
 import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
-import {IsNode} from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
+import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import {
     deploymentFreeze,
@@ -108,16 +108,6 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
                     ProductionDeploymentGoal,
                     ProductionEndpointGoal]),
         ));
-
-    sdm.addPushReactions(async p => {
-        const readme = await p.project.getFile("README.md");
-        if (!readme) {
-            return p.addressChannels(`Project at ${p.id.url} has no README. This makes me sad. :crying_cat_face:`);
-        }
-    })
-        .addNewIssueListeners(async i => {
-            return i.addressChannels(`_${i.issue.openedBy.person.chatId.screenName}_, *stop* raising issues. :angry:`);
-        });
 
     sdm.addExtensionPacks(
         deploymentFreeze(freezeStore),
