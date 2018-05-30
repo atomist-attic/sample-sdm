@@ -15,12 +15,12 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import { SoftwareDeliveryMachine, } from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { ConfigureOptions, configureSdm } from "@atomist/sdm/internal/machine/configureSdm";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { tryRolarLogFactory } from "./blueprint/log/logFactory";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 /*
  * This sample-sdm includes code for a variety of

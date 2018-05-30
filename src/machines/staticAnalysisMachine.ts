@@ -24,12 +24,12 @@ import {
     SoftwareDeliveryMachine,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 /**
  * Assemble a machine that performs only static analysis.

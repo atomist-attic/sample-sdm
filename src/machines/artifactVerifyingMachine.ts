@@ -19,11 +19,11 @@ import { ArtifactGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSa
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as fs from "fs";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 /**
  * Assemble a machine that only builds and verifies Java artifacts.

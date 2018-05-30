@@ -45,6 +45,7 @@ import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetD
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
@@ -70,7 +71,6 @@ import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
