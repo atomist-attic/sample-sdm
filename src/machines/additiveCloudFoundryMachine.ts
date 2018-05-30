@@ -113,8 +113,8 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         }
     })
         .addNewIssueListeners(async i => {
-            return i.addressChannels(`_${i.issue.openedBy.person.chatId.screenName}_, *stop* raising issues. :angry:`)
-        })
+            return i.addressChannels(`_${i.issue.openedBy.person.chatId.screenName}_, *stop* raising issues. :angry:`);
+        });
 
     sdm.addExtensionPacks(
         deploymentFreeze(freezeStore),
@@ -148,7 +148,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals));
-        sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
+    sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
         .addSupportingCommands(
             () => addCloudFoundryManifest,
             enableDeploy,
