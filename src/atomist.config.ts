@@ -15,11 +15,9 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import {
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { ConfigureOptions, configureSdm } from "@atomist/sdm/internal/machine/configureSdm";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { tryRolarLogFactory } from "./blueprint/log/logFactory";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
@@ -54,7 +52,7 @@ import { configureLogzio } from "./util/logzio";
  * start with any of these and change it to make it your own!
  */
 
-function createMachine(options: SoftwareDeliveryMachineOptions,
+function createMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                        config: Configuration): SoftwareDeliveryMachine {
     return additiveCloudFoundryMachine(options, config);
 }

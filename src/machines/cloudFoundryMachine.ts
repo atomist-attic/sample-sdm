@@ -36,7 +36,6 @@ import * as build from "@atomist/sdm/dsl/buildDsl";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
@@ -81,6 +80,7 @@ import {
     NpmKubernetesDeployGoals,
 } from "@atomist/sdm/goal/common/npmGoals";
 import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 
@@ -89,7 +89,7 @@ import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
+export function cloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                     configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {

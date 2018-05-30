@@ -16,27 +16,25 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
-    FromAtomist, IsDeployEnabled, not,
-    SoftwareDeliveryMachine,
-    ToDefaultBranch, whenPushSatisfies,
-} from "@atomist/sdm";
-import {
+    FromAtomist,
+    IsDeployEnabled,
+    not,
     ProductionDeploymentGoal,
+    SoftwareDeliveryMachine,
     StagingDeploymentGoal,
+    ToDefaultBranch,
+    whenPushSatisfies,
 } from "@atomist/sdm";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
 import { HttpServiceGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
 import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
 import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/goal/common/npmGoals";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
 import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
@@ -44,7 +42,7 @@ import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200
 import {
     K8sProductionDomain,
     K8sTestingDomain,
-    NoticeK8sProdDeployCompletion,
+    noticeK8sProdDeployCompletion,
     NoticeK8sTestDeployCompletion,
 } from "../blueprint/deploy/k8sDeploy";
 import { SuggestAddingK8sSpec } from "../blueprint/repo/suggestAddingK8sSpec";
@@ -58,7 +56,7 @@ import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
-export function k8sMachine(options: SoftwareDeliveryMachineOptions,
+export function k8sMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                            configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "K8s software delivery machine",
@@ -105,7 +103,7 @@ export function k8sMachine(options: SoftwareDeliveryMachineOptions,
             disableDeploy,
         )
         .addSupportingEvents(() => NoticeK8sTestDeployCompletion,
-            () => NoticeK8sProdDeployCompletion)
+            () => noticeK8sProdDeployCompletion(sdm.options.repoRefResolver))
         .addEndpointVerificationListeners(
             lookFor200OnEndpointRootGet({
                 retries: 15,

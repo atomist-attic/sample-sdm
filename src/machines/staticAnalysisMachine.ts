@@ -24,8 +24,8 @@ import {
     SoftwareDeliveryMachine,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
@@ -35,9 +35,8 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  * Assemble a machine that performs only static analysis.
  * @return {SoftwareDeliveryMachine}
  */
-export function staticAnalysisMachine(options: SoftwareDeliveryMachineOptions,
+export function staticAnalysisMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                       configuration: Configuration): SoftwareDeliveryMachine {
-
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "Static analysis SDM",

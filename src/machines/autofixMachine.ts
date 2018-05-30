@@ -16,8 +16,8 @@
 
 import { Configuration } from "@atomist/automation-client";
 import { AutofixGoal, Goals, onAnyPush, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
 import { addDemoEditors } from "../parts/demo/demoEditors";
@@ -26,9 +26,8 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  * Assemble a machine that performs only autofixes.
  * @return {SoftwareDeliveryMachine}
  */
-export function autofixMachine(options: SoftwareDeliveryMachineOptions,
+export function autofixMachine(options: ConcreteSoftwareDeliveryMachineOptions,
                                configuration: Configuration): SoftwareDeliveryMachine {
-
     const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", options, configuration},
         onAnyPush
             .setGoals(new Goals("Autofix", AutofixGoal)));
