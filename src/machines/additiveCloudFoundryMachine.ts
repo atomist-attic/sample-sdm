@@ -16,6 +16,7 @@
 
 import { Configuration } from "@atomist/automation-client";
 import {
+    any,
     AnyPush,
     ArtifactGoal, goalContributors,
     Goals,
@@ -47,6 +48,7 @@ import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLo
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { SoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/SoftwareDeliveryMachineOptions";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
+import {IsNode} from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import {
     deploymentFreeze,
@@ -91,7 +93,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
             onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
             whenPushSatisfies(IsDeploymentFrozen)
                 .setGoals(ExplainDeploymentFreezeGoal),
-            whenPushSatisfies(IsMaven)
+            whenPushSatisfies(any(IsMaven, IsNode))
                 .setGoals(JustBuildGoal),
             whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
                 .setGoals(LocalDeploymentGoal),
@@ -123,10 +125,6 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         CloudReadinessChecks,
         NodeSupport,
     );
-
-    sdm.addBuildRules(
-        build.setDefault(new MavenBuilder(options.artifactStore,
-            createEphemeralProgressLog, options.projectLoader)));
 
     sdm.addDeployRules(
         deploy.when(IsMaven)
@@ -161,6 +159,10 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
     // addDemoPolicies(sdm, configuration);
+
+    sdm.addBuildRules(
+        build.setDefault(new MavenBuilder(options.artifactStore,
+            createEphemeralProgressLog, options.projectLoader)));
 
     return sdm;
 }
