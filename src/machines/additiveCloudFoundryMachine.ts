@@ -149,7 +149,7 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
     addJavaSupport(sdm);
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
-    // addDemoPolicies(sdm, configuration);
+    // DemoPolicies(sdm, configuration);
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,

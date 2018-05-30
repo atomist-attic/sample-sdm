@@ -195,6 +195,6 @@ export function cloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOpti
     );
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
-    // addDemoPolicies(sdm, configuration);
+    // DemoPolicies(sdm, configuration);
     return sdm;
 }
