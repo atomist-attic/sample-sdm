@@ -16,7 +16,7 @@ const SentryDependency: VersionedArtifact = {
     version: "1.7.5",
 };
 
-const sentryYaml = dsn => `raven:
+const sentryYaml = dsn => `\nraven:
     dsn: '${dsn}'`;
 
 function addSentryEditor(dsn: string): ProjectEditor {

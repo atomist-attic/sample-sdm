@@ -95,14 +95,26 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                 .setGoals(JustBuildGoal),
             whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
                 .setGoals(LocalDeploymentGoal),
-            whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+            whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
                 .setGoals([ArtifactGoal,
                     StagingDeploymentGoal,
                     StagingEndpointGoal,
-                    StagingVerifiedGoal,
+                    StagingVerifiedGoal]),
+            whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+                .setGoals([ArtifactGoal,
                     ProductionDeploymentGoal,
                     ProductionEndpointGoal]),
         ));
+
+    sdm.addPushReactions(async p => {
+        const readme = await p.project.getFile("README.md");
+        if (!readme) {
+            return p.addressChannels(`Project at ${p.id.url} has no README. This makes me sad. :crying_cat_face:`);
+        }
+    })
+        .addNewIssueListeners(async i => {
+            return i.addressChannels(`_${i.issue.openedBy.person.chatId.screenName}_, *stop* raising issues. :angry:`)
+        })
 
     sdm.addExtensionPacks(
         deploymentFreeze(freezeStore),
@@ -136,7 +148,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals));
-    sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
+        sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
         .addSupportingCommands(
             () => addCloudFoundryManifest,
             enableDeploy,
