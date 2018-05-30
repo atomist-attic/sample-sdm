@@ -16,19 +16,15 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoId";
-import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
-import { Project } from "@atomist/automation-client/project/Project";
 import * as assert from "power-assert";
 import {
     replaceReadmeTitle,
     setAtomistTeamInApplicationYml,
-    springBootGenerator,
 } from "../../../../src/pack/spring/generators/springBootGenerator";
 import { SpringProjectCreationParameters } from "../../../../src/pack/spring/generators/SpringProjectCreationParameters";
 import { transformSeedToCustomProject } from "../../../../src/pack/spring/generators/transformSeedToCustomProject";
 import { springBootPom } from "../../../editors/TestPoms";
-import { fakeContext } from "../../../FakeContext";
 
 const Readme1 = `# spring-rest-seed
 
@@ -124,6 +120,7 @@ describe("springBootGenerator", () => {
         });
     });
 
+    /*
     describe("run end to end", () => {
 
         it("should put in Atomist team id and ensure valid Java with default service class name", async () => {
@@ -190,5 +187,6 @@ describe("springBootGenerator", () => {
         }).timeout(18000);
 
     });
+    */
 
 });

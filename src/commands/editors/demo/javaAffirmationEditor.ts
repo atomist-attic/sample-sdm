@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { HandleCommand } from "@atomist/automation-client";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { editorCommand } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 import { AllJavaFiles } from "@atomist/spring-automation/commands/generator/java/javaProjectUtils";
 import { AffirmationParameters, affirmations } from "./affirmationEditor";
 
@@ -25,15 +24,13 @@ import { AffirmationParameters, affirmations } from "./affirmationEditor";
  * Harmlessly modify a Java file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const javaAffirmationEditor: HandleCommand = editorCommand(
-    () => appendAffirmationToJava,
-    "javaAffirmation",
-    () => new AffirmationParameters("Everyone needs encouragement to write Java"),
-    {
-        editMode: ap => ap.editMode,
-        intent: "javakick",
-    },
-);
+export const JavaAffirmationEditor: EditorRegistration = {
+    createEditor: () => appendAffirmationToJava,
+    name: "javaAffirmation",
+    paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),
+    editMode: ap => ap.editMode,
+    intent: "javakick",
+};
 
 function randomAffirmation() {
     return affirmations[getRandomInt(affirmations.length)];

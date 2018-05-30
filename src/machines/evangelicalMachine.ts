@@ -32,7 +32,7 @@ import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../blueprint/deploy/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
-import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { addDemoEditors } from "../parts/demo/demoEditors";
@@ -72,7 +72,7 @@ export function evangelicalMachine(options: ConcreteSoftwareDeliveryMachineOptio
             tagRepo(nodeTagger),
         )
         .addSupportingCommands(
-            () => addCloudFoundryManifest,
+            () => AddCloudFoundryManifest,
             enableDeploy,
             disableDeploy,
         )

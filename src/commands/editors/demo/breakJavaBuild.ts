@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 
-import { HandleCommand, HandlerContext } from "@atomist/automation-client";
+import { HandlerContext } from "@atomist/automation-client";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
-import { editorCommand } from "@atomist/sdm";
-import { EmptyParameters } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 
 export const BadJavaFileName = "src/main/java/Bad.java";
 
-export const breakJavaBuildEditor: HandleCommand = editorCommand(
-    () => breakBuild,
-    "breakJavaBuild",
-    EmptyParameters,
-    {
-        editMode: commitToMaster(`You asked me to break the build!`),
-    });
+export const BreakJavaBuildEditor: EditorRegistration = {
+    createEditor: () => breakBuild,
+    name: "breakJavaBuild",
+    editMode: commitToMaster(`You asked me to break the build!`),
+};
 
 async function breakBuild(p: Project, ctx: HandlerContext) {
     return p.addFile(BadJavaFileName, "this is not Java");
 }
 
-export const unbreakJavaBuildEditor: HandleCommand = editorCommand(
-    () => unbreakJavaBuild,
-    "unbreakJavaBuild",
-    EmptyParameters,
-    {
-        editMode: commitToMaster(`Trying to unbreak the build!`),
-    });
+export const UnbreakJavaBuildEditor: EditorRegistration = {
+    createEditor: () => unbreakJavaBuild,
+    name: "unbreakJavaBuild",
+    editMode: commitToMaster(`Trying to unbreak the build!`),
+};
 
 async function unbreakJavaBuild(p: Project, ctx: HandlerContext) {
     return p.deleteFile(BadJavaFileName);

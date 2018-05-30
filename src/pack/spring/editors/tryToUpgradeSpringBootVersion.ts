@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { HandleCommand, Parameter, Parameters } from "@atomist/automation-client";
-import { dryRunEditor, EditModeSuggestion } from "@atomist/sdm";
+import { Parameter, Parameters } from "@atomist/automation-client";
+import { EditModeSuggestion, EditorRegistration } from "@atomist/sdm";
 import { setSpringBootVersionEditor } from "@atomist/spring-automation/commands/editor/spring/setSpringBootVersionEditor";
 
 @Parameters()
@@ -51,11 +51,11 @@ export class UpgradeSpringBootParameters implements EditModeSuggestion {
  * handler to respond to the build with either a PR and Issue
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const tryToUpgradeSpringBootVersion: HandleCommand = dryRunEditor<UpgradeSpringBootParameters>(
-    params => setSpringBootVersionEditor(params.desiredBootVersion),
-    UpgradeSpringBootParameters,
-    "boot-upgrade", {
-        description: `Upgrade Spring Boot version`,
-        intent: "try to upgrade Spring Boot",
-    },
-);
+export const TryToUpgradeSpringBootVersion: EditorRegistration<UpgradeSpringBootParameters> = {
+    createEditor: params => setSpringBootVersionEditor(params.desiredBootVersion),
+    paramsMaker: UpgradeSpringBootParameters,
+    name: "boot-upgrade",
+    description: `Upgrade Spring Boot version`,
+    intent: "try to upgrade Spring Boot",
+    dryRun: true,
+};

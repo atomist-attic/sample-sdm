@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-import { HandleCommand } from "@atomist/automation-client";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { editorCommand } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
 
 /**
  * Harmlessly modify a TS file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const whackHeaderEditor: HandleCommand = editorCommand(
-    () => whackSomeHeader,
-    "removeHeader",
-    () => new RequestedCommitParameters("Who needs all these extra characters"),
-    {
-        editMode: ahp => ahp.editMode,
-        intent: "remove a header",
-    },
-);
+export const WhackHeaderEditor: EditorRegistration = {
+    createEditor: () => whackSomeHeader,
+    name: "removeHeader",
+    paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
+    editMode: ahp => ahp.editMode,
+    intent: "remove a header",
+};
 
 // TODO switch to CFamily constant from GlobPatterns
 

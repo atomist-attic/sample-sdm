@@ -1,11 +1,11 @@
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import { editorCommand } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
 import { addDependencyEditor } from "@atomist/spring-automation/commands/editor/maven/addDependencyEditor";
 
-import { HandleCommand, Parameter } from "@atomist/automation-client";
+import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { VersionedArtifact } from "@atomist/sdm/internal/delivery/build/local/maven/VersionedArtifact";
@@ -31,7 +31,7 @@ function addSentryEditor(dsn: string): ProjectEditor {
 }
 
 @Parameters()
- class AddSentryParams {
+export class AddSentryParams {
 
     @Parameter()
     public dsn: string;
@@ -41,14 +41,13 @@ function addSentryEditor(dsn: string): ProjectEditor {
  * Command to add Sentry support to the current project
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const addSentry: HandleCommand = editorCommand<AddSentryParams>(
-    params => addSentryEditor(params.dsn),
-    "addSentry",
-    AddSentryParams,
-    {
-        editMode: params => new PullRequest(
-            `add-sentry-${new Date().getTime()}`,
-            "Add Sentry support",
-            "Adds Sentry (Raven) APM support"),
-        intent: "add sentry",
-    });
+export const AddSentry: EditorRegistration<AddSentryParams> = {
+    createEditor: params => addSentryEditor(params.dsn),
+    name: "AddSentry",
+    paramsMaker: AddSentryParams,
+    editMode: () => new PullRequest(
+        `add-sentry-${new Date().getTime()}`,
+        "Add Sentry support",
+        "Adds Sentry (Raven) APM support"),
+    intent: "add sentry",
+};

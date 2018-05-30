@@ -47,7 +47,7 @@ import {
 } from "../blueprint/deploy/cloudFoundryDeploy";
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
-import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
@@ -178,7 +178,7 @@ export function cloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOpti
             .setGoals(RepositoryDeletionGoals));
     sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
         .addSupportingCommands(
-            () => addCloudFoundryManifest,
+            () => AddCloudFoundryManifest,
             enableDeploy,
             disableDeploy,
             isDeployEnabledCommand,

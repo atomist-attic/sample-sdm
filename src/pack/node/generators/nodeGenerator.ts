@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-import { HandleCommand } from "@atomist/automation-client";
 import { AnyProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import {
-    GeneratorCommandDetails,
-    generatorHandler,
-} from "@atomist/automation-client/operations/generate/generatorToCommand";
-import { GeneratorConfig } from "@atomist/sdm";
+import { GeneratorCommandDetails } from "@atomist/automation-client/operations/generate/generatorToCommand";
+import { GeneratorConfig, GeneratorRegistration } from "@atomist/sdm";
 import { updateReadmeTitle } from "../../../commands/editors/updateReadmeTitle";
 import { updatePackageJsonIdentification } from "../editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParameters } from "./NodeProjectCreationParameters";
 
+/* tslint:disable:max-line-length */
+
 export function nodeGenerator(config: GeneratorConfig,
-                              details: Partial<GeneratorCommandDetails<NodeProjectCreationParameters>> = {}): HandleCommand {
-    return generatorHandler<NodeProjectCreationParameters>(
-        transformSeed,
-        () => new NodeProjectCreationParameters(config),
-        `nodeGenerator-${config.seed.repo}`,
-        {
-            tags: ["node", "typescript", "generator"],
-            ...details,
-            intent: config.intent,
-        });
+                              details: Partial<GeneratorCommandDetails<NodeProjectCreationParameters>> = {}): GeneratorRegistration<NodeProjectCreationParameters> {
+    return {
+        createEditor: transformSeed,
+        paramsMaker: () => new NodeProjectCreationParameters(config),
+        name: `nodeGenerator-${config.seed.repo}`,
+        tags: ["node", "typescript", "generator"],
+        ...details,
+        intent: config.intent,
+    };
 }
 
 function transformSeed(params: NodeProjectCreationParameters): AnyProjectEditor<NodeProjectCreationParameters> {

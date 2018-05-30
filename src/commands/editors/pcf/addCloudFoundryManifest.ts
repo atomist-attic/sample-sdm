@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { HandleCommand, logger } from "@atomist/automation-client";
+import { logger } from "@atomist/automation-client";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { editorCommand } from "@atomist/sdm";
-import { EmptyParameters } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 import { MavenProjectIdentifier } from "@atomist/sdm/internal/delivery/build/local/maven/pomParser";
 import { NodeProjectIdentifier } from "@atomist/sdm/internal/delivery/build/local/npm/nodeProjectIdentifier";
 import { CloudFoundryManifestPath } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";
@@ -33,25 +32,23 @@ export const AtomistGeneratedMarker = "[atomist:generated]";
 export const AtomistConfigTsPath = "src/atomist.config.ts";
 
 /**
- * Command handler wrapping addCloudFoundryManifest editor
+ * Command handler wrapping AddCloudFoundryManifest editor
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const addCloudFoundryManifest: HandleCommand = editorCommand(
-    () => addCloudFoundryManifestEditor,
-    AddCloudFoundryManifestCommandName,
-    EmptyParameters,
-    {
-        intent: "Add Cloud Foundry manifest",
-        editMode: () => new PullRequest(
-            `add-pcf-manifest-${new Date().getTime()}`,
-            "Add Cloud Foundry manifest",
-            `This will trigger the Software Development Machine to deploy to your Cloud Foundry space.
+export const AddCloudFoundryManifest: EditorRegistration = {
+    createEditor: () => addCloudFoundryManifestEditor,
+    name: AddCloudFoundryManifestCommandName,
+    intent: "Add Cloud Foundry manifest",
+    editMode: () => new PullRequest(
+        `add-pcf-manifest-${new Date().getTime()}`,
+        "Add Cloud Foundry manifest",
+        `This will trigger the Software Development Machine to deploy to your Cloud Foundry space.
 
 ${AtomistGeneratedMarker}`,
-            `Add Cloud Foundry manifest
+        `Add Cloud Foundry manifest
 
 ${AddCloudFoundryManifestMarker}`),
-    });
+};
 
 // This should not have been invoked unless it's a Spring or Node project
 export const addCloudFoundryManifestEditor: SimpleProjectEditor = async (p, ctx) => {

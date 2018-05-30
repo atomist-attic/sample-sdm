@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { HandleCommand, Parameter, Parameters } from "@atomist/automation-client";
+import { Parameter, Parameters } from "@atomist/automation-client";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { editorCommand } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
 
 export const AffirmationEditorName = "affirmation";
@@ -38,15 +38,13 @@ export class AffirmationParameters extends RequestedCommitParameters {
  * editor
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const affirmationEditor: HandleCommand = editorCommand(
-    () => appendAffirmationToReadMe,
-    AffirmationEditorName,
-    () => new AffirmationParameters("Everyone needs encouragement"),
-    {
-        editMode: ap => ap.editMode,
-        intent: "edit affirmation",
-    },
-);
+export const AffirmationEditor: EditorRegistration = {
+    createEditor: () => appendAffirmationToReadMe,
+    name: AffirmationEditorName,
+    paramsMaker: () => new AffirmationParameters("Everyone needs encouragement"),
+    editMode: ap => ap.editMode,
+    intent: "edit affirmation",
+};
 
 export const affirmations = [
     "You're good enough, you're smart enough, and doggone it, people like you.",

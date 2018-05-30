@@ -15,12 +15,15 @@
  */
 
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { affirmationEditor } from "../../commands/editors/demo/affirmationEditor";
-import { breakJavaBuildEditor, unbreakJavaBuildEditor } from "../../commands/editors/demo/breakJavaBuild";
-import { breakNodeBuildEditor, unbreakNodeBuildEditor } from "../../commands/editors/demo/breakNodeBuild";
-import { javaAffirmationEditor } from "../../commands/editors/demo/javaAffirmationEditor";
-import { whackHeaderEditor } from "../../commands/editors/demo/removeTypeScriptHeader";
-import { removeFileEditor } from "../../commands/editors/helper/removeFile";
+import { AffirmationEditor } from "../../commands/editors/demo/affirmationEditor";
+import { BreakJavaBuildEditor, UnbreakJavaBuildEditor } from "../../commands/editors/demo/breakJavaBuild";
+import {
+    BreakNodeBuildEditor,
+    UnbreakNodeBuildEditor,
+} from "../../commands/editors/demo/breakNodeBuild";
+import { JavaAffirmationEditor } from "../../commands/editors/demo/javaAffirmationEditor";
+import { WhackHeaderEditor } from "../../commands/editors/demo/removeTypeScriptHeader";
+import { RemoveFileEditor } from "../../commands/editors/helper/removeFile";
 
 /**
  * Editors for use in demos
@@ -29,13 +32,13 @@ import { removeFileEditor } from "../../commands/editors/helper/removeFile";
 export function addDemoEditors(softwareDeliveryMachine: SoftwareDeliveryMachine) {
     softwareDeliveryMachine
         .addEditors(
-            () => affirmationEditor,
-            () => breakJavaBuildEditor,
-            () => unbreakJavaBuildEditor,
-            () => breakNodeBuildEditor,
-            () => unbreakNodeBuildEditor,
-            () => javaAffirmationEditor,
-            () => removeFileEditor,
-            () => whackHeaderEditor,
+            BreakNodeBuildEditor,
+            UnbreakNodeBuildEditor,
+            WhackHeaderEditor,
+            JavaAffirmationEditor,
+            AffirmationEditor,
+            BreakJavaBuildEditor,
+            RemoveFileEditor,
+            UnbreakJavaBuildEditor,
         );
 }
