@@ -83,7 +83,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  * @return {SoftwareDeliveryMachine}
  */
 export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOptions,
-                                            configuration: Configuration): SoftwareDeliveryMachine {
+    configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "CloudFoundry software delivery machine",
@@ -125,7 +125,7 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
                     deployer: LocalExecutableJarDeployer,
                     targeter: ManagedDeploymentTargeter,
                 },
-            ),
+        ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(options)),
@@ -138,12 +138,12 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals));
     sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
+        .addEditors(AddCloudFoundryManifest)
         .addSupportingCommands(
-            () => AddCloudFoundryManifest,
             enableDeploy,
             disableDeploy,
             isDeployEnabledCommand,
-        )
+    )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
     addJavaSupport(sdm);
