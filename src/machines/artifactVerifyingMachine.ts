@@ -16,9 +16,9 @@
 
 import { Configuration } from "@atomist/automation-client";
 import { ArtifactGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
-import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
 import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";

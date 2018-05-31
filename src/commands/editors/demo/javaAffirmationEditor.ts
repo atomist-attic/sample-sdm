@@ -20,12 +20,26 @@ import { EditorRegistration } from "@atomist/sdm";
 import { AllJavaFiles } from "@atomist/spring-automation/commands/generator/java/javaProjectUtils";
 import { AffirmationParameters, affirmations } from "./affirmationEditor";
 
+const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, ctx, params) => {
+    const affirmation = params.customAffirmation || randomAffirmation();
+    let count = 0;
+    return doWithFiles(p, AllJavaFiles, f => {
+        return f.getContent().then(async content => {
+            if (count++ >= 1) {
+                return;
+            }
+            await ctx.messageClient.respond(`Prepending to \`${f.name}\` via \`${params.branchToUse}\`: _${affirmation}_`);
+            return f.setContent(`// ${affirmation}\n\n${content}`);
+        });
+    });
+};
+
 /**
  * Harmlessly modify a Java file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const JavaAffirmationEditor: EditorRegistration = {
-    createEditor: () => appendAffirmationToJava,
+    editor: appendAffirmationToJava,
     name: "javaAffirmation",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),
     editMode: ap => ap.editMode,
@@ -39,17 +53,3 @@ function randomAffirmation() {
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
-
-export const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, ctx, params) => {
-    const affirmation = params.customAffirmation || randomAffirmation();
-    let count = 0;
-    return doWithFiles(p, AllJavaFiles, f => {
-        return f.getContent().then(async content => {
-            if (count++ >= 1) {
-                return;
-            }
-            await ctx.messageClient.respond(`Prepending to \`${f.name}\` via \`${params.branchToUse}\`: _${affirmation}_`);
-            return f.setContent(`// ${affirmation}\n\n${content}`);
-        });
-    });
-};

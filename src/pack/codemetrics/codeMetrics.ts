@@ -7,7 +7,7 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import { TypedFingerprint } from "@atomist/sdm/code/fingerprint/TypedFingerprint";
-import { CodeStats, reportForLanguages } from "@atomist/sdm/util/sloc/slocReport";
+import { CodeStats, reportForLanguages } from "@atomist/sdm/pack/sloc/slocReport";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 

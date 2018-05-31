@@ -37,6 +37,7 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
@@ -45,7 +46,6 @@ import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDe
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
-import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
 import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
