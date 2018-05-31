@@ -83,7 +83,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  * @return {SoftwareDeliveryMachine}
  */
 export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOptions,
-    configuration: Configuration): SoftwareDeliveryMachine {
+                                            configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "CloudFoundry software delivery machine",
