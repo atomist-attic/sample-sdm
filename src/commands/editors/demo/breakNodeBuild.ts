@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-import { HandleCommand, HandlerContext } from "@atomist/automation-client";
+import { HandlerContext } from "@atomist/automation-client";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
-import { editorCommand } from "@atomist/sdm";
-import { EmptyParameters } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 
 export const BadTypeScriptFileName = "src/Bad.ts";
 export const BadJavaScriptFileName = "src/Bad.js";
 
-export const breakNodeBuildEditor: HandleCommand = editorCommand(
-    () => breakBuild,
-    "breakNodeBuild",
-    EmptyParameters,
-    {
-        editMode: commitToMaster(`You asked me to break the build!`),
-    });
+export const BreakNodeBuildEditor: EditorRegistration = {
+    createEditor: () => breakBuild,
+    name: "breakNodeBuild",
+    editMode: commitToMaster(`You asked me to break the build!`),
+};
 
 async function breakBuild(p: Project, ctx: HandlerContext) {
     await p.addFile(BadJavaScriptFileName, "this is not JavaScript");
     return p.addFile(BadTypeScriptFileName, "this is not TypeScript");
 }
 
-export const unbreakNodeBuildEditor: HandleCommand = editorCommand(
-    () => unbreakNodeBuild,
-    "unbreakNodeBuild",
-    EmptyParameters,
-    {
-        editMode: commitToMaster(`Trying to unbreak the build!`),
-    });
+export const UnbreakNodeBuildEditor: EditorRegistration = {
+    createEditor: () => unbreakNodeBuild,
+    name: "unbreakNodeBuild",
+    editMode: commitToMaster(`Trying to unbreak the build!`),
+};
 
 async function unbreakNodeBuild(p: Project, ctx: HandlerContext) {
     await p.deleteFile(BadTypeScriptFileName);

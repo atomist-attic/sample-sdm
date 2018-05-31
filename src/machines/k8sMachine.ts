@@ -46,7 +46,7 @@ import {
     NoticeK8sTestDeployCompletion,
 } from "../blueprint/deploy/k8sDeploy";
 import { SuggestAddingK8sSpec } from "../blueprint/repo/suggestAddingK8sSpec";
-import { addK8sSpec } from "../commands/editors/k8s/addK8sSpec";
+import { AddK8sSpec } from "../commands/editors/k8s/addK8sSpec";
 import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
@@ -98,7 +98,7 @@ export function k8sMachine(options: ConcreteSoftwareDeliveryMachineOptions,
             requestDeployToK8s(K8sProductionDomain))
         .addChannelLinkListeners(SuggestAddingK8sSpec)
         .addSupportingCommands(
-            () => addK8sSpec,
+            () => AddK8sSpec,
             enableDeploy,
             disableDeploy,
         )

@@ -23,7 +23,8 @@ import { GitCommandGitProject } from "@atomist/automation-client/project/git/Git
 import { fakeRunWithLogContext } from "@atomist/sdm/util/test/fakeRunWithLogContext";
 import * as assert from "power-assert";
 
-import { executeAutofixes } from "@atomist/sdm/code/autofix/executeAutofixes";
+import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
+import { DefaultRepoRefResolver } from "@atomist/sdm/handlers/common/DefaultRepoRefResolver";
 import { SingleProjectLoader } from "@atomist/sdm/util/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/blueprint/code/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
@@ -52,7 +53,8 @@ describe("addHeaderFix", () => {
         await p.addFile(f.path, f.content);
         assert(!!p.findFileSync(f.path));
 
-        const r = await executeAutofixes(pl, [AddAtomistTypeScriptHeader])(fakeRunWithLogContext(p.id as RemoteRepoRef));
+        const r = await executeAutofixes(pl, [AddAtomistTypeScriptHeader],
+            new DefaultRepoRefResolver())(fakeRunWithLogContext(p.id as RemoteRepoRef));
         assert(r.code === 1);
         assert.equal(pushCount, 1);
         assert.equal(commitCount, 1);

@@ -37,6 +37,7 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
@@ -45,7 +46,6 @@ import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDe
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
-import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
 import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
@@ -64,7 +64,7 @@ import {
 } from "../blueprint/deploy/cloudFoundryDeploy";
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
-import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
@@ -139,7 +139,7 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
             .setGoals(RepositoryDeletionGoals));
     sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
         .addSupportingCommands(
-            () => addCloudFoundryManifest,
+            () => AddCloudFoundryManifest,
             enableDeploy,
             disableDeploy,
             isDeployEnabledCommand,
@@ -149,7 +149,7 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
     addJavaSupport(sdm);
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
-    // addDemoPolicies(sdm, configuration);
+    // DemoPolicies(sdm, configuration);
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,

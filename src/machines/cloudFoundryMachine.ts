@@ -47,7 +47,7 @@ import {
 } from "../blueprint/deploy/cloudFoundryDeploy";
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
 import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
-import { addCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
@@ -66,6 +66,7 @@ import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmB
 import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 
+import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { NoGoals, StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
 import {
     HttpServiceGoals,
@@ -79,7 +80,6 @@ import {
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
 } from "@atomist/sdm/goal/common/npmGoals";
-import { createEphemeralProgressLog } from "@atomist/sdm/log/EphemeralProgressLog";
 import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
@@ -178,7 +178,7 @@ export function cloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOpti
             .setGoals(RepositoryDeletionGoals));
     sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
         .addSupportingCommands(
-            () => addCloudFoundryManifest,
+            () => AddCloudFoundryManifest,
             enableDeploy,
             disableDeploy,
             isDeployEnabledCommand,
@@ -195,6 +195,6 @@ export function cloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOpti
     );
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
-    // addDemoPolicies(sdm, configuration);
+    // DemoPolicies(sdm, configuration);
     return sdm;
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { HandleCommand, HandlerContext, logger, Parameter, Parameters } from "@atomist/automation-client";
+import { HandlerContext, logger, Parameter, Parameters } from "@atomist/automation-client";
 import { File } from "@atomist/automation-client/project/File";
 import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
-import { editorCommand } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
@@ -74,13 +74,12 @@ export const ApacheHeader = `/*
  * limitations under the License.
  */`;
 
-export const addApacheLicenseHeaderEditor: HandleCommand = editorCommand(
-    () => addHeaderProjectEditor,
-    "addHeader",
-    AddHeaderParameters,
-    {
-        editMode: ahp => ahp.editMode
-    });
+export const AddApacheLicenseHeaderEditor: EditorRegistration = {
+    createEditor: () => addHeaderProjectEditor,
+    name: "addHeader",
+    paramsMaker: AddHeaderParameters,
+    editMode: ahp => ahp.editMode
+};
 
 export async function addHeaderProjectEditor(p: Project,
                                              ctx: HandlerContext,

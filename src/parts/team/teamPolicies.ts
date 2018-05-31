@@ -18,14 +18,14 @@ import { logger } from "@atomist/automation-client";
 import { FingerprintListener, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";
 import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
-import { slocCommand } from "@atomist/sdm/handlers/commands/sloc";
-import { OnDryRunBuildComplete } from "@atomist/sdm/handlers/events/dry-run/OnDryRunBuildComplete";
+import { DryRunEditing } from "@atomist/sdm/pack/dry-run/dryRunEditorSupport";
+import { Sloc } from "@atomist/sdm/pack/sloc/sloc";
 import { PostToDeploymentsChannel } from "../../blueprint/deploy/postToDeploymentsChannel";
 import { capitalizer } from "../../blueprint/issue/capitalizer";
 import { requestDescription } from "../../blueprint/issue/requestDescription";
 import { thankYouYouRock } from "../../blueprint/issue/thankYouYouRock";
 import { PublishNewRepo } from "../../blueprint/repo/publishNewRepo";
-import { addApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
+import { AddApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
 import { codeMetrics } from "../../pack/codemetrics/codeMetrics";
 import { SonarQubeSupport } from "../../pack/sonarqube/sonarQubeSupport";
 
@@ -43,17 +43,19 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
             slackReviewListener(),
         )
         .addEditors(
-            () => addApacheLicenseHeaderEditor,
+            AddApacheLicenseHeaderEditor,
         )
         .addNewRepoWithCodeActions(
             PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListeners(PostToDeploymentsChannel)
-        .addSupportingCommands(() => slocCommand)
-        .addSupportingEvents(() => new OnDryRunBuildComplete(sdm.options.repoRefResolver))
         .addUserJoiningChannelListeners(je =>
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
+    sdm.addExtensionPacks(
+        DryRunEditing,
+        Sloc,
+    );
 
     if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
         logger.info("Enabling SonarQube integration");

@@ -25,7 +25,7 @@ import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
-import { tryToUpgradeSpringBootVersion } from "./editors/tryToUpgradeSpringBootVersion";
+import { TryToUpgradeSpringBootVersion } from "./editors/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "./generators/springBootGenerator";
 
 export const SpringSupport: ExtensionPack = {
@@ -44,14 +44,14 @@ export const SpringSupport: ExtensionPack = {
                     ))
             .addSupportingCommands(listLocalDeploys)
             .addEditors(
-                () => tryToUpgradeSpringBootVersion,
+                TryToUpgradeSpringBootVersion,
             )
-            .addGenerators(() => springBootGenerator({
+            .addGenerators(springBootGenerator({
                 ...CommonJavaGeneratorConfig,
                 seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
                 intent: "create spring",
             }))
-            .addGenerators(() => springBootGenerator({
+            .addGenerators(springBootGenerator({
                 ...CommonJavaGeneratorConfig,
                 seed: new GitHubRepoRef("johnsonr", "flux-flix-service"),
                 intent: "create spring kotlin",

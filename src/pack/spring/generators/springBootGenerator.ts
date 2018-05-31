@@ -15,13 +15,11 @@
  */
 
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import {
-    GeneratorCommandDetails,
-} from "@atomist/automation-client/operations/generate/generatorToCommand";
+import { GeneratorCommandDetails } from "@atomist/automation-client/operations/generate/generatorToCommand";
 import * as utils from "@atomist/automation-client/project/util/projectUtils";
 
-import { HandleCommand } from "@atomist/automation-client";
-import { generatorHandler } from "@atomist/sdm";
+import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
+import { GeneratorRegistration } from "@atomist/sdm";
 import { JavaGeneratorConfig } from "../../java/support/JavaGeneratorConfig";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
 import { transformSeedToCustomProject } from "./transformSeedToCustomProject";
@@ -35,24 +33,23 @@ import { transformSeedToCustomProject } from "./transformSeedToCustomProject";
  */
 export function springBootGenerator(config: JavaGeneratorConfig,
                                     // tslint:disable-next-line:max-line-length
-                                    details: Partial<GeneratorCommandDetails<SpringProjectCreationParameters>> = {}): HandleCommand<SpringProjectCreationParameters> {
-    return generatorHandler<SpringProjectCreationParameters>(
-        (params, ctx) => chainEditors(
+                                    details: Partial<GeneratorCommandDetails<SpringProjectCreationParameters>> = {}): GeneratorRegistration<SpringProjectCreationParameters> {
+    return {
+        createEditor: (params, ctx) => chainEditors(
             replaceReadmeTitle(params),
-            setAtomistTeamInApplicationYml(params, ctx),
+            SetAtomistTeamInApplicationYml,
             transformSeedToCustomProject(params),
         ),
-        () => {
+        paramsMaker: () => {
             const p = new SpringProjectCreationParameters(config);
             // p.target = new BitBucketRepoCreationParameters();
             return p;
         },
-        `springBootGenerator-${config.seed.repo}`,
-        {
-            tags: ["spring", "boot", "java", "generator"],
-            ...details,
-            intent: config.intent,
-        });
+        name: `springBootGenerator-${config.seed.repo}`,
+        tags: ["spring", "boot", "java", "generator"],
+        ...details as any,
+        intent: config.intent,
+    };
 }
 
 /**
@@ -68,11 +65,9 @@ export const replaceReadmeTitle =
 /**
  * Replace the ${ATOMIST_TEAM} placeholder in the seed with the id
  * of the team we are generating for
- * @param params
- * @param ctx
  */
-export const setAtomistTeamInApplicationYml =
-    (params, ctx) => async p => {
+export const SetAtomistTeamInApplicationYml: SimpleProjectEditor =
+    async (p, ctx) => {
         return utils.doWithFiles(p, "src/main/resources/application.yml", f =>
             f.replace(/\${ATOMIST_TEAM}/, ctx.teamId));
     };

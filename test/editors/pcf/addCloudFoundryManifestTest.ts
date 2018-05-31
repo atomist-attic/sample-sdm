@@ -26,7 +26,7 @@ import {
 import { fakeContext } from "../../FakeContext";
 import { NonSpringPom, springBootPom } from "../TestPoms";
 
-describe("addCloudFoundryManifest", () => {
+describe("AddCloudFoundryManifest", () => {
 
     it("should add a manifest to Spring Boot project when none exists", async () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),

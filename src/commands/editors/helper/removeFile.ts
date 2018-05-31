@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { HandleCommand, HandlerContext, Parameter } from "@atomist/automation-client";
+import { HandlerContext, Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
-import { editorCommand } from "@atomist/sdm";
+import { EditorRegistration } from "@atomist/sdm";
 
 @Parameters()
 export class RemoveFileParams {
@@ -27,13 +27,12 @@ export class RemoveFileParams {
     public path: string;
 }
 
-export const removeFileEditor: HandleCommand = editorCommand<RemoveFileParams>(
-    () => removeFile,
-    "remove file",
-    RemoveFileParams,
-    {
-        editMode: params => commitToMaster(`You asked me to remove file ${params.path}!`),
-    });
+export const RemoveFileEditor: EditorRegistration<RemoveFileParams> = {
+    createEditor: () => removeFile,
+    name: "remove file",
+    paramsMaker: RemoveFileParams,
+    editMode: params => commitToMaster(`You asked me to remove file ${params.path}!`),
+};
 
 async function removeFile(p: Project, ctx: HandlerContext, params: RemoveFileParams) {
     return p.deleteFile(params.path);
