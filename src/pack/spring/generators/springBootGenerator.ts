@@ -18,6 +18,7 @@ import { chainEditors } from "@atomist/automation-client/operations/edit/project
 import { GeneratorCommandDetails } from "@atomist/automation-client/operations/generate/generatorToCommand";
 import * as utils from "@atomist/automation-client/project/util/projectUtils";
 
+import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { GeneratorRegistration } from "@atomist/sdm";
 import { JavaGeneratorConfig } from "../../java/support/JavaGeneratorConfig";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
@@ -36,7 +37,7 @@ export function springBootGenerator(config: JavaGeneratorConfig,
     return {
         createEditor: (params, ctx) => chainEditors(
             replaceReadmeTitle(params),
-            setAtomistTeamInApplicationYml(params, ctx),
+            SetAtomistTeamInApplicationYml,
             transformSeedToCustomProject(params),
         ),
         paramsMaker: () => {
@@ -64,11 +65,9 @@ export const replaceReadmeTitle =
 /**
  * Replace the ${ATOMIST_TEAM} placeholder in the seed with the id
  * of the team we are generating for
- * @param params
- * @param ctx
  */
-export const setAtomistTeamInApplicationYml =
-    (params, ctx) => async p => {
+export const SetAtomistTeamInApplicationYml: SimpleProjectEditor =
+    async (p, ctx) => {
         return utils.doWithFiles(p, "src/main/resources/application.yml", f =>
             f.replace(/\${ATOMIST_TEAM}/, ctx.teamId));
     };
