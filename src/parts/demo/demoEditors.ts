@@ -16,7 +16,10 @@
 
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { AffirmationEditor } from "../../commands/editors/demo/affirmationEditor";
-import { BreakJavaBuildEditor, UnbreakJavaBuildEditor } from "../../commands/editors/demo/breakJavaBuild";
+import {
+    BreakJavaBuildEditor,
+    UnbreakJavaBuildEditor,
+} from "../../commands/editors/demo/breakJavaBuild";
 import {
     BreakNodeBuildEditor,
     UnbreakNodeBuildEditor,

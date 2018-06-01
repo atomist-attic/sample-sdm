@@ -15,7 +15,17 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { ExtensionPack, hasFile, SoftwareDeliveryMachine, ToDefaultBranch } from "@atomist/sdm";
+import {
+    ExtensionPack,
+    hasFile,
+    SoftwareDeliveryMachine,
+    ToDefaultBranch,
+} from "@atomist/sdm";
+
+import * as build from "@atomist/sdm/dsl/buildDsl";
+
+import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
+import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { PackageLockFingerprinter } from "@atomist/sdm/pack/node/PackageLockFingerprinter";
 import { tslintFix } from "@atomist/sdm/pack/node/tslint";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
@@ -26,11 +36,6 @@ import { CommonTypeScriptErrors } from "../../parts/team/commonTypeScriptErrors"
 import { DontImportOwnIndex } from "../../parts/team/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
 import { nodeGenerator } from "./generators/nodeGenerator";
-
-import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
-import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
-
-import * as build from "@atomist/sdm/dsl/buildDsl";
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy
@@ -80,16 +85,16 @@ export const NodeSupport: ExtensionPack = {
             .addBuildRules(
                 build.when(IsNode, ToDefaultBranch, hasPackageLock)
                     .itMeans("npm run build")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm ci", "npm run build")),
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm ci", "npm run build")),
                 build.when(IsNode, hasPackageLock)
                     .itMeans("npm run compile")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm ci", "npm run compile")),
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm ci", "npm run compile")),
                 build.when(IsNode, ToDefaultBranch)
                     .itMeans("npm run build - no package lock")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm i", "npm run build")),
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm i", "npm run build")),
                 build.when(IsNode)
                     .itMeans("npm run compile - no package lock")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm i", "npm run compile")));
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm i", "npm run compile")));
 
     },
 };

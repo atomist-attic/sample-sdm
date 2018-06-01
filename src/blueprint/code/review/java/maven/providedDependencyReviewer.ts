@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-import { DefaultReviewComment, ReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
+import {
+    DefaultReviewComment,
+    ReviewComment,
+} from "@atomist/automation-client/operations/review/ReviewResult";
 import { File } from "@atomist/automation-client/project/File";
 import { Project } from "@atomist/automation-client/project/Project";
 import { ReviewerRegistration } from "@atomist/sdm";
-import { promisify } from "util";
-import * as xml2js from "xml2js";
 
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as _ from "lodash";
+import { promisify } from "util";
+import * as xml2js from "xml2js";
 
 export const ProvidedDependencyCategory = "Use of `provided` dependencies in Maven POM";
 

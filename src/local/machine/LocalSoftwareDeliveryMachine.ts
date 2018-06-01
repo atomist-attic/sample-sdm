@@ -1,8 +1,14 @@
-import { Configuration, HandleCommand, HandleEvent, logger } from "@atomist/automation-client";
+import {
+    Configuration,
+    HandleCommand,
+    HandleEvent,
+    logger,
+} from "@atomist/automation-client";
 import { Maker } from "@atomist/automation-client/util/constructionUtils";
 import {
     Builder,
-    CommandHandlerRegistration, DeploymentListener,
+    CommandHandlerRegistration,
+    DeploymentListener,
     EditorRegistration,
     enrichGoalSetters,
     ExecuteGoalWithLog,
@@ -13,16 +19,17 @@ import {
     GoalSetter,
     InterpretLog,
     PushMapping,
-    PushRule, PushRules,
+    PushRule,
+    PushRules,
     PushTest,
     SdmGoalImplementationMapper,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     StaticPushMapping,
     Target,
 } from "@atomist/sdm";
 import { ListenerRegistrationManagerSupport } from "@atomist/sdm/api-helper/machine/ListenerRegistrationManagerSupport";
 import { RegistrationManagerSupport } from "@atomist/sdm/api-helper/machine/RegistrationManagerSupport";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as _ from "lodash";
 
 export class LocalSoftwareDeliveryMachine extends ListenerRegistrationManagerSupport implements SoftwareDeliveryMachine {
@@ -121,8 +128,7 @@ export class LocalSoftwareDeliveryMachine extends ListenerRegistrationManagerSup
     }
 
     constructor(public readonly name: string,
-                public readonly options: SoftwareDeliveryMachineOptions,
-                public readonly configuration: Configuration,
+                public readonly configuration: Configuration & SoftwareDeliveryMachineConfiguration,
                 goalSetters: Array<GoalSetter | GoalSetter[]>) {
         super();
         this.pushMap = new PushRules("Goal setters", _.flatten(goalSetters));

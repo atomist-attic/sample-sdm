@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     FromAtomist,
     IsDeployEnabled,
     not,
     ProductionDeploymentGoal,
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
 import { HttpServiceGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
 import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
-import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/goal/common/npmGoals";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import {
+    NpmBuildGoals,
+    NpmDeployGoals,
+} from "@atomist/sdm/goal/common/npmGoals";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
 import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
@@ -55,11 +61,9 @@ import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
-export function k8sMachine(options: SoftwareDeliveryMachineOptions,
-                           configuration: Configuration): SoftwareDeliveryMachine {
+export function k8sMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "K8s software delivery machine",
-            options,
             configuration,
         },
         whenPushSatisfies(IsMaven, not(MaterialChangeToJavaRepo))
@@ -102,7 +106,7 @@ export function k8sMachine(options: SoftwareDeliveryMachineOptions,
             disableDeploy,
         )
         .addSupportingEvents(() => NoticeK8sTestDeployCompletion,
-            () => noticeK8sProdDeployCompletion(sdm.options.repoRefResolver))
+            () => noticeK8sProdDeployCompletion(configuration.sdm.repoRefResolver))
         .addEndpointVerificationListeners(
             lookFor200OnEndpointRootGet({
                 retries: 15,

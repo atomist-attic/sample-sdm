@@ -15,9 +15,15 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { ExtensionPack, LocalDeploymentGoal } from "@atomist/sdm";
+import {
+    ExtensionPack,
+    LocalDeploymentGoal,
+} from "@atomist/sdm";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
-import { LocalEndpointGoal, LocalUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
+import {
+    LocalEndpointGoal,
+    LocalUndeploymentGoal,
+} from "@atomist/sdm/goal/common/commonGoals";
 import { listLocalDeploys } from "@atomist/sdm/handlers/commands/listLocalDeploys";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
@@ -40,7 +46,7 @@ export const SpringSupport: ExtensionPack = {
                     .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
                     .using(
                         {
-                            deployer: mavenSourceDeployer(sdm.options.projectLoader),
+                            deployer: mavenSourceDeployer(sdm.configuration.sdm.projectLoader),
                             targeter: ManagedDeploymentTargeter,
                         },
                     ))

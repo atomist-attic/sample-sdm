@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { PredicatePushTest, predicatePushTest } from "@atomist/sdm";
+import {
+    PredicatePushTest,
+    predicatePushTest,
+} from "@atomist/sdm";
 import { AtomistK8sSpecFile } from "./addK8sSpec";
 
 export const HasK8Spec: PredicatePushTest = predicatePushTest(

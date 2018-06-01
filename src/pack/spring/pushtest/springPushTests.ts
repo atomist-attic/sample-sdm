@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { predicatePushTest, PredicatePushTest } from "@atomist/sdm";
+import {
+    predicatePushTest,
+    PredicatePushTest,
+} from "@atomist/sdm";
 import { SpringBootProjectStructure } from "@atomist/spring-automation/commands/generator/spring/SpringBootProjectStructure";
 
 /**

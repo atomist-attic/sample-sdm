@@ -14,32 +14,67 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
-    FromAtomist, given,
+    FromAtomist,
+    given,
     Goals,
-    hasFile, IsDeployEnabled, NamedSeedRepo,
+    hasFile,
+    IsDeployEnabled,
+    NamedSeedRepo,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     StagingEndpointGoal,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
 
+import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
+
 import * as build from "@atomist/sdm/dsl/buildDsl";
+
+import * as deploy from "@atomist/sdm/dsl/deployDsl";
+import {
+    NoGoals,
+    StagingUndeploymentGoal,
+} from "@atomist/sdm/goal/common/commonGoals";
+import {
+    HttpServiceGoals,
+    RepositoryDeletionGoals,
+    UndeployEverywhereGoals,
+} from "@atomist/sdm/goal/common/httpServiceGoals";
+import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
+import {
+    NpmBuildGoals,
+    NpmDeployGoals,
+    NpmDockerGoals,
+    NpmKubernetesDeployGoals,
+} from "@atomist/sdm/goal/common/npmGoals";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
+import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
+import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
-import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
+import {
+    HasAtomistBuildFile,
+    IsNode,
+} from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
@@ -60,40 +95,15 @@ import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
-import * as deploy from "@atomist/sdm/dsl/deployDsl";
-import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
-import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
-import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
-
-import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
-import { NoGoals, StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
-import {
-    HttpServiceGoals,
-    RepositoryDeletionGoals,
-    UndeployEverywhereGoals,
-} from "@atomist/sdm/goal/common/httpServiceGoals";
-import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
-import {
-    NpmBuildGoals,
-    NpmDeployGoals,
-    NpmDockerGoals,
-    NpmKubernetesDeployGoals,
-} from "@atomist/sdm/goal/common/npmGoals";
-import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
-
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
-                                    configuration: Configuration): SoftwareDeliveryMachine {
+export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "CloudFoundry software delivery machine",
-            options,
             configuration,
         },
         given<Goals>(IsMaven).itMeans("Maven")
@@ -133,21 +143,21 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)
             .itMeans("Custom build script")
-            .set(npmCustomBuilder(options.artifactStore, options.projectLoader)),
+            .set(npmCustomBuilder(configuration.sdm.artifactStore, configuration.sdm.projectLoader)),
         build.when(IsNode, ToDefaultBranch, hasPackageLock)
             .itMeans("npm run build")
-            .set(nodeBuilder(options.projectLoader, "npm ci", "npm run build")),
+            .set(nodeBuilder(configuration.sdm.projectLoader, "npm ci", "npm run build")),
         build.when(IsNode, hasPackageLock)
             .itMeans("npm run compile")
-            .set(nodeBuilder(options.projectLoader, "npm ci", "npm run compile")),
+            .set(nodeBuilder(configuration.sdm.projectLoader, "npm ci", "npm run compile")),
         build.when(IsNode, ToDefaultBranch)
             .itMeans("npm run build - no package lock")
-            .set(nodeBuilder(options.projectLoader, "npm i", "npm run build")),
+            .set(nodeBuilder(configuration.sdm.projectLoader, "npm i", "npm run build")),
         build.when(IsNode)
             .itMeans("npm run compile - no package lock")
-            .set(nodeBuilder(options.projectLoader, "npm i", "npm run compile")),
-        build.setDefault(new MavenBuilder(options.artifactStore,
-            createEphemeralProgressLog, options.projectLoader)));
+            .set(nodeBuilder(configuration.sdm.projectLoader, "npm i", "npm run compile")),
+        build.setDefault(new MavenBuilder(configuration.sdm.artifactStore,
+            createEphemeralProgressLog, configuration.sdm.projectLoader)));
     sdm.addDeployRules(
         deploy.when(IsMaven)
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
@@ -159,11 +169,11 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
             ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(options)),
+            .using(cloudFoundryProductionDeploySpec(configuration.sdm)),
         deploy.when(IsNode)
             .itMeans("node run test")
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-            .using(cloudFoundryStagingDeploySpec(options)),
+            .using(cloudFoundryStagingDeploySpec(configuration.sdm)),
     );
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { Deployer, ProjectLoader } from "@atomist/sdm";
+import {
+    Deployer,
+    ProjectLoader,
+} from "@atomist/sdm";
 import { executableJarDeployer } from "@atomist/sdm/internal/delivery/deploy/local/jar/executableJarDeployer";
 import { StartupInfo } from "@atomist/sdm/internal/delivery/deploy/local/LocalDeployerOptions";
 import { ManagedDeploymentTargetInfo } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";

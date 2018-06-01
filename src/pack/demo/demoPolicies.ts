@@ -15,7 +15,12 @@
  */
 
 import { Issue } from "@atomist/automation-client/util/gitHub";
-import { editorAutofixRegistration, ExtensionPack, hasFile, not } from "@atomist/sdm";
+import {
+    editorAutofixRegistration,
+    ExtensionPack,
+    hasFile,
+    not,
+} from "@atomist/sdm";
 import { updateIssue } from "@atomist/sdm/util/github/ghub";
 import axios from "axios";
 
@@ -29,7 +34,7 @@ export const DemoPolicies: ExtensionPack = {
     version: "0.1.0",
     configure: sdm => {
         sdm
-        // Close all newly created issues
+            // Close all newly created issues
             .addCommands({
                 name: "helloworld",
                 listener: async cli => cli.addressChannels("Hello world"),

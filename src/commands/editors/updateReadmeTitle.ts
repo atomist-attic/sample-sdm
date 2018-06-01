@@ -15,9 +15,9 @@
  */
 
 import { doWithFileMatches } from "@atomist/automation-client/project/util/parseUtils";
-import { Microgrammar } from "@atomist/microgrammar/Microgrammar";
 
 import { RestOfLine } from "@atomist/microgrammar/matchers/skip/Skip";
+import { Microgrammar } from "@atomist/microgrammar/Microgrammar";
 
 export function updateReadmeTitle(appName: string,
                                   description: string) {

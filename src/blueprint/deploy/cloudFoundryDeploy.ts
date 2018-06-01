@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { DeployerInfo, ProjectLoader, PushImpactListener, PushReactionRegistration } from "@atomist/sdm";
+import {
+    DeployerInfo,
+    ProjectLoader,
+    PushImpactListener,
+    PushReactionRegistration,
+} from "@atomist/sdm";
 import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/pack/pcf/CloudFoundryBlueGreenDeployer";
 import { CloudFoundryInfo } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";

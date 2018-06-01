@@ -16,9 +16,12 @@
 
 import { logger } from "@atomist/automation-client";
 import { buttonForCommand } from "@atomist/automation-client/spi/message/MessageClient";
-import { ChannelLinkListener } from "@atomist/sdm";
-import { ProjectPredicate } from "@atomist/sdm";
-import { allPredicatesSatisfied, anyPredicateSatisfied } from "@atomist/sdm";
+import {
+    allPredicatesSatisfied,
+    anyPredicateSatisfied,
+    ChannelLinkListener,
+    ProjectPredicate,
+} from "@atomist/sdm";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import * as slack from "@atomist/slack-messages/SlackMessages";
