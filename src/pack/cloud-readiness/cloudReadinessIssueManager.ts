@@ -16,13 +16,16 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { deepLink } from "@atomist/automation-client/util/gitHub";
-import { ImportDotStarCategory } from "../../blueprint/code/review/java/importDotStarReviewer";
-import { CommentsFormatter, singleIssueManagingReviewListener } from "../../blueprint/issue/issueManagingReviewListeners";
 
 import { ReviewListener } from "@atomist/sdm";
 import * as _ from "lodash";
 import { ImportFileIoCategory } from "../../blueprint/code/review/java/fileIoImportReviewer";
+import { ImportDotStarCategory } from "../../blueprint/code/review/java/importDotStarReviewer";
 import { HardcodePropertyCategory } from "../../blueprint/code/review/java/spring/hardcodedPropertyReviewer";
+import {
+    CommentsFormatter,
+    singleIssueManagingReviewListener,
+} from "../../blueprint/issue/issueManagingReviewListeners";
 
 const CloudReadinessIssueTitle = "Service Not Yet Cloud Native";
 const CloudReadinessReviewCommentCategories = [

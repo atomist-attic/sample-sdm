@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
-import { FingerprintListener, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    FingerprintListener,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";
 import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
 import { DryRunEditing } from "@atomist/sdm/pack/dry-run/dryRunEditorSupport";
@@ -58,10 +60,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     );
 
     if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
-        logger.info("Enabling SonarQube integration");
         sdm.addExtensionPacks(SonarQubeSupport);
-    } else {
-        logger.info("SonarQube integration not enabled");
     }
 
     const pub: FingerprintListener = async fp => {

@@ -15,7 +15,10 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { PushTest, pushTest } from "@atomist/sdm";
+import {
+    PushTest,
+    pushTest,
+} from "@atomist/sdm";
 import {
     anyFileChangedSuchThat,
     anyFileChangedWithExtension,

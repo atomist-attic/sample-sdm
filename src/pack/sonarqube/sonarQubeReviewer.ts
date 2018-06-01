@@ -1,7 +1,13 @@
 import { logger } from "@atomist/automation-client";
-import { ReviewerRegistration, ToDefaultBranch } from "@atomist/sdm";
+import {
+    ReviewerRegistration,
+    ToDefaultBranch,
+} from "@atomist/sdm";
 import { StringCapturingProgressLog } from "@atomist/sdm/api-helper/log/StringCapturingProgressLog";
-import { asSpawnCommand, spawnAndWatch } from "@atomist/sdm/util/misc/spawned";
+import {
+    asSpawnCommand,
+    spawnAndWatch,
+} from "@atomist/sdm/util/misc/spawned";
 
 export interface SonarCubeOptions {
     url: string;

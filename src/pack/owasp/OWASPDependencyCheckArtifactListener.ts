@@ -1,4 +1,7 @@
-import { ArtifactListenerRegistration, ToDefaultBranch } from "@atomist/sdm";
+import {
+    ArtifactListenerRegistration,
+    ToDefaultBranch,
+} from "@atomist/sdm";
 import { LoggingProgressLog } from "@atomist/sdm/api-helper/log/LoggingProgressLog";
 import {
     asSpawnCommand,

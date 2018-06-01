@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     ArtifactGoal,
     Goals,
     JustBuildGoal,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
@@ -35,10 +34,9 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  * Assemble a machine that only builds and verifies Java artifacts.
  * @return {SoftwareDeliveryMachine}
  */
-export function artifactVerifyingMachine(options: SoftwareDeliveryMachineOptions,
-                                         configuration: Configuration): SoftwareDeliveryMachine {
+export function artifactVerifyingMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
-            name: "Artifact verifying machine", options,
+            name: "Artifact verifying machine",
             configuration,
         }, whenPushSatisfies(IsMaven)
             .itMeans("Push to Maven repo")
@@ -47,7 +45,7 @@ export function artifactVerifyingMachine(options: SoftwareDeliveryMachineOptions
     sdm.addBuildRules(
         build.when(IsMaven)
             .itMeans("build with Maven")
-            .set(new MavenBuilder(options.artifactStore, createEphemeralProgressLog, options.projectLoader)))
+            .set(new MavenBuilder(configuration.sdm.artifactStore, createEphemeralProgressLog, configuration.sdm.projectLoader)))
         .addArtifactListeners(async ai => {
             // Could invoke a security scanning tool etc.
             const stat = fs.statSync(`${ai.deployableArtifact.cwd}/${ai.deployableArtifact.filename}`);

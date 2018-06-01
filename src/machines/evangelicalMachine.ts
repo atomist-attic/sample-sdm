@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     executeSendMessageToSlack,
     MessageGoal,
     not,
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
@@ -42,10 +45,11 @@ export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
 /**
  * Assemble a machine that suggests the potential to use more SDM features
  */
-export function evangelicalMachine(options: SoftwareDeliveryMachineOptions,
-                                   configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine(
-        {name: "Helpful software delivery machine. You need to be saved.", options, configuration},
+export function evangelicalMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    const sdm = createSoftwareDeliveryMachine({
+            name: "Helpful software delivery machine. You need to be saved.",
+            configuration,
+        },
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
             .itMeans("No material change to Java")
             .setGoals(ImmaterialChangeToJava),

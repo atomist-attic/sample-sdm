@@ -15,7 +15,10 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { ExtensionPack, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    ExtensionPack,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { checkstyleReviewerRegistration } from "@atomist/sdm/pack/checkstyle/checkstyleReviewer";
 
 export interface CheckstyleSupportOptions {

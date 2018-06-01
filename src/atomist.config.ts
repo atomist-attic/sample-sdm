@@ -15,9 +15,11 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { ConfigureOptions, configureSdm } from "@atomist/sdm/internal/machine/configureSdm";
-import { tryRolarLogFactory } from "./blueprint/log/logFactory";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
+import {
+    ConfigureOptions,
+    configureSdm,
+} from "@atomist/sdm/internal/machine/configureSdm";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
 
@@ -51,9 +53,8 @@ import { configureLogzio } from "./util/logzio";
  * start with any of these and change it to make it your own!
  */
 
-function createMachine(options: SoftwareDeliveryMachineOptions,
-                       config: Configuration): SoftwareDeliveryMachine {
-    return additiveCloudFoundryMachine(options, config);
+function machineMaker(config: SoftwareDeliveryMachineConfiguration) {
+    return additiveCloudFoundryMachine(config);
 }
 
 const Options: ConfigureOptions = {
@@ -65,10 +66,6 @@ const Options: ConfigureOptions = {
         "sdm.cloudfoundry.spaces.production",
         "sdm.cloudfoundry.spaces.staging",
     ],
-    sdmOptions: {
-        // TODO get this from the config
-        logFactory: tryRolarLogFactory("http://rolar.cfapps.io"),
-    },
 };
 
 export const configuration: Configuration = {
@@ -81,14 +78,11 @@ export const configuration: Configuration = {
             },
         },
     },
-    cluster: {
-        workers: 1,
-    },
     logging: {
         level: "info",
     },
     postProcessors: [
         configureLogzio,
-        configureSdm(createMachine, Options),
+        configureSdm(machineMaker, Options),
     ],
 };

@@ -1,14 +1,13 @@
-import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import { EditorRegistration } from "@atomist/sdm";
-import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
-import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
-import { addDependencyEditor } from "@atomist/spring-automation/commands/editor/maven/addDependencyEditor";
-
 import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
+import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
+import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
+import { EditorRegistration } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/sdm/internal/delivery/build/local/maven/VersionedArtifact";
+import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
+import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
+import { addDependencyEditor } from "@atomist/spring-automation/commands/editor/maven/addDependencyEditor";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",

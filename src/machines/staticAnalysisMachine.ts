@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import { DefaultReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
 import {
     Goals,
     ReviewerRegistration,
     ReviewGoal,
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
@@ -34,12 +34,11 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  * Assemble a machine that performs only static analysis.
  * @return {SoftwareDeliveryMachine}
  */
-export function staticAnalysisMachine(options: SoftwareDeliveryMachineOptions,
-                                      configuration: Configuration): SoftwareDeliveryMachine {
+export function staticAnalysisMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "Static analysis SDM",
-            options, configuration,
+            configuration,
         },
         whenPushSatisfies(IsJava, MaterialChangeToJavaRepo)
             .itMeans("Change to Java")
