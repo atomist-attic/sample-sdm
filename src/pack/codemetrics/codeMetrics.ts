@@ -19,6 +19,8 @@ export function codeMetrics(publisher: FingerprintListener,
                             pushTest?: PushTest): ExtensionPack {
     return {
         name: CodeMetricsFingerprintName,
+        vendor: "Atomist",
+        version: "0.1.0",
         configure: addCodeMetrics(publisher, pushTest),
     };
 }

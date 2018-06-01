@@ -25,9 +25,16 @@ import axios from "axios";
  */
 export const DemoPolicies: ExtensionPack = {
     name: "demoPolicies",
+    vendor: "Atomist",
+    version: "0.1.0",
     configure: sdm => {
         sdm
         // Close all newly created issues
+            .addCommands({
+                name: "helloworld",
+                listener: async cli => cli.addressChannels("Hello world"),
+                intent: "hello world",
+            })
             .addNewIssueListeners(async newIssue => {
                 await updateIssue(newIssue.credentials, newIssue.id, newIssue.issue.number, {
                     ...newIssue.issue,

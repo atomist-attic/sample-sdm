@@ -19,7 +19,7 @@ import { HandlerContext } from "@atomist/automation-client";
 import { BasicAuthCredentials } from "@atomist/automation-client/operations/common/BasicAuthCredentials";
 import { ProjectOperationCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
-import { CredentialsResolver } from "@atomist/sdm/handlers/common/CredentialsResolver";
+import { CredentialsResolver } from "@atomist/sdm";
 
 export class DefaultCredentialsResolver implements CredentialsResolver {
 

@@ -30,6 +30,8 @@ import { springBootGenerator } from "./generators/springBootGenerator";
 
 export const SpringSupport: ExtensionPack = {
     name: "Spring support",
+    vendor: "Atomist",
+    version: "0.1.0",
     configure: sdm => {
         sdm
             .addDeployRules(

@@ -21,10 +21,9 @@ import {
     Goals,
     ReviewerRegistration,
     ReviewGoal,
-    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
@@ -35,7 +34,7 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  * Assemble a machine that performs only static analysis.
  * @return {SoftwareDeliveryMachine}
  */
-export function staticAnalysisMachine(options: ConcreteSoftwareDeliveryMachineOptions,
+export function staticAnalysisMachine(options: SoftwareDeliveryMachineOptions,
                                       configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
