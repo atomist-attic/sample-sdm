@@ -85,7 +85,4 @@ export const configuration: Configuration = {
         configureLogzio,
         configureSdm(machineMaker, Options),
     ],
-    sdm: {
-        artifactStore: null,
-    },
 };
