@@ -87,5 +87,5 @@ export const configuration: Configuration = {
     ],
     sdm: {
         artifactStore: null,
-    }
+    },
 };
