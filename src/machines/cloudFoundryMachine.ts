@@ -25,7 +25,7 @@ import {
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
     StagingEndpointGoal,
     ToDefaultBranch,
@@ -80,7 +80,6 @@ import {
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
 } from "@atomist/sdm/goal/common/npmGoals";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 
@@ -89,7 +88,7 @@ import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function cloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOptions,
+export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
                                     configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {

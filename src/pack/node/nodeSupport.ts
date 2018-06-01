@@ -39,6 +39,8 @@ import * as build from "@atomist/sdm/dsl/buildDsl";
  */
 export const NodeSupport: ExtensionPack = {
     name: "Node support",
+    vendor: "Atomist",
+    version: "0.1.0",
     configure: (sdm: SoftwareDeliveryMachine) => {
         const hasPackageLock = hasFile("package-lock.json");
 

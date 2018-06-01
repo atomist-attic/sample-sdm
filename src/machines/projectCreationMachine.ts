@@ -17,9 +17,8 @@
 import { Configuration } from "@atomist/automation-client";
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
-    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
 } from "@atomist/sdm";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
@@ -37,7 +36,7 @@ import {
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function projectCreationMachine(options: ConcreteSoftwareDeliveryMachineOptions,
+export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
                                        configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", options, configuration});
 

@@ -7,6 +7,8 @@ import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
 
 export const CloudReadinessChecks: ExtensionPack = {
     name: "CloudReadiness",
+    vendor: "Atomist",
+    version: "0.1.0",
     configure: softwareDeliveryMachine =>
         softwareDeliveryMachine
             .addReviewerRegistrations(

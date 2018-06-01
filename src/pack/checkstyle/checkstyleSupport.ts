@@ -31,6 +31,8 @@ export interface CheckstyleSupportOptions {
  */
 export const CheckstyleSupport: ExtensionPack = {
     name: "Checkstyle",
+    vendor: "Atomist",
+    version: "0.1.0",
     configure: (softwareDeliveryMachine: SoftwareDeliveryMachine) => {
         const opts = softwareDeliveryMachine.configuration.sdm.checkstyle as CheckstyleSupportOptions;
         if (opts && opts.enabled) {

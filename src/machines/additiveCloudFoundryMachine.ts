@@ -31,6 +31,7 @@ import {
     PushReactionGoal,
     ReviewGoal,
     SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingVerifiedGoal,
@@ -46,7 +47,6 @@ import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDe
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
@@ -82,7 +82,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
  * @return {SoftwareDeliveryMachine}
  */
-export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMachineOptions,
+export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
                                             configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
@@ -149,7 +149,8 @@ export function additiveCloudFoundryMachine(options: ConcreteSoftwareDeliveryMac
     addJavaSupport(sdm);
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
-    // DemoPolicies(sdm, configuration);
+
+    // sdm.addExtensionPacks(DemoPolicies);
 
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(options.artifactStore,

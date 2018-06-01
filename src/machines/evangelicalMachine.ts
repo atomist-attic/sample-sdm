@@ -19,12 +19,11 @@ import {
     executeSendMessageToSlack,
     MessageGoal,
     not,
-    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
@@ -43,7 +42,7 @@ export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
 /**
  * Assemble a machine that suggests the potential to use more SDM features
  */
-export function evangelicalMachine(options: ConcreteSoftwareDeliveryMachineOptions,
+export function evangelicalMachine(options: SoftwareDeliveryMachineOptions,
                                    configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {name: "Helpful software delivery machine. You need to be saved.", options, configuration},

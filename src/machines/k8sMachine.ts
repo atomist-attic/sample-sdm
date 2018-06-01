@@ -20,7 +20,7 @@ import {
     IsDeployEnabled,
     not,
     ProductionDeploymentGoal,
-    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
     ToDefaultBranch,
     whenPushSatisfies,
@@ -33,7 +33,6 @@ import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/goal/common/npmGoals
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
 import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
-import { ConcreteSoftwareDeliveryMachineOptions } from "@atomist/sdm/machine/ConcreteSoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
@@ -56,7 +55,7 @@ import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
-export function k8sMachine(options: ConcreteSoftwareDeliveryMachineOptions,
+export function k8sMachine(options: SoftwareDeliveryMachineOptions,
                            configuration: Configuration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "K8s software delivery machine",
