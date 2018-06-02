@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     any,
     AnyPush,
@@ -31,7 +30,6 @@ import {
     PushReactionGoal,
     ReviewGoal,
     SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingVerifiedGoal,
@@ -39,6 +37,7 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
@@ -82,12 +81,11 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
  * @return {SoftwareDeliveryMachine}
  */
-export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
-                                            configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine(
+export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    const sdm: SoftwareDeliveryMachine = createSoftwareDeliveryMachine(
         {
             name: "CloudFoundry software delivery machine",
-            options, configuration,
+            configuration,
         },
         // Each contributor contributes goals. The infrastructure assembles them into a goal set.
         goalContributors(
@@ -125,10 +123,10 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
                     deployer: LocalExecutableJarDeployer,
                     targeter: ManagedDeploymentTargeter,
                 },
-        ),
+            ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(options)),
+            .using(cloudFoundryProductionDeploySpec(configuration.sdm)),
     );
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)
@@ -143,7 +141,7 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
             enableDeploy,
             disableDeploy,
             isDeployEnabledCommand,
-    )
+        )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
     addJavaSupport(sdm);
@@ -153,8 +151,8 @@ export function additiveCloudFoundryMachine(options: SoftwareDeliveryMachineOpti
     // sdm.addExtensionPacks(DemoPolicies);
 
     sdm.addBuildRules(
-        build.setDefault(new MavenBuilder(options.artifactStore,
-            createEphemeralProgressLog, options.projectLoader)));
+        build.setDefault(new MavenBuilder(configuration.sdm.artifactStore,
+            createEphemeralProgressLog, configuration.sdm.projectLoader)));
 
     return sdm;
 }

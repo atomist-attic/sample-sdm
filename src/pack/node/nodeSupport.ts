@@ -80,16 +80,16 @@ export const NodeSupport: ExtensionPack = {
             .addBuildRules(
                 build.when(IsNode, ToDefaultBranch, hasPackageLock)
                     .itMeans("npm run build")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm ci", "npm run build")),
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm ci", "npm run build")),
                 build.when(IsNode, hasPackageLock)
                     .itMeans("npm run compile")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm ci", "npm run compile")),
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm ci", "npm run compile")),
                 build.when(IsNode, ToDefaultBranch)
                     .itMeans("npm run build - no package lock")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm i", "npm run build")),
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm i", "npm run build")),
                 build.when(IsNode)
                     .itMeans("npm run compile - no package lock")
-                    .set(nodeBuilder(sdm.options.projectLoader, "npm i", "npm run compile")));
+                    .set(nodeBuilder(sdm.configuration.sdm.projectLoader, "npm i", "npm run compile")));
 
     },
 };

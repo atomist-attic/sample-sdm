@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
-import { AutofixGoal, Goals, onAnyPush, SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { AutofixGoal, Goals, onAnyPush, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
 import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
@@ -25,9 +25,9 @@ import { addDemoEditors } from "../parts/demo/demoEditors";
  * Assemble a machine that performs only autofixes.
  * @return {SoftwareDeliveryMachine}
  */
-export function autofixMachine(options: SoftwareDeliveryMachineOptions,
-                               configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", options, configuration},
+export function autofixMachine(
+                               configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", configuration},
         onAnyPush
             .setGoals(new Goals("Autofix", AutofixGoal)));
     sdm.addAutofixes(

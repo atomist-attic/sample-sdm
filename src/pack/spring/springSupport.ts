@@ -40,7 +40,7 @@ export const SpringSupport: ExtensionPack = {
                     .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
                     .using(
                         {
-                            deployer: mavenSourceDeployer(sdm.options.projectLoader),
+                            deployer: mavenSourceDeployer(sdm.configuration.sdm.projectLoader),
                             targeter: ManagedDeploymentTargeter,
                         },
                     ))

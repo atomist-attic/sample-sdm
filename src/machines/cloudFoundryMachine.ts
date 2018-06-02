@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     AnyPush,
     FromAtomist, given,
@@ -25,7 +24,7 @@ import {
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     StagingEndpointGoal,
     ToDefaultBranch,
@@ -67,6 +66,7 @@ import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { NoGoals, StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
 import {
     HttpServiceGoals,
@@ -88,12 +88,11 @@ import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
-                                    configuration: Configuration): SoftwareDeliveryMachine {
+export function cloudFoundryMachine(
+                                    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "CloudFoundry software delivery machine",
-            options,
             configuration,
         },
         given<Goals>(IsMaven).itMeans("Maven")
@@ -133,21 +132,21 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)
             .itMeans("Custom build script")
-            .set(npmCustomBuilder(options.artifactStore, options.projectLoader)),
+            .set(npmCustomBuilder(configuration.artifactStore, configuration.projectLoader)),
         build.when(IsNode, ToDefaultBranch, hasPackageLock)
             .itMeans("npm run build")
-            .set(nodeBuilder(options.projectLoader, "npm ci", "npm run build")),
+            .set(nodeBuilder(configuration.projectLoader, "npm ci", "npm run build")),
         build.when(IsNode, hasPackageLock)
             .itMeans("npm run compile")
-            .set(nodeBuilder(options.projectLoader, "npm ci", "npm run compile")),
+            .set(nodeBuilder(configuration.projectLoader, "npm ci", "npm run compile")),
         build.when(IsNode, ToDefaultBranch)
             .itMeans("npm run build - no package lock")
-            .set(nodeBuilder(options.projectLoader, "npm i", "npm run build")),
+            .set(nodeBuilder(configuration.projectLoader, "npm i", "npm run build")),
         build.when(IsNode)
             .itMeans("npm run compile - no package lock")
-            .set(nodeBuilder(options.projectLoader, "npm i", "npm run compile")),
-        build.setDefault(new MavenBuilder(options.artifactStore,
-            createEphemeralProgressLog, options.projectLoader)));
+            .set(nodeBuilder(configuration.projectLoader, "npm i", "npm run compile")),
+        build.setDefault(new MavenBuilder(configuration.artifactStore,
+            createEphemeralProgressLog, configuration.projectLoader)));
     sdm.addDeployRules(
         deploy.when(IsMaven)
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
@@ -159,11 +158,11 @@ export function cloudFoundryMachine(options: SoftwareDeliveryMachineOptions,
             ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(options)),
+            .using(cloudFoundryProductionDeploySpec(configuration.sdm)),
         deploy.when(IsNode)
             .itMeans("node run test")
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-            .using(cloudFoundryStagingDeploySpec(options)),
+            .using(cloudFoundryStagingDeploySpec(configuration.sdm)),
     );
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)

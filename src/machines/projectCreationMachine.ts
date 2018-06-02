@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import {
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { nodeGenerator } from "../pack/node/generators/nodeGenerator";
 import { springBootGenerator } from "../pack/spring/generators/springBootGenerator";
-import {
-    CommonGeneratorConfig,
-    CommonJavaGeneratorConfig,
-} from "./generatorConfig";
+import { CommonGeneratorConfig, CommonJavaGeneratorConfig } from "./generatorConfig";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -36,10 +31,9 @@ import {
  * See generatorConfig.ts to customize generation defaults.
  * @return {SoftwareDeliveryMachine}
  */
-export function projectCreationMachine(options: SoftwareDeliveryMachineOptions,
-                                       configuration: Configuration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", options, configuration});
-
+export function projectCreationMachine(
+                                       configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", configuration});
     sdm.addGenerators(
         springBootGenerator({
             ...CommonJavaGeneratorConfig,

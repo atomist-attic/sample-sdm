@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
 import {
     FromAtomist,
     IsDeployEnabled,
     not,
     ProductionDeploymentGoal,
-    SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions,
+    SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
 import { HttpServiceGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
@@ -55,11 +55,10 @@ import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
 import { addJavaSupport } from "../parts/stacks/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
-export function k8sMachine(options: SoftwareDeliveryMachineOptions,
-                           configuration: Configuration): SoftwareDeliveryMachine {
+export function k8sMachine(
+                           configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "K8s software delivery machine",
-            options,
             configuration,
         },
         whenPushSatisfies(IsMaven, not(MaterialChangeToJavaRepo))
@@ -102,7 +101,7 @@ export function k8sMachine(options: SoftwareDeliveryMachineOptions,
             disableDeploy,
         )
         .addSupportingEvents(() => NoticeK8sTestDeployCompletion,
-            () => noticeK8sProdDeployCompletion(sdm.options.repoRefResolver))
+            () => noticeK8sProdDeployCompletion(sdm.configuration.sdm.repoRefResolver))
         .addEndpointVerificationListeners(
             lookFor200OnEndpointRootGet({
                 retries: 15,
