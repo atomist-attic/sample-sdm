@@ -175,7 +175,7 @@ async function updateIssue(credentials: ProjectOperationCredentials,
     };
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
-    const url = encodeURI(`${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues/${issue.number}`);
+    const url = encodeURI(`${grr.scheme}${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues/${issue.number}`);
     logger.info(`Request to '${url}' to update issue`);
     await axios.patch(url, safeIssue, authHeaders(token)).catch(err => {
         logger.error("Failure updating issue. response: %s", stringify(err.response.data));
@@ -188,7 +188,7 @@ async function createIssue(credentials: ProjectOperationCredentials,
                            issue: Issue) {
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
-    const url = `${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues`;
+    const url = `${grr.scheme}${grr.apiBase}/repos/${rr.owner}/${rr.repo}/issues`;
     logger.info(`Request to '${url}' to create issue`);
     await axios.post(url, issue, authHeaders(token));
 }
@@ -199,7 +199,7 @@ async function findIssue(credentials: ProjectOperationCredentials,
                          title: string): Promise<KnownIssue> {
     const token = (credentials as TokenCredentials).token;
     const grr = rr as GitHubRepoRef;
-    const url = encodeURI(`${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`);
+    const url = encodeURI(`${grr.scheme}${grr.apiBase}/search/issues?q=is:issue+user:${rr.owner}+repo:${rr.repo}+"${title}"`);
     logger.info(`Request to '${url}' to get issues`);
     const returnedIssues: KnownIssue[] = await axios.get(url, authHeaders(token)).then(r => r.data.items);
     return returnedIssues.filter(i =>

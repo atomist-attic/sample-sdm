@@ -51,12 +51,12 @@ export const SpringSupport: ExtensionPack = {
             .addGenerators(springBootGenerator({
                 ...CommonJavaGeneratorConfig,
                 seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
-                intent: "create spring",
+            },{ intent: "create spring",
             }))
             .addGenerators(springBootGenerator({
                 ...CommonJavaGeneratorConfig,
                 seed: new GitHubRepoRef("johnsonr", "flux-flix-service"),
-                intent: "create spring kotlin",
+            } ,{ intent: "create spring kotlin",
             }))
             .addNewRepoWithCodeActions(
                 tagRepo(springBootTagger),

@@ -32,7 +32,6 @@ export function nodeGenerator(config: GeneratorConfig,
         name: `nodeGenerator-${config.seed.repo}`,
         tags: ["node", "typescript", "generator"],
         ...details,
-        intent: config.intent,
     };
 }
 

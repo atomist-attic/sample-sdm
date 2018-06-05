@@ -58,7 +58,6 @@ describe("springBootGenerator", () => {
                 {path: "README.md", content: Readme1});
             const params = new SpringProjectCreationParameters({
                 seed: new GitHubRepoRef("foo", "bar"),
-                intent: "whatever",
                 groupId: "atomist",
                 addAtomistWebhook: false,
             });
@@ -77,7 +76,6 @@ describe("springBootGenerator", () => {
                 {path: "pom.xml", content: springBootPom()});
             const params = new SpringProjectCreationParameters({
                 seed: new GitHubRepoRef("foo", "bar"),
-                intent: "whatever",
                 groupId: "atomist",
                 addAtomistWebhook: false,
             });
@@ -93,7 +91,6 @@ describe("springBootGenerator", () => {
                 {path: "README.md", content: Readme1});
             const params = new SpringProjectCreationParameters({
                 seed: new GitHubRepoRef("foo", "bar"),
-                intent: "whatever",
                 groupId: "atomist",
                 addAtomistWebhook: false,
             });

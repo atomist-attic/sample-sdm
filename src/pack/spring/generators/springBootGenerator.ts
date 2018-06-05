@@ -48,7 +48,7 @@ export function springBootGenerator(config: JavaGeneratorConfig,
         name: `springBootGenerator-${config.seed.repo}`,
         tags: ["spring", "boot", "java", "generator"],
         ...details as any,
-        intent: config.intent,
+        intent: details.intent,
     };
 }
 
