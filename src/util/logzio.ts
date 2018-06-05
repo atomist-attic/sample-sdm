@@ -109,8 +109,8 @@ export class LogzioAutomationEventListener extends AutomationEventListenerSuppor
     }
 
     public async messageSent(message: any,
-                       destinations: Destination | Destination[],
-                       options: MessageOptions, ctx: HandlerContext) {
+                             destinations: Destination | Destination[],
+                             options: MessageOptions, ctx: HandlerContext) {
         this.sendEvent("Outgoing message", "message", {
             message,
             destinations,

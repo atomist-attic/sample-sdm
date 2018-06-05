@@ -38,17 +38,17 @@ export function projectCreationMachine(
         springBootGenerator({
             ...CommonJavaGeneratorConfig,
             seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
-        },{ intent: "create spring",
+        }, { intent: "create spring",
         }),
         nodeGenerator({
             ...CommonGeneratorConfig,
             seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
-        },{  intent: "create node",
+        }, {  intent: "create node",
         }),
         nodeGenerator({
             ...CommonGeneratorConfig,
             seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
-        },{   intent: "create minimal node",
+        }, {   intent: "create minimal node",
         }))
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
