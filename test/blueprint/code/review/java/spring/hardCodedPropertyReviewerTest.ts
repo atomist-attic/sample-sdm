@@ -23,7 +23,7 @@ import { PushListenerInvocation } from "@atomist/sdm";
 import {
     HardCodedPropertyReviewer,
     HardcodePropertyCategory,
-} from "../../../../../../src/blueprint/code/review/java/spring/hardcodedPropertyReviewer";
+} from "../../../../../../src/reviewer/java/spring/hardcodedPropertyReviewer";
 
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
 import * as assert from "power-assert";

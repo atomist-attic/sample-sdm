@@ -44,7 +44,7 @@ import {
     noticeK8sProdDeployCompletion,
     NoticeK8sTestDeployCompletion,
 } from "../blueprint/deploy/k8sDeploy";
-import { SuggestAddingK8sSpec } from "../blueprint/repo/suggestAddingK8sSpec";
+import { SuggestAddingK8sSpec } from "../listener/channel-link/suggestAddingK8sSpec";
 import { AddK8sSpec } from "../commands/editors/k8s/addK8sSpec";
 import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";

@@ -20,7 +20,7 @@ import { PackageLockFingerprinter } from "@atomist/sdm/pack/node/PackageLockFing
 import { tslintFix } from "@atomist/sdm/pack/node/tslint";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
-import { AddAtomistTypeScriptHeader } from "../../blueprint/code/autofix/addAtomistHeader";
+import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../../parts/team/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../parts/team/dontImportOwnIndex";

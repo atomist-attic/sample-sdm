@@ -21,7 +21,7 @@ import * as assert from "power-assert";
 import {
     ImportDotStarCategory,
     ImportDotStarReviewer,
-} from "../../../../../src/blueprint/code/review/java/importDotStarReviewer";
+} from "../../../../../src/reviewer/java/importDotStarReviewer";
 import { Bad1 } from "./fileIoImportReviewerTest";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 

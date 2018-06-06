@@ -17,8 +17,8 @@
 import { AutofixGoal, Goals, onAnyPush, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../blueprint/code/autofix/addAtomistHeader";
-import { AddLicenseFile } from "../blueprint/code/autofix/addLicenseFile";
+import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../autofix/addAtomistHeader";
+import { AddLicenseFile } from "../autofix/addLicenseFile";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 
 /**

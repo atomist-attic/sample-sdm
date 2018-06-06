@@ -62,7 +62,7 @@ import {
     EnableDeployOnCloudFoundryManifestAddition,
 } from "../blueprint/deploy/cloudFoundryDeploy";
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
-import { SuggestAddingCloudFoundryManifest } from "../blueprint/repo/suggestAddingCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest } from "../listener/channel-link/suggestAddingCloudFoundryManifest";
 import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { NodeSupport } from "../pack/node/nodeSupport";

@@ -1,8 +1,8 @@
 import { ExtensionPack } from "@atomist/sdm";
-import { FileIoImportReviewer } from "../../blueprint/code/review/java/fileIoImportReviewer";
-import { ImportDotStarReviewer } from "../../blueprint/code/review/java/importDotStarReviewer";
-import { ProvidedDependencyReviewer } from "../../blueprint/code/review/java/maven/providedDependencyReviewer";
-import { HardCodedPropertyReviewer } from "../../blueprint/code/review/java/spring/hardcodedPropertyReviewer";
+import { FileIoImportReviewer } from "../../reviewer/java/fileIoImportReviewer";
+import { ImportDotStarReviewer } from "../../reviewer/java/importDotStarReviewer";
+import { ProvidedDependencyReviewer } from "../../reviewer/java/maven/providedDependencyReviewer";
+import { HardCodedPropertyReviewer } from "../../reviewer/java/spring/hardcodedPropertyReviewer";
 import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
 
 export const CloudReadinessChecks: ExtensionPack = {

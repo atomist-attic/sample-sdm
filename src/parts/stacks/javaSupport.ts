@@ -16,7 +16,7 @@
 
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { MavenFingerprinter } from "@atomist/sdm/pack/maven/MavenFingerprinter";
-import { AddAtomistJavaHeader } from "../../blueprint/code/autofix/addAtomistHeader";
+import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 import { CheckstyleSupport } from "../../pack/checkstyle/checkstyleSupport";
 
 /**

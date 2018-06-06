@@ -26,7 +26,7 @@ import * as assert from "power-assert";
 import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
 import { DefaultRepoRefResolver } from "@atomist/sdm/handlers/common/DefaultRepoRefResolver";
 import { SingleProjectLoader } from "@atomist/sdm/util/test/SingleProjectLoader";
-import { AddAtomistTypeScriptHeader } from "../../../src/blueprint/code/autofix/addAtomistHeader";
+import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 
 /**

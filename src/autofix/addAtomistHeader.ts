@@ -23,7 +23,7 @@ import { hasFileContaining } from "@atomist/sdm";
 import { allSatisfied } from "@atomist/sdm";
 import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsTypeScript } from "@atomist/sdm/mapping/pushtest/node/tsPushTests";
-import { AddHeaderParameters, addHeaderProjectEditor } from "../../../commands/editors/license/addHeader";
+import { AddHeaderParameters, addHeaderProjectEditor } from "../commands/editors/license/addHeader";
 import { LicenseFilename } from "./addLicenseFile";
 
 export const AddAtomistJavaHeader: AutofixRegistration = addAtomistHeader("Java header", "**/*.java", IsJava);
