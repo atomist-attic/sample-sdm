@@ -70,7 +70,7 @@ import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
-import { addJavaSupport } from "../parts/stacks/javaSupport";
+import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
@@ -112,6 +112,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         SpringSupport,
         SentrySupport,
         CloudReadinessChecks,
+        JavaSupport,
         NodeSupport,
     );
 
@@ -144,7 +145,6 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
-    addJavaSupport(sdm);
     addTeamPolicies(sdm);
     addDemoEditors(sdm);
 

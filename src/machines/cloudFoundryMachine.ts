@@ -56,7 +56,7 @@ import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPus
 import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { addJavaSupport } from "../parts/stacks/javaSupport";
+import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
@@ -183,12 +183,12 @@ export function cloudFoundryMachine(
         )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
-    addJavaSupport(sdm);
 
     sdm.addExtensionPacks(
         SpringSupport,
         SentrySupport,
         CloudReadinessChecks,
+        JavaSupport,
         NodeSupport,
     );
     addTeamPolicies(sdm);

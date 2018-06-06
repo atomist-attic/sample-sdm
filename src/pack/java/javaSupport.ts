@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { ExtensionPack, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { MavenFingerprinter } from "@atomist/sdm/pack/maven/MavenFingerprinter";
 import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
-import { CheckstyleSupport } from "../../pack/checkstyle/checkstyleSupport";
+import { CheckstyleSupport } from "../checkstyle/checkstyleSupport";
 
 /**
  * Configuration common to Java SDMs, wherever they deploy
  * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
  * @param {{useCheckstyle: boolean}} opts
  */
-export function addJavaSupport(softwareDeliveryMachine: SoftwareDeliveryMachine) {
-    softwareDeliveryMachine.addExtensionPacks(CheckstyleSupport);
-    softwareDeliveryMachine
-        .addFingerprinterRegistrations(new MavenFingerprinter())
-        .addAutofixes(AddAtomistJavaHeader);
-}
+export const JavaSupport: ExtensionPack = {
+    name: "java",
+    vendor: "atomist",
+    version: "0.1.0",
+    configure:
+        sdm => {
+            sdm.addExtensionPacks(CheckstyleSupport)
+                .addFingerprinterRegistrations(new MavenFingerprinter())
+                .addAutofixes(AddAtomistJavaHeader);
+        },
+};

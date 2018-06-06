@@ -52,7 +52,7 @@ import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPus
 import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { addJavaSupport } from "../parts/stacks/javaSupport";
+import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
 export function k8sMachine(
@@ -110,8 +110,10 @@ export function k8sMachine(
             }),
         );
 
-    sdm.addExtensionPacks(SpringSupport);
-    addJavaSupport(sdm);
+    sdm.addExtensionPacks(
+        JavaSupport,
+        SpringSupport,
+    );
     addTeamPolicies(sdm);
 
     addDemoEditors(sdm);
