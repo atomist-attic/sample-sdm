@@ -29,12 +29,12 @@ import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
-import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
-import { addDemoEditors } from "../parts/demo/demoEditors";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
@@ -75,9 +75,11 @@ export function evangelicalMachine(
             enableDeploy,
             disableDeploy,
         )
+        .addExtensionPacks(
+            DemoEditors,
+        )
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition);
 
     // addTeamPolicies(sdm);
-    addDemoEditors(sdm);
     return sdm;
 }

@@ -1,6 +1,6 @@
 import { ExtensionPack } from "@atomist/sdm";
-import { SuggestAddingCloudFoundryManifest } from "./suggestAddingCloudFoundryManifest";
 import { AddCloudFoundryManifest } from "./addCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest } from "./suggestAddingCloudFoundryManifest";
 
 export const CloudFoundrySupport: ExtensionPack = {
     name: "CloudFoundry",

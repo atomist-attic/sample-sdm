@@ -42,23 +42,23 @@ import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
+import { LocalExecutableJarDeployer } from "../deploy/localSpringBootDeployers";
+import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import { JavaSupport } from "../pack/java/javaSupport";
+import { NodeSupport } from "../pack/node/nodeSupport";
+import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
-import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
 import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
-import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
-import { NodeSupport } from "../pack/node/nodeSupport";
-import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
-import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
@@ -92,7 +92,7 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
  * @return {SoftwareDeliveryMachine}
  */
 export function cloudFoundryMachine(
-                                    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
             name: "CloudFoundry software delivery machine",
@@ -187,6 +187,7 @@ export function cloudFoundryMachine(
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
 
     sdm.addExtensionPacks(
+        DemoEditors,
         SpringSupport,
         SentrySupport,
         CloudReadinessChecks,
@@ -195,7 +196,6 @@ export function cloudFoundryMachine(
         CloudFoundrySupport,
     );
     addTeamPolicies(sdm);
-    addDemoEditors(sdm);
     // DemoPolicies(sdm, configuration);
     return sdm;
 }

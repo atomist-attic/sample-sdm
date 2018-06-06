@@ -18,7 +18,7 @@ import { Parameter, Parameters } from "@atomist/automation-client";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { EditorRegistration } from "@atomist/sdm";
-import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
+import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
 export const AffirmationEditorName = "affirmation";
 

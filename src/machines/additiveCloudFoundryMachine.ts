@@ -57,22 +57,20 @@ import {
 } from "@atomist/sdm/pack/freeze/deploymentFreeze";
 import { InMemoryDeploymentStatusManager } from "@atomist/sdm/pack/freeze/InMemoryDeploymentStatusManager";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
+import { LocalExecutableJarDeployer } from "../deploy/localSpringBootDeployers";
+import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import { JavaSupport } from "../pack/java/javaSupport";
+import { NodeSupport } from "../pack/node/nodeSupport";
 import {
     cloudFoundryProductionDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
-import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
-import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
-import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
-import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
-import { NodeSupport } from "../pack/node/nodeSupport";
+import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
-import { addDemoEditors } from "../parts/demo/demoEditors";
-import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
-import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -109,6 +107,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         ));
 
     sdm.addExtensionPacks(
+        DemoEditors,
         deploymentFreeze(freezeStore),
         SpringSupport,
         SentrySupport,
@@ -146,7 +145,6 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
-    addDemoEditors(sdm);
 
     // sdm.addExtensionPacks(DemoPolicies);
 

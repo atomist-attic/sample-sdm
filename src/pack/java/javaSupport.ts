@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ExtensionPack, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { ExtensionPack } from "@atomist/sdm";
 import { MavenFingerprinter } from "@atomist/sdm/pack/maven/MavenFingerprinter";
 import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 import { CheckstyleSupport } from "../checkstyle/checkstyleSupport";

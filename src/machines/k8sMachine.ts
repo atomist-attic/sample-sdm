@@ -38,21 +38,21 @@ import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
+import { AddK8sSpec } from "../commands/editors/k8s/addK8sSpec";
+import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import {
     K8sProductionDomain,
     K8sTestingDomain,
     noticeK8sProdDeployCompletion,
     NoticeK8sTestDeployCompletion,
-} from "../blueprint/deploy/k8sDeploy";
+} from "../deploy/k8sDeploy";
 import { SuggestAddingK8sSpec } from "../listener/channel-link/suggestAddingK8sSpec";
-import { AddK8sSpec } from "../commands/editors/k8s/addK8sSpec";
-import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import { JavaSupport } from "../pack/java/javaSupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
-import { addDemoEditors } from "../parts/demo/demoEditors";
 import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
 
 export function k8sMachine(
@@ -111,11 +111,11 @@ export function k8sMachine(
         );
 
     sdm.addExtensionPacks(
+        DemoEditors,
         JavaSupport,
         SpringSupport,
     );
     addTeamPolicies(sdm);
 
-    addDemoEditors(sdm);
     return sdm;
 }

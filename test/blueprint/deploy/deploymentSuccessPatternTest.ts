@@ -15,7 +15,7 @@
  */
 
 import * as assert from "power-assert";
-import { SpringBootSuccessPatterns } from "../../../src/blueprint/deploy/localSpringBootDeployers";
+import { SpringBootSuccessPatterns } from "../../../src/deploy/localSpringBootDeployers";
 
 describe("SpringBootSuccessPattern", () => {
 

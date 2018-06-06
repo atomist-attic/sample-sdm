@@ -28,14 +28,14 @@ import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/M
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as fs from "fs";
-import { addDemoEditors } from "../parts/demo/demoEditors";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 /**
  * Assemble a machine that only builds and verifies Java artifacts.
  * @return {SoftwareDeliveryMachine}
  */
 export function artifactVerifyingMachine(
-                                         configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "Artifact verifying machine",
             configuration,
@@ -43,10 +43,14 @@ export function artifactVerifyingMachine(
             .itMeans("Push to Maven repo")
             .setGoals(new Goals("Verify artifact", JustBuildGoal, ArtifactGoal)),
     );
-    sdm.addBuildRules(
-        build.when(IsMaven)
-            .itMeans("build with Maven")
-            .set(new MavenBuilder(configuration.artifactStore, createEphemeralProgressLog, configuration.projectLoader)))
+    sdm
+        .addExtensionPacks(
+            DemoEditors,
+        )
+        .addBuildRules(
+            build.when(IsMaven)
+                .itMeans("build with Maven")
+                .set(new MavenBuilder(configuration.artifactStore, createEphemeralProgressLog, configuration.projectLoader)))
         .addArtifactListeners(async ai => {
             // Could invoke a security scanning tool etc.
             const stat = fs.statSync(`${ai.deployableArtifact.cwd}/${ai.deployableArtifact.filename}`);
@@ -55,6 +59,5 @@ export function artifactVerifyingMachine(
             }
         });
 
-    addDemoEditors(sdm);
     return sdm;
 }

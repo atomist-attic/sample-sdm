@@ -23,7 +23,7 @@ import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
-import { mavenSourceDeployer } from "../../blueprint/deploy/localSpringBootDeployers";
+import { mavenSourceDeployer } from "../../deploy/localSpringBootDeployers";
 import { CommonJavaGeneratorConfig } from "../../machines/generatorConfig";
 import { TryToUpgradeSpringBootVersion } from "./editors/tryToUpgradeSpringBootVersion";
 import { springBootGenerator } from "./generators/springBootGenerator";

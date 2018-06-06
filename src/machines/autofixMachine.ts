@@ -19,23 +19,26 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../autofix/addAtomistHeader";
 import { AddLicenseFile } from "../autofix/addLicenseFile";
-import { addDemoEditors } from "../parts/demo/demoEditors";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 /**
  * Assemble a machine that performs only autofixes.
  * @return {SoftwareDeliveryMachine}
  */
 export function autofixMachine(
-                               configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", configuration},
         onAnyPush
             .setGoals(new Goals("Autofix", AutofixGoal)));
-    sdm.addAutofixes(
-        AddAtomistJavaHeader,
-        AddAtomistTypeScriptHeader,
-        AddLicenseFile,
-    );
+    sdm
+        .addAutofixes(
+            AddAtomistJavaHeader,
+            AddAtomistTypeScriptHeader,
+            AddLicenseFile,
+        )
+        .addExtensionPacks(
+            DemoEditors,
+        );
 
-    addDemoEditors(sdm);
     return sdm;
 }
