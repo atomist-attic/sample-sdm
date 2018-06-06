@@ -22,7 +22,7 @@ import * as assert from "power-assert";
 import {
     addCloudFoundryManifestEditor, AtomistConfigTsPath,
     StartAutomationClientCommand,
-} from "../../../src/commands/editors/pcf/addCloudFoundryManifest";
+} from "../../../src/pack/pcf/addCloudFoundryManifest";
 import { fakeContext } from "../../FakeContext";
 import { NonSpringPom, springBootPom } from "../TestPoms";
 

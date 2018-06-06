@@ -21,9 +21,8 @@ import { EditorRegistration } from "@atomist/sdm";
 import { MavenProjectIdentifier } from "@atomist/sdm/internal/delivery/build/local/maven/pomParser";
 import { NodeProjectIdentifier } from "@atomist/sdm/internal/delivery/build/local/npm/nodeProjectIdentifier";
 import { CloudFoundryManifestPath } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";
-import { HasSpringBootPom } from "../../../pack/spring/pushtest/springPushTests";
+import { HasSpringBootPom } from "../spring/pushtest/springPushTests";
 
-export const AddCloudFoundryManifestCommandName = "AddCloudFoundryManifest";
 export const AddCloudFoundryManifestMarker = "[atomist:add-pcf-manifest]";
 
 // Using this marker removes some buttons on the Pull Request
@@ -37,7 +36,7 @@ export const AtomistConfigTsPath = "src/atomist.config.ts";
  */
 export const AddCloudFoundryManifest: EditorRegistration = {
     createEditor: () => addCloudFoundryManifestEditor,
-    name: AddCloudFoundryManifestCommandName,
+    name: "AddCloudFoundryManifest",
     intent: "Add Cloud Foundry manifest",
     editMode: () => new PullRequest(
         `add-pcf-manifest-${new Date().getTime()}`,

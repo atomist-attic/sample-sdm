@@ -20,7 +20,7 @@ import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/pack/pcf/CloudFoundr
 import { CloudFoundryInfo } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";
 import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/pack/pcf/EnvironmentCloudFoundryTarget";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
-import { AddCloudFoundryManifestMarker } from "../../commands/editors/pcf/addCloudFoundryManifest";
+import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 
 /**
  * Deploy everything to the same Cloud Foundry space

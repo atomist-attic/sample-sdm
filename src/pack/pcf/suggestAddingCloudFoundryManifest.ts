@@ -22,8 +22,8 @@ import { allPredicatesSatisfied, anyPredicateSatisfied } from "@atomist/sdm";
 import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import * as slack from "@atomist/slack-messages/SlackMessages";
-import { AddCloudFoundryManifestCommandName } from "../../commands/editors/pcf/addCloudFoundryManifest";
-import { HasSpringBootApplicationClass } from "../../pack/spring/pushtest/springPushTests";
+import { AddCloudFoundryManifest } from "./addCloudFoundryManifest";
+import { HasSpringBootApplicationClass } from "../spring/pushtest/springPushTests";
 
 /**
  * PushTest to determine whether we know how to deploy a project
@@ -45,7 +45,7 @@ export const SuggestAddingCloudFoundryManifest: ChannelLinkListener = async inv 
             text: "Add a Cloud Foundry manifest to your new repo?",
             fallback: "add PCF manifest",
             actions: [buttonForCommand({text: "Add Cloud Foundry Manifest"},
-                AddCloudFoundryManifestCommandName,
+                AddCloudFoundryManifest.name,
                 {"targets.owner": inv.id.owner, "targets.repo": inv.id.repo},
             ),
             ],

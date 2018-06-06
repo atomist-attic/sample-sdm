@@ -17,7 +17,7 @@
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { deepLink } from "@atomist/automation-client/util/gitHub";
 import { ImportDotStarCategory } from "../../reviewer/java/importDotStarReviewer";
-import { CommentsFormatter, singleIssueManagingReviewListener } from "../../listener/issue/issueManagingReviewListeners";
+import { CommentsFormatter, singleIssueManagingReviewListener } from "../../listener/review-listener/issueManagingReviewListeners";
 
 import { ReviewListener } from "@atomist/sdm";
 import * as _ from "lodash";

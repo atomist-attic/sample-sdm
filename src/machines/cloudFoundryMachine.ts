@@ -16,9 +16,12 @@
 
 import {
     AnyPush,
-    FromAtomist, given,
+    FromAtomist,
+    given,
     Goals,
-    hasFile, IsDeployEnabled, NamedSeedRepo,
+    hasFile,
+    IsDeployEnabled,
+    NamedSeedRepo,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
@@ -43,10 +46,9 @@ import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
-} from "../blueprint/deploy/cloudFoundryDeploy";
+} from "../pack/pcf/cloudFoundryDeploy";
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
-import { SuggestAddingCloudFoundryManifest } from "../listener/channel-link/suggestAddingCloudFoundryManifest";
-import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
@@ -82,6 +84,7 @@ import {
 } from "@atomist/sdm/goal/common/npmGoals";
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
+import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
@@ -176,7 +179,6 @@ export function cloudFoundryMachine(
             .setGoals(RepositoryDeletionGoals));
     sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
         .addSupportingCommands(
-            () => AddCloudFoundryManifest,
             enableDeploy,
             disableDeploy,
             isDeployEnabledCommand,
@@ -190,6 +192,7 @@ export function cloudFoundryMachine(
         CloudReadinessChecks,
         JavaSupport,
         NodeSupport,
+        CloudFoundrySupport,
     );
     addTeamPolicies(sdm);
     addDemoEditors(sdm);

@@ -60,10 +60,10 @@ import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200
 import {
     cloudFoundryProductionDeploySpec,
     EnableDeployOnCloudFoundryManifestAddition,
-} from "../blueprint/deploy/cloudFoundryDeploy";
+} from "../pack/pcf/cloudFoundryDeploy";
 import { LocalExecutableJarDeployer } from "../blueprint/deploy/localSpringBootDeployers";
-import { SuggestAddingCloudFoundryManifest } from "../listener/channel-link/suggestAddingCloudFoundryManifest";
-import { AddCloudFoundryManifest } from "../commands/editors/pcf/addCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
@@ -72,6 +72,7 @@ import { SpringSupport } from "../pack/spring/springSupport";
 import { addDemoEditors } from "../parts/demo/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -114,6 +115,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         CloudReadinessChecks,
         JavaSupport,
         NodeSupport,
+        CloudFoundrySupport,
     );
 
     sdm.addDeployRules(
@@ -135,9 +137,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             .setGoals(UndeployEverywhereGoals),
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
-            .setGoals(RepositoryDeletionGoals));
-    sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
-        .addEditors(AddCloudFoundryManifest)
+            .setGoals(RepositoryDeletionGoals))
         .addSupportingCommands(
             enableDeploy,
             disableDeploy,
