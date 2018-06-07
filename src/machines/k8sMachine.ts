@@ -46,14 +46,14 @@ import {
     noticeK8sProdDeployCompletion,
     NoticeK8sTestDeployCompletion,
 } from "../deploy/k8sDeploy";
+import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { SuggestAddingK8sSpec } from "../listener/channel-link/suggestAddingK8sSpec";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
-import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { addTeamPolicies } from "./teamPolicies";
 
 export function k8sMachine(
                            configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {

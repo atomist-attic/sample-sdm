@@ -42,6 +42,7 @@ import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
+import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { LocalExecutableJarDeployer } from "../deploy/localSpringBootDeployers";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
@@ -58,8 +59,7 @@ import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
-import { LocalDeploymentGoals } from "../parts/localDeploymentGoals";
-import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { addTeamPolicies } from "./teamPolicies";
 
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";

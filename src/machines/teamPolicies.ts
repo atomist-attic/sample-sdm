@@ -20,14 +20,14 @@ import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListene
 import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
 import { DryRunEditing } from "@atomist/sdm/pack/dry-run/dryRunEditorSupport";
 import { Sloc } from "@atomist/sdm/pack/sloc/sloc";
-import { AddApacheLicenseHeaderEditor } from "../../commands/editors/license/addHeader";
-import { PostToDeploymentsChannel } from "../../listener/deployment/postToDeploymentsChannel";
-import { capitalizer } from "../../listener/issue/capitalizer";
-import { requestDescription } from "../../listener/issue/requestDescription";
-import { thankYouYouRock } from "../../listener/issue/thankYouYouRock";
-import { PublishNewRepo } from "../../listener/repo/publishNewRepo";
-import { codeMetrics } from "../../pack/codemetrics/codeMetrics";
-import { SonarQubeSupport } from "../../pack/sonarqube/sonarQubeSupport";
+import { AddApacheLicenseHeaderEditor } from "../commands/editors/license/addHeader";
+import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
+import { capitalizer } from "../listener/issue/capitalizer";
+import { requestDescription } from "../listener/issue/requestDescription";
+import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
+import { PublishNewRepo } from "../listener/repo/publishNewRepo";
+import { codeMetrics } from "../pack/codemetrics/codeMetrics";
+import { SonarQubeSupport } from "../pack/sonarqube/sonarQubeSupport";
 
 /**
  * Set up team policies independent of specific stacks

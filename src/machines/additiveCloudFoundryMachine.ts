@@ -70,7 +70,7 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 import { SpringSupport } from "../pack/spring/springSupport";
-import { addTeamPolicies } from "../parts/team/teamPolicies";
+import { addTeamPolicies } from "./teamPolicies";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
