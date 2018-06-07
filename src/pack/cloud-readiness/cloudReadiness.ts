@@ -1,9 +1,9 @@
 import { ExtensionPack } from "@atomist/sdm";
-import { FileIoImportReviewer } from "../../reviewer/java/fileIoImportReviewer";
-import { ImportDotStarReviewer } from "../../reviewer/java/importDotStarReviewer";
-import { ProvidedDependencyReviewer } from "../../reviewer/java/maven/providedDependencyReviewer";
-import { HardCodedPropertyReviewer } from "../../reviewer/java/spring/hardcodedPropertyReviewer";
 import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
+import { FileIoImportReviewer } from "./reviewer/fileIoImportReviewer";
+import { HardCodedPropertyReviewer } from "./reviewer/hardcodedPropertyReviewer";
+import { ImportDotStarReviewer } from "./reviewer/importDotStarReviewer";
+import { ProvidedDependencyReviewer } from "./reviewer/providedDependencyReviewer";
 
 export const CloudReadinessChecks: ExtensionPack = {
     name: "CloudReadiness",

@@ -21,7 +21,7 @@ import * as assert from "power-assert";
 import {
     FileIoImportReviewer,
     ImportFileIoCategory,
-} from "../../../../../src/reviewer/java/fileIoImportReviewer";
+} from "../../../../../src/pack/cloud-readiness/reviewer/fileIoImportReviewer";
 import { fakeListenerInvocation } from "./spring/hardCodedPropertyReviewerTest";
 
 describe("fileIoImport", () => {

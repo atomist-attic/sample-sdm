@@ -24,7 +24,7 @@ import * as props from "properties-reader";
 
 import { logger } from "@atomist/automation-client";
 import * as _ from "lodash";
-import { HasSpringPom } from "../../../pack/spring/pushtest/springPushTests";
+import { HasSpringPom } from "../../spring/pushtest/springPushTests";
 
 const PropertyKeysToCheck = [
     "server.port",

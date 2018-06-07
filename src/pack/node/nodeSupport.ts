@@ -22,8 +22,8 @@ import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { CommonGeneratorConfig } from "../../machines/generatorConfig";
-import { CommonTypeScriptErrors } from "../../parts/team/commonTypeScriptErrors";
-import { DontImportOwnIndex } from "../../parts/team/dontImportOwnIndex";
+import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
+import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
 import { nodeGenerator } from "./generators/nodeGenerator";
 

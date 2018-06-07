@@ -22,7 +22,7 @@ import * as assert from "power-assert";
 import {
     ProvidedDependencyCategory,
     ProvidedDependencyReviewer,
-} from "../../../../../../src/reviewer/java/maven/providedDependencyReviewer";
+} from "../../../../../../src/pack/cloud-readiness/reviewer/providedDependencyReviewer";
 import { NonSpringPom } from "../../../../../editors/TestPoms";
 import { fakeListenerInvocation } from "../spring/hardCodedPropertyReviewerTest";
 
