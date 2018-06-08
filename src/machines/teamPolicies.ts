@@ -27,7 +27,7 @@ import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
 import { PublishNewRepo } from "../listener/repo/publishNewRepo";
 import { codeMetrics } from "../pack/codemetrics/codeMetrics";
-import { SonarQubeSupport } from "../pack/sonarqube/sonarQubeSupport";
+import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 
 /**
  * Set up team policies independent of specific stacks
