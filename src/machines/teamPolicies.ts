@@ -16,6 +16,7 @@
 
 import { logger } from "@atomist/automation-client";
 import { FingerprintListener, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";
 import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
 import { DryRunEditing } from "@atomist/sdm/pack/dry-run/dryRunEditorSupport";
@@ -27,7 +28,6 @@ import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
 import { PublishNewRepo } from "../listener/repo/publishNewRepo";
 import { codeMetrics } from "../pack/codemetrics/codeMetrics";
-import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 
 /**
  * Set up team policies independent of specific stacks
