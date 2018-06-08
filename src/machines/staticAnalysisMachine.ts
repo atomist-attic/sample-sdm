@@ -16,11 +16,17 @@
 
 import { DefaultReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
 import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { Goals, ReviewerRegistration, ReviewGoal, SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
+import {
+    Goals,
+    ReviewerRegistration,
+    ReviewGoal,
+    SoftwareDeliveryMachine,
+    whenPushSatisfies,
+} from "@atomist/sdm";
+import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
-import { CheckstyleSupport } from "../pack/checkstyle/checkstyleSupport";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
 
