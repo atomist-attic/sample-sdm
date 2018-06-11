@@ -23,6 +23,8 @@ import { inferSpringStructureAndRename } from "@atomist/spring-automation/comman
 import { curry } from "@typed/curry";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
 
+// JESS: MOVED from sample-sdm to sdm-pack-spring
+
 /**
  * Transform a seed to a Spring Boot project
  */

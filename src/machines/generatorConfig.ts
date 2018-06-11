@@ -22,6 +22,7 @@ export const CommonGeneratorConfig = {
     addAtomistWebhook: true,
 };
 
+// JESS: MOVED below
 /**
  * Customize to change Java generator behavior everywhere
  * @type {{groupId: string}}

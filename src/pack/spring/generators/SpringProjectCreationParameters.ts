@@ -20,6 +20,8 @@ import { camelize } from "tslint/lib/utils";
 import { JavaGeneratorConfig } from "../../java/support/JavaGeneratorConfig";
 import { JavaProjectCreationParameters } from "../../java/support/JavaProjectCreationParameters";
 
+// JESS: MOVED from sample-sdm to sdm-pack-spring
+
 /**
  * Parameters for creating Spring Boot apps.
  */

@@ -20,6 +20,8 @@ import { anyFileChangedWithExtension, filesChangedSince } from "@atomist/sdm/uti
 
 import * as _ from "lodash";
 
+// JESS: MOVED from sdm to sdm-pack-spring
+
 const FileToWatch = ["java", "html", "json", "yml", "xml", "sh", "kt", "properties"];
 
 /**

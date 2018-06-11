@@ -20,6 +20,8 @@ import { StartupInfo } from "@atomist/sdm/internal/delivery/deploy/local/LocalDe
 import { ManagedDeploymentTargetInfo } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { mavenDeployer } from "@atomist/sdm/internal/delivery/deploy/local/maven/mavenSourceDeployer";
 
+// JESS: MOVED
+
 /** Successs patterns when Spring Boot starts
  * @type {RegExp}
  */

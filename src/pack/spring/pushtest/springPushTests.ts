@@ -17,6 +17,8 @@
 import { predicatePushTest, PredicatePushTest } from "@atomist/sdm";
 import { SpringBootProjectStructure } from "@atomist/spring-automation/commands/generator/spring/SpringBootProjectStructure";
 
+// JESS: MOVED from sample-sdm to sdm-pack-spring
+
 /**
  * Does this project have a Spring Boot application class?
  * This is a robust but expensive test as it needs

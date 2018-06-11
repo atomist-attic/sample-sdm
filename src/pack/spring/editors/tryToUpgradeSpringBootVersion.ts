@@ -18,6 +18,8 @@ import { Parameter, Parameters } from "@atomist/automation-client";
 import { EditModeSuggestion, EditorRegistration } from "@atomist/sdm";
 import { setSpringBootVersionEditor } from "@atomist/spring-automation/commands/editor/spring/setSpringBootVersionEditor";
 
+// JESS: MOVED
+
 @Parameters()
 export class UpgradeSpringBootParameters implements EditModeSuggestion {
 

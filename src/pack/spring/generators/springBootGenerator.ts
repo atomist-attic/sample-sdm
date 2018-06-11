@@ -24,6 +24,8 @@ import { JavaGeneratorConfig } from "../../java/support/JavaGeneratorConfig";
 import { SpringProjectCreationParameters } from "./SpringProjectCreationParameters";
 import { transformSeedToCustomProject } from "./transformSeedToCustomProject";
 
+// JESS: MOVED from sample-sdm to sdm-pack-spring
+
 /**
  * Function to create a Spring Boot generator.
  * Relies on generic Atomist Java & Spring functionality in spring-automations

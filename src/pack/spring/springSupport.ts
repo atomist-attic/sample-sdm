@@ -29,7 +29,7 @@ import { TryToUpgradeSpringBootVersion } from "./editors/tryToUpgradeSpringBootV
 import { springBootGenerator } from "./generators/springBootGenerator";
 
 export const SpringSupport: ExtensionPack = {
-    name: "Spring support",
+    name: "Spring support",l
     vendor: "Atomist",
     version: "0.1.0",
     configure: sdm => {

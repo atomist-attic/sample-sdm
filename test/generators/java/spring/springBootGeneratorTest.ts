@@ -27,6 +27,8 @@ import { SpringProjectCreationParameters } from "../../../../src/pack/spring/gen
 import { transformSeedToCustomProject } from "../../../../src/pack/spring/generators/transformSeedToCustomProject";
 import { springBootPom } from "../../../editors/TestPoms";
 
+// JESS: MOVED from sample-sdm to sdm-pack-spring
+
 const Readme1 = `# spring-rest-seed
 
 This project contains an Atomist seed project.
