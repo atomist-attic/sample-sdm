@@ -19,11 +19,10 @@ import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
-import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
-import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
-import { nodeGenerator } from "../pack/node/generators/nodeGenerator";
-import { springBootGenerator } from "../pack/spring/generators/springBootGenerator";
-import { CommonGeneratorConfig, CommonJavaGeneratorConfig } from "./generatorConfig";
+import { CommonGeneratorConfig, nodeGenerator } from "../pack/node/generators/nodeGenerator";
+import { springBootTagger,
+    CommonJavaGeneratorConfig,
+    springBootGenerator } from "@atomist/sdm-pack-spring";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -52,7 +51,6 @@ export function projectCreationMachine(
         }))
         .addNewRepoWithCodeActions(
             tagRepo(springBootTagger),
-            tagRepo(nodeTagger),
         );
     return sdm;
 }

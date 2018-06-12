@@ -16,10 +16,10 @@
 
 import { ExtensionPack } from "@atomist/sdm";
 import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
-import { FileIoImportReviewer } from "./reviewer/fileIoImportReviewer";
-import { HardCodedPropertyReviewer } from "./reviewer/hardcodedPropertyReviewer";
-import { ImportDotStarReviewer } from "./reviewer/importDotStarReviewer";
-import { ProvidedDependencyReviewer } from "./reviewer/providedDependencyReviewer";
+import { HardCodedPropertyReviewer } from "@atomist/sdm-pack-spring";
+import { ProvidedDependencyReviewer } from "@atomist/sdm-pack-spring";
+import { FileIoImportReviewer } from "@atomist/sdm-pack-spring";
+import { ImportDotStarReviewer } from "@atomist/sdm-pack-spring";
 
 export const CloudReadinessChecks: ExtensionPack = {
     name: "CloudReadiness",

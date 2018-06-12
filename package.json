@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@atomist/automation-client": "^0.17.2-20180605032022",
-    "@atomist/sdm": "^0.2.2-extract-packs.20180612003823",
+    "@atomist/sdm": "0.2.2-extract-packs.20180612004641",
     "@atomist/sdm-pack-checkstyle": "https://r.atomist.com/BkHgvwf6DgQ",
     "@atomist/sdm-pack-sonarqube": "https://r.atomist.com/BkEhZ1V_lX",
     "@atomist/sdm-pack-spring": "https://r.atomist.com/r14uSpn3eX",

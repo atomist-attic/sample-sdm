@@ -26,9 +26,8 @@ import {
 import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
-import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
+import { MaterialChangeToJavaRepo, IsJava } from "@atomist/sdm-pack-spring";
 
 /**
  * Assemble a machine that performs only static analysis.

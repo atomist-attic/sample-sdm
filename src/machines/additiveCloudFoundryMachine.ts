@@ -44,10 +44,8 @@ import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
 import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import {
@@ -67,9 +65,12 @@ import {
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
-import { SpringSupport } from "../pack/spring/springSupport";
 import { addTeamPolicies } from "./teamPolicies";
+import { IsMaven } from "@atomist/sdm-pack-spring";
+import { HasSpringBootApplicationClass,
+    LocalExecutableJarDeployer,
+    SpringSupport,
+    MavenBuilder } from "@atomist/sdm-pack-spring";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 

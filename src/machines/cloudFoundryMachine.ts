@@ -38,12 +38,10 @@ import * as build from "@atomist/sdm/dsl/buildDsl";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
-import { LocalExecutableJarDeployer } from "../deploy/localSpringBootDeployers";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
@@ -56,13 +54,9 @@ import {
 } from "../pack/pcf/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
-import { SpringSupport } from "../pack/spring/springSupport";
 import { addTeamPolicies } from "./teamPolicies";
 
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
-import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
 import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
@@ -85,6 +79,14 @@ import {
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
+import {
+    HasSpringBootApplicationClass,
+    MaterialChangeToJavaRepo,
+    IsMaven,
+    LocalExecutableJarDeployer,
+    MavenBuilder,
+    SpringSupport
+} from "@atomist/sdm-pack-spring";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
