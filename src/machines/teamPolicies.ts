@@ -16,11 +16,11 @@
 
 import { logger } from "@atomist/automation-client";
 import { FingerprintListener, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";
 import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
 import { DryRunEditing } from "@atomist/sdm/pack/dry-run/dryRunEditorSupport";
-import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { AddApacheLicenseHeaderEditor } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
 import { capitalizer } from "../listener/issue/capitalizer";
