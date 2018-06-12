@@ -19,11 +19,11 @@
   },
   "dependencies": {
     "@atomist/automation-client": "^0.17.2-20180605032022",
-    "@atomist/sdm": "https://r.atomist.com/SJ7x_U8xBem",
+    "@atomist/sdm": "^0.2.2-extract-packs.20180612003823",
     "@atomist/sdm-pack-checkstyle": "https://r.atomist.com/BkHgvwf6DgQ",
     "@atomist/sdm-pack-sonarqube": "https://r.atomist.com/BkEhZ1V_lX",
+    "@atomist/sdm-pack-spring": "https://r.atomist.com/r14uSpn3eX",
     "@atomist/slack-messages": "^0.12.1",
-    "@atomist/spring-automation": "https://r.atomist.com/BJg-zHykFyQ",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
     "@commitlint/load": "^6.1.3",

@@ -24,6 +24,10 @@ import { NodeProjectCreationParameters } from "./NodeProjectCreationParameters";
 
 /* tslint:disable:max-line-length */
 
+export const CommonGeneratorConfig = {
+    addAtomistWebhook: true,
+};
+
 export function nodeGenerator(config: GeneratorConfig,
                               details: Partial<GeneratorCommandDetails<NodeProjectCreationParameters>> = {}): GeneratorRegistration<NodeProjectCreationParameters> {
     return {

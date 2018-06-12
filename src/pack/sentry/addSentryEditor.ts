@@ -19,12 +19,12 @@ import { chainEditors } from "@atomist/automation-client/operations/edit/project
 import { EditorRegistration } from "@atomist/sdm";
 import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
-import { addDependencyEditor } from "@atomist/spring-automation/commands/editor/maven/addDependencyEditor";
 
 import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
-import { VersionedArtifact } from "@atomist/sdm/internal/delivery/build/local/maven/VersionedArtifact";
+import { VersionedArtifact } from "@atomist/sdm-pack-spring";
+import { addDependencyEditor } from "@atomist/sdm-pack-spring";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",

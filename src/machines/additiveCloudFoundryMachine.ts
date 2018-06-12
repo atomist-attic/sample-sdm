@@ -57,7 +57,6 @@ import {
 } from "@atomist/sdm/pack/freeze/deploymentFreeze";
 import { InMemoryDeploymentStatusManager } from "@atomist/sdm/pack/freeze/InMemoryDeploymentStatusManager";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
-import { LocalExecutableJarDeployer } from "../deploy/localSpringBootDeployers";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
