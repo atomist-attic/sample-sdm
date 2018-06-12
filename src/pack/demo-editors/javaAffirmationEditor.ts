@@ -17,8 +17,8 @@
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { EditorRegistration } from "@atomist/sdm";
-import { AffirmationParameters, affirmations } from "./affirmationEditor";
 import { AllJavaFiles } from "@atomist/sdm-pack-spring";
+import { AffirmationParameters, affirmations } from "./affirmationEditor";
 
 const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, ctx, params) => {
     const affirmation = params.customAffirmation || randomAffirmation();

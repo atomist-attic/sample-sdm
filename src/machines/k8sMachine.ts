@@ -24,6 +24,12 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    MaterialChangeToJavaRepo,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
@@ -50,12 +56,6 @@ import { SuggestAddingK8sSpec } from "../listener/channel-link/suggestAddingK8sS
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { addTeamPolicies } from "./teamPolicies";
-import {
-    HasSpringBootApplicationClass,
-    MaterialChangeToJavaRepo,
-    IsMaven,
-    SpringSupport
-} from "@atomist/sdm-pack-spring";
 
 export function k8sMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {

@@ -16,8 +16,8 @@
 
 import { ExtensionPack } from "@atomist/sdm";
 import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
-import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 import { MavenFingerprinter } from "@atomist/sdm-pack-spring";
+import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 
 /**
  * Configuration common to Java SDMs, wherever they deploy

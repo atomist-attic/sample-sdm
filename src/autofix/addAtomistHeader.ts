@@ -21,10 +21,10 @@ import {
 import { PushTest } from "@atomist/sdm";
 import { hasFileContaining } from "@atomist/sdm";
 import { allSatisfied } from "@atomist/sdm";
+import { IsJava } from "@atomist/sdm-pack-spring";
 import { IsTypeScript } from "@atomist/sdm/mapping/pushtest/node/tsPushTests";
 import { AddHeaderParameters, addHeaderProjectEditor } from "../commands/editors/license/addHeader";
 import { LicenseFilename } from "./addLicenseFile";
-import { IsJava } from "@atomist/sdm-pack-spring";
 
 export const AddAtomistJavaHeader: AutofixRegistration = addAtomistHeader("Java header", "**/*.java", IsJava);
 

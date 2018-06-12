@@ -19,10 +19,10 @@ import { deepLink } from "@atomist/automation-client/util/gitHub";
 import { CommentsFormatter, singleIssueManagingReviewListener } from "../../listener/review-listener/issueManagingReviewListeners";
 
 import { ReviewListener } from "@atomist/sdm";
-import * as _ from "lodash";
 import { ImportDotStarCategory } from "@atomist/sdm-pack-spring";
 import { ImportFileIoCategory } from "@atomist/sdm-pack-spring";
 import { HardcodePropertyCategory } from "@atomist/sdm-pack-spring";
+import * as _ from "lodash";
 
 const CloudReadinessIssueTitle = "Service Not Yet Cloud Native";
 const CloudReadinessReviewCommentCategories = [

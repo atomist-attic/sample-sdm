@@ -61,6 +61,14 @@ import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmB
 import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    LocalExecutableJarDeployer,
+    MaterialChangeToJavaRepo,
+    MavenBuilder,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { NoGoals, StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
@@ -79,14 +87,6 @@ import {
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
-import {
-    HasSpringBootApplicationClass,
-    MaterialChangeToJavaRepo,
-    IsMaven,
-    LocalExecutableJarDeployer,
-    MavenBuilder,
-    SpringSupport
-} from "@atomist/sdm-pack-spring";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry

@@ -15,11 +15,11 @@
  */
 
 import { ExtensionPack } from "@atomist/sdm";
-import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
 import { HardCodedPropertyReviewer } from "@atomist/sdm-pack-spring";
 import { ProvidedDependencyReviewer } from "@atomist/sdm-pack-spring";
 import { FileIoImportReviewer } from "@atomist/sdm-pack-spring";
 import { ImportDotStarReviewer } from "@atomist/sdm-pack-spring";
+import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
 
 export const CloudReadinessChecks: ExtensionPack = {
     name: "CloudReadiness",

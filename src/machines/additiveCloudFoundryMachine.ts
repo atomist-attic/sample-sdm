@@ -36,6 +36,11 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { HasSpringBootApplicationClass,
+    LocalExecutableJarDeployer,
+    MavenBuilder,
+    SpringSupport } from "@atomist/sdm-pack-spring";
+import { IsMaven } from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
@@ -66,11 +71,6 @@ import {
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { IsMaven } from "@atomist/sdm-pack-spring";
-import { HasSpringBootApplicationClass,
-    LocalExecutableJarDeployer,
-    SpringSupport,
-    MavenBuilder } from "@atomist/sdm-pack-spring";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
