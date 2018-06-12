@@ -22,11 +22,12 @@
     "@atomist/sdm": "0.2.2-extract-packs.20180612004641",
     "@atomist/sdm-pack-checkstyle": "https://r.atomist.com/BkHgvwf6DgQ",
     "@atomist/sdm-pack-sonarqube": "https://r.atomist.com/BkEhZ1V_lX",
-    "@atomist/sdm-pack-spring": "https://r.atomist.com/r14uSpn3eX",
+    "@atomist/sdm-pack-spring": "https://r.atomist.com/B1r5T5K6l7",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
     "@commitlint/load": "^6.1.3",
+    "@types/lodash": "^4.14.109",
     "@types/properties-reader": "0.0.1",
     "properties-reader": "0.0.16"
   },
@@ -46,7 +47,7 @@
     "ts-node": "^3.3.0",
     "tslint": "^5.9.1",
     "typedoc": "^0.9.0",
-    "typescript": "2.6.1",
+    "typescript": "^2.8.3",
     "typescript-formatter": "^7.0.1"
   },
   "directories": {
