@@ -37,7 +37,7 @@ export const NoPushToDefaultBranchWithoutPullRequest: PushReactionRegistration =
             variables: vars,
         });
         if (foundPr.PullRequest.length === 0) {
-            const chatTo = _.get<string>(pli, "push.after.committer.person.chatId.screenName");
+            const chatTo: string = _.get(pli, "push.after.committer.person.chatId.screenName");
             return !!chatTo ?
                 pli.context.messageClient.addressUsers(`You committed without a pull request: _${pli.push.after.message}_: This isn't recommended`,
                     chatTo) :

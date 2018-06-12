@@ -27,7 +27,7 @@ import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 export const JavaSupport: ExtensionPack = {
     name: "java",
     vendor: "atomist",
-    version: "0.1.0",
+    version: "0.1.0",   
     configure:
         sdm => {
             sdm.addExtensionPacks(CheckstyleSupport)
