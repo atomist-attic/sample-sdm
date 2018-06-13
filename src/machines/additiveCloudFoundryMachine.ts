@@ -36,6 +36,11 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { HasSpringBootApplicationClass,
+    LocalExecutableJarDeployer,
+    MavenBuilder,
+    SpringSupport } from "@atomist/sdm-pack-spring";
+import { IsMaven } from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
@@ -44,10 +49,8 @@ import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
 import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
 import {
@@ -57,7 +60,6 @@ import {
 } from "@atomist/sdm/pack/freeze/deploymentFreeze";
 import { InMemoryDeploymentStatusManager } from "@atomist/sdm/pack/freeze/InMemoryDeploymentStatusManager";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
-import { LocalExecutableJarDeployer } from "../deploy/localSpringBootDeployers";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
@@ -68,8 +70,6 @@ import {
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
-import { SpringSupport } from "../pack/spring/springSupport";
 import { addTeamPolicies } from "./teamPolicies";
 
 const freezeStore = new InMemoryDeploymentStatusManager();

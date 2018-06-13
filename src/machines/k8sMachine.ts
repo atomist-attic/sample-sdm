@@ -24,6 +24,12 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    MaterialChangeToJavaRepo,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
@@ -34,7 +40,6 @@ import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetD
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
 import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
@@ -50,13 +55,10 @@ import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { SuggestAddingK8sSpec } from "../listener/channel-link/suggestAddingK8sSpec";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
-import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
-import { SpringSupport } from "../pack/spring/springSupport";
 import { addTeamPolicies } from "./teamPolicies";
 
 export function k8sMachine(
-                           configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({
             name: "K8s software delivery machine",
             configuration,

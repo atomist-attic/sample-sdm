@@ -22,19 +22,18 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { HasSpringBootApplicationClass } from "@atomist/sdm-pack-spring";
+import { IsMaven } from "@atomist/sdm-pack-spring";
+import { springBootTagger } from "@atomist/sdm-pack-spring";
+import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring/dist/support/java/pushTests";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
-import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
-import { springBootTagger } from "@atomist/spring-automation/commands/tag/springTagger";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
-import { MaterialChangeToJavaRepo } from "../pack/spring/pushtest/materialChangeToJavaRepo";
-import { HasSpringBootApplicationClass } from "../pack/spring/pushtest/springPushTests";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
@@ -68,7 +67,6 @@ export function evangelicalMachine(
         .addNewRepoWithCodeActions(
             // TODO suggest creating projects with generator
             tagRepo(springBootTagger),
-            tagRepo(nodeTagger),
         )
         .addSupportingCommands(
             () => AddCloudFoundryManifest,

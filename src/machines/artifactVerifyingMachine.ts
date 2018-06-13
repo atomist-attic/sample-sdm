@@ -21,12 +21,11 @@ import {
     SoftwareDeliveryMachine,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { IsMaven, MavenBuilder } from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
-import { MavenBuilder } from "@atomist/sdm/internal/delivery/build/local/maven/MavenBuilder";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsMaven } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import * as fs from "fs";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
@@ -52,7 +51,7 @@ export function artifactVerifyingMachine(
                 .itMeans("build with Maven")
                 .set(new MavenBuilder(configuration.artifactStore, createEphemeralProgressLog, configuration.projectLoader)))
         .addArtifactListeners(async ai => {
-            // Could invoke a security scanning tool etc.
+            // Could invoke a security scanning tool etc.c
             const stat = fs.statSync(`${ai.deployableArtifact.cwd}/${ai.deployableArtifact.filename}`);
             if (stat.size > 1000) {
                 return ai.addressChannels(`Artifact \`${ai.deployableArtifact.filename}\` is very big at ${stat.size} :weight_lifter:`);

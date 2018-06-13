@@ -18,14 +18,11 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { ExtensionPack, hasFile, SoftwareDeliveryMachine, ToDefaultBranch } from "@atomist/sdm";
 import { PackageLockFingerprinter } from "@atomist/sdm/pack/node/PackageLockFingerprinter";
 import { tslintFix } from "@atomist/sdm/pack/node/tslint";
-import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
-import { nodeTagger } from "@atomist/spring-automation/commands/tag/nodeTagger";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
-import { CommonGeneratorConfig } from "../../machines/generatorConfig";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
-import { nodeGenerator } from "./generators/nodeGenerator";
+import { CommonGeneratorConfig, nodeGenerator } from "./generators/nodeGenerator";
 
 import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
@@ -64,9 +61,6 @@ export const NodeSupport: ExtensionPack = {
                 seed: new GitHubRepoRef("spring-team", "buildable-node-seed"),
             }, {   intent: "create buildable node",
             }))
-            .addNewRepoWithCodeActions(
-                tagRepo(nodeTagger),
-            )
             .addAutofixes(
                 AddAtomistTypeScriptHeader,
                 tslintFix,
