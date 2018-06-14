@@ -24,7 +24,10 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
-import { IsJava, MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring";
+import {
+    IsJava,
+    MaterialChangeToJavaRepo,
+} from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";

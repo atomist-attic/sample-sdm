@@ -17,7 +17,10 @@
 import { AnyProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import { GeneratorCommandDetails } from "@atomist/automation-client/operations/generate/generatorToCommand";
-import { GeneratorConfig, GeneratorRegistration } from "@atomist/sdm";
+import {
+    GeneratorConfig,
+    GeneratorRegistration,
+} from "@atomist/sdm";
 import { updateReadmeTitle } from "../../../commands/editors/updateReadmeTitle";
 import { updatePackageJsonIdentification } from "../editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParameters } from "./NodeProjectCreationParameters";

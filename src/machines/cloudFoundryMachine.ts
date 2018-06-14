@@ -34,33 +34,6 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 
-import * as build from "@atomist/sdm/dsl/buildDsl";
-import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { HasAtomistBuildFile, IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
-import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
-import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
-import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
-import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
-import { DemoEditors } from "../pack/demo-editors/demoEditors";
-import { JavaSupport } from "../pack/java/javaSupport";
-import { NodeSupport } from "../pack/node/nodeSupport";
-import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
-import {
-    cloudFoundryProductionDeploySpec,
-    cloudFoundryStagingDeploySpec,
-    EnableDeployOnCloudFoundryManifestAddition,
-} from "../pack/pcf/cloudFoundryDeploy";
-import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
-import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { addTeamPolicies } from "./teamPolicies";
-
-import * as deploy from "@atomist/sdm/dsl/deployDsl";
-import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
-import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
-
 import {
     HasSpringBootApplicationClass,
     IsMaven,
@@ -71,7 +44,14 @@ import {
 } from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { NoGoals, StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
+
+import * as build from "@atomist/sdm/dsl/buildDsl";
+
+import * as deploy from "@atomist/sdm/dsl/deployDsl";
+import {
+    NoGoals,
+    StagingUndeploymentGoal,
+} from "@atomist/sdm/goal/common/commonGoals";
 import {
     HttpServiceGoals,
     RepositoryDeletionGoals,
@@ -84,9 +64,38 @@ import {
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
 } from "@atomist/sdm/goal/common/npmGoals";
+import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
+import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
+import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
+import {
+    HasAtomistBuildFile,
+    IsNode,
+} from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
+import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
+import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
+import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
+import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import { JavaSupport } from "../pack/java/javaSupport";
+import { NodeSupport } from "../pack/node/nodeSupport";
+import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
+import {
+    cloudFoundryProductionDeploySpec,
+    cloudFoundryStagingDeploySpec,
+    EnableDeployOnCloudFoundryManifestAddition,
+} from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
+import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import { SentrySupport } from "../pack/sentry/sentrySupport";
+import { addTeamPolicies } from "./teamPolicies";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry

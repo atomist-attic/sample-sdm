@@ -15,7 +15,10 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { FingerprintListener, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    FingerprintListener,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";

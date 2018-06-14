@@ -17,8 +17,14 @@
 import { ExtensionPack } from "@atomist/sdm";
 import { RemoveFileEditor } from "../../commands/editors/helper/removeFile";
 import { AffirmationEditor } from "./affirmationEditor";
-import { BreakJavaBuildEditor, UnbreakJavaBuildEditor } from "./breakJavaBuild";
-import { BreakNodeBuildEditor, UnbreakNodeBuildEditor } from "./breakNodeBuild";
+import {
+    BreakJavaBuildEditor,
+    UnbreakJavaBuildEditor,
+} from "./breakJavaBuild";
+import {
+    BreakNodeBuildEditor,
+    UnbreakNodeBuildEditor,
+} from "./breakNodeBuild";
 import { JavaAffirmationEditor } from "./javaAffirmationEditor";
 import { WhackHeaderEditor } from "./removeTypeScriptHeader";
 

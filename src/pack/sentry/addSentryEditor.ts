@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import { EditorRegistration } from "@atomist/sdm";
-import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
-import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
-
 import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
-import { VersionedArtifact } from "@atomist/sdm-pack-spring";
-import { addDependencyEditor } from "@atomist/sdm-pack-spring";
+import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
+import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
+import { EditorRegistration } from "@atomist/sdm";
+import {
+    addDependencyEditor,
+    VersionedArtifact,
+} from "@atomist/sdm-pack-spring";
+import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
+import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",

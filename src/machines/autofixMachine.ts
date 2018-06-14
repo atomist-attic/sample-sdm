@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-import { AutofixGoal, Goals, onAnyPush, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    AutofixGoal,
+    Goals,
+    onAnyPush,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { AddAtomistJavaHeader, AddAtomistTypeScriptHeader } from "../autofix/addAtomistHeader";
+import {
+    AddAtomistJavaHeader,
+    AddAtomistTypeScriptHeader,
+} from "../autofix/addAtomistHeader";
 import { AddLicenseFile } from "../autofix/addLicenseFile";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 

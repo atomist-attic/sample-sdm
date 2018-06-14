@@ -31,7 +31,10 @@ import {
     AutomationEventListener,
     AutomationEventListenerSupport,
 } from "@atomist/automation-client/server/AutomationEventListener";
-import { Destination, MessageOptions } from "@atomist/automation-client/spi/message/MessageClient";
+import {
+    Destination,
+    MessageOptions,
+} from "@atomist/automation-client/spi/message/MessageClient";
 
 import * as _ from "lodash";
 import { createLogger } from "logzio-nodejs";

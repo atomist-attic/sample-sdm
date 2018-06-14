@@ -15,19 +15,27 @@
  */
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { ExtensionPack, hasFile, SoftwareDeliveryMachine, ToDefaultBranch } from "@atomist/sdm";
+import {
+    ExtensionPack,
+    hasFile,
+    SoftwareDeliveryMachine,
+    ToDefaultBranch,
+} from "@atomist/sdm";
+
+import * as build from "@atomist/sdm/dsl/buildDsl";
+
+import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
+import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { PackageLockFingerprinter } from "@atomist/sdm/pack/node/PackageLockFingerprinter";
 import { tslintFix } from "@atomist/sdm/pack/node/tslint";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
-import { CommonGeneratorConfig, nodeGenerator } from "./generators/nodeGenerator";
-
-import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
-import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
-
-import * as build from "@atomist/sdm/dsl/buildDsl";
+import {
+    CommonGeneratorConfig,
+    nodeGenerator,
+} from "./generators/nodeGenerator";
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy

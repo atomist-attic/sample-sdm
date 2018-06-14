@@ -16,13 +16,18 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { CommonJavaGeneratorConfig,
+import {
+    CommonJavaGeneratorConfig,
     springBootGenerator,
-    springBootTagger } from "@atomist/sdm-pack-spring";
+    springBootTagger,
+} from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
-import { CommonGeneratorConfig, nodeGenerator } from "../pack/node/generators/nodeGenerator";
+import {
+    CommonGeneratorConfig,
+    nodeGenerator,
+} from "../pack/node/generators/nodeGenerator";
 
 /**
  * Assemble a machine that performs only project creation and tagging,

@@ -36,19 +36,27 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { HasSpringBootApplicationClass,
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
     LocalExecutableJarDeployer,
     MavenBuilder,
-    SpringSupport } from "@atomist/sdm-pack-spring";
-import { IsMaven } from "@atomist/sdm-pack-spring";
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
-import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
+import {
+    RepositoryDeletionGoals,
+    UndeployEverywhereGoals,
+} from "@atomist/sdm/goal/common/httpServiceGoals";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";

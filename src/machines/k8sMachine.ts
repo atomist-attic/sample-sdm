@@ -35,8 +35,14 @@ import * as build from "@atomist/sdm/dsl/buildDsl";
 import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
 import { HttpServiceGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
 import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
-import { NpmBuildGoals, NpmDeployGoals } from "@atomist/sdm/goal/common/npmGoals";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import {
+    NpmBuildGoals,
+    NpmDeployGoals,
+} from "@atomist/sdm/goal/common/npmGoals";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
 import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";

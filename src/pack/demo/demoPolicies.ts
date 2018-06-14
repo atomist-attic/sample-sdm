@@ -15,7 +15,12 @@
  */
 
 import { Issue } from "@atomist/automation-client/util/gitHub";
-import { editorAutofixRegistration, ExtensionPack, hasFile, not } from "@atomist/sdm";
+import {
+    editorAutofixRegistration,
+    ExtensionPack,
+    hasFile,
+    not,
+} from "@atomist/sdm";
 import { updateIssue } from "@atomist/sdm/util/github/ghub";
 import axios from "axios";
 

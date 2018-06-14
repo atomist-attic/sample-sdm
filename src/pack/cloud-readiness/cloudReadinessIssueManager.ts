@@ -16,13 +16,18 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { deepLink } from "@atomist/automation-client/util/gitHub";
-import { CommentsFormatter, singleIssueManagingReviewListener } from "../../listener/review-listener/issueManagingReviewListeners";
 
 import { ReviewListener } from "@atomist/sdm";
-import { ImportDotStarCategory } from "@atomist/sdm-pack-spring";
-import { ImportFileIoCategory } from "@atomist/sdm-pack-spring";
-import { HardcodePropertyCategory } from "@atomist/sdm-pack-spring";
+import {
+    HardcodePropertyCategory,
+    ImportDotStarCategory,
+    ImportFileIoCategory,
+} from "@atomist/sdm-pack-spring";
 import * as _ from "lodash";
+import {
+    CommentsFormatter,
+    singleIssueManagingReviewListener,
+} from "../../listener/review-listener/issueManagingReviewListeners";
 
 const CloudReadinessIssueTitle = "Service Not Yet Cloud Native";
 const CloudReadinessReviewCommentCategories = [

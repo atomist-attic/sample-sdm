@@ -17,7 +17,10 @@
 import { Configuration } from "@atomist/automation-client";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { ConfigureOptions, configureSdm } from "@atomist/sdm/internal/machine/configureSdm";
+import {
+    ConfigureOptions,
+    configureSdm,
+} from "@atomist/sdm/internal/machine/configureSdm";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";
 

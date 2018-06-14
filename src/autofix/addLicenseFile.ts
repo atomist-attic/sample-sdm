@@ -17,9 +17,9 @@
 import {
     AutofixRegistration,
     editorAutofixRegistration,
+    hasFile,
+    not,
 } from "@atomist/sdm";
-import { hasFile } from "@atomist/sdm";
-import { not } from "@atomist/sdm";
 import axios from "axios";
 
 export const LicenseFilename = "LICENSE";

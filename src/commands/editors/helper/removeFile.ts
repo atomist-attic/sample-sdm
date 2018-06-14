@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { HandlerContext, Parameter } from "@atomist/automation-client";
+import {
+    HandlerContext,
+    Parameter,
+} from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";

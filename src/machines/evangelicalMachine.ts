@@ -22,12 +22,17 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { HasSpringBootApplicationClass } from "@atomist/sdm-pack-spring";
-import { IsMaven } from "@atomist/sdm-pack-spring";
-import { springBootTagger } from "@atomist/sdm-pack-spring";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    springBootTagger,
+} from "@atomist/sdm-pack-spring";
 import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring/dist/support/java/pushTests";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { disableDeploy, enableDeploy } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";

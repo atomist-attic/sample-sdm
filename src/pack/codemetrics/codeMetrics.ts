@@ -18,11 +18,15 @@ import { logger } from "@atomist/automation-client";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import {
     ExtensionPack,
-    FingerprinterRegistration, FingerprintListener,
+    FingerprinterRegistration,
+    FingerprintListener,
     PushTest,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { CodeStats, reportForLanguages } from "@atomist/sdm-pack-sloc/slocReport";
+import {
+    CodeStats,
+    reportForLanguages,
+} from "@atomist/sdm-pack-sloc/slocReport";
 import { TypedFingerprint } from "@atomist/sdm/code/fingerprint/TypedFingerprint";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
