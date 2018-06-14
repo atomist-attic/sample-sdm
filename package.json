@@ -21,16 +21,18 @@
     "@atomist/automation-client": "https://r.atomist.com/HJV-CGrbYx7",
     "@atomist/sdm": "0.2.2-extract-packs.20180612004641",
     "@atomist/sdm-pack-checkstyle": "0.1.1-spring-pack.20180612184315",
-    "@atomist/sdm-pack-sonarqube": "0.1.2-nortissej.spring-pack.20180612184749",
-    "@atomist/sdm-pack-spring": "0.1.0-20180612180014",
     "@atomist/sdm-pack-sloc": "0.1.1-nortissej.spring-pack.20180612190449",
+    "@atomist/sdm-pack-sonarqube": "https://r.atomist.com/rkEykdNk-X",
+    "@atomist/sdm-pack-spring": "0.1.0-20180612180014",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
     "@commitlint/load": "^6.1.3",
     "@types/lodash": "^4.14.109",
     "@types/properties-reader": "0.0.1",
-    "properties-reader": "0.0.16"
+    "logzio-nodejs": "^0.4.11",
+    "properties-reader": "0.0.16",
+    "winston-logzio": "^1.0.8"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.48",
