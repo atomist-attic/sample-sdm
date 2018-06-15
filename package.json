@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@atomist/automation-client": "0.17.2-20180613153815",
-    "@atomist/automation-client-ext-dashboard": "0.1.0-20180606070747",
+    "@atomist/automation-client-ext-dashboard": "0.1.0-20180615072636",
     "@atomist/sdm": "^0.2.2",
     "@atomist/sdm-pack-checkstyle": "^0.1.1",
     "@atomist/sdm-pack-sloc": "^0.1.1",
