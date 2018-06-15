@@ -15,6 +15,7 @@
  */
 
 import { Configuration } from "@atomist/automation-client";
+import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {
@@ -92,6 +93,7 @@ export const configuration: Configuration = {
     },
     postProcessors: [
         configureLogzio,
+        configureDashboardNotifications,
         configureSdm(createMachine, Options),
     ],
 };
