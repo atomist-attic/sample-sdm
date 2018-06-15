@@ -47,6 +47,7 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 
 import * as build from "@atomist/sdm/dsl/buildDsl";
 
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import {
     NoGoals,
@@ -206,6 +207,12 @@ export function cloudFoundryMachine(
         NodeSupport,
         CloudFoundrySupport,
     );
+
+    // Optional add-ins from the Spring pack
+    sdm.addGenerators(springRestGenerator);
+    sdm.addGenerators(kotlinRestGenerator);
+    configureLocalSpringBootDeploy(sdm);
+
     addTeamPolicies(sdm);
     // DemoPolicies(sdm, configuration);
     return sdm;
