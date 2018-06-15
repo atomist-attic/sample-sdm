@@ -75,26 +75,35 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         {
             name: "CloudFoundry software delivery machine",
             configuration,
-        },
-        // Each contributor contributes goals. The infrastructure assembles them into a goal set.
-        goalContributors(
-            onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
-            whenPushSatisfies(IsDeploymentFrozen)
-                .setGoals(ExplainDeploymentFreezeGoal),
-            whenPushSatisfies(any(IsMaven, IsNode))
-                .setGoals(JustBuildGoal),
-            whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
-                .setGoals(LocalDeploymentGoal),
-            whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
-                .setGoals([ArtifactGoal,
-                    StagingDeploymentGoal,
-                    StagingEndpointGoal,
-                    StagingVerifiedGoal]),
-            whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-                .setGoals([ArtifactGoal,
-                    ProductionDeploymentGoal,
-                    ProductionEndpointGoal]),
-        ));
+        });
+    codeRules(sdm);
+    deployRules(sdm);
+    return sdm;
+}
+
+export function codeRules(sdm: SoftwareDeliveryMachine) {
+    // Each contributor contributes goals. The infrastructure assembles them into a goal set.
+    sdm.addGoalContributions(goalContributors(
+        onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
+        whenPushSatisfies(IsDeploymentFrozen)
+            .setGoals(ExplainDeploymentFreezeGoal),
+        whenPushSatisfies(any(IsMaven, IsNode))
+            .setGoals(JustBuildGoal),
+        whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
+            .setGoals(LocalDeploymentGoal),
+        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
+            .setGoals([ArtifactGoal,
+                StagingDeploymentGoal,
+                StagingEndpointGoal,
+                StagingVerifiedGoal]),
+        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+            .setGoals([ArtifactGoal,
+                ProductionDeploymentGoal,
+                ProductionEndpointGoal]),
+    ));
+  
+    sdm.addGenerators(springRestGenerator);
+    sdm.addGenerators(kotlinRestGenerator);
 
     sdm.addExtensionPacks(
         DemoEditors,
@@ -106,12 +115,10 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         NodeSupport,
         CloudFoundrySupport,
     );
+}
 
-    // Optional add-ins from the Spring pack
-    sdm.addGenerators(springRestGenerator);
-    sdm.addGenerators(kotlinRestGenerator);
+export function deployRules(sdm: SoftwareDeliveryMachine) {
     configureLocalSpringBootDeploy(sdm);
-
     sdm.addDeployRules(
         deploy.when(IsMaven)
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
@@ -123,7 +130,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(configuration.sdm)),
+            .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
     );
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)
@@ -144,8 +151,8 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
     // sdm.addExtensionPacks(DemoPolicies);
 
     sdm.addBuildRules(
-        build.setDefault(new MavenBuilder(configuration.sdm.artifactStore,
-            createEphemeralProgressLog, configuration.sdm.projectLoader)));
+        build.setDefault(new MavenBuilder(sdm.configuration.sdm.artifactStore,
+            createEphemeralProgressLog, sdm.configuration.sdm.projectLoader)));
 
     return sdm;
 }
