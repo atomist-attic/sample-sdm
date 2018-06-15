@@ -36,49 +36,31 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import {
-    HasSpringBootApplicationClass,
-    IsMaven,
-    LocalExecutableJarDeployer,
-    MavenBuilder,
-    SpringSupport,
-} from "@atomist/sdm-pack-spring";
+import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport, } from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as build from "@atomist/sdm/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import { StagingUndeploymentGoal } from "@atomist/sdm/goal/common/commonGoals";
-import {
-    RepositoryDeletionGoals,
-    UndeployEverywhereGoals,
-} from "@atomist/sdm/goal/common/httpServiceGoals";
+import { RepositoryDeletionGoals, UndeployEverywhereGoals, } from "@atomist/sdm/goal/common/httpServiceGoals";
 import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
+import { disableDeploy, enableDeploy, } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
 import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
 import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
-import {
-    deploymentFreeze,
-    ExplainDeploymentFreezeGoal,
-    isDeploymentFrozen,
-} from "@atomist/sdm/pack/freeze/deploymentFreeze";
+import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen, } from "@atomist/sdm/pack/freeze/deploymentFreeze";
 import { InMemoryDeploymentStatusManager } from "@atomist/sdm/pack/freeze/InMemoryDeploymentStatusManager";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
-import {
-    cloudFoundryProductionDeploySpec,
-    EnableDeployOnCloudFoundryManifestAddition,
-} from "../pack/pcf/cloudFoundryDeploy";
+import { cloudFoundryProductionDeploySpec, EnableDeployOnCloudFoundryManifestAddition, } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -124,6 +106,11 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         NodeSupport,
         CloudFoundrySupport,
     );
+
+    // Optional add-ins from the Spring pack
+    sdm.addGenerators(springRestGenerator);
+    sdm.addGenerators(kotlinRestGenerator);
+    configureLocalSpringBootDeploy(sdm);
 
     sdm.addDeployRules(
         deploy.when(IsMaven)

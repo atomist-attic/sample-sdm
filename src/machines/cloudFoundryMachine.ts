@@ -96,6 +96,7 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
@@ -206,6 +207,12 @@ export function cloudFoundryMachine(
         NodeSupport,
         CloudFoundrySupport,
     );
+
+    // Optional add-ins from the Spring pack
+    sdm.addGenerators(springRestGenerator);
+    sdm.addGenerators(kotlinRestGenerator);
+    configureLocalSpringBootDeploy(sdm);
+    
     addTeamPolicies(sdm);
     // DemoPolicies(sdm, configuration);
     return sdm;
