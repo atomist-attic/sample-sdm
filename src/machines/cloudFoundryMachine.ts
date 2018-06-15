@@ -47,6 +47,7 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 
 import * as build from "@atomist/sdm/dsl/buildDsl";
 
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 import * as deploy from "@atomist/sdm/dsl/deployDsl";
 import {
     NoGoals,
@@ -96,7 +97,6 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
@@ -212,7 +212,7 @@ export function cloudFoundryMachine(
     sdm.addGenerators(springRestGenerator);
     sdm.addGenerators(kotlinRestGenerator);
     configureLocalSpringBootDeploy(sdm);
-    
+
     addTeamPolicies(sdm);
     // DemoPolicies(sdm, configuration);
     return sdm;
