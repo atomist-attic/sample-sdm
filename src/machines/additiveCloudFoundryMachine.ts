@@ -101,7 +101,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 ProductionDeploymentGoal,
                 ProductionEndpointGoal]),
     ));
-  
+
     sdm.addGenerators(springRestGenerator);
     sdm.addGenerators(kotlinRestGenerator);
 
