@@ -31,7 +31,7 @@ You can fork and clone this repository.
 
 ## Run Locally
 
-This is an Atomist automation client. See [run an automation client](https://github.com/atomist/welcome/blob/master/runClient.md) for instructions on how to set up your environment and run it under Node.js.
+This is an Atomist automation client. See [run an automation client](https://github.com/atomist/welcome/blob/master/run.md) for instructions on how to set up your environment and run it under Node.js.
 
 See [integrations](#Integrations) for additional prerequisites according to the projects you're building.
 
