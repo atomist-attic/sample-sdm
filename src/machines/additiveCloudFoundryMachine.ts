@@ -77,6 +77,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             configuration,
         });
     codeRules(sdm);
+    buildRules(sdm);
     deployRules(sdm);
     return sdm;
 }
@@ -149,7 +150,9 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
     addTeamPolicies(sdm);
 
     // sdm.addExtensionPacks(DemoPolicies);
+}
 
+export function buildRules(sdm: SoftwareDeliveryMachine) {
     sdm.addBuildRules(
         build.setDefault(new MavenBuilder(sdm.configuration.sdm.artifactStore,
             createEphemeralProgressLog, sdm.configuration.sdm.projectLoader)));
