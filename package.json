@@ -18,9 +18,9 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/automation-client": "0.17.2-20180613153815",
+    "@atomist/automation-client": "^0.17.3",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180618202825",
-    "@atomist/sdm": "^0.2.2",
+    "@atomist/sdm": "^0.2.3-nortissej.bb-curl-or-axios.20180619000533",
     "@atomist/sdm-pack-checkstyle": "^0.1.1",
     "@atomist/sdm-pack-sloc": "^0.1.1",
     "@atomist/sdm-pack-sonarqube": "^0.1.2",
