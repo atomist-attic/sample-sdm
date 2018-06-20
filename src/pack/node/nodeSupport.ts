@@ -51,22 +51,22 @@ export const NodeSupport: ExtensionPack = {
 
         sdm.addGenerators(nodeGenerator({
             ...CommonGeneratorConfig,
-            seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
+            seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
         }, { intent: "create node",
         }));
         sdm.addGenerators(nodeGenerator({
             ...CommonGeneratorConfig,
-            seed: new GitHubRepoRef("atomist", "sdm"),
+            seed: () => new GitHubRepoRef("atomist", "sdm"),
         }, { intent: "copy sdm",
         }))
             .addGenerators(nodeGenerator({
                 ...CommonGeneratorConfig,
-                seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
+                seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
             }, {    intent: "create minimal node",
             }))
             .addGenerators(nodeGenerator({
                 ...CommonGeneratorConfig,
-                seed: new GitHubRepoRef("spring-team", "buildable-node-seed"),
+                seed: () => new GitHubRepoRef("spring-team", "buildable-node-seed"),
             }, {   intent: "create buildable node",
             }))
             .addAutofixes(

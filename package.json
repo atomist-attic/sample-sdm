@@ -20,11 +20,11 @@
   "dependencies": {
     "@atomist/automation-client": "^0.17.3",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180618202825",
-    "@atomist/sdm": "^0.2.3-nortissej.bb-curl-or-axios.20180619000533",
+    "@atomist/sdm": "^0.2.3-nortissej.custom-seed.20180619234931",
     "@atomist/sdm-pack-checkstyle": "^0.1.1",
     "@atomist/sdm-pack-sloc": "^0.1.1",
     "@atomist/sdm-pack-sonarqube": "^0.1.2",
-    "@atomist/sdm-pack-spring": "^0.1.2",
+    "@atomist/sdm-pack-spring": "^0.1.3-nortissej.custom-seed.20180620001059",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
