@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { editorAutofixRegistration, SoftwareDeliveryMachine } from "@atomist/sdm";
-import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { Project } from "@atomist/automation-client/project/Project";
+import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { editorAutofixRegistration, SoftwareDeliveryMachine } from "@atomist/sdm";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
     sdm.addPushReactions(async pu => {
@@ -37,7 +37,7 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         intent: "vermont",
         listener: async cli => {
             return cli.addressChannels("Hello Burlington!");
-        }
+        },
     });
 
     sdm.addEditor({
@@ -58,14 +58,14 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
     sdm.addAutofixes(editorAutofixRegistration({
             name: "filecounter",
             editor: fileCountEditor,
-        })
+        }),
     );
 }
 
 async function fileCountEditor(p: Project): Promise<any> {
     let count = 0;
     await doWithFiles(p, "**/*.java", f => {
-        ++count
+        ++count;
     });
     return p.addFile("filecount.md", `The number of Java files is ${count}`);
 }
