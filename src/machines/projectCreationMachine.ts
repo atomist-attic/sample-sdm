@@ -41,17 +41,17 @@ export function projectCreationMachine(
     sdm.addGenerators(
         springBootGenerator({
             ...CommonJavaGeneratorConfig,
-            seed: new GitHubRepoRef("spring-team", "spring-rest-seed"),
+            seed: () => new GitHubRepoRef("spring-team", "spring-rest-seed"),
         }, { intent: "create spring",
         }),
         nodeGenerator({
             ...CommonGeneratorConfig,
-            seed: new GitHubRepoRef("spring-team", "typescript-express-seed"),
+            seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
         }, {  intent: "create node",
         }),
         nodeGenerator({
             ...CommonGeneratorConfig,
-            seed: new GitHubRepoRef("spring-team", "minimal-node-seed"),
+            seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
         }, {   intent: "create minimal node",
         }))
         .addNewRepoWithCodeActions(

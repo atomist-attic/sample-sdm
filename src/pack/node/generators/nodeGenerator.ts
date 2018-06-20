@@ -36,7 +36,7 @@ export function nodeGenerator(config: GeneratorConfig,
     return {
         createEditor: transformSeed,
         paramsMaker: () => new NodeProjectCreationParameters(config),
-        name: `nodeGenerator-${config.seed.repo}`,
+        name: `nodeGenerator-${config.seed().repo}`,
         tags: ["node", "typescript", "generator"],
         ...details,
     };
