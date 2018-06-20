@@ -1,0 +1,55 @@
+import { editorAutofixRegistration, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { Project } from "@atomist/automation-client/project/Project";
+
+export function demoRules(sdm: SoftwareDeliveryMachine) {
+    sdm.addPushReactions(async pu => {
+        const readme = await pu.project.getFile("README.md");
+        if (!readme) {
+            return pu.addressChannels(`Project at ${pu.id.url} has no readme. This makes me sad. :crying_cat_face:`);
+        } else {
+            return pu.addressChannels("This project has a readme");
+        }
+    });
+    sdm.addNewIssueListeners(async i => {
+        const extra = i.issue.title.toLowerCase().includes("please") ? "Thank you! :thank_you:" : "Not very polite, are you :scowl:";
+        return i.addressChannels(`_${i.issue.openedBy.person.chatId.screenName}_, you opened issue #${i.issue.number}. ${extra}`);
+    });
+
+    sdm.addCommands({
+        name: "vermont",
+        intent: "vermont",
+        listener: async cli => {
+            return cli.addressChannels("Hello Burlington!");
+        }
+    });
+
+    sdm.addEditor({
+        name: "topping",
+        intent: "topping",
+        editor: async p => {
+            return p.addFile("topping", "maple syrup");
+        },
+        dryRun: true,
+    });
+
+    sdm.addEditor({
+        name: "maintainFileCount",
+        intent: "filecount",
+        editor: fileCountEditor,
+    });
+
+    sdm.addAutofixes(editorAutofixRegistration({
+            name: "filecounter",
+            editor: fileCountEditor,
+        })
+    );
+}
+
+async function fileCountEditor(p: Project): Promise<any> {
+    let count = 0;
+    await doWithFiles(p, "**/*.java", f => {
+        ++count
+    });
+    return p.addFile("filecount.md", `The number of Java files is ${count}`);
+}
