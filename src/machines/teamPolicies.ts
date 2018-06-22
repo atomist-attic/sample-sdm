@@ -22,7 +22,7 @@ import {
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
-import { GraphGoalsToSlack } from "@atomist/sdm-core";
+import { GraphGoals } from "@atomist/sdm-core";
 import { summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
 import { DryRunEditing } from "@atomist/sdm-core";
 import { AddApacheLicenseHeaderEditor } from "../commands/editors/license/addHeader";
@@ -41,7 +41,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     sdm
         .addNewIssueListeners(requestDescription, capitalizer)
         .addClosedIssueListeners(thankYouYouRock)
-        .addGoalsSetListeners(GraphGoalsToSlack)
+        .addGoalsSetListeners(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListeners(
             slackReviewListener(),
