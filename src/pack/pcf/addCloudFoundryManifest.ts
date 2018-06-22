@@ -18,10 +18,10 @@ import { logger } from "@atomist/automation-client";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { EditorRegistration } from "@atomist/sdm";
-import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
-import { HasSpringBootPom } from "@atomist/sdm-pack-spring/dist/support/spring/pushTests";
 import { NodeProjectIdentifier } from "@atomist/sdm-core";
 import { CloudFoundryManifestPath } from "@atomist/sdm-core";
+import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
+import { HasSpringBootPom } from "@atomist/sdm-pack-spring/dist/support/spring/pushTests";
 
 export const AddCloudFoundryManifestMarker = "[atomist:add-pcf-manifest]";
 

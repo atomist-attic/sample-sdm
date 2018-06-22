@@ -47,12 +47,8 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
-import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
-import {
-    NoGoals,
-    StagingUndeploymentGoal,
-} from "@atomist/sdm-core";
+import { nodeBuilder } from "@atomist/sdm-core";
+import { HasCloudFoundryManifest } from "@atomist/sdm-core";
 import {
     HttpServiceGoals,
     RepositoryDeletionGoals,
@@ -70,7 +66,10 @@ import {
     disableDeploy,
     enableDeploy,
 } from "@atomist/sdm-core";
-import { nodeBuilder } from "@atomist/sdm-core";
+import {
+    NoGoals,
+    StagingUndeploymentGoal,
+} from "@atomist/sdm-core";
 import { npmCustomBuilder } from "@atomist/sdm-core";
 import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
@@ -79,9 +78,10 @@ import {
     HasAtomistBuildFile,
     IsNode,
 } from "@atomist/sdm-core";
-import { HasCloudFoundryManifest } from "@atomist/sdm-core";
-import { ToPublicRepo } from "@atomist/sdm-core";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import { ToPublicRepo } from "@atomist/sdm-core";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
+import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";

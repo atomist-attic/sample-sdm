@@ -16,11 +16,11 @@
 
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {
     ConfigureOptions,
     configureSdm,
 } from "@atomist/sdm-core";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";

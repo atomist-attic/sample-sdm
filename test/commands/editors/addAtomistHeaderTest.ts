@@ -23,8 +23,8 @@ import { GitCommandGitProject } from "@atomist/automation-client/project/git/Git
 import { fakeRunWithLogContext } from "@atomist/sdm/api-helper/test/fakeRunWithLogContext";
 import * as assert from "power-assert";
 
-import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
 import { DefaultRepoRefResolver } from "@atomist/sdm-core";
+import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
 import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
