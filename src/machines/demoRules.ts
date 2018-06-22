@@ -1,3 +1,4 @@
+import { dryRunEditorCommand } from "@atomist/sdm-core/pack/dry-run/dryRunEditorCommand";
 /*
  * Copyright © 2018 Atomist, Inc.
  *
@@ -46,7 +47,7 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         editor: async p => {
             return p.addFile("topping", "maple syrup");
         },
-        dryRun: true,
+        editorCommandFactory: dryRunEditorCommand,
     });
 
     sdm.addEditor({

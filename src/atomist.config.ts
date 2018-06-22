@@ -20,7 +20,7 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import {
     ConfigureOptions,
     configureSdm,
-} from "@atomist/sdm/internal/machine/configureSdm";
+} from "@atomist/sdm-core";
 import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { configureLogzio } from "./util/logzio";

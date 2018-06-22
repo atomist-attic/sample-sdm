@@ -19,7 +19,7 @@ import {
     LocalDeploymentGoal,
     PushReactionGoal,
 } from "@atomist/sdm";
-import { LocalEndpointGoal } from "@atomist/sdm/goal/common/commonGoals";
+import { LocalEndpointGoal } from "@atomist/sdm-core";
 
 export const LocalDeploymentGoals = new Goals(
     "Local Deployment",

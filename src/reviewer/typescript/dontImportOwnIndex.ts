@@ -15,7 +15,7 @@
  */
 
 import { ReviewerRegistration } from "@atomist/sdm";
-import { patternMatchReviewer } from "@atomist/sdm/code/review/patternMatchReviewer";
+import { patternMatchReviewer } from "@atomist/sdm/api-helper/code/review/patternMatchReviewer";
 
 /**
  * Importing a project's index file is a recipe for circular import hell

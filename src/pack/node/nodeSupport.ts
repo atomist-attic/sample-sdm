@@ -22,12 +22,12 @@ import {
     ToDefaultBranch,
 } from "@atomist/sdm";
 
-import * as build from "@atomist/sdm/dsl/buildDsl";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
-import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
-import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
-import { PackageLockFingerprinter } from "@atomist/sdm/pack/node/PackageLockFingerprinter";
-import { tslintFix } from "@atomist/sdm/pack/node/tslint";
+import { nodeBuilder } from "@atomist/sdm-core";
+import { IsNode } from "@atomist/sdm-core";
+import { PackageLockFingerprinter } from "@atomist/sdm-core";
+import { tslintFix } from "@atomist/sdm-core";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";

@@ -26,7 +26,7 @@ import {
     HasSpringBootApplicationClass,
     IsMaven,
 } from "@atomist/sdm-pack-spring";
-import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
+import { IsNode } from "@atomist/sdm-core";
 import * as slack from "@atomist/slack-messages/SlackMessages";
 import { AddCloudFoundryManifest } from "./addCloudFoundryManifest";
 

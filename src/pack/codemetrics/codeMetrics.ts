@@ -27,7 +27,7 @@ import {
     CodeStats,
     reportForLanguages,
 } from "@atomist/sdm-pack-sloc/slocReport";
-import { TypedFingerprint } from "@atomist/sdm/code/fingerprint/TypedFingerprint";
+import { TypedFingerprint } from "@atomist/sdm/api-helper/code/fingerprint/TypedFingerprint";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 

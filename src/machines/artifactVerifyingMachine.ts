@@ -27,8 +27,8 @@ import {
 } from "@atomist/sdm-pack-spring";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import * as build from "@atomist/sdm/dsl/buildDsl";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import * as fs from "fs";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 

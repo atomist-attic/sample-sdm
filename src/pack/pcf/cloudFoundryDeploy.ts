@@ -20,10 +20,10 @@ import {
     PushImpactListener,
     PushReactionRegistration,
 } from "@atomist/sdm";
-import { setDeployEnablement } from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm/pack/pcf/CloudFoundryBlueGreenDeployer";
-import { CloudFoundryInfo } from "@atomist/sdm/pack/pcf/CloudFoundryTarget";
-import { EnvironmentCloudFoundryTarget } from "@atomist/sdm/pack/pcf/EnvironmentCloudFoundryTarget";
+import { setDeployEnablement } from "@atomist/sdm-core";
+import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm-core";
+import { CloudFoundryInfo } from "@atomist/sdm-core";
+import { EnvironmentCloudFoundryTarget } from "@atomist/sdm-core";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 

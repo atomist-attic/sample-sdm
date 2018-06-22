@@ -21,7 +21,7 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import {
     AddAtomistJavaHeader,
     AddAtomistTypeScriptHeader,

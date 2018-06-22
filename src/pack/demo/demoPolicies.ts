@@ -21,7 +21,7 @@ import {
     hasFile,
     not,
 } from "@atomist/sdm";
-import { updateIssue } from "@atomist/sdm/util/github/ghub";
+import { updateIssue } from "@atomist/sdm-core";
 import axios from "axios";
 
 /**

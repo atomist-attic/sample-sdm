@@ -22,8 +22,8 @@ import {
     springBootTagger,
 } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { tagRepo } from "@atomist/sdm-core";
 import {
     CommonGeneratorConfig,
     nodeGenerator,

@@ -21,10 +21,10 @@ import {
 } from "@atomist/sdm";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
-import { slackReviewListener } from "@atomist/sdm/code/review/slackReviewListener";
-import { GraphGoalsToSlack } from "@atomist/sdm/goal/graph/graphGoalsToSlack";
-import { summarizeGoalsInGitHubStatus } from "@atomist/sdm/internal/delivery/goals/support/githubStatusSummarySupport";
-import { DryRunEditing } from "@atomist/sdm/pack/dry-run/dryRunEditorSupport";
+import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
+import { GraphGoalsToSlack } from "@atomist/sdm-core";
+import { summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
+import { DryRunEditing } from "@atomist/sdm-core";
 import { AddApacheLicenseHeaderEditor } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
 import { capitalizer } from "../listener/issue/capitalizer";

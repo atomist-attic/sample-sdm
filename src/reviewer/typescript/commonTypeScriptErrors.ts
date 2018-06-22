@@ -15,7 +15,7 @@
  */
 
 import { ReviewerRegistration } from "@atomist/sdm";
-import { patternMatchReviewer } from "@atomist/sdm/code/review/patternMatchReviewer";
+import { patternMatchReviewer } from "@atomist/sdm/api-helper/code/review/patternMatchReviewer";
 
 export const CommonTypeScriptErrors: ReviewerRegistration = patternMatchReviewer(
     "Dangerous TypeScript Errors of the Past",
