@@ -36,23 +36,23 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
-import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
-import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
+import { IsNode } from "@atomist/sdm-core";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import { InMemoryDeploymentStatusManager } from "@atomist/sdm-core";
+import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "@atomist/sdm-core";
+import { HasCloudFoundryManifest } from "@atomist/sdm-core";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import { StagingUndeploymentGoal } from "@atomist/sdm-core";
 import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm-core";
 import { isDeployEnabledCommand } from "@atomist/sdm-core";
 import { disableDeploy, enableDeploy } from "@atomist/sdm-core";
 import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { IsNode } from "@atomist/sdm-core";
-import { HasCloudFoundryManifest } from "@atomist/sdm-core";
-import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "@atomist/sdm-core";
-import { InMemoryDeploymentStatusManager } from "@atomist/sdm-core";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
+import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
+import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";

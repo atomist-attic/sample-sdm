@@ -20,8 +20,8 @@ import {
     onAnyPush,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {
     AddAtomistJavaHeader,
     AddAtomistTypeScriptHeader,

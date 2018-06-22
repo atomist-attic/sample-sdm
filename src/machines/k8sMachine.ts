@@ -24,14 +24,9 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import {
-    HasSpringBootApplicationClass,
-    IsMaven,
-    MaterialChangeToJavaRepo,
-    SpringSupport,
-} from "@atomist/sdm-pack-spring";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import { ToPublicRepo } from "@atomist/sdm-core";
 import { NoGoals } from "@atomist/sdm-core";
 import { HttpServiceGoals } from "@atomist/sdm-core";
 import { LibraryGoals } from "@atomist/sdm-core";
@@ -45,10 +40,15 @@ import {
 } from "@atomist/sdm-core";
 import { requestDeployToK8s } from "@atomist/sdm-core";
 import { K8sAutomationBuilder } from "@atomist/sdm-core";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import { IsNode } from "@atomist/sdm-core";
-import { ToPublicRepo } from "@atomist/sdm-core";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    MaterialChangeToJavaRepo,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
+import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { AddK8sSpec } from "../commands/editors/k8s/addK8sSpec";
 import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import {

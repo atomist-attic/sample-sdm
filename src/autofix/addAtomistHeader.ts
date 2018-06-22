@@ -21,8 +21,8 @@ import {
     hasFileContaining,
     PushTest,
 } from "@atomist/sdm";
-import { IsJava } from "@atomist/sdm-pack-spring";
 import { IsTypeScript } from "@atomist/sdm-core";
+import { IsJava } from "@atomist/sdm-pack-spring";
 import {
     AddHeaderParameters,
     addHeaderProjectEditor,
