@@ -22,7 +22,7 @@ import { LoggingProgressLog } from "@atomist/sdm/api-helper/log/LoggingProgressL
 import {
     asSpawnCommand,
     spawnAndWatch,
-} from "@atomist/sdm/util/misc/spawned";
+} from "@atomist/sdm/api-helper/misc/spawned";
 
 export const OWASPDependencyCheck: ArtifactListenerRegistration = {
     name: "OWASP dependency check",

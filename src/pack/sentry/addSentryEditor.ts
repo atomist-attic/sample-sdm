@@ -24,8 +24,8 @@ import {
     addDependencyEditor,
     VersionedArtifact,
 } from "@atomist/sdm-pack-spring";
-import { appendOrCreateFileContent } from "@atomist/sdm/util/project/appendOrCreate";
-import { copyFileFromUrl } from "@atomist/sdm/util/project/fileCopy";
+import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
+import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",
