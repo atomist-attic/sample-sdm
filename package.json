@@ -20,11 +20,11 @@
   "dependencies": {
     "@atomist/automation-client": "^0.17.3",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180620184836",
-    "@atomist/sdm": "0.3.0-nortissej.break-out-api.20180622000216",
-    "@atomist/sdm-pack-checkstyle": "0.1.2-nortissej.break-out-api.20180622210947",
-    "@atomist/sdm-pack-sloc": "0.1.3-nortissej.break-out-api.20180622210850",
-    "@atomist/sdm-pack-sonarqube": "0.1.3-nortissej.break-out-api.20180622211043",
-    "@atomist/sdm-pack-spring": "0.1.3-nortissej.break-out-api.20180622131040",
+    "@atomist/sdm": "0.3.0-nortissej.break-out-api.20180624172126",
+    "@atomist/sdm-pack-checkstyle": "0.1.2-nortissej.break-out-api.20180624181414",
+    "@atomist/sdm-pack-sloc": "0.1.3-nortissej.break-out-api.20180624181555",
+    "@atomist/sdm-pack-sonarqube": "0.1.3-nortissej.break-out-api.20180624181437",
+    "@atomist/sdm-pack-spring": "0.1.3-nortissej.break-out-api.20180624181606",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
@@ -34,7 +34,7 @@
     "logzio-nodejs": "^0.4.11",
     "properties-reader": "0.0.16",
     "winston-logzio": "^1.0.8",
-    "@atomist/sdm-core": "0.3.1-20180622172537"
+    "@atomist/sdm-core": "0.3.1-20180622235515"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.48",
