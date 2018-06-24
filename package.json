@@ -20,7 +20,7 @@
   "dependencies": {
     "@atomist/automation-client": "^0.17.3",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180620184836",
-    "@atomist/sdm": "0.3.0-nortissej.break-out-api.20180624172126",
+    "@atomist/sdm": "0.3.0-nortissej.break-out-api.20180624192958",
     "@atomist/sdm-pack-checkstyle": "0.1.2-nortissej.break-out-api.20180624183024",
     "@atomist/sdm-pack-sloc": "0.1.3-nortissej.break-out-api.20180624183145",
     "@atomist/sdm-pack-sonarqube": "0.1.3-nortissej.break-out-api.20180624183205",
@@ -34,7 +34,7 @@
     "logzio-nodejs": "^0.4.11",
     "properties-reader": "0.0.16",
     "winston-logzio": "^1.0.8",
-    "@atomist/sdm-core": "0.3.1-20180622235515"
+    "@atomist/sdm-core": "0.3.1-20180624195956"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.48",
