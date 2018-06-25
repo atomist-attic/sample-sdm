@@ -19,6 +19,7 @@ query SdmGoalById($id: ID!) {
     }
     description
     url
+    externalUrl
     state
     externalKey
     ts
