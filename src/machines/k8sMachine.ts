@@ -24,31 +24,31 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import { ToPublicRepo } from "@atomist/sdm-core";
+import { NoGoals } from "@atomist/sdm-core";
+import { HttpServiceGoals } from "@atomist/sdm-core";
+import { LibraryGoals } from "@atomist/sdm-core";
+import {
+    NpmBuildGoals,
+    NpmDeployGoals,
+} from "@atomist/sdm-core";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm-core";
+import { requestDeployToK8s } from "@atomist/sdm-core";
+import { K8sAutomationBuilder } from "@atomist/sdm-core";
+import { IsNode } from "@atomist/sdm-core";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
     MaterialChangeToJavaRepo,
     SpringSupport,
 } from "@atomist/sdm-pack-spring";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import * as build from "@atomist/sdm/dsl/buildDsl";
-import { NoGoals } from "@atomist/sdm/goal/common/commonGoals";
-import { HttpServiceGoals } from "@atomist/sdm/goal/common/httpServiceGoals";
-import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
-import {
-    NpmBuildGoals,
-    NpmDeployGoals,
-} from "@atomist/sdm/goal/common/npmGoals";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { requestDeployToK8s } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/RequestK8sDeploys";
-import { K8sAutomationBuilder } from "@atomist/sdm/internal/delivery/build/k8s/K8AutomationBuilder";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
-import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
 import { AddK8sSpec } from "../commands/editors/k8s/addK8sSpec";
 import { HasK8Spec } from "../commands/editors/k8s/k8sSpecPushTest";
 import {

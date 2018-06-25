@@ -22,11 +22,11 @@ import {
     ChannelLinkListener,
     ProjectPredicate,
 } from "@atomist/sdm";
+import { IsNode } from "@atomist/sdm-core";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
 } from "@atomist/sdm-pack-spring";
-import { IsNode } from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
 import * as slack from "@atomist/slack-messages/SlackMessages";
 import { AddCloudFoundryManifest } from "./addCloudFoundryManifest";
 

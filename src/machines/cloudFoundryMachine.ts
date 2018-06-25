@@ -45,43 +45,43 @@ import {
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 
-import * as build from "@atomist/sdm/dsl/buildDsl";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
-import * as deploy from "@atomist/sdm/dsl/deployDsl";
-import {
-    NoGoals,
-    StagingUndeploymentGoal,
-} from "@atomist/sdm/goal/common/commonGoals";
+import { nodeBuilder } from "@atomist/sdm-core";
+import { HasCloudFoundryManifest } from "@atomist/sdm-core";
 import {
     HttpServiceGoals,
     RepositoryDeletionGoals,
     UndeployEverywhereGoals,
-} from "@atomist/sdm/goal/common/httpServiceGoals";
-import { LibraryGoals } from "@atomist/sdm/goal/common/libraryGoals";
+} from "@atomist/sdm-core";
+import { LibraryGoals } from "@atomist/sdm-core";
 import {
     NpmBuildGoals,
     NpmDeployGoals,
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
-} from "@atomist/sdm/goal/common/npmGoals";
-import { isDeployEnabledCommand } from "@atomist/sdm/handlers/commands/DisplayDeployEnablement";
+} from "@atomist/sdm-core";
+import { isDeployEnabledCommand } from "@atomist/sdm-core";
 import {
     disableDeploy,
     enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { nodeBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/npmBuilder";
-import { npmCustomBuilder } from "@atomist/sdm/internal/delivery/build/local/npm/NpmDetectBuildMapping";
-import { ManagedDeploymentTargeter } from "@atomist/sdm/internal/delivery/deploy/local/ManagedDeployments";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { HasDockerfile } from "@atomist/sdm/mapping/pushtest/docker/dockerPushTests";
+} from "@atomist/sdm-core";
+import {
+    NoGoals,
+    StagingUndeploymentGoal,
+} from "@atomist/sdm-core";
+import { npmCustomBuilder } from "@atomist/sdm-core";
+import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { HasDockerfile } from "@atomist/sdm-core";
 import {
     HasAtomistBuildFile,
     IsNode,
-} from "@atomist/sdm/mapping/pushtest/node/nodePushTests";
-import { HasCloudFoundryManifest } from "@atomist/sdm/mapping/pushtest/pcf/cloudFoundryManifestPushTest";
-import { ToPublicRepo } from "@atomist/sdm/mapping/pushtest/toPublicRepo";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm/util/verify/lookFor200OnEndpointRootGet";
+} from "@atomist/sdm-core";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
+import { ToPublicRepo } from "@atomist/sdm-core";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
+import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";

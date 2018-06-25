@@ -22,6 +22,12 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { tagRepo } from "@atomist/sdm-core";
+import {
+    disableDeploy,
+    enableDeploy,
+} from "@atomist/sdm-core";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
@@ -29,12 +35,6 @@ import {
 } from "@atomist/sdm-pack-spring";
 import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring/dist/support/java/pushTests";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm/handlers/commands/SetDeployEnablement";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm/machine/machineFactory";
-import { tagRepo } from "@atomist/sdm/util/github/tagRepo";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";

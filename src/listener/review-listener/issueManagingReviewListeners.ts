@@ -27,8 +27,8 @@ import {
     ReviewListener,
     ReviewListenerInvocation,
 } from "@atomist/sdm";
+import { authHeaders } from "@atomist/sdm-core";
 import { OnPushToAnyBranch } from "@atomist/sdm/typings/types";
-import { authHeaders } from "@atomist/sdm/util/github/ghub";
 import * as slack from "@atomist/slack-messages";
 import axios from "axios";
 import * as stringify from "json-stringify-safe";

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {renderCommitMessage} from "@atomist/sdm/util/slack/diffRendering";
+import {renderCommitMessage} from "@atomist/sdm-core";
 import * as assert from "power-assert";
 
 describe("commit rendering", () => {

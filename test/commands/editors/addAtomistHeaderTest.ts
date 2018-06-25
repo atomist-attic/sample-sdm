@@ -20,12 +20,12 @@ import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFil
 import { successOn } from "@atomist/automation-client/action/ActionResult";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
-import { fakeRunWithLogContext } from "@atomist/sdm/util/test/fakeRunWithLogContext";
+import { fakeRunWithLogContext } from "@atomist/sdm/api-helper/test/fakeRunWithLogContext";
 import * as assert from "power-assert";
 
+import { DefaultRepoRefResolver } from "@atomist/sdm-core";
 import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
-import { DefaultRepoRefResolver } from "@atomist/sdm/handlers/common/DefaultRepoRefResolver";
-import { SingleProjectLoader } from "@atomist/sdm/util/test/SingleProjectLoader";
+import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 

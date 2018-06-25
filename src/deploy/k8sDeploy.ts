@@ -20,8 +20,8 @@ import {
     StagingDeploymentGoal,
     StagingEndpointGoal,
 } from "@atomist/sdm";
-import { NoticeK8sTestDeployCompletionOnStatus } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/NoticeK8sDeployCompletion";
-import { NoticeK8sProdDeployCompletionOnStatus } from "@atomist/sdm/handlers/events/delivery/deploy/k8s/NoticeK8sProdDeployCompletion";
+import { NoticeK8sTestDeployCompletionOnStatus } from "@atomist/sdm-core";
+import { NoticeK8sProdDeployCompletionOnStatus } from "@atomist/sdm-core";
 
 export const K8sTestingDomain = "testing";
 export const K8sProductionDomain = "production";
