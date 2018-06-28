@@ -215,3 +215,4 @@ staging and production deployments.
 The kubernetesSoftwareDevelopmentMachine included here deploys to an Atomist sandbox kubernetes environment, using
 [k8-automation](https://github.com/atomist/k8-automation) which we run inside our cluster. You can deploy the Spring Boot
 projects created with `@atomist create spring` here, in order to try out the Kubernetes integration with the SDM.
+
