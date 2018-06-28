@@ -39,11 +39,9 @@ export function autofixMachine(
         onAnyPush
             .setGoals(new Goals("Autofix", AutofixGoal)));
     sdm
-        .addAutofixes(
-            AddAtomistJavaHeader,
-            AddAtomistTypeScriptHeader,
-            AddLicenseFile,
-        )
+        .addAutofix(AddAtomistJavaHeader)
+        .addAutofix(AddAtomistTypeScriptHeader)
+        .addAutofix(AddLicenseFile)
         .addExtensionPacks(
             DemoEditors,
         );

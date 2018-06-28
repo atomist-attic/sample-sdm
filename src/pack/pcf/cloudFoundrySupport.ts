@@ -24,7 +24,7 @@ export const CloudFoundrySupport: ExtensionPack = {
     version: "0.1.0",
     configure: sdm => {
         sdm
-            .addEditors(AddCloudFoundryManifest)
-            .addChannelLinkListeners(SuggestAddingCloudFoundryManifest);
+            .addEditor(AddCloudFoundryManifest)
+            .addChannelLinkListener(SuggestAddingCloudFoundryManifest);
     },
 };

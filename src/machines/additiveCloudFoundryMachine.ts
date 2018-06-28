@@ -36,7 +36,7 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { IsNode } from "@atomist/sdm-core";
+import { DisableDeploy, DisplayDeployEnablement, EnableDeploy, IsNode } from "@atomist/sdm-core";
 import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
 import { InMemoryDeploymentStatusManager } from "@atomist/sdm-core";
 import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "@atomist/sdm-core";
@@ -44,8 +44,6 @@ import { HasCloudFoundryManifest } from "@atomist/sdm-core";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import { StagingUndeploymentGoal } from "@atomist/sdm-core";
 import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm-core";
-import { isDeployEnabledCommand } from "@atomist/sdm-core";
-import { disableDeploy, enableDeploy } from "@atomist/sdm-core";
 import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
 import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
 import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
@@ -103,8 +101,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 ProductionEndpointGoal]),
     ));
 
-    sdm.addGenerators(springRestGenerator);
-    sdm.addGenerators(kotlinRestGenerator);
+    sdm.addGenerator(springRestGenerator);
+    sdm.addGenerator(kotlinRestGenerator);
 
     sdm.addExtensionPacks(
         DemoEditors,
@@ -140,13 +138,11 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals))
-        .addSupportingCommands(
-            enableDeploy,
-            disableDeploy,
-            isDeployEnabledCommand,
-        )
-        .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
-        .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
+        .addCommand(EnableDeploy)
+        .addCommand(DisableDeploy)
+        .addCommand(DisplayDeployEnablement)
+        .addPushReaction(EnableDeployOnCloudFoundryManifestAddition)
+        .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
 
     // sdm.addExtensionPacks(DemoPolicies);

@@ -23,6 +23,6 @@ export const SentrySupport: ExtensionPack = {
     version: "0.1.0",
     configure:
         sdm => {
-            sdm.addEditors(AddSentry);
+            sdm.addEditor(AddSentry);
         },
 };

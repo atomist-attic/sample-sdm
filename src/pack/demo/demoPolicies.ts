@@ -16,7 +16,6 @@
 
 import { Issue } from "@atomist/automation-client/util/gitHub";
 import {
-    editorAutofixRegistration,
     ExtensionPack,
     hasFile,
     not,
@@ -35,28 +34,28 @@ export const DemoPolicies: ExtensionPack = {
     configure: sdm => {
         sdm
         // Close all newly created issues
-            .addCommands({
+            .addCommand({
                 name: "helloworld",
                 listener: async cli => cli.addressChannels("Hello world"),
                 intent: "hello world",
             })
-            .addNewIssueListeners(async newIssue => {
+            .addNewIssueListener(async newIssue => {
                 await updateIssue(newIssue.credentials, newIssue.id, newIssue.issue.number, {
                     ...newIssue.issue,
                     state: "closed",
                 } as any as Issue);
             })
             // Make sure every project has a LICENSE file in the root
-            .addAutofixes(editorAutofixRegistration({
+            .addAutofix({
                 name: "License",
                 pushTest: not(hasFile("LICENSE")),
                 editor: async p => {
                     const license = await axios.get("https://www.apache.org/licenses/LICENSE-2.0.txt");
                     return p.addFile("LICENSE", license.data);
                 },
-            }))
+            })
             // Lint commit message with rules from https://github.com/marionebl/commitlint/tree/master/@commitlint/config-conventional
-            .addPushReactions({
+            .addPushReaction({
                 name: "lint commit message",
                 action: async i => {
                     const load = require("@commitlint/load");

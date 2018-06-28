@@ -49,8 +49,9 @@ export function staticAnalysisMachine(
     sdm.addExtensionPacks(
         CheckstyleSupport,
         DemoEditors,
-    );
-    sdm.addReviewerRegistrations(rodHatesYaml, hasNoReadMe);
+    )
+        .addReviewerRegistration(rodHatesYaml)
+        .addReviewerRegistration(hasNoReadMe);
 
     return sdm;
 }

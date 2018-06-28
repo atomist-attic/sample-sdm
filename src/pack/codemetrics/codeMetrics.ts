@@ -89,8 +89,8 @@ function lineCounter(pushTest: PushTest): FingerprinterRegistration {
 
 function addCodeMetrics(publisher: FingerprintListener, pushTest: PushTest) {
     return (sdm: SoftwareDeliveryMachine) => {
-        sdm.addFingerprinterRegistrations(lineCounter(pushTest))
-            .addFingerprintListeners(lineCountPublisher(publisher));
+        sdm.addFingerprinterRegistration(lineCounter(pushTest))
+            .addFingerprintListener(lineCountPublisher(publisher));
     };
 }
 

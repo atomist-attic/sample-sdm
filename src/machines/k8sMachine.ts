@@ -24,23 +24,22 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
-import { ToPublicRepo } from "@atomist/sdm-core";
-import { NoGoals } from "@atomist/sdm-core";
-import { HttpServiceGoals } from "@atomist/sdm-core";
-import { LibraryGoals } from "@atomist/sdm-core";
 import {
+    createSoftwareDeliveryMachine,
+    DisableDeploy,
+    DisplayDeployEnablement,
+    EnableDeploy,
+    HttpServiceGoals,
+    IsNode,
+    K8sAutomationBuilder,
+    LibraryGoals,
+    lookFor200OnEndpointRootGet,
+    NoGoals,
     NpmBuildGoals,
     NpmDeployGoals,
+    requestDeployToK8s,
+    ToPublicRepo,
 } from "@atomist/sdm-core";
-import {
-    disableDeploy,
-    enableDeploy,
-} from "@atomist/sdm-core";
-import { requestDeployToK8s } from "@atomist/sdm-core";
-import { K8sAutomationBuilder } from "@atomist/sdm-core";
-import { IsNode } from "@atomist/sdm-core";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
@@ -102,15 +101,14 @@ export function k8sMachine(
         .addGoalImplementation("K8ProductionDeploy",
             ProductionDeploymentGoal,
             requestDeployToK8s(K8sProductionDomain))
-        .addChannelLinkListeners(SuggestAddingK8sSpec)
-        .addSupportingCommands(
-            () => AddK8sSpec,
-            enableDeploy,
-            disableDeploy,
-        )
+        .addChannelLinkListener(SuggestAddingK8sSpec)
+        .addEditor(AddK8sSpec)
+        .addCommand(EnableDeploy)
+        .addCommand(DisableDeploy)
+        .addCommand(DisplayDeployEnablement)
         .addSupportingEvents(() => NoticeK8sTestDeployCompletion,
             () => noticeK8sProdDeployCompletion(sdm.configuration.sdm.repoRefResolver))
-        .addEndpointVerificationListeners(
+        .addEndpointVerificationListener(
             lookFor200OnEndpointRootGet({
                 retries: 15,
                 maxTimeout: 5000,

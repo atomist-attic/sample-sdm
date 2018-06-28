@@ -36,26 +36,29 @@ import {
  * @return {SoftwareDeliveryMachine}
  */
 export function projectCreationMachine(
-                                       configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", configuration});
-    sdm.addGenerators(
+    sdm.addGenerator(
         springBootGenerator({
             ...CommonJavaGeneratorConfig,
             seed: () => new GitHubRepoRef("spring-team", "spring-rest-seed"),
-        }, { intent: "create spring",
-        }),
-        nodeGenerator({
-            ...CommonGeneratorConfig,
-            seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
-        }, {  intent: "create node",
-        }),
-        nodeGenerator({
-            ...CommonGeneratorConfig,
-            seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
-        }, {   intent: "create minimal node",
+        }, {
+            intent: "create spring",
         }))
-        .addNewRepoWithCodeActions(
-            tagRepo(springBootTagger),
-        );
+        .addGenerator(
+            nodeGenerator({
+                ...CommonGeneratorConfig,
+                seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
+            }, {
+                intent: "create node",
+            }))
+        .addGenerator(
+            nodeGenerator({
+                ...CommonGeneratorConfig,
+                seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
+            }, {
+                intent: "create minimal node",
+            }))
+        .addNewRepoWithCodeAction(tagRepo(springBootTagger));
     return sdm;
 }

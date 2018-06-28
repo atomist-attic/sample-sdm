@@ -22,17 +22,14 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { tagRepo } from "@atomist/sdm-core";
 import {
-    disableDeploy,
-    enableDeploy,
+    createSoftwareDeliveryMachine,
+    DisableDeploy,
+    DisplayDeployEnablement,
+    EnableDeploy,
+    tagRepo,
 } from "@atomist/sdm-core";
-import {
-    HasSpringBootApplicationClass,
-    IsMaven,
-    springBootTagger,
-} from "@atomist/sdm-pack-spring";
+import { HasSpringBootApplicationClass, IsMaven, springBootTagger } from "@atomist/sdm-pack-spring";
 import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring/dist/support/java/pushTests";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
@@ -68,16 +65,15 @@ export function evangelicalMachine(
             EnableSpringBoot,
             executeSendMessageToSlack("Congratulations. You're using Spring Boot. It's cool :sunglasses: and so is Atomist. " +
                 "Atomist knows lots about Spring Boot and would love to help"))
-        .addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
-        .addNewRepoWithCodeActions(
+        .addChannelLinkListener(SuggestAddingCloudFoundryManifest)
+        .addNewRepoWithCodeAction(
             // TODO suggest creating projects with generator
             tagRepo(springBootTagger),
         )
-        .addSupportingCommands(
-            () => AddCloudFoundryManifest,
-            enableDeploy,
-            disableDeploy,
-        )
+        .addEditor(AddCloudFoundryManifest)
+        .addCommand(EnableDeploy)
+        .addCommand(DisableDeploy)
+        .addCommand(DisplayDeployEnablement)
         .addExtensionPacks(
             DemoEditors,
         )

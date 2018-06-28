@@ -49,36 +49,32 @@ export const NodeSupport: ExtensionPack = {
     configure: (sdm: SoftwareDeliveryMachine) => {
         const hasPackageLock = hasFile("package-lock.json");
 
-        sdm.addGenerators(nodeGenerator({
+        sdm.addGenerator(nodeGenerator({
             ...CommonGeneratorConfig,
             seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
         }, { intent: "create node",
-        }));
-        sdm.addGenerators(nodeGenerator({
+        }))
+            .addGenerator(nodeGenerator({
             ...CommonGeneratorConfig,
             seed: () => new GitHubRepoRef("atomist", "sdm"),
         }, { intent: "copy sdm",
         }))
-            .addGenerators(nodeGenerator({
+            .addGenerator(nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
             }, {    intent: "create minimal node",
             }))
-            .addGenerators(nodeGenerator({
+            .addGenerator(nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "buildable-node-seed"),
             }, {   intent: "create buildable node",
             }))
-            .addAutofixes(
-                AddAtomistTypeScriptHeader,
-                tslintFix,
-                AddBuildScript,
-            )
-            .addReviewerRegistrations(
-                CommonTypeScriptErrors,
-                DontImportOwnIndex,
-            )
-            .addFingerprinterRegistrations(new PackageLockFingerprinter())
+            .addAutofix(AddAtomistTypeScriptHeader)
+            .addAutofix(tslintFix)
+            .addAutofix(AddBuildScript)
+            .addReviewerRegistration(CommonTypeScriptErrors)
+            .addReviewerRegistration(DontImportOwnIndex)
+            .addFingerprinterRegistration(new PackageLockFingerprinter())
             .addBuildRules(
                 build.when(IsNode, ToDefaultBranch, hasPackageLock)
                     .itMeans("npm run build")

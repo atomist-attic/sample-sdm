@@ -15,8 +15,7 @@
  */
 
 import {
-    AutofixRegistration,
-    editorAutofixRegistration,
+    EditorAutofixRegistration,
     hasFile,
     not,
 } from "@atomist/sdm";
@@ -24,11 +23,11 @@ import axios from "axios";
 
 export const LicenseFilename = "LICENSE";
 
-export const AddLicenseFile: AutofixRegistration = editorAutofixRegistration({
+export const AddLicenseFile: EditorAutofixRegistration = {
     name: "License Fix",
     pushTest: not(hasFile(LicenseFilename)),
     editor: async p => {
         const license = await axios.get("https://www.apache.org/licenses/LICENSE-2.0.txt");
         return p.addFile("LICENSE", license.data);
     },
-});
+};

@@ -31,7 +31,7 @@ export const JavaSupport: ExtensionPack = {
     configure:
         sdm => {
             sdm.addExtensionPacks(CheckstyleSupport)
-                .addFingerprinterRegistrations(new MavenFingerprinter())
-                .addAutofixes(AddAtomistJavaHeader);
+                .addFingerprinterRegistration(new MavenFingerprinter())
+                .addAutofix(AddAtomistJavaHeader);
         },
 };

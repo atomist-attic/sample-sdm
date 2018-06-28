@@ -16,4 +16,27 @@
 
 import { codeRules } from "./machines/additiveCloudFoundryMachine";
 
-export const configureLocalMachine = codeRules;
+// TODO this import is wrong because the link is wrong
+// import { LocalMachineConfig } from "@atomist/slalom/build/src";
+
+export const Config = { // : LocalMachineConfig = {
+
+    repositoryOwnerParentDirectory: "/Users/rodjohnson/temp/local-sdm",
+
+    name: "local-sample-sdm",
+
+    mergeAutofixes: true,
+
+    init: sdm => {
+        codeRules(sdm);
+        // buildRules(sdm);
+        sdm.addCommands({
+            name: "hello",
+            intent: "hello",
+            listener: async ci => ci.addressChannels("Hello!"),
+        });
+    },
+
+    preferLocalSeeds: true,
+
+};
