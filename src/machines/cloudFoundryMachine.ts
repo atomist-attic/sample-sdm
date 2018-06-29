@@ -61,10 +61,10 @@ import {
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
 } from "@atomist/sdm-core";
-import { isDeployEnabledCommand } from "@atomist/sdm-core";
+import { DisplayDeployEnablement } from "@atomist/sdm-core";
 import {
-    disableDeploy,
-    enableDeploy,
+    DisableDeploy,
+    EnableDeploy,
 } from "@atomist/sdm-core";
 import {
     NoGoals,
@@ -189,14 +189,12 @@ export function cloudFoundryMachine(
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals));
-    sdm.addChannelLinkListeners(SuggestAddingCloudFoundryManifest)
-        .addSupportingCommands(
-            enableDeploy,
-            disableDeploy,
-            isDeployEnabledCommand,
-        )
-        .addPushReactions(EnableDeployOnCloudFoundryManifestAddition)
-        .addEndpointVerificationListeners(lookFor200OnEndpointRootGet());
+    sdm.addChannelLinkListener(SuggestAddingCloudFoundryManifest)
+        .addCommand(EnableDeploy)
+        .addCommand(DisableDeploy)
+        .addCommand(DisplayDeployEnablement)
+        .addPushReaction(EnableDeployOnCloudFoundryManifestAddition)
+        .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
 
     sdm.addExtensionPacks(
         DemoEditors,
@@ -209,8 +207,8 @@ export function cloudFoundryMachine(
     );
 
     // Optional add-ins from the Spring pack
-    sdm.addGenerators(springRestGenerator);
-    sdm.addGenerators(kotlinRestGenerator);
+    sdm.addGenerator(springRestGenerator);
+    sdm.addGenerator(kotlinRestGenerator);
     configureLocalSpringBootDeploy(sdm);
 
     addTeamPolicies(sdm);

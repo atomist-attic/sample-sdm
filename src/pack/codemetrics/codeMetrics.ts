@@ -28,6 +28,7 @@ import {
     reportForLanguages,
 } from "@atomist/sdm-pack-sloc/slocReport";
 import { TypedFingerprint } from "@atomist/sdm/api-helper/code/fingerprint/TypedFingerprint";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 
@@ -38,9 +39,7 @@ const CodeMetricsFingerprintName = "CodeMetrics";
 export function codeMetrics(publisher: FingerprintListener,
                             pushTest?: PushTest): ExtensionPack {
     return {
-        name: CodeMetricsFingerprintName,
-        vendor: "Atomist",
-        version: "0.1.0",
+        ...metadata("code-metrics"),
         configure: addCodeMetrics(publisher, pushTest),
     };
 }
@@ -89,8 +88,8 @@ function lineCounter(pushTest: PushTest): FingerprinterRegistration {
 
 function addCodeMetrics(publisher: FingerprintListener, pushTest: PushTest) {
     return (sdm: SoftwareDeliveryMachine) => {
-        sdm.addFingerprinterRegistrations(lineCounter(pushTest))
-            .addFingerprintListeners(lineCountPublisher(publisher));
+        sdm.addFingerprinterRegistration(lineCounter(pushTest))
+            .addFingerprintListener(lineCountPublisher(publisher));
     };
 }
 

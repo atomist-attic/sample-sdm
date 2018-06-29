@@ -33,18 +33,17 @@ import { WhackHeaderEditor } from "./removeTypeScriptHeader";
  * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
  */
 export const DemoEditors: ExtensionPack = {
-    name: "DemoEditors",
-    vendor: "Atomist",
-    version: "0.1.0",
-    configure: sdm =>
-        sdm
-            .addEditors(
-                BreakNodeBuildEditor,
-                UnbreakNodeBuildEditor,
-                WhackHeaderEditor,
-                JavaAffirmationEditor,
-                AffirmationEditor,
-                BreakJavaBuildEditor,
-                RemoveFileEditor,
-                UnbreakJavaBuildEditor),
-};
+        name: "DemoEditors",
+        vendor: "Atomist",
+        version: "0.1.0",
+        configure: sdm =>
+            sdm
+                .addEditor(BreakNodeBuildEditor)
+                .addEditor(UnbreakNodeBuildEditor)
+                .addEditor(WhackHeaderEditor)
+                .addEditor(JavaAffirmationEditor)
+                .addEditor(AffirmationEditor)
+                .addEditor(BreakJavaBuildEditor)
+                .addEditor(RemoveFileEditor)
+                .addEditor(UnbreakJavaBuildEditor),
+    };

@@ -28,6 +28,7 @@ import { nodeBuilder } from "@atomist/sdm-core";
 import { IsNode } from "@atomist/sdm-core";
 import { PackageLockFingerprinter } from "@atomist/sdm-core";
 import { tslintFix } from "@atomist/sdm-core";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
@@ -43,42 +44,36 @@ import {
  * @param options config options
  */
 export const NodeSupport: ExtensionPack = {
-    name: "Node support",
-    vendor: "Atomist",
-    version: "0.1.0",
+    ...metadata("node"),
     configure: (sdm: SoftwareDeliveryMachine) => {
         const hasPackageLock = hasFile("package-lock.json");
 
-        sdm.addGenerators(nodeGenerator({
+        sdm.addGenerator(nodeGenerator({
             ...CommonGeneratorConfig,
             seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
         }, { intent: "create node",
-        }));
-        sdm.addGenerators(nodeGenerator({
+        }))
+            .addGenerator(nodeGenerator({
             ...CommonGeneratorConfig,
             seed: () => new GitHubRepoRef("atomist", "sdm"),
         }, { intent: "copy sdm",
         }))
-            .addGenerators(nodeGenerator({
+            .addGenerator(nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
             }, {    intent: "create minimal node",
             }))
-            .addGenerators(nodeGenerator({
+            .addGenerator(nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "buildable-node-seed"),
             }, {   intent: "create buildable node",
             }))
-            .addAutofixes(
-                AddAtomistTypeScriptHeader,
-                tslintFix,
-                AddBuildScript,
-            )
-            .addReviewerRegistrations(
-                CommonTypeScriptErrors,
-                DontImportOwnIndex,
-            )
-            .addFingerprinterRegistrations(new PackageLockFingerprinter())
+            .addAutofix(AddAtomistTypeScriptHeader)
+            .addAutofix(tslintFix)
+            .addAutofix(AddBuildScript)
+            .addReviewerRegistration(CommonTypeScriptErrors)
+            .addReviewerRegistration(DontImportOwnIndex)
+            .addFingerprinterRegistration(new PackageLockFingerprinter())
             .addBuildRules(
                 build.when(IsNode, ToDefaultBranch, hasPackageLock)
                     .itMeans("npm run build")

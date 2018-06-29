@@ -53,7 +53,7 @@ export function artifactVerifyingMachine(
             build.when(IsMaven)
                 .itMeans("build with Maven")
                 .set(new MavenBuilder(configuration.artifactStore, createEphemeralProgressLog, configuration.projectLoader)))
-        .addArtifactListeners(async ai => {
+        .addArtifactListener(async ai => {
             // Could invoke a security scanning tool etc.c
             const stat = fs.statSync(`${ai.deployableArtifact.cwd}/${ai.deployableArtifact.filename}`);
             if (stat.size > 1000) {

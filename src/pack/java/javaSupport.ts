@@ -17,6 +17,7 @@
 import { ExtensionPack } from "@atomist/sdm";
 import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
 import { MavenFingerprinter } from "@atomist/sdm-pack-spring";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 
 /**
@@ -25,13 +26,11 @@ import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
  * @param {{useCheckstyle: boolean}} opts
  */
 export const JavaSupport: ExtensionPack = {
-    name: "java",
-    vendor: "atomist",
-    version: "0.1.0",
+    ...metadata("java"),
     configure:
         sdm => {
             sdm.addExtensionPacks(CheckstyleSupport)
-                .addFingerprinterRegistrations(new MavenFingerprinter())
-                .addAutofixes(AddAtomistJavaHeader);
+                .addFingerprinterRegistration(new MavenFingerprinter())
+                .addAutofix(AddAtomistJavaHeader);
         },
 };

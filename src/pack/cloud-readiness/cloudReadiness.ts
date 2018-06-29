@@ -21,19 +21,16 @@ import {
     ImportDotStarReviewer,
     ProvidedDependencyReviewer,
 } from "@atomist/sdm-pack-spring";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
 
 export const CloudReadinessChecks: ExtensionPack = {
-    name: "CloudReadiness",
-    vendor: "Atomist",
-    version: "0.1.0",
+    ...metadata("cloud-readiness"),
     configure: softwareDeliveryMachine =>
         softwareDeliveryMachine
-            .addReviewerRegistrations(
-                HardCodedPropertyReviewer,
-                ProvidedDependencyReviewer,
-                FileIoImportReviewer,
-                ImportDotStarReviewer,
-            )
-            .addReviewListeners(CloudReadinessIssueManager),
+            .addReviewerRegistration(HardCodedPropertyReviewer)
+            .addReviewerRegistration(ProvidedDependencyReviewer)
+            .addReviewerRegistration(FileIoImportReviewer)
+            .addReviewerRegistration(ImportDotStarReviewer)
+            .addReviewListener(CloudReadinessIssueManager),
 };

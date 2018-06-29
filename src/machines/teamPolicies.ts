@@ -39,21 +39,17 @@ import { codeMetrics } from "../pack/codemetrics/codeMetrics";
  */
 export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     sdm
-        .addNewIssueListeners(requestDescription, capitalizer)
-        .addClosedIssueListeners(thankYouYouRock)
-        .addGoalsSetListeners(GraphGoals)
+        .addNewIssueListener(requestDescription)
+        .addNewIssueListener(capitalizer)
+        .addClosedIssueListener(thankYouYouRock)
+        .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
-        .addReviewListeners(
-            slackReviewListener(),
-    )
-        .addEditors(
-            AddApacheLicenseHeaderEditor,
-    )
-        .addNewRepoWithCodeActions(
-            PublishNewRepo)
+        .addReviewListener(slackReviewListener())
+        .addEditor(AddApacheLicenseHeaderEditor)
+        .addNewRepoWithCodeAction(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
-        .addDeploymentListeners(PostToDeploymentsChannel)
-        .addUserJoiningChannelListeners(je =>
+        .addDeploymentListener(PostToDeploymentsChannel)
+        .addUserJoiningChannelListener(je =>
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
     sdm.addExtensionPacks(
@@ -62,7 +58,6 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     );
 
     if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
-        logger.info("Enabling SonarQube integration");
         sdm.addExtensionPacks(SonarQubeSupport);
     } else {
         logger.info("SonarQube integration not enabled");
@@ -72,7 +67,6 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         // ("METRICS ARE\n" + JSON.stringify(fp.fingerprint));
     };
     sdm.addExtensionPacks(codeMetrics(pub));
-
     summarizeGoalsInGitHubStatus(sdm);
 
     // sdm.addPushReactions(shutDownDeliveryIf(EverySecondOneGoesThrough));

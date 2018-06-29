@@ -17,23 +17,23 @@ import { dryRunEditorCommand } from "@atomist/sdm-core/pack/dry-run/dryRunEditor
 
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { editorAutofixRegistration, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
-    sdm.addPushReactions(async pu => {
+    sdm.addPushReaction(async pu => {
         const readme = await pu.project.getFile("README.md");
         if (!readme) {
             return pu.addressChannels(`Project at ${pu.id.url} has no readme. This makes me sad. :crying_cat_face:`);
         } else {
-            return pu.addressChannels("This project has a readme");
+            return pu.addressChannels("This project has a readme :wave:");
         }
     });
-    sdm.addNewIssueListeners(async i => {
+    sdm.addNewIssueListener(async i => {
         const extra = i.issue.title.toLowerCase().includes("please") ? "Thank you! :thank_you:" : "Not very polite, are you :scowl:";
         return i.addressChannels(`_${i.issue.openedBy.person.chatId.screenName}_, you opened issue #${i.issue.number}. ${extra}`);
     });
 
-    sdm.addCommands({
+    sdm.addCommand({
         name: "vermont",
         intent: "vermont",
         listener: async cli => {
@@ -56,10 +56,10 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         editor: fileCountEditor,
     });
 
-    sdm.addAutofixes(editorAutofixRegistration({
+    sdm.addAutofix({
             name: "filecounter",
             editor: fileCountEditor,
-        }),
+        },
     );
 }
 

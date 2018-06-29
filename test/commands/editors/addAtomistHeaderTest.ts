@@ -23,6 +23,7 @@ import { GitCommandGitProject } from "@atomist/automation-client/project/git/Git
 import { fakeRunWithLogContext } from "@atomist/sdm/api-helper/test/fakeRunWithLogContext";
 import * as assert from "power-assert";
 
+import { toAutofixRegistration } from "@atomist/sdm";
 import { DefaultRepoRefResolver } from "@atomist/sdm-core";
 import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
 import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
@@ -53,7 +54,7 @@ describe("addHeaderFix", () => {
         await p.addFile(f.path, f.content);
         assert(!!p.findFileSync(f.path));
 
-        const r = await executeAutofixes(pl, [AddAtomistTypeScriptHeader],
+        const r = await executeAutofixes(pl, [toAutofixRegistration(AddAtomistTypeScriptHeader)],
             new DefaultRepoRefResolver())(fakeRunWithLogContext(p.id as RemoteRepoRef));
         assert(r.code === 1);
         assert.equal(pushCount, 1);
