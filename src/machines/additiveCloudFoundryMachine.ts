@@ -37,14 +37,14 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { DisableDeploy, DisplayDeployEnablement, EnableDeploy, IsNode } from "@atomist/sdm-core";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
 import { InMemoryDeploymentStatusManager } from "@atomist/sdm-core";
 import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "@atomist/sdm-core";
 import { HasCloudFoundryManifest } from "@atomist/sdm-core";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { StagingUndeploymentGoal } from "@atomist/sdm-core";
+import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
 import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm-core";
 import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
+import { StagingUndeploymentGoal } from "@atomist/sdm-core";
 import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
 import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
@@ -59,7 +59,6 @@ import { cloudFoundryProductionDeploySpec, EnableDeployOnCloudFoundryManifestAdd
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { demoRules } from "./demoRules";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
