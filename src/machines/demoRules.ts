@@ -25,7 +25,7 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         if (!readme) {
             return pu.addressChannels(`Project at ${pu.id.url} has no readme. This makes me sad. :crying_cat_face:`);
         } else {
-            return pu.addressChannels("This project has a readme");
+            return pu.addressChannels("This project has a readme :wave:");
         }
     });
     sdm.addNewIssueListener(async i => {

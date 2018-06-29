@@ -17,7 +17,7 @@
 import {
     any,
     AnyPush,
-    ArtifactGoal,
+    ArtifactGoal, AutofixGoal,
     goalContributors,
     Goals,
     JustBuildGoal,
@@ -59,6 +59,7 @@ import { cloudFoundryProductionDeploySpec, EnableDeployOnCloudFoundryManifestAdd
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
+import { demoRules } from "./demoRules";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -83,7 +84,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     // Each contributor contributes goals. The infrastructure assembles them into a goal set.
     sdm.addGoalContributions(goalContributors(
-        onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal)),
+        onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
         whenPushSatisfies(IsDeploymentFrozen)
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(any(IsMaven, IsNode))
@@ -144,6 +145,8 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         .addPushReaction(EnableDeployOnCloudFoundryManifestAddition)
         .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
+
+    // demoRules(sdm);
 
     // sdm.addExtensionPacks(DemoPolicies);
 }
