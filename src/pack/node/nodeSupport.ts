@@ -28,6 +28,7 @@ import { nodeBuilder } from "@atomist/sdm-core";
 import { IsNode } from "@atomist/sdm-core";
 import { PackageLockFingerprinter } from "@atomist/sdm-core";
 import { tslintFix } from "@atomist/sdm-core";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
@@ -43,9 +44,7 @@ import {
  * @param options config options
  */
 export const NodeSupport: ExtensionPack = {
-    name: "Node support",
-    vendor: "Atomist",
-    version: "0.1.0",
+    ...metadata("node"),
     configure: (sdm: SoftwareDeliveryMachine) => {
         const hasPackageLock = hasFile("package-lock.json");
 

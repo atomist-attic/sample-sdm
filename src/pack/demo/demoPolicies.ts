@@ -21,6 +21,7 @@ import {
     not,
 } from "@atomist/sdm";
 import { updateIssue } from "@atomist/sdm-core";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import axios from "axios";
 
 /**
@@ -28,9 +29,7 @@ import axios from "axios";
  * @param {SoftwareDeliveryMachine} sdm
  */
 export const DemoPolicies: ExtensionPack = {
-    name: "demoPolicies",
-    vendor: "Atomist",
-    version: "0.1.0",
+    ...metadata("demo-policies"),
     configure: sdm => {
         sdm
         // Close all newly created issues

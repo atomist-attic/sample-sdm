@@ -58,7 +58,6 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     );
 
     if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
-        logger.info("Enabling SonarQube integration");
         sdm.addExtensionPacks(SonarQubeSupport);
     } else {
         logger.info("SonarQube integration not enabled");

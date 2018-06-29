@@ -15,12 +15,11 @@
  */
 
 import { ExtensionPack } from "@atomist/sdm";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddSentry } from "./addSentryEditor";
 
 export const SentrySupport: ExtensionPack = {
-    name: "Sentry",
-    vendor: "Atomist",
-    version: "0.1.0",
+    ...metadata("sentry"),
     configure:
         sdm => {
             sdm.addEditor(AddSentry);
