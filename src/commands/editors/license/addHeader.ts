@@ -25,10 +25,10 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
-import { EditorRegistration } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 /**
  * Default glob pattern matches all C family languages
@@ -79,8 +79,8 @@ export const ApacheHeader = `/*
  * limitations under the License.
  */`;
 
-export const AddApacheLicenseHeaderEditor: EditorRegistration = {
-    createEditor: () => addHeaderProjectEditor,
+export const AddApacheLicenseHeaderEditor: CodeTransformRegistration = {
+    createTransform: () => addHeaderProjectEditor,
     name: "addHeader",
     paramsMaker: AddHeaderParameters,
     editMode: ahp => ahp.editMode

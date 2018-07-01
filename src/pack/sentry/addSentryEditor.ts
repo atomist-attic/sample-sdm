@@ -19,13 +19,13 @@ import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import { EditorRegistration } from "@atomist/sdm";
 import {
     addDependencyEditor,
     VersionedArtifact,
 } from "@atomist/sdm-pack-spring";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",
@@ -58,8 +58,8 @@ export class AddSentryParams {
  * Command to add Sentry support to the current project
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const AddSentry: EditorRegistration<AddSentryParams> = {
-    createEditor: params => addSentryEditor(params.dsn),
+export const AddSentry: CodeTransformRegistration<AddSentryParams> = {
+    createTransform: params => addSentryEditor(params.dsn),
     name: "AddSentry",
     paramsMaker: AddSentryParams,
     editMode: () => new PullRequest(

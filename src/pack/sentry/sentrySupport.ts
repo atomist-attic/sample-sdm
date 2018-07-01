@@ -22,6 +22,6 @@ export const SentrySupport: ExtensionPack = {
     ...metadata("sentry"),
     configure:
         sdm => {
-            sdm.addEditor(AddSentry);
+            sdm.addCodeTransformCommand(AddSentry);
         },
 };

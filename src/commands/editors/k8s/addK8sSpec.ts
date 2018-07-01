@@ -17,8 +17,8 @@
 import { logger } from "@atomist/automation-client";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { EditorRegistration } from "@atomist/sdm";
 import { deploymentTemplate } from "./deploymentTemplate";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 export const AddK8sSpecCommandName = "AddK8sSpecCommandName";
 
@@ -26,8 +26,8 @@ export const AtomistK8sSpecFile = "atomist-k8s-deployment.json";
 
 export const ImagePlaceholder = "image_placeholder";
 
-export const AddK8sSpec: EditorRegistration = {
-    createEditor: () => addK8sSpecEditor,
+export const AddK8sSpec: CodeTransformRegistration = {
+    createTransform: () => addK8sSpecEditor,
     name: AddK8sSpecCommandName,
     intent: "Add kubernetes deployment spec",
     editMode: () => new PullRequest("enable-k8s",

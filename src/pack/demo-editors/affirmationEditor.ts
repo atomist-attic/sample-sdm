@@ -20,8 +20,8 @@ import {
 } from "@atomist/automation-client";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { EditorRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 export const AffirmationEditorName = "affirmation";
 
@@ -41,8 +41,8 @@ export class AffirmationParameters extends RequestedCommitParameters {
  * editor
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const AffirmationEditor: EditorRegistration = {
-    createEditor: () => appendAffirmationToReadMe,
+export const AffirmationEditor: CodeTransformRegistration = {
+    createTransform: () => appendAffirmationToReadMe,
     name: AffirmationEditorName,
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement"),
     editMode: ap => ap.editMode,

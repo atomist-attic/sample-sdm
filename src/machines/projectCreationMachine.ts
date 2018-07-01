@@ -38,21 +38,21 @@ import {
 export function projectCreationMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", configuration});
-    sdm.addGenerator(
+    sdm.addGeneratorCommand(
         springBootGenerator({
             ...CommonJavaGeneratorConfig,
             seed: () => new GitHubRepoRef("spring-team", "spring-rest-seed"),
         }, {
             intent: "create spring",
         }))
-        .addGenerator(
+        .addGeneratorCommand(
             nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
             }, {
                 intent: "create node",
             }))
-        .addGenerator(
+        .addGeneratorCommand(
             nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),

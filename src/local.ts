@@ -15,6 +15,7 @@
  */
 
 import { codeRules } from "./machines/additiveCloudFoundryMachine";
+import { addParameters } from "@atomist/sdm";
 
 // TODO this import is wrong because the link is wrong
 // import { LocalMachineConfig } from "@atomist/slalom/build/src";
@@ -30,10 +31,11 @@ export const Config = { // : LocalMachineConfig = {
     init: sdm => {
         codeRules(sdm);
         // buildRules(sdm);
-        sdm.addCommands({
+        sdm.addCommand({
             name: "hello",
             intent: "hello",
-            listener: async ci => ci.addressChannels("Hello!"),
+            paramsBuilder: addParameters({name: "name" }),
+            listener: async ci => ci.addressChannels(`Hello ${ci.parameters.name}`),
         });
     },
 

@@ -34,7 +34,7 @@ export const CommonGeneratorConfig = {
 export function nodeGenerator(config: GeneratorConfig,
                               details: Partial<GeneratorCommandDetails<NodeProjectCreationParameters>> = {}): GeneratorRegistration<NodeProjectCreationParameters> {
     return {
-        createEditor: transformSeed,
+        createTransform: transformSeed,
         paramsMaker: () => new NodeProjectCreationParameters(config),
         name: `nodeGenerator-${config.seed().repo}`,
         tags: ["node", "typescript", "generator"],

@@ -16,15 +16,15 @@
 
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { EditorRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 /**
  * Harmlessly modify a TS file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const WhackHeaderEditor: EditorRegistration = {
-    createEditor: () => whackSomeHeader,
+export const WhackHeaderEditor: CodeTransformRegistration = {
+    createTransform: () => whackSomeHeader,
     name: "removeHeader",
     paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
     editMode: ahp => ahp.editMode,

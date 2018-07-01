@@ -45,7 +45,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListener(slackReviewListener())
-        .addEditor(AddApacheLicenseHeaderEditor)
+        .addCodeTransformCommand(AddApacheLicenseHeaderEditor)
         .addNewRepoWithCodeAction(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListener(PostToDeploymentsChannel)
