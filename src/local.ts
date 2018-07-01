@@ -30,7 +30,7 @@ export const Config = { // : LocalMachineConfig = {
     init: sdm => {
         codeRules(sdm);
         // buildRules(sdm);
-        sdm.addCommands({
+        sdm.addCommand({
             name: "hello",
             intent: "hello",
             listener: async ci => ci.addressChannels("Hello!"),
