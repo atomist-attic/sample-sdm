@@ -15,7 +15,8 @@
  */
 
 import { codeRules } from "./machines/additiveCloudFoundryMachine";
-import { addParameters } from "@atomist/sdm";
+import { addParameters, FingerprintGoal, onAnyPush } from "@atomist/sdm";
+import { codeMetrics } from "./pack/codemetrics/codeMetrics";
 
 // TODO this import is wrong because the link is wrong
 // import { LocalMachineConfig } from "@atomist/slalom/build/src";
@@ -34,9 +35,17 @@ export const Config = { // : LocalMachineConfig = {
         sdm.addCommand({
             name: "hello",
             intent: "hello",
-            paramsBuilder: addParameters({name: "name" }),
+            parameters: {
+                name: {},
+            },
             listener: async ci => ci.addressChannels(`Hello ${ci.parameters.name}`),
         });
+
+        sdm.addExtensionPacks(codeMetrics());
+
+        sdm.addFingerprintListener(async fp => {
+            console.log(JSON.stringify(fp.fingerprint))
+        })
     },
 
     preferLocalSeeds: true,
