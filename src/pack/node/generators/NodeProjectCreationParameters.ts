@@ -15,19 +15,11 @@
  */
 
 import { Parameter } from "@atomist/automation-client";
-
-import { Parameters } from "@atomist/automation-client/decorators";
-import { GitHubRepoCreationParameters } from "@atomist/automation-client/operations/generate/GitHubRepoCreationParameters";
-import { NewRepoCreationParameters } from "@atomist/automation-client/operations/generate/NewRepoCreationParameters";
-import {
-    GeneratorConfig,
-    SeedDrivenGeneratorParametersSupport,
-} from "@atomist/sdm";
+import { SeedDrivenGeneratorParametersSupport, } from "@atomist/sdm";
 
 /**
  * Parameters for creating a Node project.
  */
-@Parameters()
 export class NodeProjectCreationParameters extends SeedDrivenGeneratorParametersSupport {
 
     @Parameter({
@@ -42,11 +34,5 @@ export class NodeProjectCreationParameters extends SeedDrivenGeneratorParameters
         order: 51,
     })
     public appName: string;
-
-    public target: NewRepoCreationParameters = new GitHubRepoCreationParameters();
-
-    constructor(config: GeneratorConfig) {
-        super(config);
-    }
 
 }

@@ -17,20 +17,18 @@
 import { logger } from "@atomist/automation-client";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
 import { findAuthorName } from "../../../commands/generators/common/findAuthorName";
+import { CodeTransform } from "@atomist/sdm";
+import { NodeProjectCreationParameters } from "../generators/NodeProjectCreationParameters";
 
-export function updatePackageJsonIdentification(appName: string,
-                                                description: string,
-                                                version: string,
-                                                screenName: string,
-                                                target: { owner: string, repo: string }) {
-    return async (project, context) => {
-        const author = await findAuthorName(context, screenName);
+export const UpdatePackageJsonIdentification: CodeTransform =
+    async (project, context, params: NodeProjectCreationParameters) => {
+        const author = await findAuthorName(context, params.screenName);
         logger.info("Updating JSON. Author is " + author);
         return doWithJson(project, "package.json", pkg => {
-            const repoUrl = `https://github.com/${target.owner}/${target.repo}`;
-            pkg.name = appName;
-            pkg.description = description;
-            pkg.version = version;
+            const repoUrl = `https://github.com/${params.target.repoRef.owner}/${params.target.repoRef.repo}`;
+            pkg.name = params.appName;
+            pkg.description = params.target.description;
+            pkg.version = params.version;
             pkg.author = author;
             pkg.repository = {
                 type: "git",
@@ -42,4 +40,3 @@ export function updatePackageJsonIdentification(appName: string,
             };
         });
     };
-}
