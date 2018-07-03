@@ -16,18 +16,11 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { tagRepo } from "@atomist/sdm-core";
-import {
-    CommonJavaGeneratorConfig,
-    springBootGenerator,
-    springBootTagger,
-} from "@atomist/sdm-pack-spring";
+import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
+import { CommonJavaGeneratorConfig, springBootGenerator, springBootTagger, } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import {
-    CommonGeneratorConfig,
-    nodeGenerator,
-} from "../pack/node/generators/nodeGenerator";
+import { TransformNodeSeed, } from "../pack/node/generators/transformNodeSeed";
+import { NodeProjectCreationParameters } from "../pack/node/generators/NodeProjectCreationParameters";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -37,7 +30,7 @@ import {
  */
 export function projectCreationMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
-    const sdm = createSoftwareDeliveryMachine({name: "Project creation machine", configuration});
+    const sdm = createSoftwareDeliveryMachine({ name: "Project creation machine", configuration });
     sdm.addGeneratorCommand(
         springBootGenerator({
             ...CommonJavaGeneratorConfig,
@@ -45,20 +38,20 @@ export function projectCreationMachine(
         }, {
             intent: "create spring",
         }))
-        .addGeneratorCommand(
-            nodeGenerator({
-                ...CommonGeneratorConfig,
-                seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
-            }, {
-                intent: "create node",
-            }))
-        .addGeneratorCommand(
-            nodeGenerator({
-                ...CommonGeneratorConfig,
-                seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
-            }, {
-                intent: "create minimal node",
-            }))
+        .addGeneratorCommand({
+            name: "typescript-express-generator",
+            paramsMaker: NodeProjectCreationParameters,
+            startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
+            intent: "create node",
+            transform: TransformNodeSeed,
+        })
+        .addGeneratorCommand({
+            name: "minimal-node-generator",
+            paramsMaker: NodeProjectCreationParameters,
+            startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
+            intent: "create minimal node",
+            transform: TransformNodeSeed,
+        })
         .addNewRepoWithCodeAction(tagRepo(springBootTagger));
     return sdm;
 }
