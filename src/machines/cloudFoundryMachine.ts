@@ -122,7 +122,7 @@ export function cloudFoundryMachine(
                 whenPushSatisfies(HasSpringBootApplicationClass, not(FromAtomist))
                     .itMeans("Spring Boot service local deploy")
                     .setGoals(LocalDeploymentGoals),
-                onAnyPush.itMeans("Build Java library")
+                onAnyPush().itMeans("Build Java library")
                     .set(LibraryGoals),
             ),
         whenPushSatisfies(IsNode, not(MaterialChangeToNodeRepo))
@@ -207,8 +207,8 @@ export function cloudFoundryMachine(
     );
 
     // Optional add-ins from the Spring pack
-    sdm.addGenerator(springRestGenerator);
-    sdm.addGenerator(kotlinRestGenerator);
+    sdm.addGeneratorCommand(springRestGenerator);
+    sdm.addGeneratorCommand(kotlinRestGenerator);
     configureLocalSpringBootDeploy(sdm);
 
     addTeamPolicies(sdm);

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import { SlocSupport } from "@atomist/sdm-pack-sloc";
+import { actionButton } from "./machines/actionButton";
 import { codeRules } from "./machines/additiveCloudFoundryMachine";
+import { codeMetrics } from "./pack/codemetrics/codeMetrics";
 
 // TODO this import is wrong because the link is wrong
 // import { LocalMachineConfig } from "@atomist/slalom/build/src";
@@ -29,11 +32,32 @@ export const Config = { // : LocalMachineConfig = {
 
     init: sdm => {
         codeRules(sdm);
+        sdm.addExtensionPacks(SlocSupport);
+
         // buildRules(sdm);
         sdm.addCommand({
             name: "hello",
             intent: "hello",
-            listener: async ci => ci.addressChannels("Hello!"),
+            parameters: {
+                name: {},
+            },
+            listener: async ci => {
+                await ci.addressChannels(`Hello ${ci.parameters.name}`);
+                return actionButton({
+                    text: "I want coffee",
+                    command: "hello",
+                    params: { name: "who" },
+                    addressChannels: ci.addressChannels,
+                });
+            },
+        });
+
+        // TODO this appears to trigger a bug in goal handling
+        // Fix in conjunction with sealing
+        sdm.addExtensionPacks(codeMetrics());
+
+        sdm.addFingerprintListener(async fp => {
+            console.log(JSON.stringify(fp.fingerprint));
         });
     },
 

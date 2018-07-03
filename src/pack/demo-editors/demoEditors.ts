@@ -16,14 +16,14 @@
 
 import { ExtensionPack } from "@atomist/sdm";
 import { RemoveFileEditor } from "../../commands/editors/helper/removeFile";
-import { AffirmationEditor } from "./affirmationEditor";
+import { AffirmationTransform } from "./affirmationTransform";
 import {
-    BreakJavaBuildEditor,
+    BreakJavaBuildTransform,
     UnbreakJavaBuildEditor,
 } from "./breakJavaBuild";
 import {
-    BreakNodeBuildEditor,
-    UnbreakNodeBuildEditor,
+    BreakNodeBuildTransform,
+    UnbreakNodeBuildTransform,
 } from "./breakNodeBuild";
 import { JavaAffirmationEditor } from "./javaAffirmationEditor";
 import { WhackHeaderEditor } from "./removeTypeScriptHeader";
@@ -38,12 +38,12 @@ export const DemoEditors: ExtensionPack = {
         version: "0.1.0",
         configure: sdm =>
             sdm
-                .addEditor(BreakNodeBuildEditor)
-                .addEditor(UnbreakNodeBuildEditor)
+                .addEditor(BreakNodeBuildTransform)
+                .addEditor(UnbreakNodeBuildTransform)
                 .addEditor(WhackHeaderEditor)
                 .addEditor(JavaAffirmationEditor)
-                .addEditor(AffirmationEditor)
-                .addEditor(BreakJavaBuildEditor)
+                .addEditor(AffirmationTransform)
+                .addEditor(BreakJavaBuildTransform)
                 .addEditor(RemoveFileEditor)
                 .addEditor(UnbreakJavaBuildEditor),
     };

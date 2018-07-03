@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import {
     ExtensionPack,
     FingerprinterRegistration,
-    FingerprintListener,
+    FingerprintGoal,
+    onAnyPush,
     PushTest,
-    SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import {
-    CodeStats,
-    reportForLanguages,
-} from "@atomist/sdm-pack-sloc/slocReport";
+import { CodeStats, reportForLanguages } from "@atomist/sdm-pack-sloc/slocReport";
 import { TypedFingerprint } from "@atomist/sdm/api-helper/code/fingerprint/TypedFingerprint";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 
@@ -34,13 +30,16 @@ const CodeMetricsFingerprintName = "CodeMetrics";
 
 /**
  * Add this registration to a machine
- * @param publisher listener that will publish relevant fingerprints
  */
-export function codeMetrics(publisher: FingerprintListener,
-                            pushTest?: PushTest): ExtensionPack {
+export function codeMetrics(
+    pushTest?: PushTest): ExtensionPack {
     return {
         ...metadata("code-metrics"),
-        configure: addCodeMetrics(publisher, pushTest),
+        configure: sdm => {
+            sdm
+                .addGoalContributions(onAnyPush().setGoals(FingerprintGoal))
+                .addFingerprinterRegistration(lineCounter(pushTest));
+        },
     };
 }
 
@@ -83,26 +82,5 @@ function lineCounter(pushTest: PushTest): FingerprinterRegistration {
             };
             return new TypedFingerprint(CodeMetricsFingerprintName, "lc", "0.1.0", fingerprintData);
         },
-    };
-}
-
-function addCodeMetrics(publisher: FingerprintListener, pushTest: PushTest) {
-    return (sdm: SoftwareDeliveryMachine) => {
-        sdm.addFingerprinterRegistration(lineCounter(pushTest))
-            .addFingerprintListener(lineCountPublisher(publisher));
-    };
-}
-
-/**
- * Publish the fingerprint data wherever we want
- * @return {FingerprintListener}
- */
-function lineCountPublisher(publisher: FingerprintListener): FingerprintListener {
-    return async fp => {
-        if (fp.fingerprint.name === CodeMetricsFingerprintName) {
-            return publisher(fp);
-        } else {
-            logger.info("Ignoring fingerprint named '%s'", fp.fingerprint.name);
-        }
     };
 }

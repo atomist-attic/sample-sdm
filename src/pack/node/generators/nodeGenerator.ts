@@ -31,10 +31,11 @@ export const CommonGeneratorConfig = {
     addAtomistWebhook: true,
 };
 
+// TODO get rid of this - use inline seed
 export function nodeGenerator(config: GeneratorConfig,
                               details: Partial<GeneratorCommandDetails<NodeProjectCreationParameters>> = {}): GeneratorRegistration<NodeProjectCreationParameters> {
     return {
-        createEditor: transformSeed,
+        createTransform: transformNodeSeed,
         paramsMaker: () => new NodeProjectCreationParameters(config),
         name: `nodeGenerator-${config.seed().repo}`,
         tags: ["node", "typescript", "generator"],
@@ -42,7 +43,7 @@ export function nodeGenerator(config: GeneratorConfig,
     };
 }
 
-function transformSeed(params: NodeProjectCreationParameters): AnyProjectEditor<NodeProjectCreationParameters> {
+function transformNodeSeed(params: NodeProjectCreationParameters): AnyProjectEditor<NodeProjectCreationParameters> {
     return chainEditors(
         updatePackageJsonIdentification(params.appName, params.target.description,
             params.version,

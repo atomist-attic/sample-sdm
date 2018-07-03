@@ -83,7 +83,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     // Each contributor contributes goals. The infrastructure assembles them into a goal set.
     sdm.addGoalContributions(goalContributors(
-        onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
+        onAnyPush().setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
         whenPushSatisfies(IsDeploymentFrozen)
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(any(IsMaven, IsNode))
@@ -101,8 +101,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 ProductionEndpointGoal]),
     ));
 
-    sdm.addGenerator(springRestGenerator);
-    sdm.addGenerator(kotlinRestGenerator);
+    sdm.addGeneratorCommand(springRestGenerator);
+    sdm.addGeneratorCommand(kotlinRestGenerator);
 
     sdm.addExtensionPacks(
         DemoEditors,

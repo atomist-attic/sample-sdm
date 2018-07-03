@@ -16,7 +16,7 @@
 
 import { ExtensionPack } from "@atomist/sdm";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
-import { AddSentry } from "./addSentryEditor";
+import { AddSentry } from "./addSentryTransform";
 
 export const SentrySupport: ExtensionPack = {
     ...metadata("sentry"),

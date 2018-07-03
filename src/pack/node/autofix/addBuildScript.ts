@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { HandlerContext } from "@atomist/automation-client";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
 import { AutofixRegisterable } from "@atomist/sdm";
@@ -24,11 +23,10 @@ import * as _ from "lodash";
 export const AddBuildScript: AutofixRegisterable = {
     name: "Make sure there is a build script",
     pushTest: IsNode,
-    editor: addBuildScriptEditor,
+    transform: addBuildScriptTransform,
 };
 
-export async function addBuildScriptEditor(p: Project,
-                                           ctx: HandlerContext): Promise<Project> {
+export async function addBuildScriptTransform(p: Project): Promise<Project> {
     return doWithJson(p, "package.json", (packageJson => {
             if (_.get(packageJson, "scripts.build")) {
                 return;

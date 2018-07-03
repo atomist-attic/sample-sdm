@@ -70,14 +70,14 @@ export function evangelicalMachine(
             // TODO suggest creating projects with generator
             tagRepo(springBootTagger),
         )
-        .addEditor(AddCloudFoundryManifest)
+        .addCodeTransformCommand(AddCloudFoundryManifest)
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
         .addExtensionPacks(
             DemoEditors,
         )
-        .addPushReactions(EnableDeployOnCloudFoundryManifestAddition);
+        .addPushReaction(EnableDeployOnCloudFoundryManifestAddition);
 
     // addTeamPolicies(sdm);
     return sdm;
