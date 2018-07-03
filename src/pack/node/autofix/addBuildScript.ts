@@ -24,7 +24,7 @@ import * as _ from "lodash";
 export const AddBuildScript: AutofixRegisterable = {
     name: "Make sure there is a build script",
     pushTest: IsNode,
-    editor: addBuildScriptEditor,
+    transform: addBuildScriptEditor,
 };
 
 export async function addBuildScriptEditor(p: Project,

@@ -48,22 +48,22 @@ export const NodeSupport: ExtensionPack = {
     configure: (sdm: SoftwareDeliveryMachine) => {
         const hasPackageLock = hasFile("package-lock.json");
 
-        sdm.addGenerator(nodeGenerator({
+        sdm.addGeneratorCommand(nodeGenerator({
             ...CommonGeneratorConfig,
             seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
         }, { intent: "create node",
         }))
-            .addGenerator(nodeGenerator({
+            .addGeneratorCommand(nodeGenerator({
             ...CommonGeneratorConfig,
             seed: () => new GitHubRepoRef("atomist", "sdm"),
         }, { intent: "copy sdm",
         }))
-            .addGenerator(nodeGenerator({
+            .addGeneratorCommand(nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
             }, {    intent: "create minimal node",
             }))
-            .addGenerator(nodeGenerator({
+            .addGeneratorCommand(nodeGenerator({
                 ...CommonGeneratorConfig,
                 seed: () => new GitHubRepoRef("spring-team", "buildable-node-seed"),
             }, {   intent: "create buildable node",

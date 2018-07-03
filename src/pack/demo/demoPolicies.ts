@@ -48,7 +48,7 @@ export const DemoPolicies: ExtensionPack = {
             .addAutofix({
                 name: "License",
                 pushTest: not(hasFile("LICENSE")),
-                editor: async p => {
+                transform: async p => {
                     const license = await axios.get("https://www.apache.org/licenses/LICENSE-2.0.txt");
                     return p.addFile("LICENSE", license.data);
                 },

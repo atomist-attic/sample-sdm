@@ -207,8 +207,8 @@ export function cloudFoundryMachine(
     );
 
     // Optional add-ins from the Spring pack
-    sdm.addGenerator(springRestGenerator);
-    sdm.addGenerator(kotlinRestGenerator);
+    sdm.addGeneratorCommand(springRestGenerator);
+    sdm.addGeneratorCommand(kotlinRestGenerator);
     configureLocalSpringBootDeploy(sdm);
 
     addTeamPolicies(sdm);

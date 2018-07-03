@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { codeRules } from "./machines/additiveCloudFoundryMachine";
+import { buildRules, codeRules } from "./machines/additiveCloudFoundryMachine";
+import { addParameters, FingerprintGoal, onAnyPush } from "@atomist/sdm";
+import { codeMetrics } from "./pack/codemetrics/codeMetrics";
+import { actionButton } from "./machines/actionButton";
 
 // TODO this import is wrong because the link is wrong
 // import { LocalMachineConfig } from "@atomist/slalom/build/src";
@@ -29,12 +32,30 @@ export const Config = { // : LocalMachineConfig = {
 
     init: sdm => {
         codeRules(sdm);
+        buildRules(sdm);
         // buildRules(sdm);
-        sdm.addCommands({
+        sdm.addCommand({
             name: "hello",
             intent: "hello",
-            listener: async ci => ci.addressChannels("Hello!"),
+            parameters: {
+                name: {},
+            },
+            listener: async ci => {
+                await ci.addressChannels(`Hello ${ci.parameters.name}`);
+                return actionButton({
+                    text: "I want coffee",
+                    command: "hello",
+                    params: { name: "who" },
+                    addressChannels: ci.addressChannels,
+                });
+            }
         });
+
+        sdm.addExtensionPacks(codeMetrics());
+
+        sdm.addFingerprintListener(async fp => {
+            console.log(JSON.stringify(fp.fingerprint))
+        })
     },
 
     preferLocalSeeds: true,

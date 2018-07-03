@@ -16,12 +16,12 @@
 
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { EditorRegistration } from "@atomist/sdm";
 import { AllJavaFiles } from "@atomist/sdm-pack-spring";
 import {
     AffirmationParameters,
     affirmations,
 } from "./affirmationEditor";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, ctx, params) => {
     const affirmation = params.customAffirmation || randomAffirmation();
@@ -41,8 +41,8 @@ const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, 
  * Harmlessly modify a Java file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const JavaAffirmationEditor: EditorRegistration = {
-    editor: appendAffirmationToJava,
+export const JavaAffirmationEditor: CodeTransformRegistration = {
+    transform: appendAffirmationToJava,
     name: "javaAffirmation",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),
     editMode: ap => ap.editMode,

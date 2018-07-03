@@ -15,13 +15,8 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import {
-    FingerprintListener,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
-import { DryRunEditing } from "@atomist/sdm-core";
-import { summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
-import { GraphGoals } from "@atomist/sdm-core";
+import { SoftwareDeliveryMachine, } from "@atomist/sdm";
+import { DryRunEditing, GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
@@ -45,7 +40,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListener(slackReviewListener())
-        .addEditor(AddApacheLicenseHeaderEditor)
+        .addCodeTransformCommand(AddApacheLicenseHeaderEditor)
         .addNewRepoWithCodeAction(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListener(PostToDeploymentsChannel)
@@ -63,10 +58,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         logger.info("SonarQube integration not enabled");
     }
 
-    const pub: FingerprintListener = async fp => {
-        // ("METRICS ARE\n" + JSON.stringify(fp.fingerprint));
-    };
-    sdm.addExtensionPacks(codeMetrics(pub));
+    sdm.addExtensionPacks(codeMetrics());
     summarizeGoalsInGitHubStatus(sdm);
 
     // sdm.addPushReactions(shutDownDeliveryIf(EverySecondOneGoesThrough));

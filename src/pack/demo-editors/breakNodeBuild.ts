@@ -17,13 +17,13 @@
 import { HandlerContext } from "@atomist/automation-client";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
-import { EditorRegistration } from "@atomist/sdm";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 export const BadTypeScriptFileName = "src/Bad.ts";
 export const BadJavaScriptFileName = "src/Bad.js";
 
-export const BreakNodeBuildEditor: EditorRegistration = {
-    createEditor: () => breakBuild,
+export const BreakNodeBuildEditor: CodeTransformRegistration = {
+    createTransform: () => breakBuild,
     name: "breakNodeBuild",
     editMode: commitToMaster(`You asked me to break the build!`),
 };
@@ -33,8 +33,8 @@ async function breakBuild(p: Project, ctx: HandlerContext) {
     return p.addFile(BadTypeScriptFileName, "this is not TypeScript");
 }
 
-export const UnbreakNodeBuildEditor: EditorRegistration = {
-    createEditor: () => unbreakNodeBuild,
+export const UnbreakNodeBuildEditor: CodeTransformRegistration = {
+    createTransform: () => unbreakNodeBuild,
     name: "unbreakNodeBuild",
     editMode: commitToMaster(`Trying to unbreak the build!`),
 };

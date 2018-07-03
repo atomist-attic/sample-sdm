@@ -41,29 +41,28 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         },
     });
 
-    sdm.addEditor({
+    sdm.addCodeTransformCommand({
         name: "topping",
         intent: "topping",
-        editor: async p => {
+        transform: async p => {
             return p.addFile("topping", "maple syrup");
         },
-        editorCommandFactory: dryRunEditorCommand,
+        transformCommandFactory: dryRunEditorCommand,
     });
 
-    sdm.addEditor({
+    sdm.addCodeTransformCommand({
         name: "maintainFileCount",
         intent: "filecount",
-        editor: fileCountEditor,
+        transform: fileCountTransform,
     });
 
     sdm.addAutofix({
-            name: "filecounter",
-            editor: fileCountEditor,
-        },
-    );
+        name: "filecounter",
+        transform: fileCountTransform,
+    });
 }
 
-async function fileCountEditor(p: Project): Promise<any> {
+async function fileCountTransform(p: Project): Promise<any> {
     let count = 0;
     await doWithFiles(p, "**/*.java", f => {
         ++count;

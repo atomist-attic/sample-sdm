@@ -21,7 +21,7 @@ import {
 import { Parameters } from "@atomist/automation-client/decorators";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
-import { EditorRegistration } from "@atomist/sdm";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
 @Parameters()
 export class RemoveFileParams {
@@ -30,8 +30,8 @@ export class RemoveFileParams {
     public path: string;
 }
 
-export const RemoveFileEditor: EditorRegistration<RemoveFileParams> = {
-    createEditor: () => removeFile,
+export const RemoveFileEditor: CodeTransformRegistration<RemoveFileParams> = {
+    createTransform: () => removeFile,
     name: "remove file",
     paramsMaker: RemoveFileParams,
     editMode: params => commitToMaster(`You asked me to remove file ${params.path}!`),
