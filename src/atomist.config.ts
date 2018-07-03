@@ -100,4 +100,3 @@ export const configuration: any = {
         () => new UpdateSdmGoalState(),
     ],
 };
-
