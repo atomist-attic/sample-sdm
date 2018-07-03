@@ -36,6 +36,7 @@ import { AddBuildScript } from "./autofix/addBuildScript";
 import {
     TransformNodeSeed,
 } from "./generators/transformNodeSeed";
+import { NodeProjectCreationParameters } from "./generators/NodeProjectCreationParameters";
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy
@@ -48,24 +49,28 @@ export const NodeSupport: ExtensionPack = {
         const hasPackageLock = hasFile("package-lock.json");
         sdm.addGeneratorCommand({
             name: "typescript-express-generator",
+            paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
             transform: TransformNodeSeed,
         })
             .addGeneratorCommand({
                 name: "minimal-node-generator",
+                paramsMaker: NodeProjectCreationParameters,
                 startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
                 intent: "create minimal node",
                 transform: TransformNodeSeed,
             })
             .addGeneratorCommand({
                 name: "copySdm",
+                paramsMaker: NodeProjectCreationParameters,
                 startingPoint: new GitHubRepoRef("atomist", "sdm"),
                 intent: "copy sdm",
                 transform: TransformNodeSeed,
             })
             .addGeneratorCommand({
                 name: "buildable-node-generator",
+                paramsMaker: NodeProjectCreationParameters,
                 startingPoint: new GitHubRepoRef("spring-team", "buildable-node-seed"),
                 intent: "create buildable node",
                 transform: TransformNodeSeed,

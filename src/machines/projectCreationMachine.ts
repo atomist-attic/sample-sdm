@@ -20,6 +20,7 @@ import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
 import { CommonJavaGeneratorConfig, springBootGenerator, springBootTagger, } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { TransformNodeSeed, } from "../pack/node/generators/transformNodeSeed";
+import { NodeProjectCreationParameters } from "../pack/node/generators/NodeProjectCreationParameters";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -39,12 +40,14 @@ export function projectCreationMachine(
         }))
         .addGeneratorCommand({
             name: "typescript-express-generator",
+            paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
             transform: TransformNodeSeed,
         })
         .addGeneratorCommand({
             name: "minimal-node-generator",
+            paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
             intent: "create minimal node",
             transform: TransformNodeSeed,

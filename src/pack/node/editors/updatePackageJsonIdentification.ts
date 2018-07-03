@@ -22,10 +22,10 @@ import { NodeProjectCreationParameters } from "../generators/NodeProjectCreation
 
 export const UpdatePackageJsonIdentification: CodeTransform =
     async (project, context, params: NodeProjectCreationParameters) => {
-        const author = await findAuthorName(context, params.screenName);
-        logger.info("Updating JSON. Author is " + author);
+        const author = await findAuthorName(context, params.screenName) || params.screenName;
+        logger.info("Updating JSON. Author is %s, params=%j", author, params);
         return doWithJson(project, "package.json", pkg => {
-            const repoUrl = `https://github.com/${params.target.repoRef.owner}/${params.target.repoRef.repo}`;
+            const repoUrl = params.target.repoRef.url;
             pkg.name = params.appName;
             pkg.description = params.target.description;
             pkg.version = params.version;
@@ -38,5 +38,6 @@ export const UpdatePackageJsonIdentification: CodeTransform =
             pkg.bugs = {
                 url: `${repoUrl}/issues`,
             };
+            logger.info("Updated JSON. Result is %j", pkg);
         });
     };
