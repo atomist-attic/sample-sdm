@@ -25,17 +25,16 @@ import {
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
 import { nodeBuilder } from "@atomist/sdm-core";
-import { IsNode } from "@atomist/sdm-core";
 import { PackageLockFingerprinter } from "@atomist/sdm-core";
 import { tslintFix } from "@atomist/sdm-core";
+import { IsNode } from "@atomist/sdm-core";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
+import { UpdateReadmeTitle } from "../../commands/editors/updateReadmeTitle";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
-import {
-    TransformNodeSeed,
-} from "./generators/transformNodeSeed";
+import { UpdatePackageJsonIdentification } from "./editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParameters } from "./generators/NodeProjectCreationParameters";
 
 /**
@@ -52,28 +51,36 @@ export const NodeSupport: ExtensionPack = {
             paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
-            transform: TransformNodeSeed,
+            transform: [
+                UpdatePackageJsonIdentification,
+                UpdateReadmeTitle],
         })
             .addGeneratorCommand({
                 name: "minimal-node-generator",
                 paramsMaker: NodeProjectCreationParameters,
                 startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
                 intent: "create minimal node",
-                transform: TransformNodeSeed,
+                transform: [
+                    UpdatePackageJsonIdentification,
+                    UpdateReadmeTitle],
             })
             .addGeneratorCommand({
                 name: "copySdm",
                 paramsMaker: NodeProjectCreationParameters,
                 startingPoint: new GitHubRepoRef("atomist", "sdm"),
                 intent: "copy sdm",
-                transform: TransformNodeSeed,
+                transform: [
+                    UpdatePackageJsonIdentification,
+                    UpdateReadmeTitle],
             })
             .addGeneratorCommand({
                 name: "buildable-node-generator",
                 paramsMaker: NodeProjectCreationParameters,
                 startingPoint: new GitHubRepoRef("spring-team", "buildable-node-seed"),
                 intent: "create buildable node",
-                transform: TransformNodeSeed,
+                transform: [
+                    UpdatePackageJsonIdentification,
+                    UpdateReadmeTitle],
             })
             .addAutofix(AddAtomistTypeScriptHeader)
             .addAutofix(tslintFix)
