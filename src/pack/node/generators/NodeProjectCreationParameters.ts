@@ -15,7 +15,7 @@
  */
 
 import { Parameter } from "@atomist/automation-client";
-import { SeedDrivenGeneratorParametersSupport, } from "@atomist/sdm";
+import { SeedDrivenGeneratorParametersSupport } from "@atomist/sdm";
 
 /**
  * Parameters for creating a Node project.

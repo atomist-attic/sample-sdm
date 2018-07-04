@@ -17,9 +17,10 @@
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
-import { CommonJavaGeneratorConfig, springBootGenerator, springBootTagger, } from "@atomist/sdm-pack-spring";
+import { CommonJavaGeneratorConfig, springBootGenerator, springBootTagger } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { TransformNodeSeed, } from "../pack/node/generators/transformNodeSeed";
+import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
+import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParameters } from "../pack/node/generators/NodeProjectCreationParameters";
 
 /**
@@ -43,14 +44,18 @@ export function projectCreationMachine(
             paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
-            transform: TransformNodeSeed,
+            transform: [
+                UpdatePackageJsonIdentification,
+                UpdateReadmeTitle],
         })
         .addGeneratorCommand({
             name: "minimal-node-generator",
             paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
             intent: "create minimal node",
-            transform: TransformNodeSeed,
+            transform: [
+                UpdatePackageJsonIdentification,
+                UpdateReadmeTitle],
         })
         .addNewRepoWithCodeAction(tagRepo(springBootTagger));
     return sdm;

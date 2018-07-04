@@ -15,6 +15,7 @@
  */
 
 import {
+    CommandListenerInvocation,
     DeployerInfo,
     ProjectLoader,
     PushImpactListener,
@@ -30,14 +31,14 @@ import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 /**
  * Deploy everything to the same Cloud Foundry space
  */
-export function cloudFoundryStagingDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}): DeployerInfo<CloudFoundryInfo> {
+export function cloudFoundryStagingDeploySpec(opts: { artifactStore: ArtifactStore, projectLoader: ProjectLoader }): DeployerInfo<CloudFoundryInfo> {
     return {
         deployer: new CloudFoundryBlueGreenDeployer(opts.projectLoader),
         targeter: () => new EnvironmentCloudFoundryTarget("staging"),
     };
 }
 
-export function cloudFoundryProductionDeploySpec(opts: {artifactStore: ArtifactStore, projectLoader: ProjectLoader}):
+export function cloudFoundryProductionDeploySpec(opts: { artifactStore: ArtifactStore, projectLoader: ProjectLoader }):
     DeployerInfo<CloudFoundryInfo> {
     return {
         deployer: new CloudFoundryBlueGreenDeployer(opts.projectLoader),
@@ -47,12 +48,13 @@ export function cloudFoundryProductionDeploySpec(opts: {artifactStore: ArtifactS
 
 const EnableDeployOnCloudFoundryManifestAdditionListener: PushImpactListener = async pil => {
     const commit = pil.commit;
-    const repo = commit.repo;
     const push = commit.pushes[0];
 
     if (push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
-        await setDeployEnablement(true)
-        (pil.context, {repo: repo.name, owner: repo.owner, providerId: repo.org.provider.providerId});
+        await setDeployEnablement({
+            commandName: "addCloudFoundryManifest",
+            ...pil,
+        } as CommandListenerInvocation, true);
     }
 };
 
