@@ -16,19 +16,21 @@
 
 import { doWithFileMatches } from "@atomist/automation-client/project/util/parseUtils";
 
+import { logger } from "@atomist/automation-client";
 import { RestOfLine } from "@atomist/microgrammar/matchers/skip/Skip";
 import { Microgrammar } from "@atomist/microgrammar/Microgrammar";
+import { CodeTransform } from "@atomist/sdm";
+import { NodeProjectCreationParameters } from "../../pack/node/generators/NodeProjectCreationParameters";
 
-export function updateReadmeTitle(appName: string,
-                                  description: string) {
-    return project => {
+export const UpdateReadmeTitle: CodeTransform =
+    (project, ctx, params: NodeProjectCreationParameters) => {
+        logger.info("UpdateReadmeTitle: params=%j", params);
         return doWithFileMatches(project, "README.md", h1Grammar, fm => {
             if (fm.matches.length > 0) {
-                fm.matches[0].value = appName + "\n\n" + description;
+                fm.matches[0].value = params.appName + "\n\n" + params.target.description;
             }
         });
     };
-}
 
 const headingGrammar: (start: string) => Microgrammar<{ value: string }> = start => Microgrammar.fromDefinitions({
     _start: start,

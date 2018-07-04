@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import * as slack from "@atomist/slack-messages/SlackMessages";
-import { buttonForCommand, ButtonSpecification } from "@atomist/automation-client/spi/message/MessageClient";
 import { Fix } from "@atomist/automation-client/operations/review/ReviewResult";
+import { buttonForCommand, ButtonSpecification } from "@atomist/automation-client/spi/message/MessageClient";
 import { AddressChannels } from "@atomist/sdm";
+import * as slack from "@atomist/slack-messages/SlackMessages";
 
 /**
  * Simple function to present an action button to run a command

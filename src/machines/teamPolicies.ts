@@ -15,7 +15,7 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { SoftwareDeliveryMachine, } from "@atomist/sdm";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { DryRunEditing, GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
@@ -40,7 +40,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListener(slackReviewListener())
-        .addCodeTransformCommand(AddApacheLicenseHeaderEditor)
+        .addEditor(AddApacheLicenseHeaderEditor)
         .addNewRepoWithCodeAction(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListener(PostToDeploymentsChannel)

@@ -25,18 +25,17 @@ import {
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
 import { nodeBuilder } from "@atomist/sdm-core";
-import { IsNode } from "@atomist/sdm-core";
 import { PackageLockFingerprinter } from "@atomist/sdm-core";
 import { tslintFix } from "@atomist/sdm-core";
+import { IsNode } from "@atomist/sdm-core";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
+import { UpdateReadmeTitle } from "../../commands/editors/updateReadmeTitle";
 import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScriptErrors";
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
-import {
-    CommonGeneratorConfig,
-    nodeGenerator,
-} from "./generators/nodeGenerator";
+import { UpdatePackageJsonIdentification } from "./editors/updatePackageJsonIdentification";
+import { NodeProjectCreationParameters } from "./generators/NodeProjectCreationParameters";
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy
@@ -47,27 +46,42 @@ export const NodeSupport: ExtensionPack = {
     ...metadata("node"),
     configure: (sdm: SoftwareDeliveryMachine) => {
         const hasPackageLock = hasFile("package-lock.json");
-
-        sdm.addGeneratorCommand(nodeGenerator({
-            ...CommonGeneratorConfig,
-            seed: () => new GitHubRepoRef("spring-team", "typescript-express-seed"),
-        }, { intent: "create node",
-        }))
-            .addGeneratorCommand(nodeGenerator({
-            ...CommonGeneratorConfig,
-            seed: () => new GitHubRepoRef("atomist", "sdm"),
-        }, { intent: "copy sdm",
-        }))
-            .addGeneratorCommand(nodeGenerator({
-                ...CommonGeneratorConfig,
-                seed: () => new GitHubRepoRef("spring-team", "minimal-node-seed"),
-            }, {    intent: "create minimal node",
-            }))
-            .addGeneratorCommand(nodeGenerator({
-                ...CommonGeneratorConfig,
-                seed: () => new GitHubRepoRef("spring-team", "buildable-node-seed"),
-            }, {   intent: "create buildable node",
-            }))
+        sdm.addGeneratorCommand({
+            name: "typescript-express-generator",
+            paramsMaker: NodeProjectCreationParameters,
+            startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
+            intent: "create node",
+            transform: [
+                UpdatePackageJsonIdentification,
+                UpdateReadmeTitle],
+        })
+            .addGeneratorCommand({
+                name: "minimal-node-generator",
+                paramsMaker: NodeProjectCreationParameters,
+                startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
+                intent: "create minimal node",
+                transform: [
+                    UpdatePackageJsonIdentification,
+                    UpdateReadmeTitle],
+            })
+            .addGeneratorCommand({
+                name: "copySdm",
+                paramsMaker: NodeProjectCreationParameters,
+                startingPoint: new GitHubRepoRef("atomist", "sdm"),
+                intent: "copy sdm",
+                transform: [
+                    UpdatePackageJsonIdentification,
+                    UpdateReadmeTitle],
+            })
+            .addGeneratorCommand({
+                name: "buildable-node-generator",
+                paramsMaker: NodeProjectCreationParameters,
+                startingPoint: new GitHubRepoRef("spring-team", "buildable-node-seed"),
+                intent: "create buildable node",
+                transform: [
+                    UpdatePackageJsonIdentification,
+                    UpdateReadmeTitle],
+            })
             .addAutofix(AddAtomistTypeScriptHeader)
             .addAutofix(tslintFix)
             .addAutofix(AddBuildScript)

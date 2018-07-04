@@ -25,10 +25,10 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
+import { CodeTransformRegistration } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
-import { CodeTransformRegistration } from "@atomist/sdm";
 
 /**
  * Default glob pattern matches all C family languages
@@ -80,15 +80,15 @@ export const ApacheHeader = `/*
  */`;
 
 export const AddApacheLicenseHeaderEditor: CodeTransformRegistration = {
-    createTransform: () => addHeaderProjectEditor,
+    createTransform: () => addHeaderTransform,
     name: "addHeader",
     paramsMaker: AddHeaderParameters,
     editMode: ahp => ahp.editMode
 };
 
-export async function addHeaderProjectEditor(p: Project,
-                                             ctx: HandlerContext,
-                                             params: AddHeaderParameters): Promise<Project> {
+export async function addHeaderTransform(p: Project,
+                                         ctx: HandlerContext,
+                                         params: AddHeaderParameters): Promise<Project> {
     let headersAdded = 0;
     let matchingFiles = 0;
     let filesWithDifferentHeaders = [];

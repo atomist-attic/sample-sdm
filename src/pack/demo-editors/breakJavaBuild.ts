@@ -21,7 +21,7 @@ import { CodeTransformRegistration } from "@atomist/sdm";
 
 export const BadJavaFileName = "src/main/java/Bad.java";
 
-export const BreakJavaBuildEditor: CodeTransformRegistration = {
+export const BreakJavaBuildTransform: CodeTransformRegistration = {
     createTransform: () => breakBuild,
     name: "breakJavaBuild",
     editMode: commitToMaster(`You asked me to break the build!`),

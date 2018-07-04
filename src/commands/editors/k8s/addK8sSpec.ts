@@ -17,8 +17,8 @@
 import { logger } from "@atomist/automation-client";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { deploymentTemplate } from "./deploymentTemplate";
 import { CodeTransformRegistration } from "@atomist/sdm";
+import { deploymentTemplate } from "./deploymentTemplate";
 
 export const AddK8sSpecCommandName = "AddK8sSpecCommandName";
 

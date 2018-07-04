@@ -122,7 +122,7 @@ export function cloudFoundryMachine(
                 whenPushSatisfies(HasSpringBootApplicationClass, not(FromAtomist))
                     .itMeans("Spring Boot service local deploy")
                     .setGoals(LocalDeploymentGoals),
-                onAnyPush.itMeans("Build Java library")
+                onAnyPush().itMeans("Build Java library")
                     .set(LibraryGoals),
             ),
         whenPushSatisfies(IsNode, not(MaterialChangeToNodeRepo))

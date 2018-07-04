@@ -16,8 +16,8 @@
 
 import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 import { CodeTransformRegistration } from "@atomist/sdm";
+import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
 /**
  * Harmlessly modify a TS file on master

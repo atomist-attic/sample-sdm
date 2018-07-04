@@ -47,7 +47,7 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         transform: async p => {
             return p.addFile("topping", "maple syrup");
         },
-        transformCommandFactory: dryRunEditorCommand,
+        editorCommandFactory: dryRunEditorCommand,
     });
 
     sdm.addCodeTransformCommand({

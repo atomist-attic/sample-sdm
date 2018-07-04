@@ -23,7 +23,7 @@ export const CloudFoundrySupport: ExtensionPack = {
     ...metadata("cloud-foundry"),
     configure: sdm => {
         sdm
-            .addCodeTransformCommand(AddCloudFoundryManifest)
+            .addEditor(AddCloudFoundryManifest)
             .addChannelLinkListener(SuggestAddingCloudFoundryManifest);
     },
 };

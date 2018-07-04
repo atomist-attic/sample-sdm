@@ -22,7 +22,7 @@ import { CodeTransformRegistration } from "@atomist/sdm";
 export const BadTypeScriptFileName = "src/Bad.ts";
 export const BadJavaScriptFileName = "src/Bad.js";
 
-export const BreakNodeBuildEditor: CodeTransformRegistration = {
+export const BreakNodeBuildTransform: CodeTransformRegistration = {
     createTransform: () => breakBuild,
     name: "breakNodeBuild",
     editMode: commitToMaster(`You asked me to break the build!`),
@@ -33,13 +33,13 @@ async function breakBuild(p: Project, ctx: HandlerContext) {
     return p.addFile(BadTypeScriptFileName, "this is not TypeScript");
 }
 
-export const UnbreakNodeBuildEditor: CodeTransformRegistration = {
+export const UnbreakNodeBuildTransform: CodeTransformRegistration = {
     createTransform: () => unbreakNodeBuild,
     name: "unbreakNodeBuild",
     editMode: commitToMaster(`Trying to unbreak the build!`),
 };
 
-async function unbreakNodeBuild(p: Project, ctx: HandlerContext) {
+async function unbreakNodeBuild(p: Project) {
     await p.deleteFile(BadTypeScriptFileName);
     return p;
 }

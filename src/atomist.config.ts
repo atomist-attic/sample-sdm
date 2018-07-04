@@ -63,11 +63,11 @@ function createMachine(
 const Options: ConfigureOptions = {
     requiredConfigurationValues: [
         "sdm",
-        // "sdm.cloudfoundry.user",
-        // "sdm.cloudfoundry.password",
-        // "sdm.cloudfoundry.org",
-        // "sdm.cloudfoundry.spaces.production",
-        // "sdm.cloudfoundry.spaces.staging",
+        "sdm.cloudfoundry.user",
+        "sdm.cloudfoundry.password",
+        "sdm.cloudfoundry.org",
+        "sdm.cloudfoundry.spaces.production",
+        "sdm.cloudfoundry.spaces.staging",
     ],
     // sdm: {
     //     // TODO get this from the config

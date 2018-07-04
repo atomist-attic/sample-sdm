@@ -21,9 +21,8 @@ import {
     FingerprintGoal,
     onAnyPush,
     PushTest,
-    SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { CodeStats, reportForLanguages, } from "@atomist/sdm-pack-sloc/slocReport";
+import { CodeStats, reportForLanguages } from "@atomist/sdm-pack-sloc/slocReport";
 import { TypedFingerprint } from "@atomist/sdm/api-helper/code/fingerprint/TypedFingerprint";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 
@@ -32,10 +31,15 @@ const CodeMetricsFingerprintName = "CodeMetrics";
 /**
  * Add this registration to a machine
  */
-export function codeMetrics(pushTest?: PushTest): ExtensionPack {
+export function codeMetrics(
+    pushTest?: PushTest): ExtensionPack {
     return {
         ...metadata("code-metrics"),
-        configure: addCodeMetrics(pushTest),
+        configure: sdm => {
+            sdm
+                .addGoalContributions(onAnyPush().setGoals(FingerprintGoal))
+                .addFingerprinterRegistration(lineCounter(pushTest));
+        },
     };
 }
 
@@ -80,12 +84,3 @@ function lineCounter(pushTest: PushTest): FingerprinterRegistration {
         },
     };
 }
-
-function addCodeMetrics(pushTest: PushTest) {
-    return (sdm: SoftwareDeliveryMachine) => {
-        sdm
-            .addGoalContributions(onAnyPush.setGoals(FingerprintGoal))
-            .addFingerprinterRegistration(lineCounter(pushTest));
-    };
-}
-

@@ -36,7 +36,7 @@ import { DemoEditors } from "../pack/demo-editors/demoEditors";
 export function autofixMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", configuration},
-        onAnyPush
+        onAnyPush()
             .setGoals(new Goals("Autofix", AutofixGoal)));
     sdm
         .addAutofix(AddAtomistJavaHeader)

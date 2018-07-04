@@ -15,20 +15,20 @@
  */
 
 import {
-    allSatisfied, AutofixRegisterable, AutofixRegistration, CodeTransformAutofixRegistration,
+    allSatisfied, AutofixRegisterable,
     hasFileContaining,
     PushTest,
 } from "@atomist/sdm";
 import { IsTypeScript } from "@atomist/sdm-core";
 import { IsJava } from "@atomist/sdm-pack-spring";
-import { AddHeaderParameters, addHeaderProjectEditor } from "../commands/editors/license/addHeader";
+import { AddHeaderParameters, addHeaderTransform } from "../commands/editors/license/addHeader";
 import { LicenseFilename } from "./addLicenseFile";
 
-export const AddAtomistJavaHeader: CodeTransformAutofixRegistration = addAtomistHeader("Java header", "**/*.java", IsJava);
+export const AddAtomistJavaHeader: AutofixRegisterable = addAtomistHeader("Java header", "**/*.java", IsJava);
 
-export const AddAtomistTypeScriptHeader: CodeTransformAutofixRegistration = addAtomistHeader("TypeScript header", "**/*.ts", IsTypeScript);
+export const AddAtomistTypeScriptHeader: AutofixRegisterable = addAtomistHeader("TypeScript header", "**/*.ts", IsTypeScript);
 
-export function addAtomistHeader(name: string, glob: string, pushTest: PushTest): CodeTransformAutofixRegistration {
+export function addAtomistHeader(name: string, glob: string, pushTest: PushTest): AutofixRegisterable {
     const parameters = new AddHeaderParameters();
     parameters.glob = glob;
     // Stop it continually editing the barrel and graphql types
@@ -37,7 +37,7 @@ export function addAtomistHeader(name: string, glob: string, pushTest: PushTest)
         name,
         pushTest: allSatisfied(pushTest, hasFileContaining(LicenseFilename, /Apache License/)),
         // Ignored any parameters passed in, which will be undefined in an autofix, and provide predefined parameters
-        transform: addHeaderProjectEditor,
+        transform: addHeaderTransform,
         parameters,
     };
 }

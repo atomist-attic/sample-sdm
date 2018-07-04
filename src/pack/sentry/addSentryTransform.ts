@@ -19,13 +19,13 @@ import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
+import { CodeTransformRegistration } from "@atomist/sdm";
 import {
     addDependencyEditor,
     VersionedArtifact,
 } from "@atomist/sdm-pack-spring";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
-import { CodeTransformRegistration } from "@atomist/sdm";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",
@@ -36,7 +36,7 @@ const SentryDependency: VersionedArtifact = {
 const sentryYaml = dsn => `\nraven:
     dsn: '${dsn}'`;
 
-function addSentryEditor(dsn: string): ProjectEditor {
+function addSentryTransform(dsn: string): ProjectEditor {
     return chainEditors(
         addDependencyEditor(SentryDependency),
         // tslint:disable-next-line:max-line-length
@@ -59,7 +59,7 @@ export class AddSentryParams {
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const AddSentry: CodeTransformRegistration<AddSentryParams> = {
-    createTransform: params => addSentryEditor(params.dsn),
+    createTransform: params => addSentryTransform(params.dsn),
     name: "AddSentry",
     paramsMaker: AddSentryParams,
     editMode: () => new PullRequest(

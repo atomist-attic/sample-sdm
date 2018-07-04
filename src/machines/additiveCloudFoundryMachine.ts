@@ -28,7 +28,7 @@ import {
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
     PushReactionGoal,
-    ReviewGoal, SeedDrivenGeneratorParametersSupport,
+    ReviewGoal,
     SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     StagingEndpointGoal,
@@ -45,18 +45,8 @@ import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
 import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm-core";
 import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
 import { StagingUndeploymentGoal } from "@atomist/sdm-core";
-import {
-    HasSpringBootApplicationClass,
-    IsMaven,
-    LocalExecutableJarDeployer,
-    MavenBuilder,
-    SpringSupport
-} from "@atomist/sdm-pack-spring";
-import {
-    configureLocalSpringBootDeploy,
-    kotlinRestGenerator,
-    springRestGenerator
-} from "@atomist/sdm-pack-spring/dist";
+import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
@@ -65,18 +55,10 @@ import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
-import {
-    cloudFoundryProductionDeploySpec,
-    EnableDeployOnCloudFoundryManifestAddition
-} from "../pack/pcf/cloudFoundryDeploy";
+import { cloudFoundryProductionDeploySpec, EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
-import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
-import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoId";
-import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -101,7 +83,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     // Each contributor contributes goals. The infrastructure assembles them into a goal set.
     sdm.addGoalContributions(goalContributors(
-        onAnyPush.setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
+        onAnyPush().setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
         whenPushSatisfies(IsDeploymentFrozen)
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(any(IsMaven, IsNode))
@@ -121,31 +103,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 
     sdm.addGeneratorCommand(springRestGenerator);
     sdm.addGeneratorCommand(kotlinRestGenerator);
-
-    sdm.addGeneratorCommand<SeedDrivenGeneratorParameters & { path: string }>({
-        name: "foo",
-        intent: "create thing",
-        startingPoint: InMemoryProject.of(
-            new InMemoryFile("README.md", "some content")),
-        parameters: {
-            path: {},
-        },
-        transform: async (p, ctx, params) => {
-            return p.addFile(params.path, "1");
-        },
-    });
-
-    sdm.addGeneratorCommand<SeedDrivenGeneratorParameters & { path: string }>({
-        name: "foo",
-        intent: "create thing2",
-        startingPoint: GitHubRepoRef.from({owner: "spring-team", repo: "spring-rest-seed"}),
-        parameters: {
-            path: {},
-        },
-        transform: async (p, ctx, params) => {
-            return p.addFile(params.path, "1");
-        },
-    });
 
     sdm.addExtensionPacks(
         DemoEditors,

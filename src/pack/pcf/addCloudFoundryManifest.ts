@@ -16,8 +16,7 @@
 
 import { logger } from "@atomist/automation-client";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
-import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
 import { CloudFoundryManifestPath, NodeProjectIdentifier } from "@atomist/sdm-core";
 import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
 import { HasSpringBootPom } from "@atomist/sdm-pack-spring/dist/support/spring/pushTests";
@@ -34,7 +33,7 @@ export const AtomistConfigTsPath = "src/atomist.config.ts";
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const AddCloudFoundryManifest: CodeTransformRegistration = {
-    createTransform: () => addCloudFoundryManifestEditor,
+    createTransform: () => addCloudFoundryManifestTransform,
     name: "AddCloudFoundryManifest",
     intent: "Add Cloud Foundry manifest",
     editMode: () => new PullRequest(
@@ -49,7 +48,7 @@ ${AddCloudFoundryManifestMarker}`),
 };
 
 // This should not have been invoked unless it's a Spring or Node project
-export const addCloudFoundryManifestEditor: SimpleProjectEditor = async (p, ctx) => {
+export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) => {
     const javaId = await MavenProjectIdentifier(p);
     if (javaId && await HasSpringBootPom.predicate(p)) {
         return p.addFile(CloudFoundryManifestPath, javaManifestFor(javaId.name, ctx.teamId));
