@@ -5277,6 +5277,25 @@ export enum CommitIssueRelationshipType {
   references = "references"
 }
 
+export namespace PersonByChatId {
+  export type Variables = {
+    screenName: string;
+  };
+
+  export type Query = {
+    __typename?: "Query";
+    ChatId?: ChatId[] | null;
+  };
+
+  export type ChatId = {
+    __typename?: "ChatId";
+    userId?: string | null;
+    screenName?: string | null;
+    person?: Person | null;
+  };
+
+  export type Person = PersonFields.Fragment;
+}
 export namespace PullRequestForSha {
   export type Variables = {
     owner: string;
@@ -5441,5 +5460,32 @@ export namespace CoreRepoFieldsAndChannels {
   export type Team = {
     __typename?: "ChatTeam";
     id?: string | null;
+  };
+}
+
+export namespace PersonFields {
+  export type Fragment = {
+    __typename?: "Person";
+    forename?: string | null;
+    surname?: string | null;
+    name?: string | null;
+    emails?: Emails[] | null;
+    gitHubId?: GitHubId | null;
+    chatId?: ChatId | null;
+  };
+
+  export type Emails = {
+    __typename?: "Email";
+    address?: string | null;
+  };
+
+  export type GitHubId = {
+    __typename?: "GitHubId";
+    login?: string | null;
+  };
+
+  export type ChatId = {
+    __typename?: "ChatId";
+    screenName?: string | null;
   };
 }
