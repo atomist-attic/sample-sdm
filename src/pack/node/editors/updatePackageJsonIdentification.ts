@@ -22,8 +22,13 @@ import { NodeProjectCreationParameters } from "../generators/NodeProjectCreation
 
 export const UpdatePackageJsonIdentification: CodeTransform =
     async (project, context, params: NodeProjectCreationParameters) => {
-        const author = await findAuthorName(context, params.screenName) || params.screenName;
-        logger.info("Updating JSON. Author is %s, params=%j", author, params);
+        logger.info("Updating JSON: params=%j", params);
+        const author = await findAuthorName(context, params.screenName)
+            .then(authorName => authorName || params.screenName,
+                err => {
+                    logger.warn("Cannot query for author name: %s", err.message);
+                    return params.screenName;
+                });
         return doWithJson(project, "package.json", pkg => {
             const repoUrl = params.target.repoRef.url;
             pkg.name = params.appName;
