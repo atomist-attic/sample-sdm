@@ -21,10 +21,12 @@ import {
     PushImpactListener,
     PushReactionRegistration,
 } from "@atomist/sdm";
-import { setDeployEnablement } from "@atomist/sdm-core";
-import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm-core";
-import { CloudFoundryInfo } from "@atomist/sdm-core";
-import { EnvironmentCloudFoundryTarget } from "@atomist/sdm-core";
+import {
+    CloudFoundryBlueGreenDeployer,
+    CloudFoundryInfo,
+    EnvironmentCloudFoundryTarget,
+    setDeployEnablement
+} from "@atomist/sdm-core";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 
@@ -47,10 +49,7 @@ export function cloudFoundryProductionDeploySpec(opts: { artifactStore: Artifact
 }
 
 const EnableDeployOnCloudFoundryManifestAdditionListener: PushImpactListener = async pil => {
-    const commit = pil.commit;
-    const push = commit.pushes[0];
-
-    if (push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
+    if (pil.push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
         await setDeployEnablement({
             commandName: "addCloudFoundryManifest",
             ...pil,
