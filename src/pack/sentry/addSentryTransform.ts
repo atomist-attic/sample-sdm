@@ -20,9 +20,10 @@ import { PullRequest } from "@atomist/automation-client/operations/edit/editMode
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import { CodeTransformRegistration } from "@atomist/sdm";
-import { addDependencyEditor, VersionedArtifact, } from "@atomist/sdm-pack-spring";
+import { VersionedArtifact, } from "@atomist/sdm-pack-spring";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
+import { addDependencyTransform } from "@atomist/sdm-pack-spring/dist";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",
@@ -34,7 +35,7 @@ const sentryYaml = dsn => `\nraven:
     dsn: '${dsn}'`;
 
 const AddSentryTransform: ProjectEditor<AddSentryParams> = chainEditors(
-    addDependencyEditor(SentryDependency),
+    addDependencyTransform(SentryDependency),
     // tslint:disable-next-line:max-line-length
     copyFileFromUrl("https://raw.githubusercontent.com/sdm-org/cd20/dc16c15584d77db6cf9a70fdcb4d7bebe24113d5/src/main/java/com/atomist/SentryConfiguration.java",
         "src/main/java/com/atomist/SentryConfiguration.java"),
