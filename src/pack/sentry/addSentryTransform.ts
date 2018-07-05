@@ -20,10 +20,7 @@ import { PullRequest } from "@atomist/automation-client/operations/edit/editMode
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import { CodeTransformRegistration } from "@atomist/sdm";
-import {
-    addDependencyEditor,
-    VersionedArtifact,
-} from "@atomist/sdm-pack-spring";
+import { addDependencyEditor, VersionedArtifact, } from "@atomist/sdm-pack-spring";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
 
@@ -36,16 +33,22 @@ const SentryDependency: VersionedArtifact = {
 const sentryYaml = dsn => `\nraven:
     dsn: '${dsn}'`;
 
-function addSentryTransform(dsn: string): ProjectEditor {
-    return chainEditors(
-        addDependencyEditor(SentryDependency),
-        // tslint:disable-next-line:max-line-length
-        copyFileFromUrl("https://raw.githubusercontent.com/sdm-org/cd20/dc16c15584d77db6cf9a70fdcb4d7bebe24113d5/src/main/java/com/atomist/SentryConfiguration.java",
-            "src/main/java/com/atomist/SentryConfiguration.java"),
-        appendOrCreateFileContent({ toAppend: sentryYaml(dsn), path: "src/main/resources/application.yml" }),
-        appendOrCreateFileContent({ toAppend: sentryYaml(dsn), path: "src/test/resources/application.yml" }),
-    );
-}
+const AddSentryTransform: ProjectEditor<AddSentryParams> = chainEditors(
+    addDependencyEditor(SentryDependency),
+    // tslint:disable-next-line:max-line-length
+    copyFileFromUrl("https://raw.githubusercontent.com/sdm-org/cd20/dc16c15584d77db6cf9a70fdcb4d7bebe24113d5/src/main/java/com/atomist/SentryConfiguration.java",
+        "src/main/java/com/atomist/SentryConfiguration.java"),
+    async (p, ctx, params) => {
+        await appendOrCreateFileContent({
+            toAppend: sentryYaml(params.dsn),
+            path: "src/main/resources/application.yml"
+        })(p, ctx, params);
+        return appendOrCreateFileContent({
+            toAppend: sentryYaml(params.dsn),
+            path: "src/test/resources/application.yml"
+        })(p, ctx, params);
+    }
+);
 
 @Parameters()
 export class AddSentryParams {
@@ -59,7 +62,7 @@ export class AddSentryParams {
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const AddSentry: CodeTransformRegistration<AddSentryParams> = {
-    createTransform: params => addSentryTransform(params.dsn),
+    transform: AddSentryTransform,
     name: "AddSentry",
     paramsMaker: AddSentryParams,
     editMode: () => new PullRequest(
