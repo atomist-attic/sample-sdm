@@ -16,7 +16,7 @@
 
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { actionButton } from "./machines/actionButton";
-import { codeRules } from "./machines/additiveCloudFoundryMachine";
+import { buildRules, codeRules } from "./machines/additiveCloudFoundryMachine";
 import { codeMetrics } from "./pack/codemetrics/codeMetrics";
 
 // TODO this import is wrong because the link is wrong
@@ -32,6 +32,8 @@ export const Config = { // : LocalMachineConfig = {
 
     init: sdm => {
         codeRules(sdm);
+        buildRules(sdm);
+        // sdm.addGoalContributions(onAnyPush().setGoals(JustBuildGoal));
         sdm.addExtensionPacks(SlocSupport);
 
         // buildRules(sdm);
@@ -57,7 +59,7 @@ export const Config = { // : LocalMachineConfig = {
         sdm.addExtensionPacks(codeMetrics());
 
         sdm.addFingerprintListener(async fp => {
-            console.log(JSON.stringify(fp.fingerprint));
+            process.stdout.write(JSON.stringify(fp.fingerprint) + "\n");
         });
     },
 

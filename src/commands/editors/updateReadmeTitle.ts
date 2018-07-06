@@ -20,7 +20,7 @@ import { logger } from "@atomist/automation-client";
 import { RestOfLine } from "@atomist/microgrammar/matchers/skip/Skip";
 import { Microgrammar } from "@atomist/microgrammar/Microgrammar";
 import { CodeTransform } from "@atomist/sdm";
-import { NodeProjectCreationParameters } from "../../pack/node/generators/NodeProjectCreationParameters";
+import { NodeProjectCreationParameters } from "../../pack/node/nodeSupport";
 
 export const UpdateReadmeTitle: CodeTransform =
     (project, ctx, params: NodeProjectCreationParameters) => {

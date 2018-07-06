@@ -42,45 +42,40 @@ import {
     MavenBuilder,
     SpringSupport,
 } from "@atomist/sdm-pack-spring";
-import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
-import { nodeBuilder } from "@atomist/sdm-core";
-import { HasCloudFoundryManifest } from "@atomist/sdm-core";
 import {
+    createSoftwareDeliveryMachine,
+    DisableDeploy,
+    DisplayDeployEnablement,
+    EnableDeploy,
+    HasAtomistBuildFile,
+    HasCloudFoundryManifest,
+    HasDockerfile,
     HttpServiceGoals,
-    RepositoryDeletionGoals,
-    UndeployEverywhereGoals,
-} from "@atomist/sdm-core";
-import { LibraryGoals } from "@atomist/sdm-core";
-import {
+    IsNode,
+    LibraryGoals,
+    lookFor200OnEndpointRootGet,
+    ManagedDeploymentTargeter,
+    nodeBuilder,
+    NoGoals,
     NpmBuildGoals,
+    npmCustomBuilder,
     NpmDeployGoals,
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
-} from "@atomist/sdm-core";
-import { DisplayDeployEnablement } from "@atomist/sdm-core";
-import {
-    DisableDeploy,
-    EnableDeploy,
-} from "@atomist/sdm-core";
-import {
-    NoGoals,
+    RepositoryDeletionGoals,
     StagingUndeploymentGoal,
+    ToPublicRepo,
+    UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { npmCustomBuilder } from "@atomist/sdm-core";
-import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { HasDockerfile } from "@atomist/sdm-core";
 import {
-    HasAtomistBuildFile,
-    IsNode,
-} from "@atomist/sdm-core";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
-import { ToPublicRepo } from "@atomist/sdm-core";
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
+    configureLocalSpringBootDeploy,
+    kotlinRestGenerator,
+    springRestGenerator,
+} from "@atomist/sdm-pack-spring/dist";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
@@ -147,7 +142,7 @@ export function cloudFoundryMachine(
     sdm.addBuildRules(
         build.when(HasAtomistBuildFile)
             .itMeans("Custom build script")
-            .set(npmCustomBuilder(configuration.artifactStore, configuration.projectLoader)),
+            .set(npmCustomBuilder(sdm)),
         build.when(IsNode, ToDefaultBranch, hasPackageLock)
             .itMeans("npm run build")
             .set(nodeBuilder(configuration.projectLoader, "npm ci", "npm run build")),
@@ -160,8 +155,7 @@ export function cloudFoundryMachine(
         build.when(IsNode)
             .itMeans("npm run compile - no package lock")
             .set(nodeBuilder(configuration.projectLoader, "npm i", "npm run compile")),
-        build.setDefault(new MavenBuilder(configuration.artifactStore,
-            createEphemeralProgressLog, configuration.projectLoader)));
+        build.setDefault(new MavenBuilder(sdm)));
     sdm.addDeployRules(
         deploy.when(IsMaven)
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)

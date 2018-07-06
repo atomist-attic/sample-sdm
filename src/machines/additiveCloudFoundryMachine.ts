@@ -17,7 +17,8 @@
 import {
     any,
     AnyPush,
-    ArtifactGoal, AutofixGoal,
+    ArtifactGoal,
+    AutofixGoal,
     goalContributors,
     Goals,
     JustBuildGoal,
@@ -36,26 +37,46 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { DisableDeploy, DisplayDeployEnablement, EnableDeploy, IsNode } from "@atomist/sdm-core";
-import { InMemoryDeploymentStatusManager } from "@atomist/sdm-core";
-import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "@atomist/sdm-core";
-import { HasCloudFoundryManifest } from "@atomist/sdm-core";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { lookFor200OnEndpointRootGet } from "@atomist/sdm-core";
-import { RepositoryDeletionGoals, UndeployEverywhereGoals } from "@atomist/sdm-core";
-import { ManagedDeploymentTargeter } from "@atomist/sdm-core";
-import { StagingUndeploymentGoal } from "@atomist/sdm-core";
-import { HasSpringBootApplicationClass, IsMaven, LocalExecutableJarDeployer, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
+import {
+    createSoftwareDeliveryMachine,
+    deploymentFreeze,
+    DisableDeploy,
+    DisplayDeployEnablement,
+    EnableDeploy,
+    ExplainDeploymentFreezeGoal,
+    HasCloudFoundryManifest,
+    InMemoryDeploymentStatusManager,
+    isDeploymentFrozen,
+    IsNode,
+    lookFor200OnEndpointRootGet,
+    ManagedDeploymentTargeter,
+    RepositoryDeletionGoals,
+    StagingUndeploymentGoal,
+    UndeployEverywhereGoals,
+} from "@atomist/sdm-core";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    LocalExecutableJarDeployer,
+    MavenBuilder,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
+import {
+    configureLocalSpringBootDeploy,
+    kotlinRestGenerator,
+    springRestGenerator,
+} from "@atomist/sdm-pack-spring/dist";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
-import { createEphemeralProgressLog } from "@atomist/sdm/api-helper/log/EphemeralProgressLog";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
-import { cloudFoundryProductionDeploySpec, EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
+import {
+    cloudFoundryProductionDeploySpec,
+    EnableDeployOnCloudFoundryManifestAddition,
+} from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
@@ -151,9 +172,9 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
 }
 
 export function buildRules(sdm: SoftwareDeliveryMachine) {
+    const mb = new MavenBuilder(sdm);
+    // mb.buildStatusUpdater = sdm as any as BuildStatusUpdater;
     sdm.addBuildRules(
-        build.setDefault(new MavenBuilder(sdm.configuration.sdm.artifactStore,
-            createEphemeralProgressLog, sdm.configuration.sdm.projectLoader)));
-
+        build.setDefault(mb));
     return sdm;
 }
