@@ -16,8 +16,9 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
+    DeclarationType,
     ExtensionPack,
-    hasFile,
+    hasFile, ParametersObject, SemVerRegExp,
     SoftwareDeliveryMachine,
     ToDefaultBranch,
 } from "@atomist/sdm";
@@ -35,7 +36,36 @@ import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScri
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
 import { UpdatePackageJsonIdentification } from "./editors/updatePackageJsonIdentification";
-import { NodeProjectCreationParameters } from "./generators/NodeProjectCreationParameters";
+import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
+import { MappedParameters } from "@atomist/automation-client";
+
+export interface NodeProjectCreationParameters extends SeedDrivenGeneratorParameters {
+    appName: string;
+    screenName: string;
+    version: string;
+}
+
+export const NodeProjectCreationParametersDefinition: ParametersObject = {
+
+    appName: {
+        displayName: "App name",
+        description: "Application name",
+        pattern: /^(@?[A-Za-z][-A-Za-z0-9_]*)$/,
+        validInput: "a valid package.json application name, which starts with a lower-case letter and contains only " +
+        " alphanumeric, -, and _ characters, or `${projectName}` to use the project name",
+        minLength: 1,
+        maxLength: 50,
+        required: true,
+        order: 51,
+    },
+    version: {
+        ...SemVerRegExp,
+        required: false,
+        order: 52,
+        defaultValue: "0.1.0",
+    },
+    screenName: { type: DeclarationType.mapped, uri: MappedParameters.SlackUserName},
+};
 
 /**
  * Add configuration common to Node SDMs, wherever they deploy
@@ -48,16 +78,16 @@ export const NodeSupport: ExtensionPack = {
         const hasPackageLock = hasFile("package-lock.json");
         sdm.addGeneratorCommand({
             name: "typescript-express-generator",
-            paramsMaker: NodeProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
+            parameters: NodeProjectCreationParametersDefinition,
             transform: [
                 UpdatePackageJsonIdentification,
                 UpdateReadmeTitle],
         })
             .addGeneratorCommand({
                 name: "minimal-node-generator",
-                paramsMaker: NodeProjectCreationParameters,
+                parameters: NodeProjectCreationParametersDefinition,
                 startingPoint: new GitHubRepoRef("spring-team", "minimal-node-seed"),
                 intent: "create minimal node",
                 transform: [
@@ -66,7 +96,7 @@ export const NodeSupport: ExtensionPack = {
             })
             .addGeneratorCommand({
                 name: "copySdm",
-                paramsMaker: NodeProjectCreationParameters,
+                parameters: NodeProjectCreationParametersDefinition,
                 startingPoint: new GitHubRepoRef("atomist", "sdm"),
                 intent: "copy sdm",
                 transform: [
@@ -75,7 +105,7 @@ export const NodeSupport: ExtensionPack = {
             })
             .addGeneratorCommand({
                 name: "buildable-node-generator",
-                paramsMaker: NodeProjectCreationParameters,
+                parameters: NodeProjectCreationParametersDefinition,
                 startingPoint: new GitHubRepoRef("spring-team", "buildable-node-seed"),
                 intent: "create buildable node",
                 transform: [

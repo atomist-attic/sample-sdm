@@ -18,7 +18,7 @@ import { logger } from "@atomist/automation-client";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
 import { CodeTransform } from "@atomist/sdm";
 import { findAuthorName } from "../../../commands/generators/common/findAuthorName";
-import { NodeProjectCreationParameters } from "../generators/NodeProjectCreationParameters";
+import { NodeProjectCreationParameters } from "../nodeSupport";
 
 export const UpdatePackageJsonIdentification: CodeTransform =
     async (project, context, params: NodeProjectCreationParameters) => {
