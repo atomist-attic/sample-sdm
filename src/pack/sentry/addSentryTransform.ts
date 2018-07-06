@@ -20,10 +20,10 @@ import { PullRequest } from "@atomist/automation-client/operations/edit/editMode
 import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
 import { CodeTransformRegistration } from "@atomist/sdm";
-import { VersionedArtifact, } from "@atomist/sdm-pack-spring";
+import { VersionedArtifact } from "@atomist/sdm-pack-spring";
+import { addDependencyTransform } from "@atomist/sdm-pack-spring/dist";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
-import { addDependencyTransform } from "@atomist/sdm-pack-spring/dist";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",
@@ -42,13 +42,13 @@ const AddSentryTransform: ProjectEditor<AddSentryParams> = chainEditors(
     async (p, ctx, params) => {
         await appendOrCreateFileContent({
             toAppend: sentryYaml(params.dsn),
-            path: "src/main/resources/application.yml"
+            path: "src/main/resources/application.yml",
         })(p, ctx, params);
         return appendOrCreateFileContent({
             toAppend: sentryYaml(params.dsn),
-            path: "src/test/resources/application.yml"
+            path: "src/test/resources/application.yml",
         })(p, ctx, params);
-    }
+    },
 );
 
 @Parameters()

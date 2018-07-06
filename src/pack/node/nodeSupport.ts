@@ -25,10 +25,12 @@ import {
 
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
-import { nodeBuilder } from "@atomist/sdm-core";
-import { PackageLockFingerprinter } from "@atomist/sdm-core";
+import { MappedParameters } from "@atomist/automation-client";
+import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
 import { tslintFix } from "@atomist/sdm-core";
 import { IsNode } from "@atomist/sdm-core";
+import { nodeBuilder } from "@atomist/sdm-core";
+import { PackageLockFingerprinter } from "@atomist/sdm-core";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { UpdateReadmeTitle } from "../../commands/editors/updateReadmeTitle";
@@ -36,8 +38,6 @@ import { CommonTypeScriptErrors } from "../../reviewer/typescript/commonTypeScri
 import { DontImportOwnIndex } from "../../reviewer/typescript/dontImportOwnIndex";
 import { AddBuildScript } from "./autofix/addBuildScript";
 import { UpdatePackageJsonIdentification } from "./editors/updatePackageJsonIdentification";
-import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
-import { MappedParameters } from "@atomist/automation-client";
 
 export interface NodeProjectCreationParameters extends SeedDrivenGeneratorParameters {
     appName: string;

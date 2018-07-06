@@ -52,19 +52,19 @@ import {
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
     StagingUndeploymentGoal,
-    UndeployEverywhereGoals
+    UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
     LocalExecutableJarDeployer,
     MavenBuilder,
-    SpringSupport
+    SpringSupport,
 } from "@atomist/sdm-pack-spring";
 import {
     configureLocalSpringBootDeploy,
     kotlinRestGenerator,
-    springRestGenerator
+    springRestGenerator,
 } from "@atomist/sdm-pack-spring/dist";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
@@ -75,7 +75,7 @@ import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import {
     cloudFoundryProductionDeploySpec,
-    EnableDeployOnCloudFoundryManifestAddition
+    EnableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";

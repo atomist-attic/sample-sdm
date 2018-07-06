@@ -69,12 +69,12 @@ import {
     RepositoryDeletionGoals,
     StagingUndeploymentGoal,
     ToPublicRepo,
-    UndeployEverywhereGoals
+    UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
 import {
     configureLocalSpringBootDeploy,
     kotlinRestGenerator,
-    springRestGenerator
+    springRestGenerator,
 } from "@atomist/sdm-pack-spring/dist";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";

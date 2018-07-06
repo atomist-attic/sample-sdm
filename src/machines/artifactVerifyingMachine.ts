@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { ArtifactGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSatisfies, } from "@atomist/sdm";
+import { ArtifactGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { IsMaven, MavenBuilder, } from "@atomist/sdm-pack-spring";
+import { IsMaven, MavenBuilder } from "@atomist/sdm-pack-spring";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as fs from "fs";

@@ -18,7 +18,6 @@ import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { actionButton } from "./machines/actionButton";
 import { buildRules, codeRules } from "./machines/additiveCloudFoundryMachine";
 import { codeMetrics } from "./pack/codemetrics/codeMetrics";
-import { BuildGoal, JustBuildGoal, onAnyPush } from "@atomist/sdm";
 
 // TODO this import is wrong because the link is wrong
 // import { LocalMachineConfig } from "@atomist/slalom/build/src";
@@ -34,7 +33,7 @@ export const Config = { // : LocalMachineConfig = {
     init: sdm => {
         codeRules(sdm);
         buildRules(sdm);
-        //sdm.addGoalContributions(onAnyPush().setGoals(JustBuildGoal));
+        // sdm.addGoalContributions(onAnyPush().setGoals(JustBuildGoal));
         sdm.addExtensionPacks(SlocSupport);
 
         // buildRules(sdm);

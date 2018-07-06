@@ -25,7 +25,7 @@ import {
     CloudFoundryBlueGreenDeployer,
     CloudFoundryInfo,
     EnvironmentCloudFoundryTarget,
-    setDeployEnablement
+    setDeployEnablement,
 } from "@atomist/sdm-core";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
