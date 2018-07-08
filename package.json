@@ -18,7 +18,7 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "https://r.atomist.com/2275746193",
+    "@atomist/sdm": "https://r.atomist.com/1019464752",
     "@atomist/sdm-core": "https://r.atomist.com/1036130643",
     "@atomist/automation-client": "0.17.4-20180628204109",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180620184836",
