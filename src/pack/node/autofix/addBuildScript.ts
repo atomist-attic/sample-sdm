@@ -16,11 +16,11 @@
 
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
-import { AutofixRegisterable } from "@atomist/sdm";
 import { IsNode } from "@atomist/sdm-core";
 import * as _ from "lodash";
+import { AutofixRegistration } from "@atomist/sdm";
 
-export const AddBuildScript: AutofixRegisterable = {
+export const AddBuildScript: AutofixRegistration = {
     name: "Make sure there is a build script",
     pushTest: IsNode,
     transform: addBuildScriptTransform,

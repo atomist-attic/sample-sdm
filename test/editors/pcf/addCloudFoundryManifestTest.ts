@@ -32,7 +32,7 @@ describe("AddCloudFoundryManifest", () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
             {path: "pom.xml", content: springBootPom()});
         const teamId = "T123";
-        await addCloudFoundryManifestTransform(p, fakeContext(teamId));
+        await addCloudFoundryManifestTransform(p, fakeContext(teamId) as any);
         assert(p.fileExistsSync(CloudFoundryManifestPath), "Should have manifest file");
         const content = p.findFileSync(CloudFoundryManifestPath).getContentSync();
         assert(content.includes("spring-rest-seed"), "Should contain app name");
@@ -43,7 +43,7 @@ describe("AddCloudFoundryManifest", () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
             {path: "pom.xml", content: NonSpringPom});
         const teamId = "T123";
-        await addCloudFoundryManifestTransform(p, fakeContext(teamId));
+        await addCloudFoundryManifestTransform(p, fakeContext(teamId) as any);
         assert(!p.fileExistsSync(CloudFoundryManifestPath), "Should not have manifest file");
     });
 
@@ -53,7 +53,7 @@ describe("AddCloudFoundryManifest", () => {
                 path: "package.json", content: JSON.stringify({name: "node-seed"}),
             });
         const teamId = "T123";
-        await addCloudFoundryManifestTransform(p, fakeContext(teamId));
+        await addCloudFoundryManifestTransform(p, fakeContext(teamId) as any);
         assert(p.fileExistsSync(CloudFoundryManifestPath), "Should have manifest file");
         const content = p.findFileSync(CloudFoundryManifestPath).getContentSync();
         assert(content.includes("node-seed"), "Should contain app name");
@@ -70,7 +70,7 @@ describe("AddCloudFoundryManifest", () => {
                 path: AtomistConfigTsPath, content: "// automation client",
             });
         const teamId = "T123";
-        await addCloudFoundryManifestTransform(p, fakeContext(teamId));
+        await addCloudFoundryManifestTransform(p, fakeContext(teamId) as any);
         assert(p.fileExistsSync(CloudFoundryManifestPath), "Should have manifest file");
         const content = p.findFileSync(CloudFoundryManifestPath).getContentSync();
         assert(content.includes("node-seed"), "Should contain app name");

@@ -1,4 +1,3 @@
-import { dryRunEditorCommand } from "@atomist/sdm-core/pack/dry-run/dryRunEditorCommand";
 /*
  * Copyright © 2018 Atomist, Inc.
  *
@@ -18,6 +17,7 @@ import { dryRunEditorCommand } from "@atomist/sdm-core/pack/dry-run/dryRunEditor
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { makeBuildAware } from "@atomist/sdm/pack/build-aware-transform";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
     sdm.addPushReaction(async pu => {
@@ -41,14 +41,13 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         },
     });
 
-    sdm.addCodeTransformCommand({
+    sdm.addCodeTransformCommand(makeBuildAware({
         name: "topping",
         intent: "topping",
         transform: async p => {
             return p.addFile("topping", "maple syrup");
         },
-        editorCommandFactory: dryRunEditorCommand,
-    });
+    }));
 
     sdm.addCodeTransformCommand({
         name: "maintainFileCount",

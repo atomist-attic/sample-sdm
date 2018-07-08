@@ -17,11 +17,8 @@
 import { Parameter } from "@atomist/automation-client";
 import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
-import { ProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
-import { chainEditors } from "@atomist/automation-client/operations/edit/projectEditorOps";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransformOrTransforms, CodeTransformRegistration } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/sdm-pack-spring";
-import { addDependencyTransform } from "@atomist/sdm-pack-spring/dist";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
 
@@ -34,8 +31,7 @@ const SentryDependency: VersionedArtifact = {
 const sentryYaml = dsn => `\nraven:
     dsn: '${dsn}'`;
 
-const AddSentryTransform: ProjectEditor<AddSentryParams> = chainEditors(
-    addDependencyTransform(SentryDependency),
+const AddSentryTransform: CodeTransformOrTransforms<AddSentryParams> = [
     // tslint:disable-next-line:max-line-length
     copyFileFromUrl("https://raw.githubusercontent.com/sdm-org/cd20/dc16c15584d77db6cf9a70fdcb4d7bebe24113d5/src/main/java/com/atomist/SentryConfiguration.java",
         "src/main/java/com/atomist/SentryConfiguration.java"),
@@ -49,7 +45,7 @@ const AddSentryTransform: ProjectEditor<AddSentryParams> = chainEditors(
             path: "src/test/resources/application.yml",
         })(p, ctx, params);
     },
-);
+];
 
 @Parameters()
 export class AddSentryParams {
