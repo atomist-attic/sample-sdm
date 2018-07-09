@@ -16,6 +16,18 @@
 
 import { HandlerContext, logger } from "@atomist/automation-client";
 import * as stringify from "json-stringify-safe";
+import { CommandListenerInvocation } from "@atomist/sdm";
+import { fakePush } from "@atomist/sdm/api-helper/test/fakePush";
+
+export function fakeCommandListenerInvocation<P>(opts: Partial<CommandListenerInvocation> = {}): CommandListenerInvocation {
+    return {
+        commandName: opts.commandName || "test",
+        parameters: opts.parameters,
+        context: fakeContext(),
+        addressChannels: () => null,
+        credentials: opts.credentials,
+    }
+}
 
 export function fakeContext(teamId: string = "T123") {
     return {

@@ -28,18 +28,16 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { NodeFsLocalProject } from "@atomist/automation-client/project/local/NodeFsLocalProject";
 import * as fs from "fs";
 import * as tmp from "tmp-promise";
-import { fakeContext } from "../../FakeContext";
-import { HandlerContext } from "@atomist/automation-client";
-import { CommandListenerInvocation } from "@atomist/sdm";
+import { fakeCommandListenerInvocation } from "../../FakeContext";
 
-describe("addHeaderEditor", () => {
+describe("addHeaderTransform", () => {
 
     it("should add header to Java when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: "public class Thing1 {}" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters }));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -49,8 +47,8 @@ describe("addHeaderEditor", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content: "export class Thing1 {}" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters }));
         assert(p.fileExistsSync("src/Thing1.ts"));
         const content = p.findFileSync("src/Thing1.ts").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -61,13 +59,9 @@ describe("addHeaderEditor", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content });
-        const params = new AddHeaderParameters();
-        params.excludeGlob = "src/Thing1.ts";
-        const context = fakeContext();
-        await addHeaderTransform(p, {
-            ...context as any as CommandListenerInvocation,
-            context: context as any as HandlerContext
-        });
+        const parameters = new AddHeaderParameters();
+        parameters.excludeGlob = "src/Thing1.ts";
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters }));
         assert(p.fileExistsSync("src/Thing1.ts"));
         const newContent = p.findFileSync("src/Thing1.ts").getContentSync();
         assert.equal(newContent, content);
@@ -77,9 +71,9 @@ describe("addHeaderEditor", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content: "export class Thing1 {}" });
-        const params = new AddHeaderParameters();
-        params.excludeGlob = "other.thing";
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        parameters.excludeGlob = "other.thing";
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/Thing1.ts"));
         const content = p.findFileSync("src/Thing1.ts").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -89,8 +83,8 @@ describe("addHeaderEditor", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing.js", content: TsWithApacheHeader },
             { path: "src/Thing1.js", content: "export class Thing1 {}" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/Thing1.js"));
         const content = p.findFileSync("src/Thing1.js").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -99,8 +93,8 @@ describe("addHeaderEditor", () => {
     it("should add header to Scala when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.scala", content: "public class Thing1 {}" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/Thing1.scala"));
         const content = p.findFileSync("src/Thing1.scala").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -109,8 +103,8 @@ describe("addHeaderEditor", () => {
     it("should add header to C when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.c", content: "#include <stdio.h>" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/Thing1.c"));
         const content = p.findFileSync("src/Thing1.c").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -119,8 +113,8 @@ describe("addHeaderEditor", () => {
     it("should add header to C++ when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.cpp", content: "#include <stdio.h>" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/Thing1.cpp"));
         const content = p.findFileSync("src/Thing1.cpp").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -129,8 +123,8 @@ describe("addHeaderEditor", () => {
     it("should add header to Kotlin when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.kt", content: "public class Thing1 {}" });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/Thing1.kt"));
         const content = p.findFileSync("src/Thing1.kt").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -144,8 +138,8 @@ describe("addHeaderEditor", () => {
         const c1 = fs.readFileSync(tmpDir + "/src/main/java/Thing1.java");
         assert(!c1.toString().startsWith(ApacheHeader), "Header should not yet be there");
         assert(!!c1);
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -157,8 +151,8 @@ describe("addHeaderEditor", () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
             { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: JavaWithApacheHeader });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content === JavaWithApacheHeader);
@@ -168,8 +162,8 @@ describe("addHeaderEditor", () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
             { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: JavaWithGplHeader });
-        const params = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeContext() as any);
+        const parameters = new AddHeaderParameters();
+        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content === JavaWithGplHeader);

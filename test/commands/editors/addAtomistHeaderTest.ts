@@ -20,7 +20,6 @@ import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFil
 import { successOn } from "@atomist/automation-client/action/ActionResult";
 import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
-import { fakeRunWithLogContext } from "@atomist/sdm/api-helper/test/fakeRunWithLogContext";
 import * as assert from "power-assert";
 
 import { DefaultRepoRefResolver } from "@atomist/sdm-core";
@@ -28,6 +27,8 @@ import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofi
 import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
+import { GoalInvocation } from "@atomist/sdm";
+import { fakeGoalInvocation } from "@atomist/sdm/api-helper/test/fakeGoalInvocation";
 
 /**
  * Test an autofix end to end
@@ -35,7 +36,7 @@ import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 describe("addHeaderFix", () => {
 
     it("should lint and make fixes", async () => {
-        const p = await GitCommandGitProject.cloned({token: null}, new GitHubRepoRef("atomist", "github-sdm"));
+        const p = await GitCommandGitProject.cloned({ token: null }, new GitHubRepoRef("atomist", "github-sdm"));
         // Make commit and push harmless
         let pushCount = 0;
         let commitCount = 0;
@@ -53,9 +54,11 @@ describe("addHeaderFix", () => {
         await p.addFile(f.path, f.content);
         assert(!!p.findFileSync(f.path));
 
-        const r = await executeAutofixes(pl, [AddAtomistTypeScriptHeader],
-            new DefaultRepoRefResolver())(fakeRunWithLogContext(p.id as RemoteRepoRef));
-        assert(r.code === 1);
+        const gi: GoalInvocation = fakeGoalInvocation(p.id as RemoteRepoRef);
+        const r = await executeAutofixes(pl,
+            [AddAtomistTypeScriptHeader],
+            new DefaultRepoRefResolver())(gi);
+        assert.equal(r.code, 1);
         assert.equal(pushCount, 1);
         assert.equal(commitCount, 1);
 
