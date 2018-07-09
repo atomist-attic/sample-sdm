@@ -18,10 +18,10 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "0.3.2-nortissej.remove-status-field.20180706202026",
-    "@atomist/sdm-core": "0.3.2-20180706144833",
     "@atomist/automation-client": "0.17.4-20180628204109",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180620184836",
+    "@atomist/sdm": "0.3.2-nortissej.remove-status-field.20180706202026",
+    "@atomist/sdm-core": "^0.3.2-latest-sdm.20180706221548",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-sloc": "0.1.4-20180629035326",
     "@atomist/sdm-pack-sonarqube": "0.1.3-20180629030539",
