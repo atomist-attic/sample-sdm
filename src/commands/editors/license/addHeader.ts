@@ -25,7 +25,7 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransformRegistration, CommandListenerInvocation, SdmContext } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
@@ -79,45 +79,46 @@ export const ApacheHeader = `/*
  * limitations under the License.
  */`;
 
+export async function addHeaderTransform(p: Project,
+                                         ci: CommandListenerInvocation): Promise<Project> {
+    let headersAdded = 0;
+    let matchingFiles = 0;
+    let filesWithDifferentHeaders = [];
+    await doWithFiles(p, ci.parameters.glob, async f => {
+        if (ci.parameters.excludeGlob && ci.parameters.excludeGlob.split(",").some(p => minimatch(f.path, p))) {
+            return;
+        }
+        ++matchingFiles;
+        const content = await f.getContent();
+        if (content.includes(ci.parameters.header)) {
+            return;
+        }
+        if (hasDifferentHeader(ci.parameters.header, content)) {
+            filesWithDifferentHeaders.push(f);
+            return;
+        }
+        logger.info("Adding header of length %d to %s", ci.parameters.header.length, f.path);
+        ++headersAdded;
+        return f.setContent(ci.parameters.header + "\n\n" + content);
+    });
+    const sha: string = !!(p as GitProject).gitStatus ? (await (p as GitProject).gitStatus()).sha : p.id.sha;
+    logger.info("%d files matched [%s]. %s headers added. %d files skipped", matchingFiles, ci.parameters.glob, headersAdded, matchingFiles - headersAdded);
+    await reportAboutDifferentHeaders(ci.context.messageClient, filesWithDifferentHeaders);
+    if (headersAdded > 0) {
+        await ci.addressChannels(`*License header editor* on \`${sha.substring(0, 5)}\`: ${matchingFiles} files matched \`${ci.parameters.glob}\`. ` +
+            `${headersAdded} headers added. ${matchingFiles - headersAdded} files skipped ${ci.parameters.successEmoji}`);
+    }
+    return p;
+}
+
 export const AddApacheLicenseHeaderEditor: CodeTransformRegistration = {
-    createTransform: () => addHeaderTransform,
+    transform: addHeaderTransform,
     name: "addHeader",
     paramsMaker: AddHeaderParameters,
     editMode: ahp => ahp.editMode
 };
 
-export async function addHeaderTransform(p: Project,
-                                         ctx: HandlerContext,
-                                         params: AddHeaderParameters): Promise<Project> {
-    let headersAdded = 0;
-    let matchingFiles = 0;
-    let filesWithDifferentHeaders = [];
-    await doWithFiles(p, params.glob, async f => {
-        if (params.excludeGlob && params.excludeGlob.split(",").some(p => minimatch(f.path, p))) {
-            return;
-        }
-        ++matchingFiles;
-        const content = await f.getContent();
-        if (content.includes(params.header)) {
-            return;
-        }
-        if (hasDifferentHeader(params.header, content)) {
-            filesWithDifferentHeaders.push(f);
-            return;
-        }
-        logger.info("Adding header of length %d to %s", params.header.length, f.path);
-        ++headersAdded;
-        return f.setContent(params.header + "\n\n" + content);
-    });
-    const sha: string = !!(p as GitProject).gitStatus ? (await (p as GitProject).gitStatus()).sha : p.id.sha;
-    logger.info("%d files matched [%s]. %s headers added. %d files skipped", matchingFiles, params.glob, headersAdded, matchingFiles - headersAdded);
-    await reportAboutDifferentHeaders(ctx.messageClient, filesWithDifferentHeaders);
-    if (headersAdded > 0) {
-        await ctx.messageClient.respond(`*License header editor* on \`${sha.substring(0, 5)}\`: ${matchingFiles} files matched \`${params.glob}\`. ` +
-            `${headersAdded} headers added. ${matchingFiles - headersAdded} files skipped ${params.successEmoji}`);
-    }
-    return p;
-}
+
 
 function reportAboutDifferentHeaders(messageClient: MessageClient, offendingFiles: File[]) {
     if (offendingFiles.length === 0) {

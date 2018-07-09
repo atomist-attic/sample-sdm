@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { HandlerContext } from "@atomist/automation-client";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
 import { CodeTransformRegistration } from "@atomist/sdm";
@@ -27,7 +26,7 @@ export const BreakJavaBuildTransform: CodeTransformRegistration = {
     editMode: commitToMaster(`You asked me to break the build!`),
 };
 
-async function breakBuild(p: Project, ctx: HandlerContext) {
+async function breakBuild(p: Project) {
     return p.addFile(BadJavaFileName, "this is not Java");
 }
 
@@ -37,6 +36,6 @@ export const UnbreakJavaBuildEditor: CodeTransformRegistration = {
     editMode: commitToMaster(`Trying to unbreak the build!`),
 };
 
-async function unbreakJavaBuild(p: Project, ctx: HandlerContext) {
+async function unbreakJavaBuild(p: Project) {
     return p.deleteFile(BadJavaFileName);
 }

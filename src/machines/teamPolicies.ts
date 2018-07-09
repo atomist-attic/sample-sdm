@@ -16,7 +16,7 @@
 
 import { logger } from "@atomist/automation-client";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { DryRunEditing, GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
+import { GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
@@ -27,6 +27,7 @@ import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
 import { PublishNewRepo } from "../listener/repo/publishNewRepo";
 import { codeMetrics } from "../pack/codemetrics/codeMetrics";
+import { buildAwareCodeTransforms } from "@atomist/sdm/pack/build-aware-transform";
 
 /**
  * Set up team policies independent of specific stacks
@@ -48,7 +49,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
     sdm.addExtensionPacks(
-        DryRunEditing,
+        buildAwareCodeTransforms(),
         SlocSupport,
     );
 
