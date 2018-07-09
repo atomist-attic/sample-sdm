@@ -18,14 +18,14 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/sdm": "https://r.atomist.com/1019464752",
-    "@atomist/sdm-core": "https://r.atomist.com/1036130643",
     "@atomist/automation-client": "0.17.4-20180628204109",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180620184836",
+    "@atomist/sdm": "^0.3.2-dry4-simpler.20180709004010",
+    "@atomist/sdm-core": "https://r.atomist.com/1036130643",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
-    "@atomist/sdm-pack-sloc": "0.1.4-20180629035326",
+    "@atomist/sdm-pack-sloc": "^0.1.5-20180703031914",
     "@atomist/sdm-pack-sonarqube": "0.1.3-20180629030539",
-    "@atomist/sdm-pack-spring": "https://r.atomist.com/3845874463",
+    "@atomist/sdm-pack-spring": "^0.1.7-dry.20180709011116",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
