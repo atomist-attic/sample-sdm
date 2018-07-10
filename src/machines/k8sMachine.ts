@@ -102,7 +102,7 @@ export function k8sMachine(
             ProductionDeploymentGoal,
             requestDeployToK8s(K8sProductionDomain))
         .addChannelLinkListener(SuggestAddingK8sSpec)
-        .addEditor(AddK8sSpec)
+        .addCodeTransformCommand(AddK8sSpec)
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)

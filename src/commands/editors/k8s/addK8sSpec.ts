@@ -26,8 +26,15 @@ export const AtomistK8sSpecFile = "atomist-k8s-deployment.json";
 
 export const ImagePlaceholder = "image_placeholder";
 
+export const addK8sSpecEditor: SimpleProjectEditor = async (p, ctx) => {
+    const specFileContent = deploymentTemplate(p.id.repo, p.id.owner, p.id.repo,
+        ctx.teamId, ImagePlaceholder, "testing");
+    logger.debug("Spec file content is \n" + specFileContent);
+    return p.addFile(AtomistK8sSpecFile, specFileContent);
+};
+
 export const AddK8sSpec: CodeTransformRegistration = {
-    createTransform: () => addK8sSpecEditor,
+    transform: addK8sSpecEditor,
     name: AddK8sSpecCommandName,
     intent: "Add kubernetes deployment spec",
     editMode: () => new PullRequest("enable-k8s",
@@ -39,9 +46,3 @@ In your own kubernetes environment, you can do what you like; see https://github
         "Enable deployment to kubernetes\n\n[atomist]"),
 };
 
-export const addK8sSpecEditor: SimpleProjectEditor = async (p, ctx) => {
-    const specFileContent = deploymentTemplate(p.id.repo, p.id.owner, p.id.repo,
-        ctx.teamId, ImagePlaceholder, "testing");
-    logger.debug("Spec file content is \n" + specFileContent);
-    return p.addFile(AtomistK8sSpecFile, specFileContent);
-};

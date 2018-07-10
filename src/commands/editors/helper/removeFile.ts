@@ -31,7 +31,7 @@ export class RemoveFileParams {
 }
 
 export const RemoveFileEditor: CodeTransformRegistration<RemoveFileParams> = {
-    createTransform: () => removeFile,
+    transform: removeFile,
     name: "remove file",
     paramsMaker: RemoveFileParams,
     editMode: params => commitToMaster(`You asked me to remove file ${params.path}!`),
