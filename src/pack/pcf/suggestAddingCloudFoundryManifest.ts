@@ -64,7 +64,6 @@ export const SuggestAddingCloudFoundryManifest: ChannelLinkListener = async inv 
     return inv.addressNewlyLinkedChannel(message);
 };
 
-
 export function suggestAddingCloudFoundryManifestOnNewRepo(projectLoader: ProjectLoader): RepoListener {
     return async inv => {
         await projectLoader.doWithProject(
@@ -87,6 +86,6 @@ export function suggestAddingCloudFoundryManifestOnNewRepo(projectLoader: Projec
                 attachments: [attachment],
             };
             return inv.addressChannels(message);
-        })
+        });
     };
 }
