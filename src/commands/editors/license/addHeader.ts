@@ -24,7 +24,7 @@ import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
 import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
-import { CodeTransformRegistration, CommandListenerInvocation, SdmContext } from "@atomist/sdm";
+import { CodeTransformRegistration, CommandListenerInvocation } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
@@ -110,7 +110,7 @@ export async function addHeaderTransform(p: Project,
     return p;
 }
 
-export const AddApacheLicenseHeaderEditor: CodeTransformRegistration<AddHeaderParameters> = {
+export const AddApacheLicenseHeaderTransform: CodeTransformRegistration<AddHeaderParameters> = {
     transform: addHeaderTransform,
     name: "addHeader",
     paramsMaker: AddHeaderParameters,

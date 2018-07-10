@@ -28,7 +28,6 @@ export const AtomistGeneratedMarker = "[atomist:generated]";
 
 export const AtomistConfigTsPath = "src/atomist.config.ts";
 
-
 // This should not have been invoked unless it's a Spring or Node project
 export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) => {
     const javaId = await MavenProjectIdentifier(p);
@@ -48,7 +47,6 @@ export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) =>
     return ctx.messageClient.respond(
         `Unable to add Cloud Foundry manifest to project \`${p.id.owner}:${p.id.repo}\`: Neither Maven nor Node`);
 };
-
 
 /**
  * Command handler wrapping AddCloudFoundryManifest editor

@@ -45,4 +45,3 @@ The Atomist playground kubernetes environment is restricted, so changes to this 
 In your own kubernetes environment, you can do what you like; see https://github.com/atomist/k8-automation for a starting point.`,
         "Enable deployment to kubernetes\n\n[atomist]"),
 };
-

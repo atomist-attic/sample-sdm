@@ -22,13 +22,13 @@ import { RemoteRepoRef } from "@atomist/automation-client/operations/common/Repo
 import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
 import * as assert from "power-assert";
 
+import { GoalInvocation } from "@atomist/sdm";
 import { DefaultRepoRefResolver } from "@atomist/sdm-core";
 import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
+import { fakeGoalInvocation } from "@atomist/sdm/api-helper/test/fakeGoalInvocation";
 import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
-import { GoalInvocation } from "@atomist/sdm";
-import { fakeGoalInvocation } from "@atomist/sdm/api-helper/test/fakeGoalInvocation";
 
 /**
  * Test an autofix end to end

@@ -26,9 +26,9 @@ import {
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { NodeFsLocalProject } from "@atomist/automation-client/project/local/NodeFsLocalProject";
+import { fakeCommandListenerInvocation } from "@atomist/sdm/api-helper/test/fakeCommandListenerInvocation";
 import * as fs from "fs";
 import * as tmp from "tmp-promise";
-import { fakeCommandListenerInvocation } from "@atomist/sdm/api-helper/test/fakeCommandListenerInvocation";
 
 describe("addHeaderTransform", () => {
 

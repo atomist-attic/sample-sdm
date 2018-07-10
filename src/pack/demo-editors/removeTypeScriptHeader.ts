@@ -19,7 +19,6 @@ import { doWithFiles } from "@atomist/automation-client/project/util/projectUtil
 import { CodeTransformRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
-
 /**
  * Whack the first TypeScript header we get hold off.
  * Intended for demo use.
@@ -61,4 +60,3 @@ export const WhackHeaderEditor: CodeTransformRegistration = {
 const HeaderRegex = /^\/\*[\s\S]*?\*\/\s*/;
 
 const CFamilySuffix = /\.(ts|java)$/;
-

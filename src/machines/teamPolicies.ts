@@ -20,14 +20,14 @@ import { GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
-import { AddApacheLicenseHeaderEditor } from "../commands/editors/license/addHeader";
+import { buildAwareCodeTransforms } from "@atomist/sdm/pack/build-aware-transform";
+import { AddApacheLicenseHeaderTransform } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
 import { capitalizer } from "../listener/issue/capitalizer";
 import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
 import { PublishNewRepo } from "../listener/repo/publishNewRepo";
 import { codeMetrics } from "../pack/codemetrics/codeMetrics";
-import { buildAwareCodeTransforms } from "@atomist/sdm/pack/build-aware-transform";
 
 /**
  * Set up team policies independent of specific stacks
@@ -41,7 +41,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListener(slackReviewListener())
-        .addEditor(AddApacheLicenseHeaderEditor)
+        .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
         .addNewRepoWithCodeAction(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListener(PostToDeploymentsChannel)

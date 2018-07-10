@@ -18,13 +18,13 @@ import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoI
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 
 import { CloudFoundryManifestPath } from "@atomist/sdm-core";
+import { fakeContext } from "@atomist/sdm/api-helper/test/fakeContext";
 import * as assert from "power-assert";
 import {
     addCloudFoundryManifestTransform, AtomistConfigTsPath,
     StartAutomationClientCommand,
 } from "../../../src/pack/pcf/addCloudFoundryManifest";
 import { NonSpringPom, springBootPom } from "../TestPoms";
-import { fakeContext } from "@atomist/sdm/api-helper/test/fakeContext";
 
 describe("AddCloudFoundryManifest", () => {
 
