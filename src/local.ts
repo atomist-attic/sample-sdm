@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { actionButton } from "./machines/actionButton";
 import { buildRules, codeRules } from "./machines/additiveCloudFoundryMachine";
 import { codeMetrics } from "./pack/codemetrics/codeMetrics";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
 
 // TODO this import is wrong because the link is wrong
 // import { LocalMachineConfig } from "@atomist/slalom/build/src";
