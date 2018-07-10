@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-import {
-    Parameter,
-    Parameters,
-} from "@atomist/automation-client";
-import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
+import { Parameter, Parameters, } from "@atomist/automation-client";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
 export const AffirmationEditorName = "affirmation";
@@ -36,9 +32,9 @@ export class AffirmationParameters extends RequestedCommitParameters {
     public readonly customAffirmation: string;
 }
 
-export const appendAffirmationToReadMe: SimpleProjectEditor<AffirmationParameters> = async (p, ctx, params) => {
-    const affirmation = params.customAffirmation || randomAffirmation();
-    await ctx.messageClient.respond(`Adding to \`README.md\` via \`${params.branchToUse}\`: _${affirmation}_`);
+export const appendAffirmationToReadMe: CodeTransform<AffirmationParameters> = async (p, ci) => {
+    const affirmation = ci.parameters.customAffirmation || randomAffirmation();
+    await ci.context.messageClient.respond(`Adding to \`README.md\` via \`${ci.parameters.branchToUse}\`: _${affirmation}_`);
     return doWithFiles(p, "README.md", async f => {
         const content = await f.getContent();
         return f.setContent(`${content}\n${affirmation}\n`);

@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
 import { AllJavaFiles } from "@atomist/sdm-pack-spring";
 import { AffirmationParameters, affirmations } from "./affirmationTransform";
 
-const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, ctx, params) => {
-    const affirmation = params.customAffirmation || randomAffirmation();
+const appendAffirmationToJava: CodeTransform<AffirmationParameters> = (p, ci) => {
+    const affirmation = ci.parameters.customAffirmation || randomAffirmation();
     let count = 0;
     return doWithFiles(p, AllJavaFiles, f => {
         return f.getContent().then(async content => {
             if (count++ >= 1) {
                 return;
             }
-            await ctx.messageClient.respond(`Prepending to \`${f.name}\` via \`${params.branchToUse}\`: _${affirmation}_`);
+            await ci.context.messageClient.respond(`Prepending to \`${f.name}\` via \`${ci.parameters.branchToUse}\`: _${affirmation}_`);
             return f.setContent(`// ${affirmation}\n\n${content}`);
         });
     });
@@ -38,7 +37,7 @@ const appendAffirmationToJava: SimpleProjectEditor<AffirmationParameters> = (p, 
  * Harmlessly modify a Java file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const JavaAffirmationEditor: CodeTransformRegistration = {
+export const JavaAffirmationEditor: CodeTransformRegistration<AffirmationParameters> = {
     transform: appendAffirmationToJava,
     name: "javaAffirmation",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),
