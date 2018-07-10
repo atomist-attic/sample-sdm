@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+import { suppressConsoleLogging } from "@atomist/slalom/build/src/invocation/cli/support/configureLogging";
+suppressConsoleLogging();
+
 import { runSlalom } from "@atomist/slalom/build/src/invocation/cli/runSlalom";
 import { newLocalSdm } from "@atomist/slalom/build/src/machine/newLocalSdm";
 import { Config } from "../local";
