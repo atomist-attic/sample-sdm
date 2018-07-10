@@ -16,12 +16,12 @@
 
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
+import { LocalMachineConfig } from "@atomist/slalom";
 import { actionButton } from "./machines/actionButton";
 import { buildRules, codeRules } from "./machines/additiveCloudFoundryMachine";
 import { codeMetrics } from "./pack/codemetrics/codeMetrics";
-import { LocalMachineConfig } from "@atomist/slalom";
 
-export const Config : LocalMachineConfig = {
+export const Config: LocalMachineConfig = {
 
     repositoryOwnerParentDirectory: "/Users/rodjohnson/temp/local-sdm",
 
