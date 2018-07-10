@@ -17,6 +17,9 @@
   "bugs": {
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
+  "bin": {
+    "sample-slalom": "build/src/local/slalom.js"
+  },
   "dependencies": {
     "@atomist/automation-client": "0.18.0-20180710131258",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
