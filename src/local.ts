@@ -27,7 +27,7 @@ export const Config : LocalMachineConfig = {
 
     name: "local-sample-sdm",
 
-    gitHookScript: require.resolve("local/onGitHook"),
+    gitHookScript: require.resolve("./local/onGitHook"),
 
     mergeAutofixes: true,
 
