@@ -27,7 +27,7 @@ export const AtomistK8sSpecFile = "atomist-k8s-deployment.json";
 export const ImagePlaceholder = "image_placeholder";
 
 export const AddK8sSpec: CodeTransformRegistration = {
-    createTransform: () => addK8sSpecEditor,
+    transform: addK8sSpecEditor,
     name: AddK8sSpecCommandName,
     intent: "Add kubernetes deployment spec",
     editMode: () => new PullRequest("enable-k8s",

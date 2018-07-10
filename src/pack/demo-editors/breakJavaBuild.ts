@@ -21,7 +21,7 @@ import { CodeTransformRegistration } from "@atomist/sdm";
 export const BadJavaFileName = "src/main/java/Bad.java";
 
 export const BreakJavaBuildTransform: CodeTransformRegistration = {
-    createTransform: () => breakBuild,
+    transform: breakBuild,
     name: "breakJavaBuild",
     editMode: commitToMaster(`You asked me to break the build!`),
 };
@@ -31,7 +31,7 @@ async function breakBuild(p: Project) {
 }
 
 export const UnbreakJavaBuildEditor: CodeTransformRegistration = {
-    createTransform: () => unbreakJavaBuild,
+    transform: unbreakJavaBuild,
     name: "unbreakJavaBuild",
     editMode: commitToMaster(`Trying to unbreak the build!`),
 };

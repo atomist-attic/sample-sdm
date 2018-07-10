@@ -33,7 +33,7 @@ export const AtomistConfigTsPath = "src/atomist.config.ts";
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const AddCloudFoundryManifest: CodeTransformRegistration = {
-    createTransform: () => addCloudFoundryManifestTransform,
+    transform: addCloudFoundryManifestTransform,
     name: "AddCloudFoundryManifest",
     intent: "Add Cloud Foundry manifest",
     editMode: () => new PullRequest(

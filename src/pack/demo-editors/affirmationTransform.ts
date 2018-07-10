@@ -42,7 +42,7 @@ export class AffirmationParameters extends RequestedCommitParameters {
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const AffirmationTransform: CodeTransformRegistration = {
-    createTransform: () => appendAffirmationToReadMe,
+    transform: appendAffirmationToReadMe,
     name: AffirmationEditorName,
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement"),
     editMode: ap => ap.editMode,

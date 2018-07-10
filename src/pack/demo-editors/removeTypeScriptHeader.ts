@@ -24,7 +24,7 @@ import { RequestedCommitParameters } from "../../commands/editors/support/Reques
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
 export const WhackHeaderEditor: CodeTransformRegistration = {
-    createTransform: () => whackSomeHeader,
+    transform: whackSomeHeader,
     name: "removeHeader",
     paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
     editMode: ahp => ahp.editMode,
