@@ -23,7 +23,6 @@ import {
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
-import { configureLogzio } from "./util/logzio";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -92,7 +91,6 @@ export const configuration: any = {
         level: "info",
     },
     postProcessors: [
-        configureLogzio,
         configureDashboardNotifications,
         configureSdm(createMachine, Options),
     ],
