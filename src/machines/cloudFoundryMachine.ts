@@ -89,7 +89,10 @@ import {
     EnableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
-import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import {
+    SuggestAddingCloudFoundryManifest,
+    suggestAddingCloudFoundryManifestOnNewRepo,
+} from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
 
@@ -184,6 +187,7 @@ export function cloudFoundryMachine(
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals));
     sdm.addChannelLinkListener(SuggestAddingCloudFoundryManifest)
+        .addNewRepoWithCodeAction(suggestAddingCloudFoundryManifestOnNewRepo(sdm.configuration.sdm.projectLoader))
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)

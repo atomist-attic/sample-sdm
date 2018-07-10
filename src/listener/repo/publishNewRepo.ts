@@ -23,5 +23,5 @@ import { RepoListener } from "@atomist/sdm";
  */
 export const PublishNewRepo: RepoListener = i => {
     return i.context.messageClient.addressChannels(
-        `A new repo was created: \`${i.id.owner}:${i.id.repo}\``, "general");
+        `A new repo was created: \`${i.id.owner}/${i.id.repo}\``, "general");
 };

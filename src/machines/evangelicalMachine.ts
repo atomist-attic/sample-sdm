@@ -35,7 +35,8 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
-import { SuggestAddingCloudFoundryManifest } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest,
+    suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
@@ -66,6 +67,7 @@ export function evangelicalMachine(
             executeSendMessageToSlack("Congratulations. You're using Spring Boot. It's cool :sunglasses: and so is Atomist. " +
                 "Atomist knows lots about Spring Boot and would love to help"))
         .addChannelLinkListener(SuggestAddingCloudFoundryManifest)
+        .addNewRepoWithCodeAction(suggestAddingCloudFoundryManifestOnNewRepo(sdm.configuration.sdm.projectLoader))
         .addNewRepoWithCodeAction(
             // TODO suggest creating projects with generator
             tagRepo(springBootTagger),

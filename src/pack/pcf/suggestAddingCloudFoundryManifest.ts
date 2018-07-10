@@ -20,7 +20,9 @@ import {
     allPredicatesSatisfied,
     anyPredicateSatisfied,
     ChannelLinkListener,
+    ProjectLoader,
     ProjectPredicate,
+    RepoListener,
 } from "@atomist/sdm";
 import { IsNode } from "@atomist/sdm-core";
 import {
@@ -28,6 +30,7 @@ import {
     IsMaven,
 } from "@atomist/sdm-pack-spring";
 import * as slack from "@atomist/slack-messages/SlackMessages";
+import { codeLine } from "@atomist/slack-messages/SlackMessages";
 import { AddCloudFoundryManifest } from "./addCloudFoundryManifest";
 
 /**
@@ -60,3 +63,30 @@ export const SuggestAddingCloudFoundryManifest: ChannelLinkListener = async inv 
     };
     return inv.addressNewlyLinkedChannel(message);
 };
+
+
+export function suggestAddingCloudFoundryManifestOnNewRepo(projectLoader: ProjectLoader): RepoListener {
+    return async inv => {
+        await projectLoader.doWithProject(
+            { context: inv.context, credentials: inv.credentials, id: inv.id, readOnly: true }, async p => {
+            const eligible = await CloudFoundryDeployableProject(p);
+            if (!eligible) {
+                return;
+            }
+
+            const attachment: slack.Attachment = {
+                text: `Add a Cloud Foundry manifest to ${codeLine(`${inv.id.owner}/${inv.id.repo}`)}?`,
+                fallback: `Add a Cloud Foundry manifest to ${inv.id.owner}/${inv.id.repo}?`,
+                actions: [buttonForCommand({ text: "Add Cloud Foundry Manifest" },
+                    AddCloudFoundryManifest.name,
+                    {"targets.owner": inv.id.owner, "targets.repo": inv.id.repo},
+                ),
+                ],
+            };
+            const message: slack.SlackMessage = {
+                attachments: [attachment],
+            };
+            return inv.addressChannels(message);
+        })
+    };
+}
