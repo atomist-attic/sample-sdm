@@ -37,7 +37,7 @@ export const Config = { // : LocalMachineConfig = {
         sdm.addExtensionPacks(SlocSupport);
 
         // buildRules(sdm);
-        sdm.addCommand({
+        sdm.addCommand<{name: string}>({
             name: "hello",
             intent: "hello",
             parameters: {
