@@ -15,7 +15,6 @@
  */
 
 import {
-    HandlerContext,
     logger,
     Parameter,
     Parameters,
@@ -80,7 +79,7 @@ export const ApacheHeader = `/*
  */`;
 
 export async function addHeaderTransform(p: Project,
-                                         ci: CommandListenerInvocation): Promise<Project> {
+                                         ci: CommandListenerInvocation<AddHeaderParameters>): Promise<Project> {
     let headersAdded = 0;
     let matchingFiles = 0;
     let filesWithDifferentHeaders = [];
@@ -111,7 +110,7 @@ export async function addHeaderTransform(p: Project,
     return p;
 }
 
-export const AddApacheLicenseHeaderEditor: CodeTransformRegistration = {
+export const AddApacheLicenseHeaderEditor: CodeTransformRegistration<AddHeaderParameters> = {
     transform: addHeaderTransform,
     name: "addHeader",
     paramsMaker: AddHeaderParameters,

@@ -24,11 +24,11 @@ import { IsJava } from "@atomist/sdm-pack-spring";
 import { AddHeaderParameters, addHeaderTransform } from "../commands/editors/license/addHeader";
 import { LicenseFilename } from "./addLicenseFile";
 
-export const AddAtomistJavaHeader: AutofixRegistration = addAtomistHeader("Java header", "**/*.java", IsJava);
+export const AddAtomistJavaHeader: AutofixRegistration<AddHeaderParameters> = addAtomistHeader("Java header", "**/*.java", IsJava);
 
-export const AddAtomistTypeScriptHeader: AutofixRegistration = addAtomistHeader("TypeScript header", "**/*.ts", IsTypeScript);
+export const AddAtomistTypeScriptHeader: AutofixRegistration<AddHeaderParameters> = addAtomistHeader("TypeScript header", "**/*.ts", IsTypeScript);
 
-export function addAtomistHeader(name: string, glob: string, pushTest: PushTest): AutofixRegistration {
+export function addAtomistHeader(name: string, glob: string, pushTest: PushTest): AutofixRegistration<AddHeaderParameters> {
     const parameters = new AddHeaderParameters();
     parameters.glob = glob;
     // Stop it continually editing the barrel and graphql types

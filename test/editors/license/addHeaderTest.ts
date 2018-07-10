@@ -28,7 +28,7 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { NodeFsLocalProject } from "@atomist/automation-client/project/local/NodeFsLocalProject";
 import * as fs from "fs";
 import * as tmp from "tmp-promise";
-import { fakeCommandListenerInvocation } from "../../FakeContext";
+import { fakeCommandListenerInvocation } from "@atomist/sdm/api-helper/test/fakeCommandListenerInvocation";
 
 describe("addHeaderTransform", () => {
 
@@ -37,7 +37,7 @@ describe("addHeaderTransform", () => {
             { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: "public class Thing1 {}" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters }));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters }));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -48,7 +48,7 @@ describe("addHeaderTransform", () => {
             { path: "src/Thing.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content: "export class Thing1 {}" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters }));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters }));
         assert(p.fileExistsSync("src/Thing1.ts"));
         const content = p.findFileSync("src/Thing1.ts").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -61,7 +61,7 @@ describe("addHeaderTransform", () => {
             { path: "src/Thing1.ts", content });
         const parameters = new AddHeaderParameters();
         parameters.excludeGlob = "src/Thing1.ts";
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters }));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters }));
         assert(p.fileExistsSync("src/Thing1.ts"));
         const newContent = p.findFileSync("src/Thing1.ts").getContentSync();
         assert.equal(newContent, content);
@@ -73,7 +73,7 @@ describe("addHeaderTransform", () => {
             { path: "src/Thing1.ts", content: "export class Thing1 {}" });
         const parameters = new AddHeaderParameters();
         parameters.excludeGlob = "other.thing";
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/Thing1.ts"));
         const content = p.findFileSync("src/Thing1.ts").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -84,7 +84,7 @@ describe("addHeaderTransform", () => {
             { path: "src/Thing.js", content: TsWithApacheHeader },
             { path: "src/Thing1.js", content: "export class Thing1 {}" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/Thing1.js"));
         const content = p.findFileSync("src/Thing1.js").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -94,7 +94,7 @@ describe("addHeaderTransform", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.scala", content: "public class Thing1 {}" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/Thing1.scala"));
         const content = p.findFileSync("src/Thing1.scala").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -104,7 +104,7 @@ describe("addHeaderTransform", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.c", content: "#include <stdio.h>" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/Thing1.c"));
         const content = p.findFileSync("src/Thing1.c").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -114,7 +114,7 @@ describe("addHeaderTransform", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.cpp", content: "#include <stdio.h>" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/Thing1.cpp"));
         const content = p.findFileSync("src/Thing1.cpp").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -124,7 +124,7 @@ describe("addHeaderTransform", () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
             { path: "src/Thing1.kt", content: "public class Thing1 {}" });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/Thing1.kt"));
         const content = p.findFileSync("src/Thing1.kt").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -139,7 +139,7 @@ describe("addHeaderTransform", () => {
         assert(!c1.toString().startsWith(ApacheHeader), "Header should not yet be there");
         assert(!!c1);
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content.startsWith(ApacheHeader));
@@ -152,7 +152,7 @@ describe("addHeaderTransform", () => {
             { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: JavaWithApacheHeader });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content === JavaWithApacheHeader);
@@ -163,7 +163,7 @@ describe("addHeaderTransform", () => {
             { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: JavaWithGplHeader });
         const parameters = new AddHeaderParameters();
-        await addHeaderTransform(p, fakeCommandListenerInvocation({ parameters}));
+        await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
         assert(p.fileExistsSync("src/main/java/Thing1.java"));
         const content = p.findFileSync("src/main/java/Thing1.java").getContentSync();
         assert(content === JavaWithGplHeader);

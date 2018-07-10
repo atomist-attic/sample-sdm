@@ -23,8 +23,8 @@ import {
     addCloudFoundryManifestTransform, AtomistConfigTsPath,
     StartAutomationClientCommand,
 } from "../../../src/pack/pcf/addCloudFoundryManifest";
-import { fakeContext } from "../../FakeContext";
 import { NonSpringPom, springBootPom } from "../TestPoms";
+import { fakeContext } from "@atomist/sdm/api-helper/test/fakeContext";
 
 describe("AddCloudFoundryManifest", () => {
 
