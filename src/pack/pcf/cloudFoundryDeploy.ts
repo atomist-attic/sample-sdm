@@ -27,6 +27,7 @@ import {
     EnvironmentCloudFoundryTarget,
     setDeployEnablement,
 } from "@atomist/sdm-core";
+import { SetDeployEnablementParameters } from "@atomist/sdm-core/handlers/commands/SetDeployEnablement";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 
@@ -50,8 +51,15 @@ export function cloudFoundryProductionDeploySpec(opts: { artifactStore: Artifact
 
 const EnableDeployOnCloudFoundryManifestAdditionListener: PushImpactListener = async pil => {
     if (pil.push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
+        const parameters: SetDeployEnablementParameters = {
+            owner: pil.push.repo.owner,
+            repo: pil.push.repo.name,
+            providerId: pil.push.repo.org.provider.providerId,
+        };
+
         await setDeployEnablement({
             commandName: "addCloudFoundryManifest",
+            parameters,
             ...pil,
         } as CommandListenerInvocation, true);
     }
