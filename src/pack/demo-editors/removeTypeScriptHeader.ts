@@ -19,23 +19,6 @@ import { doWithFiles } from "@atomist/automation-client/project/util/projectUtil
 import { CodeTransformRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
-/**
- * Harmlessly modify a TS file on master
- * @type {HandleCommand<EditOneOrAllParameters>}
- */
-export const WhackHeaderEditor: CodeTransformRegistration = {
-    transform: whackSomeHeader,
-    name: "removeHeader",
-    paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
-    editMode: ahp => ahp.editMode,
-    intent: "remove a header",
-};
-
-// TODO switch to CFamily constant from GlobPatterns
-
-const HeaderRegex = /^\/\*[\s\S]*?\*\/\s*/;
-
-const CFamilySuffix = /\.(ts|java)$/;
 
 /**
  * Whack the first TypeScript header we get hold off.
@@ -60,3 +43,22 @@ const whackSomeHeader: SimpleProjectEditor = (p, ctx) => {
         }
     });
 };
+
+/**
+ * Harmlessly modify a TS file on master
+ * @type {HandleCommand<EditOneOrAllParameters>}
+ */
+export const WhackHeaderEditor: CodeTransformRegistration = {
+    transform: whackSomeHeader,
+    name: "removeHeader",
+    paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
+    editMode: ahp => ahp.editMode,
+    intent: "remove a header",
+};
+
+// TODO switch to CFamily constant from GlobPatterns
+
+const HeaderRegex = /^\/\*[\s\S]*?\*\/\s*/;
+
+const CFamilySuffix = /\.(ts|java)$/;
+

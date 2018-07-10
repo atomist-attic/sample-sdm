@@ -28,24 +28,6 @@ export const AtomistGeneratedMarker = "[atomist:generated]";
 
 export const AtomistConfigTsPath = "src/atomist.config.ts";
 
-/**
- * Command handler wrapping AddCloudFoundryManifest editor
- * @type {HandleCommand<EditOneOrAllParameters>}
- */
-export const AddCloudFoundryManifest: CodeTransformRegistration = {
-    transform: addCloudFoundryManifestTransform,
-    name: "AddCloudFoundryManifest",
-    intent: "Add Cloud Foundry manifest",
-    editMode: () => new PullRequest(
-        `add-pcf-manifest-${new Date().getTime()}`,
-        "Add Cloud Foundry manifest",
-        `This will trigger the Software Development Machine to deploy to your Cloud Foundry space.
-
-${AtomistGeneratedMarker}`,
-        `Add Cloud Foundry manifest
-
-${AddCloudFoundryManifestMarker}`),
-};
 
 // This should not have been invoked unless it's a Spring or Node project
 export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) => {
@@ -65,6 +47,26 @@ export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) =>
     }
     return ctx.messageClient.respond(
         `Unable to add Cloud Foundry manifest to project \`${p.id.owner}:${p.id.repo}\`: Neither Maven nor Node`);
+};
+
+
+/**
+ * Command handler wrapping AddCloudFoundryManifest editor
+ * @type {HandleCommand<EditOneOrAllParameters>}
+ */
+export const AddCloudFoundryManifest: CodeTransformRegistration = {
+    transform: addCloudFoundryManifestTransform,
+    name: "AddCloudFoundryManifest",
+    intent: "Add Cloud Foundry manifest",
+    editMode: () => new PullRequest(
+        `add-pcf-manifest-${new Date().getTime()}`,
+        "Add Cloud Foundry manifest",
+        `This will trigger the Software Development Machine to deploy to your Cloud Foundry space.
+
+${AtomistGeneratedMarker}`,
+        `Add Cloud Foundry manifest
+
+${AddCloudFoundryManifestMarker}`),
 };
 
 // Simple template for Cloud Foundry manifest

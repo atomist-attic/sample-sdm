@@ -36,6 +36,15 @@ export class AffirmationParameters extends RequestedCommitParameters {
     public readonly customAffirmation: string;
 }
 
+export const appendAffirmationToReadMe: SimpleProjectEditor<AffirmationParameters> = async (p, ctx, params) => {
+    const affirmation = params.customAffirmation || randomAffirmation();
+    await ctx.messageClient.respond(`Adding to \`README.md\` via \`${params.branchToUse}\`: _${affirmation}_`);
+    return doWithFiles(p, "README.md", async f => {
+        const content = await f.getContent();
+        return f.setContent(`${content}\n${affirmation}\n`);
+    });
+};
+
 /**
  * Function returning a command handler around the appendAffirmationToReadMe
  * editor
@@ -71,11 +80,3 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-export const appendAffirmationToReadMe: SimpleProjectEditor<AffirmationParameters> = async (p, ctx, params) => {
-    const affirmation = params.customAffirmation || randomAffirmation();
-    await ctx.messageClient.respond(`Adding to \`README.md\` via \`${params.branchToUse}\`: _${affirmation}_`);
-    return doWithFiles(p, "README.md", async f => {
-        const content = await f.getContent();
-        return f.setContent(`${content}\n${affirmation}\n`);
-    });
-};
