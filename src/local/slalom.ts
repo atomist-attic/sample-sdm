@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Copyright © 2018 Atomist, Inc.
  *
@@ -13,9 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-#!/usr/bin/env node
 
 import { runSlalom } from "@atomist/slalom/build/src/invocation/cli/runSlalom";
 import { newLocalSdm } from "@atomist/slalom/build/src/machine/newLocalSdm";
