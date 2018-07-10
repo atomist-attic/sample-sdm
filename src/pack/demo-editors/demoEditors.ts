@@ -38,12 +38,12 @@ export const DemoEditors: ExtensionPack = {
         version: "0.1.0",
         configure: sdm =>
             sdm
-                .addEditor(BreakNodeBuildTransform)
-                .addEditor(UnbreakNodeBuildTransform)
-                .addEditor(WhackHeaderEditor)
-                .addEditor(JavaAffirmationEditor)
-                .addEditor(AffirmationTransform)
-                .addEditor(BreakJavaBuildTransform)
-                .addEditor(RemoveFileEditor)
-                .addEditor(UnbreakJavaBuildEditor),
+                .addCodeTransformCommand(BreakNodeBuildTransform)
+                .addCodeTransformCommand(UnbreakNodeBuildTransform)
+                .addCodeTransformCommand(WhackHeaderEditor)
+                .addCodeTransformCommand(JavaAffirmationEditor)
+                .addCodeTransformCommand(AffirmationTransform)
+                .addCodeTransformCommand(BreakJavaBuildTransform)
+                .addCodeTransformCommand(RemoveFileEditor)
+                .addCodeTransformCommand(UnbreakJavaBuildEditor),
     };
