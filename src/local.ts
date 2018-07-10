@@ -19,15 +19,15 @@ import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { actionButton } from "./machines/actionButton";
 import { buildRules, codeRules } from "./machines/additiveCloudFoundryMachine";
 import { codeMetrics } from "./pack/codemetrics/codeMetrics";
+import { LocalMachineConfig } from "@atomist/slalom";
 
-// TODO this import is wrong because the link is wrong
-// import { LocalMachineConfig } from "@atomist/slalom/build/src";
-
-export const Config = { // : LocalMachineConfig = {
+export const Config : LocalMachineConfig = {
 
     repositoryOwnerParentDirectory: "/Users/rodjohnson/temp/local-sdm",
 
     name: "local-sample-sdm",
+
+    gitHookScript: require.resolve("local/onGitHook"),
 
     mergeAutofixes: true,
 
