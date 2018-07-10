@@ -347,7 +347,7 @@ MIT License - [http://www.opensource.org/licenses/MIT](http://www.opensource.org
 |`@types/lodash`|`4.14.111`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/mime`|`2.0.0`||[https://www.github.com/DefinitelyTyped/DefinitelyTyped](https://www.github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/minimatch`|`3.0.3`||[https://www.github.com/DefinitelyTyped/DefinitelyTyped](https://www.github.com/DefinitelyTyped/DefinitelyTyped)|
-|`@types/node`|`8.10.21`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
+|`@types/node`|`10.5.2`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/prettier`|`1.10.0`||[https://www.github.com/DefinitelyTyped/DefinitelyTyped](https://www.github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/properties-reader`|`0.0.1`||[https://www.github.com/DefinitelyTyped/DefinitelyTyped](https://www.github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/range-parser`|`1.2.2`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
