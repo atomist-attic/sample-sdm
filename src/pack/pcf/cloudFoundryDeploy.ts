@@ -20,6 +20,7 @@ import {
     ProjectLoader,
     PushImpactListener,
     PushReactionRegistration,
+    SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import {
     CloudFoundryBlueGreenDeployer,
@@ -49,26 +50,32 @@ export function cloudFoundryProductionDeploySpec(opts: { artifactStore: Artifact
     };
 }
 
-const EnableDeployOnCloudFoundryManifestAdditionListener: PushImpactListener = async pil => {
-    if (pil.push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
-        const parameters: SetDeployEnablementParameters = {
-            owner: pil.push.repo.owner,
-            repo: pil.push.repo.name,
-            providerId: pil.push.repo.org.provider.providerId,
-        };
+export function enableDeployOnCloudFoundryManifestAdditionListener(sdm: SoftwareDeliveryMachine): PushImpactListener {
+    return async pil => {
+        if (pil.push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
+            const parameters: SetDeployEnablementParameters = {
+                owner: pil.push.repo.owner,
+                repo: pil.push.repo.name,
+                providerId: pil.push.repo.org.provider.providerId,
+                name: sdm.configuration.name,
+                version: sdm.configuration.version,
+            };
 
-        await setDeployEnablement({
-            commandName: "addCloudFoundryManifest",
-            parameters,
-            ...pil,
-        } as CommandListenerInvocation, true);
-    }
-};
+            await setDeployEnablement({
+                commandName: "addCloudFoundryManifest",
+                parameters,
+                ...pil,
+            } as CommandListenerInvocation, true);
+        }
+    };
+}
 
 /**
  * Enable deployment when a PCF manifest is added to the default branch.
  */
-export const EnableDeployOnCloudFoundryManifestAddition: PushReactionRegistration = {
-    name: "EnableDeployOnCloudFoundryManifestAddition",
-    action: EnableDeployOnCloudFoundryManifestAdditionListener,
-};
+export function enableDeployOnCloudFoundryManifestAddition(sdm: SoftwareDeliveryMachine): PushReactionRegistration {
+    return {
+        name: "EnableDeployOnCloudFoundryManifestAddition",
+        action: enableDeployOnCloudFoundryManifestAdditionListener(sdm),
+    };
+}

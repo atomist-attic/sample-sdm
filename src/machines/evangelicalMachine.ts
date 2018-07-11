@@ -34,7 +34,7 @@ import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring/dist/support/
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
-import { EnableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
+import { enableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest,
     suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 
@@ -79,7 +79,7 @@ export function evangelicalMachine(
         .addExtensionPacks(
             DemoEditors,
         )
-        .addPushReaction(EnableDeployOnCloudFoundryManifestAddition);
+        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm));
 
     // addTeamPolicies(sdm);
     return sdm;

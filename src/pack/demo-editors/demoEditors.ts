@@ -15,6 +15,7 @@
  */
 
 import { ExtensionPack } from "@atomist/sdm";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { RemoveFileEditor } from "../../commands/editors/helper/removeFile";
 import { AffirmationTransform } from "./affirmationTransform";
 import {
@@ -33,17 +34,15 @@ import { WhackHeaderEditor } from "./removeTypeScriptHeader";
  * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
  */
 export const DemoEditors: ExtensionPack = {
-        name: "DemoEditors",
-        vendor: "Atomist",
-        version: "0.1.0",
-        configure: sdm =>
-            sdm
-                .addCodeTransformCommand(BreakNodeBuildTransform)
-                .addCodeTransformCommand(UnbreakNodeBuildTransform)
-                .addCodeTransformCommand(WhackHeaderEditor)
-                .addCodeTransformCommand(JavaAffirmationEditor)
-                .addCodeTransformCommand(AffirmationTransform)
-                .addCodeTransformCommand(BreakJavaBuildTransform)
-                .addCodeTransformCommand(RemoveFileEditor)
-                .addCodeTransformCommand(UnbreakJavaBuildEditor),
-    };
+    ...metadata("demo-editors"),
+    configure: sdm =>
+        sdm
+            .addCodeTransformCommand(BreakNodeBuildTransform)
+            .addCodeTransformCommand(UnbreakNodeBuildTransform)
+            .addCodeTransformCommand(WhackHeaderEditor)
+            .addCodeTransformCommand(JavaAffirmationEditor)
+            .addCodeTransformCommand(AffirmationTransform)
+            .addCodeTransformCommand(BreakJavaBuildTransform)
+            .addCodeTransformCommand(RemoveFileEditor)
+            .addCodeTransformCommand(UnbreakJavaBuildEditor),
+};

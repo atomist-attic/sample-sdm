@@ -86,7 +86,7 @@ import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeTo
 import {
     cloudFoundryProductionDeploySpec,
     cloudFoundryStagingDeploySpec,
-    EnableDeployOnCloudFoundryManifestAddition,
+    enableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import {
@@ -105,7 +105,7 @@ export function cloudFoundryMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
         {
-            name: "CloudFoundry software delivery machine",
+            name: "Cloud Foundry software delivery machine",
             configuration,
         },
         given<Goals>(IsMaven).itMeans("Maven")
@@ -191,7 +191,7 @@ export function cloudFoundryMachine(
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
-        .addPushReaction(EnableDeployOnCloudFoundryManifestAddition)
+        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm))
         .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
 
     sdm.addExtensionPacks(

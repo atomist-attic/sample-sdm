@@ -75,7 +75,7 @@ import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import {
     cloudFoundryProductionDeploySpec,
-    EnableDeployOnCloudFoundryManifestAddition,
+    enableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
@@ -92,7 +92,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
 export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm: SoftwareDeliveryMachine = createSoftwareDeliveryMachine(
         {
-            name: "CloudFoundry software delivery machine",
+            name: "Cloud Foundry software delivery machine",
             configuration,
         });
     codeRules(sdm);
@@ -162,7 +162,7 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
-        .addPushReaction(EnableDeployOnCloudFoundryManifestAddition)
+        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm))
         .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
 
