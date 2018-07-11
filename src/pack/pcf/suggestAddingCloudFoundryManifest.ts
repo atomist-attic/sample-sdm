@@ -61,7 +61,7 @@ export const SuggestAddingCloudFoundryManifest: ChannelLinkListener = async inv 
     const message: slack.SlackMessage = {
         attachments: [attachment],
     };
-    return inv.addressNewlyLinkedChannel(message);
+    return inv.addressNewlyLinkedChannel(message, { dashboard: false });
 };
 
 export function suggestAddingCloudFoundryManifestOnNewRepo(projectLoader: ProjectLoader): RepoListener {
