@@ -15,7 +15,7 @@
  */
 
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import {
     ConfigureOptions,
     configureSdm,
@@ -23,6 +23,10 @@ import {
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
+import { Configuration } from "@atomist/automation-client";
+import { CachingProjectLoader } from "@atomist/sdm/api-helper/project/CachingProjectLoader";
+import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
+import { CloningProjectLoader } from "@atomist/sdm/api-helper/project/cloningProjectLoader";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -74,7 +78,10 @@ const Options: ConfigureOptions = {
     // },
 };
 
-export const configuration: any = {
+export const configuration: Configuration = {
+    sdm: {
+        projectLoader: new CachingProjectLoader(new LazyProjectLoader(CloningProjectLoader)),
+    } as Partial<SoftwareDeliveryMachineOptions>,
     http: {
         auth: {
             basic: {
