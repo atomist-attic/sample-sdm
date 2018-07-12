@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
 import {
     ConfigureOptions,
     configureSdm,
 } from "@atomist/sdm-core";
+import { CachingProjectLoader } from "@atomist/sdm/api-helper/project/CachingProjectLoader";
+import { CloningProjectLoader } from "@atomist/sdm/api-helper/project/cloningProjectLoader";
+import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
-import { Configuration } from "@atomist/automation-client";
-import { CachingProjectLoader } from "@atomist/sdm/api-helper/project/CachingProjectLoader";
-import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
-import { CloningProjectLoader } from "@atomist/sdm/api-helper/project/cloningProjectLoader";
 
 /*
  * This sample-sdm includes code for a variety of
