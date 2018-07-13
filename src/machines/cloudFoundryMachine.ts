@@ -37,7 +37,6 @@ import {
 import {
     HasSpringBootApplicationClass,
     IsMaven,
-    LocalExecutableJarDeployer,
     MaterialChangeToJavaRepo,
     MavenBuilder,
     SpringSupport,
@@ -160,14 +159,14 @@ export function cloudFoundryMachine(
             .set(nodeBuilder(configuration.projectLoader, "npm i", "npm run compile")),
         build.setDefault(new MavenBuilder(sdm)));
     sdm.addDeployRules(
-        deploy.when(IsMaven)
-            .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-            .using(
-                {
-                    deployer: LocalExecutableJarDeployer,
-                    targeter: ManagedDeploymentTargeter,
-                },
-            ),
+        // deploy.when(IsMaven)
+        //     .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+        //     .using(
+        //         {
+        //             deployer: LocalExecutableJarDeployer,
+        //             targeter: ManagedDeploymentTargeter,
+        //         },
+        //     ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(configuration.sdm)),

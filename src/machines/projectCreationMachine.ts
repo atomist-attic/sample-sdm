@@ -57,6 +57,6 @@ export function projectCreationMachine(
                 UpdatePackageJsonIdentification,
                 UpdateReadmeTitle],
         })
-        .addNewRepoWithCodeAction(tagRepo(springBootTagger));
+        .addNewRepoWithCodeListener(tagRepo(springBootTagger));
     return sdm;
 }

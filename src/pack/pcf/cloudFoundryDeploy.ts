@@ -18,8 +18,7 @@ import {
     CommandListenerInvocation,
     DeployerInfo,
     ProjectLoader,
-    PushImpactListener,
-    PushReactionRegistration,
+    PushImpactListener, PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import {
@@ -50,22 +49,22 @@ export function cloudFoundryProductionDeploySpec(opts: { artifactStore: Artifact
     };
 }
 
-export function enableDeployOnCloudFoundryManifestAdditionListener(sdm: SoftwareDeliveryMachine): PushImpactListener {
+export function enableDeployOnCloudFoundryManifestAdditionListener(sdm: SoftwareDeliveryMachine): PushImpactListener<any> {
     return async pil => {
         if (pil.push.commits.some(c => c.message.includes(AddCloudFoundryManifestMarker))) {
             const parameters: SetDeployEnablementParameters = {
                 owner: pil.push.repo.owner,
                 repo: pil.push.repo.name,
                 providerId: pil.push.repo.org.provider.providerId,
-                name: sdm.configuration.name,
-                version: sdm.configuration.version,
+                name: sdm.configuration.sdm.name,
+                version: sdm.configuration.sdm.version,
             };
 
             await setDeployEnablement({
                 commandName: "addCloudFoundryManifest",
                 parameters,
                 ...pil,
-            } as CommandListenerInvocation, true);
+            } as CommandListenerInvocation<SetDeployEnablementParameters>, true);
         }
     };
 }
@@ -73,7 +72,7 @@ export function enableDeployOnCloudFoundryManifestAdditionListener(sdm: Software
 /**
  * Enable deployment when a PCF manifest is added to the default branch.
  */
-export function enableDeployOnCloudFoundryManifestAddition(sdm: SoftwareDeliveryMachine): PushReactionRegistration {
+export function enableDeployOnCloudFoundryManifestAddition(sdm: SoftwareDeliveryMachine): PushImpactListenerRegistration {
     return {
         name: "EnableDeployOnCloudFoundryManifestAddition",
         action: enableDeployOnCloudFoundryManifestAdditionListener(sdm),

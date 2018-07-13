@@ -20,7 +20,7 @@ import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { makeBuildAware } from "@atomist/sdm/pack/build-aware-transform";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
-    sdm.addPushReaction(async pu => {
+    sdm.addPushImpactListener(async pu => {
         const readme = await pu.project.getFile("README.md");
         if (!readme) {
             return pu.addressChannels(`Project at ${pu.id.url} has no readme. This makes me sad. :crying_cat_face:`);

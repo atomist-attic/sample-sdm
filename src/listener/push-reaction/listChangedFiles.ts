@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { PushReactionRegistration } from "@atomist/sdm";
+import { PushImpactListenerRegistration } from "@atomist/sdm";
 
 /**
  * React to a push by listing changed files to any Slack channels
  * associated with the repo
  * @return {Promise<any>}
  */
-export const listChangedFiles: PushReactionRegistration = {
+export const listChangedFiles: PushImpactListenerRegistration = {
     action: i => {
         return i.addressChannels(`Files changed:\n${i.filesChanged.map(n => "- `" + n + "`").join("\n")}`);
     },

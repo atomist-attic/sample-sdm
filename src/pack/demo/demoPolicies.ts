@@ -54,7 +54,7 @@ export const DemoPolicies: ExtensionPack = {
                 },
             })
             // Lint commit message with rules from https://github.com/marionebl/commitlint/tree/master/@commitlint/config-conventional
-            .addPushReaction({
+            .addPushImpactListener({
                 name: "lint commit message",
                 action: async i => {
                     const load = require("@commitlint/load");

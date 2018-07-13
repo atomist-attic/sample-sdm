@@ -57,7 +57,6 @@ import {
 import {
     HasSpringBootApplicationClass,
     IsMaven,
-    LocalExecutableJarDeployer,
     MavenBuilder,
     SpringSupport,
 } from "@atomist/sdm-pack-spring";
@@ -140,14 +139,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 export function deployRules(sdm: SoftwareDeliveryMachine) {
     configureLocalSpringBootDeploy(sdm);
     sdm.addDeployRules(
-        deploy.when(IsMaven)
-            .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-            .using(
-                {
-                    deployer: LocalExecutableJarDeployer,
-                    targeter: ManagedDeploymentTargeter,
-                },
-            ),
+        // deploy.when(IsMaven)
+        //     .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+        //     .using(
+        //         {
+        //             deployer: LocalExecutableJarDeployer,
+        //             targeter: ManagedDeploymentTargeter,
+        //         },
+        //     ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
@@ -162,7 +161,7 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
-        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm))
+        .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm))
         .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
 

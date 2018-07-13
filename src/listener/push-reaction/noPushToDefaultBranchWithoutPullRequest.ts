@@ -15,15 +15,15 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { PushReactionRegistration } from "@atomist/sdm";
 
 import { PullRequestForSha } from "@atomist/sdm-core/typings/types";
 import * as _ from "lodash";
+import { PushImpactListenerRegistration } from "@atomist/sdm";
 
 /**
  * DM a user who made a push to the default branch that doesn't have an associated pull request
  */
-export const NoPushToDefaultBranchWithoutPullRequest: PushReactionRegistration = {
+export const NoPushToDefaultBranchWithoutPullRequest: PushImpactListenerRegistration = {
     name: "NoPushToDefaultBranchWithoutPullRequest",
     action: async pli => {
         if (pli.push.branch !== pli.push.repo.defaultBranch) {
