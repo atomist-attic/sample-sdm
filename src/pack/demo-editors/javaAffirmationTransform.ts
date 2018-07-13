@@ -37,7 +37,7 @@ const appendAffirmationToJava: CodeTransform<AffirmationParameters> = (p, ci) =>
  * Harmlessly modify a Java file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const JavaAffirmationEditor: CodeTransformRegistration<AffirmationParameters> = {
+export const JavaAffirmationTransform: CodeTransformRegistration<AffirmationParameters> = {
     transform: appendAffirmationToJava,
     name: "javaAffirmation",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),

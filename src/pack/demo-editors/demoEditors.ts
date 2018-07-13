@@ -26,7 +26,7 @@ import {
     BreakNodeBuildTransform,
     UnbreakNodeBuildTransform,
 } from "./breakNodeBuild";
-import { JavaAffirmationEditor } from "./javaAffirmationEditor";
+import { JavaAffirmationTransform } from "./javaAffirmationTransform";
 import { WhackHeaderEditor } from "./removeTypeScriptHeader";
 
 /**
@@ -40,7 +40,7 @@ export const DemoEditors: ExtensionPack = {
             .addCodeTransformCommand(BreakNodeBuildTransform)
             .addCodeTransformCommand(UnbreakNodeBuildTransform)
             .addCodeTransformCommand(WhackHeaderEditor)
-            .addCodeTransformCommand(JavaAffirmationEditor)
+            .addCodeTransformCommand(JavaAffirmationTransform)
             .addCodeTransformCommand(AffirmationTransform)
             .addCodeTransformCommand(BreakJavaBuildTransform)
             .addCodeTransformCommand(RemoveFileEditor)
