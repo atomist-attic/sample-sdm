@@ -25,7 +25,7 @@ export const BadJavaScriptFileName = "src/Bad.js";
 export const BreakNodeBuildTransform: CodeTransformRegistration = {
     transform: breakBuild,
     name: "breakNodeBuild",
-    editMode: commitToMaster(`You asked me to break the build!`),
+    transformPresentation: () => commitToMaster(`You asked me to break the build!`),
 };
 
 async function breakBuild(p: Project, ctx: HandlerContext) {
@@ -36,7 +36,7 @@ async function breakBuild(p: Project, ctx: HandlerContext) {
 export const UnbreakNodeBuildTransform: CodeTransformRegistration = {
     transform: unbreakNodeBuild,
     name: "unbreakNodeBuild",
-    editMode: commitToMaster(`Trying to unbreak the build!`),
+    transformPresentation: () => commitToMaster(`Trying to unbreak the build!`),
 };
 
 async function unbreakNodeBuild(p: Project) {

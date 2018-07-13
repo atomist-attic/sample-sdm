@@ -23,7 +23,7 @@ export const BadJavaFileName = "src/main/java/Bad.java";
 export const BreakJavaBuildTransform: CodeTransformRegistration = {
     transform: breakBuild,
     name: "breakJavaBuild",
-    editMode: commitToMaster(`You asked me to break the build!`),
+    transformPresentation: () => commitToMaster(`You asked me to break the build!`),
 };
 
 async function breakBuild(p: Project) {
@@ -33,7 +33,7 @@ async function breakBuild(p: Project) {
 export const UnbreakJavaBuildEditor: CodeTransformRegistration = {
     transform: unbreakJavaBuild,
     name: "unbreakJavaBuild",
-    editMode: commitToMaster(`Trying to unbreak the build!`),
+    transformPresentation: () => commitToMaster(`Trying to unbreak the build!`),
 };
 
 async function unbreakJavaBuild(p: Project) {

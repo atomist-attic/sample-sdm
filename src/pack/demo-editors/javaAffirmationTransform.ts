@@ -41,7 +41,7 @@ export const JavaAffirmationTransform: CodeTransformRegistration<AffirmationPara
     transform: appendAffirmationToJava,
     name: "javaAffirmation",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),
-    editMode: ap => ap.editMode,
+    transformPresentation: ci => ci.parameters.editMode,
     intent: "javakick",
 };
 

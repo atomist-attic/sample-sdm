@@ -64,7 +64,7 @@ export const AddSentry: CodeTransformRegistration<AddSentryParams> = {
     transform: AddSentryTransform,
     name: "AddSentry",
     paramsMaker: AddSentryParams,
-    editMode: () => new PullRequest(
+    transformPresentation: () => new PullRequest(
         `add-sentry-${new Date().getTime()}`,
         "Add Sentry support",
         "Adds Sentry (Raven) APM support"),

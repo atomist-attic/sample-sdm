@@ -37,7 +37,7 @@ export const AddK8sSpec: CodeTransformRegistration = {
     transform: addK8sSpecEditor,
     name: AddK8sSpecCommandName,
     intent: "Add kubernetes deployment spec",
-    editMode: () => new PullRequest("enable-k8s",
+    transformPresentation: () => new PullRequest("enable-k8s",
         "Enable deployment to Kubernetes",
         `This will trigger the Software Development Machine to request deployment of this service in a Kubernetes environment.
 

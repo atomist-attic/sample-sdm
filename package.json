@@ -20,7 +20,7 @@
   "dependencies": {
     "@atomist/automation-client": "0.18.0-20180710131258",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
-    "@atomist/sdm": "^0.3.2-rename-listener.20180713021926",
+    "@atomist/sdm": "https://r.atomist.com/1451694078",
     "@atomist/sdm-core": "^0.3.2-20180713022755",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-sloc": "https://r.atomist.com/2853137397",

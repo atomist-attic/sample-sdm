@@ -114,7 +114,7 @@ export const AddApacheLicenseHeaderTransform: CodeTransformRegistration<AddHeade
     transform: addHeaderTransform,
     name: "addHeader",
     paramsMaker: AddHeaderParameters,
-    editMode: ahp => ahp.editMode
+    transformPresentation: ci => ci.parameters.editMode,
 };
 
 

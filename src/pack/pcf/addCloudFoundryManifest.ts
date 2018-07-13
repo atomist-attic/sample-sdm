@@ -56,7 +56,7 @@ export const AddCloudFoundryManifest: CodeTransformRegistration = {
     transform: addCloudFoundryManifestTransform,
     name: "AddCloudFoundryManifest",
     intent: "Add Cloud Foundry manifest",
-    editMode: () => new PullRequest(
+    transformPresentation: () => new PullRequest(
         `add-pcf-manifest-${new Date().getTime()}`,
         "Add Cloud Foundry manifest",
         `This will trigger the Software Development Machine to deploy to your Cloud Foundry space.

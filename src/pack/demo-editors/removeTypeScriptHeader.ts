@@ -47,11 +47,11 @@ const whackSomeHeader: SimpleProjectEditor = (p, ctx) => {
  * Harmlessly modify a TS file on master
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const WhackHeaderEditor: CodeTransformRegistration = {
+export const WhackHeaderEditor: CodeTransformRegistration<RequestedCommitParameters> = {
     transform: whackSomeHeader,
     name: "removeHeader",
     paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
-    editMode: ahp => ahp.editMode,
+    transformPresentation: ci => ci.parameters.editMode,
     intent: "remove a header",
 };
 

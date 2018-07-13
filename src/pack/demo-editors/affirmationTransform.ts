@@ -46,11 +46,11 @@ export const appendAffirmationToReadMe: CodeTransform<AffirmationParameters> = a
  * editor
  * @type {HandleCommand<EditOneOrAllParameters>}
  */
-export const AffirmationTransform: CodeTransformRegistration = {
+export const AffirmationTransform: CodeTransformRegistration<AffirmationParameters> = {
     transform: appendAffirmationToReadMe,
     name: AffirmationEditorName,
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement"),
-    editMode: ap => ap.editMode,
+    transformPresentation: ci => ci.parameters.editMode,
     intent: "add affirmation",
 };
 
