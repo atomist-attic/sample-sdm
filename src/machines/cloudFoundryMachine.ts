@@ -56,7 +56,7 @@ import {
     HttpServiceGoals,
     IsNode,
     LibraryGoals,
-    lookFor200OnEndpointRootGet,
+    lookFor200OnEndpointRootGet, ManagedDeploymentTargeter,
     nodeBuilder,
     NoGoals,
     NpmBuildGoals,
@@ -74,6 +74,7 @@ import {
     kotlinRestGenerator,
     springRestGenerator,
 } from "@atomist/sdm-pack-spring/dist";
+import {localExecutableJarDeployer} from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
@@ -158,14 +159,14 @@ export function cloudFoundryMachine(
             .set(nodeBuilder(configuration.projectLoader, "npm i", "npm run compile")),
         build.setDefault(new MavenBuilder(sdm)));
     sdm.addDeployRules(
-        // deploy.when(IsMaven)
-        //     .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-        //     .using(
-        //         {
-        //             deployer: LocalExecutableJarDeployer,
-        //             targeter: ManagedDeploymentTargeter,
-        //         },
-        //     ),
+             deploy.when(IsMaven)
+                 .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+                 .using(
+                     {
+                       deployer: localExecutableJarDeployer(),
+                         targeter: ManagedDeploymentTargeter,
+                     },
+                 ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(configuration.sdm)),

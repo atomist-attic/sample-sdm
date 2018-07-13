@@ -48,8 +48,8 @@ import {
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
     IsNode,
-    lookFor200OnEndpointRootGet,
-    RepositoryDeletionGoals,
+    lookFor200OnEndpointRootGet, ManagedDeploymentTargeter,
+    RepositoryDeletionGoals, StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
 import {
@@ -63,6 +63,7 @@ import {
     kotlinRestGenerator,
     springRestGenerator,
 } from "@atomist/sdm-pack-spring/dist";
+import {localExecutableJarDeployer} from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -137,14 +138,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 export function deployRules(sdm: SoftwareDeliveryMachine) {
     configureLocalSpringBootDeploy(sdm);
     sdm.addDeployRules(
-        // deploy.when(IsMaven)
-        //     .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-        //     .using(
-        //         {
-        //             deployer: LocalExecutableJarDeployer,
-        //             targeter: ManagedDeploymentTargeter,
-        //         },
-        //     ),
+         deploy.when(IsMaven)
+             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+             .using(
+                 {
+                     deployer: localExecutableJarDeployer(),
+                     targeter: ManagedDeploymentTargeter,
+                 },
+             ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
