@@ -21,8 +21,6 @@ import {
     ConfigureOptions,
     configureSdm,
 } from "@atomist/sdm-core";
-import { CachingProjectLoader } from "@atomist/sdm/api-helper/project/CachingProjectLoader";
-import { CloningProjectLoader } from "@atomist/sdm/api-helper/project/cloningProjectLoader";
 // import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";

@@ -57,7 +57,6 @@ import {
     IsNode,
     LibraryGoals,
     lookFor200OnEndpointRootGet,
-    ManagedDeploymentTargeter,
     nodeBuilder,
     NoGoals,
     NpmBuildGoals,

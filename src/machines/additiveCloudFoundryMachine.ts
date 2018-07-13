@@ -49,9 +49,7 @@ import {
     isDeploymentFrozen,
     IsNode,
     lookFor200OnEndpointRootGet,
-    ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
-    StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
 import {
