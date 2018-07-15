@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
     any,
     AnyPush,
@@ -54,13 +55,15 @@ import {
     StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { HasSpringBootApplicationClass, IsMaven, MavenBuilder, SpringSupport, } from "@atomist/sdm-pack-spring";
+import { HasSpringBootApplicationClass, IsMaven, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
 import {
     configureLocalSpringBootDeploy,
     ReplaceReadmeTitle,
     SetAtomistTeamInApplicationYml,
 } from "@atomist/sdm-pack-spring/dist";
 import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
+import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
+import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -75,9 +78,6 @@ import {
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
