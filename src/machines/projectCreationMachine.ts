@@ -17,14 +17,14 @@
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
-import { CommonJavaGeneratorConfig, springBootGenerator, springBootTagger } from "@atomist/sdm-pack-spring";
+import { springBootTagger } from "@atomist/sdm-pack-spring";
+import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring/dist";
+import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
+import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParametersDefinition } from "../pack/node/nodeSupport";
-import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring/dist";
-import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
-import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -45,7 +45,7 @@ export function projectCreationMachine(
                 ReplaceReadmeTitle,
                 SetAtomistTeamInApplicationYml,
                 TransformSeedToCustomProject,
-            ]
+            ],
         })
         .addGeneratorCommand({
             name: "typescript-express-generator",
