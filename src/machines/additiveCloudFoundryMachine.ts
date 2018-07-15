@@ -48,22 +48,19 @@ import {
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
     IsNode,
-    lookFor200OnEndpointRootGet, ManagedDeploymentTargeter,
-    RepositoryDeletionGoals, StagingUndeploymentGoal,
+    lookFor200OnEndpointRootGet,
+    ManagedDeploymentTargeter,
+    RepositoryDeletionGoals,
+    StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import {
-    HasSpringBootApplicationClass,
-    IsMaven,
-    MavenBuilder,
-    SpringSupport,
-} from "@atomist/sdm-pack-spring";
+import { HasSpringBootApplicationClass, IsMaven, MavenBuilder, SpringSupport, } from "@atomist/sdm-pack-spring";
 import {
     configureLocalSpringBootDeploy,
-    kotlinRestGenerator,
-    springRestGenerator,
+    ReplaceReadmeTitle,
+    SetAtomistTeamInApplicationYml,
 } from "@atomist/sdm-pack-spring/dist";
-import {localExecutableJarDeployer} from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
+import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -78,6 +75,9 @@ import {
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
+import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
+import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
+import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -120,8 +120,29 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 ProductionEndpointGoal]),
     ));
 
-    sdm.addGeneratorCommand(springRestGenerator);
-    sdm.addGeneratorCommand(kotlinRestGenerator);
+    sdm
+        .addGeneratorCommand<SpringProjectCreationParameters>({
+            name: "create-spring",
+            intent: "create spring",
+            paramsMaker: SpringProjectCreationParameters,
+            startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
+            transform: [
+                ReplaceReadmeTitle,
+                SetAtomistTeamInApplicationYml,
+                TransformSeedToCustomProject,
+            ],
+        })
+        .addGeneratorCommand<SpringProjectCreationParameters>({
+            name: "create-spring-kotlin",
+            intent: "create spring kotlin",
+            paramsMaker: SpringProjectCreationParameters,
+            startingPoint: new GitHubRepoRef("johnsonr", "flux-flix-service"),
+            transform: [
+                ReplaceReadmeTitle,
+                SetAtomistTeamInApplicationYml,
+                TransformSeedToCustomProject,
+            ],
+        });
 
     sdm.addExtensionPacks(
         DemoEditors,
@@ -138,14 +159,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 export function deployRules(sdm: SoftwareDeliveryMachine) {
     configureLocalSpringBootDeploy(sdm);
     sdm.addDeployRules(
-         deploy.when(IsMaven)
-             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-             .using(
-                 {
-                     deployer: localExecutableJarDeployer(),
-                     targeter: ManagedDeploymentTargeter,
-                 },
-             ),
+        deploy.when(IsMaven)
+            .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+            .using(
+                {
+                    deployer: localExecutableJarDeployer(),
+                    targeter: ManagedDeploymentTargeter,
+                },
+            ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
             .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),

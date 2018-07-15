@@ -22,6 +22,9 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParametersDefinition } from "../pack/node/nodeSupport";
+import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring/dist";
+import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
+import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -32,15 +35,21 @@ import { NodeProjectCreationParametersDefinition } from "../pack/node/nodeSuppor
 export function projectCreationMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine({ name: "Project creation machine", configuration });
-    sdm.addGeneratorCommand(
-        springBootGenerator({
-            ...CommonJavaGeneratorConfig,
-            seed: () => new GitHubRepoRef("spring-team", "spring-rest-seed"),
-        }, {
+    sdm
+        .addGeneratorCommand({
+            name: "create-spring",
             intent: "create spring",
-        }))
+            paramsMaker: SpringProjectCreationParameters,
+            startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
+            transform: [
+                ReplaceReadmeTitle,
+                SetAtomistTeamInApplicationYml,
+                TransformSeedToCustomProject,
+            ]
+        })
         .addGeneratorCommand({
             name: "typescript-express-generator",
+            paramsMaker: SpringProjectCreationParameters,
             parameters: NodeProjectCreationParametersDefinition,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",
