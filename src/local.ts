@@ -46,12 +46,12 @@ export const Config: LocalMachineConfig = {
             },
             listener: async ci => {
                 await ci.addressChannels(`Hello ${ci.parameters.name}`);
-                return actionButton({
-                    text: "I want coffee",
-                    command: "hello",
-                    params: { name: "who" },
-                    addressChannels: ci.addressChannels,
-                });
+                // return actionButton({
+                //     text: "I want coffee",
+                //     command: "hello",
+                //     params: { name: "who" },
+                //     addressChannels: ci.addressChannels,
+                // });
             },
         });
 
