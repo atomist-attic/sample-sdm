@@ -23,7 +23,7 @@
   "dependencies": {
     "@atomist/automation-client": "https://r.atomist.com/2996578176",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
-    "@atomist/sdm": "https://r.atomist.com/120380251",
+    "@atomist/sdm": "https://r.atomist.com/23759756",
     "@atomist/sdm-core": "^0.3.2-20180713022755",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-sloc": "https://r.atomist.com/2853137397",
