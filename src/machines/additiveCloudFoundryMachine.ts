@@ -16,8 +16,8 @@
 
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
-    any,
     AnyPush,
+    anySatisfied,
     ArtifactGoal,
     AutofixGoal,
     goalContributors,
@@ -105,7 +105,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         onAnyPush().setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
         whenPushSatisfies(IsDeploymentFrozen)
             .setGoals(ExplainDeploymentFreezeGoal),
-        whenPushSatisfies(any(IsMaven, IsNode))
+        whenPushSatisfies(anySatisfied(IsMaven, IsNode))
             .setGoals(JustBuildGoal),
         whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
             .setGoals(LocalDeploymentGoal),
