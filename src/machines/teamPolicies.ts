@@ -60,7 +60,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     }
 
     sdm.addExtensionPacks(codeMetrics());
-    summarizeGoalsInGitHubStatus(sdm);
+    // summarizeGoalsInGitHubStatus(sdm);
 
     // sdm.addPushReactions(shutDownDeliveryIf(EverySecondOneGoesThrough));
 }

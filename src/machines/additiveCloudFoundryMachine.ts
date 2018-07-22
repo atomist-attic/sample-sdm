@@ -93,6 +93,18 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             name: "Cloud Foundry software delivery machine",
             configuration,
         });
+
+    sdm.addCommand<{name: string}>({
+        name: "hello",
+        intent: "say hello",
+        parameters: {
+            name: { pattern: /[A-Za-z]+/},
+        },
+        listener: async ci => {
+            return ci.addressChannels(`Hello _${ci.parameters.name}_ :wave:`);
+        },
+    });
+
     codeRules(sdm);
     buildRules(sdm);
     deployRules(sdm);

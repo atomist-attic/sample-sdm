@@ -23,8 +23,11 @@ import {
 } from "@atomist/sdm-core";
 // import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import {UpdateSdmGoalState} from "./commands/UpdateSdmGoalState";
+import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
+import { Config } from "./local";
+
+import { supportLocal, LocalIo } from "@atomist/slalom";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -56,9 +59,11 @@ import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMach
  * start with any of these and change it to make it your own!
  */
 
-function createMachine(
-    config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
-    return additiveCloudFoundryMachine(config);
+function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    const sdm = additiveCloudFoundryMachine(config);
+    // For local use
+    sdm.addExtensionPacks(LocalIo);
+    return sdm;
 }
 
 const Options: ConfigureOptions = {
@@ -78,7 +83,7 @@ const Options: ConfigureOptions = {
 
 export const configuration: Configuration = {
     sdm: {
-       // projectLoader: new CachingProjectLoader(new LazyProjectLoader(CloningProjectLoader)),
+        // projectLoader: new CachingProjectLoader(new LazyProjectLoader(CloningProjectLoader)),
     } as Partial<SoftwareDeliveryMachineOptions>,
     http: {
         auth: {
@@ -96,6 +101,7 @@ export const configuration: Configuration = {
         level: "info",
     },
     postProcessors: [
+        supportLocal(Config),
         configureDashboardNotifications,
         configureSdm(createMachine, Options),
     ],
