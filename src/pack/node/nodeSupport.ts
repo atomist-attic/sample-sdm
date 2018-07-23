@@ -50,9 +50,8 @@ export const NodeProjectCreationParametersDefinition: ParametersObject = {
     appName: {
         displayName: "App name",
         description: "Application name",
-        pattern: /^(@?[A-Za-z][-A-Za-z0-9_]*)$/,
-        validInput: "a valid package.json application name, which starts with a lower-case letter and contains only " +
-        " alphanumeric, -, and _ characters, or `${projectName}` to use the project name",
+        pattern: /^(@?[A-Za-z][-A-Za-z0-9_/]*)$/,
+        validInput: "a valid package.json application name; letters and numbers and dashes and underscores. Might start with @npm-username/",
         minLength: 1,
         maxLength: 50,
         required: true,
