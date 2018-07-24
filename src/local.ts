@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import { LocalMachineConfig } from "../node_modules/@atomist/slalom";
 
 export const Config: LocalMachineConfig = {

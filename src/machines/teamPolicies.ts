@@ -16,7 +16,7 @@
 
 import { logger } from "@atomist/automation-client";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
+import { GraphGoals } from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
