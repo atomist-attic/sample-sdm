@@ -21,7 +21,7 @@
     "@atomist/automation-client": "https://r.atomist.com/1601372402",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
     "@atomist/sdm": "https://r.atomist.com/2091308992",
-    "@atomist/sdm-core": "https://r.atomist.com/2286024262",
+    "@atomist/sdm-core": "https://r.atomist.com/414657972",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-sloc": "https://r.atomist.com/2853137397",
     "@atomist/sdm-pack-sonarqube": "0.1.3-20180629030539",

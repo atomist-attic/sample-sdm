@@ -24,10 +24,10 @@ import {
 // import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
-import { Config } from "./local";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
+import { Config } from "./local";
 
-import { LocalIo, supportLocal } from "@atomist/slalom";
+import { supportLocal, LocalLifecycle } from "@atomist/slalom";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -62,7 +62,7 @@ import { LocalIo, supportLocal } from "@atomist/slalom";
 function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = additiveCloudFoundryMachine(config);
     // For local use
-    sdm.addExtensionPacks(LocalIo);
+    sdm.addExtensionPacks(LocalLifecycle);
     return sdm;
 }
 
