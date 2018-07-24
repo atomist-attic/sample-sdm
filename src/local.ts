@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { LocalMachineConfig } from "../node_modules/@atomist/slalom";
+import { LocalMachineConfig } from "@atomist/slalom";
 
 export const Config: LocalMachineConfig = {
 
-    repositoryOwnerParentDirectory: "/Users/rodjohnson/temp/local-sdm",
+    repositoryOwnerParentDirectory: process.env.SDM_PROJECTS_ROOT || "/Users/rodjohnson/temp/local-sdm",
 
     mergeAutofixes: true,
 
