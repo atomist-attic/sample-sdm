@@ -24,10 +24,10 @@ import {
 // import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
-import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 import { Config } from "./local";
+import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 
-import { supportLocal, LocalLifecycle } from "@atomist/slalom";
+import { LocalLifecycle, supportLocal } from "@atomist/slalom";
 
 /*
  * This sample-sdm includes code for a variety of
