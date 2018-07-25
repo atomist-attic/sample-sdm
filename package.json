@@ -17,18 +17,16 @@
   "bugs": {
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
-  "bin": {
-    "sample-slalom": "build/src/local/slalom.js"
-  },
   "dependencies": {
-    "@atomist/automation-client": "https://r.atomist.com/2996578176",
+    "@atomist/automation-client": "0.18.0-20180724234011",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
-    "@atomist/sdm": "https://r.atomist.com/1304420101",
-    "@atomist/sdm-core": "^0.3.2-20180713022755",
+    "@atomist/automation-client-ext-eventlog": "0.1.0-20180725112931",
+    "@atomist/sdm": "0.3.2-20180725024434",
+    "@atomist/sdm-core": "0.3.2-20180725080039",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-sloc": "https://r.atomist.com/2853137397",
     "@atomist/sdm-pack-sonarqube": "0.1.3-20180629030539",
-    "@atomist/sdm-pack-spring": "https://r.atomist.com/102991291",
+    "@atomist/sdm-pack-spring": "0.1.7-20180715090742",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
