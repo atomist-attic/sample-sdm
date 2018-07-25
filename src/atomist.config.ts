@@ -27,7 +27,7 @@ import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { Config } from "./local";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 
-import { LocalLifecycle, supportLocal } from "@atomist/slalom";
+import { LocalLifecycle, configureLocal } from "@atomist/slalom";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -101,7 +101,7 @@ export const configuration: Configuration = {
         level: "info",
     },
     postProcessors: [
-        supportLocal(Config),
+        configureLocal(Config),
         configureDashboardNotifications,
         configureSdm(createMachine, Options),
     ],
