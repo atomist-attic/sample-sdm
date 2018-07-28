@@ -27,7 +27,7 @@ import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { Config } from "./local";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 
-import { LocalLifecycle, configureLocal } from "@atomist/slalom";
+import { configureLocal, LocalLifecycle } from "@atomist/slalom";
 
 /*
  * This sample-sdm includes code for a variety of

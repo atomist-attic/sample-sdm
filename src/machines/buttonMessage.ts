@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { Fix } from "@atomist/automation-client/operations/review/ReviewResult";
-import { buttonForCommand, ButtonSpecification } from "@atomist/automation-client/spi/message/MessageClient";
-import { actionableButton, AddressChannels } from "@atomist/sdm";
-import * as slack from "@atomist/slack-messages/SlackMessages";
+import { ButtonSpecification } from "@atomist/automation-client/spi/message/MessageClient";
+import { actionableButton } from "@atomist/sdm";
 import { CommandRegistration } from "@atomist/sdm/api/registration/CommandRegistration";
+import * as slack from "@atomist/slack-messages/SlackMessages";
 
 /**
  * Simple function to present an action button to run a command
@@ -34,7 +33,7 @@ export function buttonMessage<T>(
     parameters: Partial<T> = {},
     slackOptions?: Partial<slack.Attachment>): slack.SlackMessage {
     const attachment: slack.Attachment = {
-        //text: spec.text,
+        // text: spec.text,
         fallback: spec.text,
         ...slackOptions,
         actions: [actionableButton(
@@ -45,7 +44,7 @@ export function buttonMessage<T>(
         ],
     };
     return {
-        //text: spec.text,
+        // text: spec.text,
         attachments: [attachment],
     };
 }
