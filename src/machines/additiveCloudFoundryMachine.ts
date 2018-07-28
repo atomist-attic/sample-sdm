@@ -18,13 +18,12 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import {
     AnyPush,
     anySatisfied,
-    ArtifactGoal,
-    AutofixGoal, CommandHandlerRegistration,
+    AutofixGoal,
+    CommandHandlerRegistration,
     goalContributors,
     Goals,
     JustBuildGoal,
     LocalDeploymentGoal,
-    not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
@@ -32,9 +31,6 @@ import {
     PushReactionGoal,
     ReviewGoal,
     SoftwareDeliveryMachine,
-    StagingDeploymentGoal,
-    StagingEndpointGoal,
-    StagingVerifiedGoal,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
@@ -48,25 +44,32 @@ import {
     HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
-    IsNode, LocalEndpointGoal, LocalUndeploymentGoal,
-    lookFor200OnEndpointRootGet, LookupStrategy,
+    IsNode,
+    LocalEndpointGoal,
+    LocalUndeploymentGoal,
+    lookFor200OnEndpointRootGet,
+    LookupStrategy,
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
-    StagingUndeploymentGoal, StartupInfo,
+    StartupInfo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { HasSpringBootApplicationClass, IsMaven, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
 import {
     configureLocalSpringBootDeploy,
+    HasSpringBootApplicationClass,
+    IsMaven,
+    ListLocalDeploys,
+    localExecutableJarDeployer,
+    MavenBuilder,
+    mavenDeployer,
+    mavenSourceDeployer,
     ReplaceReadmeTitle,
     SetAtomistTeamInApplicationYml,
-} from "@atomist/sdm-pack-spring/dist";
-import {
-    localExecutableJarDeployer,
-    mavenSourceDeployer, SpringBootSuccessPatterns
-} from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
-import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
-import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
+    SpringBootSuccessPatterns,
+    SpringProjectCreationParameters,
+    SpringSupport,
+    TransformSeedToCustomProject
+} from "@atomist/sdm-pack-spring";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -74,16 +77,11 @@ import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
-import {
-    cloudFoundryProductionDeploySpec,
-    enableDeployOnCloudFoundryManifestAddition,
-} from "../pack/pcf/cloudFoundryDeploy";
+import { cloudFoundryProductionDeploySpec, enableDeployOnCloudFoundryManifestAddition, } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { actionButton, buttonMessage } from "./actionButton";
-import { ListLocalDeploys } from "@atomist/sdm-pack-spring/dist/support/maven/deploy/listLocalDeploys";
-import { mavenDeployer } from "@atomist/sdm-pack-spring/dist/support/maven/deploy/mavenDeployer";
+import { buttonMessage } from "./buttonMessage";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 

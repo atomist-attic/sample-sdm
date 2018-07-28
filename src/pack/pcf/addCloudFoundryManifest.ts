@@ -19,7 +19,7 @@ import { PullRequest } from "@atomist/automation-client/operations/edit/editMode
 import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
 import { CloudFoundryManifestPath, NodeProjectIdentifier } from "@atomist/sdm-core";
 import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
-import { HasSpringBootPom } from "@atomist/sdm-pack-spring/dist/support/spring/pushTests";
+import { HasSpringBootPom } from "@atomist/sdm-pack-spring";
 
 export const AddCloudFoundryManifestMarker = "[atomist:add-pcf-manifest]";
 

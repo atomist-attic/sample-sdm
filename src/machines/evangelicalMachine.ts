@@ -30,7 +30,7 @@ import {
     tagRepo,
 } from "@atomist/sdm-core";
 import { HasSpringBootApplicationClass, IsMaven, springBootTagger } from "@atomist/sdm-pack-spring";
-import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring/dist/support/java/pushTests";
+import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";

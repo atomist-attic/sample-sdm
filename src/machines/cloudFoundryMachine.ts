@@ -73,8 +73,8 @@ import {
     configureLocalSpringBootDeploy,
     kotlinRestGenerator,
     springRestGenerator,
-} from "@atomist/sdm-pack-spring/dist";
-import {localExecutableJarDeployer} from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
+} from "@atomist/sdm-pack-spring";
+import {localExecutableJarDeployer} from "@atomist/sdm-pack-spring";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";

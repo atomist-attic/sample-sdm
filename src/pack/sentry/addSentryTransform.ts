@@ -19,7 +19,7 @@ import { Parameters } from "@atomist/automation-client/decorators";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
 import { CodeTransformOrTransforms, CodeTransformRegistration } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/sdm-pack-spring";
-import { addDependencyTransform } from "@atomist/sdm-pack-spring/dist";
+import { addDependencyTransform } from "@atomist/sdm-pack-spring";
 import { appendOrCreateFileContent } from "@atomist/sdm/api-helper/project/appendOrCreate";
 import { copyFileFromUrl } from "@atomist/sdm/api-helper/project/fileCopy";
 
