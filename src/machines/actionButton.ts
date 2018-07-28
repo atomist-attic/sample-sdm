@@ -16,31 +16,36 @@
 
 import { Fix } from "@atomist/automation-client/operations/review/ReviewResult";
 import { buttonForCommand, ButtonSpecification } from "@atomist/automation-client/spi/message/MessageClient";
-import { AddressChannels } from "@atomist/sdm";
+import { actionableButton, AddressChannels } from "@atomist/sdm";
 import * as slack from "@atomist/slack-messages/SlackMessages";
+import { CommandRegistration } from "@atomist/sdm/api/registration/CommandRegistration";
 
 /**
  * Simple function to present an action button to run a command
- * @param {ButtonSpecification & Fix & {addressChannels: AddressChannels}} spec
+ * @param spec button spec
+ * @param command Command to run
+ * @param parameters parameters
  * @param {Partial<Attachment>} slackOptions
  * @return {Promise<any>}
  */
-export async function actionButton(
-    spec: ButtonSpecification & Fix & { addressChannels: AddressChannels },
-    slackOptions?: Partial<slack.Attachment>) {
+export function buttonMessage<T>(
+    spec: ButtonSpecification,
+    command: CommandRegistration<T>,
+    parameters: Partial<T> = {},
+    slackOptions?: Partial<slack.Attachment>): slack.SlackMessage {
     const attachment: slack.Attachment = {
-        text: spec.text,
+        //text: spec.text,
         fallback: spec.text,
         ...slackOptions,
-        actions: [buttonForCommand(
+        actions: [actionableButton(
             spec,
-            spec.command,
-            spec.params,
+            command,
+            parameters,
         ),
         ],
     };
-    const message: slack.SlackMessage = {
+    return {
+        //text: spec.text,
         attachments: [attachment],
     };
-    return spec.addressChannels(message);
 }
