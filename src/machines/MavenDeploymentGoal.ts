@@ -26,12 +26,16 @@ import { ExecuteGoal, GenericGoal } from "@atomist/sdm";
 import { LoggingProgressLog } from "@atomist/sdm/api-helper/log/LoggingProgressLog";
 import { poisonAndWait } from "@atomist/sdm/api-helper/misc/spawned";
 
+const portfinder = require("portfinder");
+
+//import portfinder from "portfinder";
+
 export const MavenDeploymentGoal = new GenericGoal({ uniqueName: "mavenDep" },
     "Deploy to Maven");
 
 export interface MavenDeployerOptions {
 
-    portForBranch: (branch: string) => number;
+    lowerPort: number;
 
     baseUrl: string;
 
@@ -66,7 +70,7 @@ export function executeMavenDeploy(projectLoader: ProjectLoader,
                                    opts: Partial<MavenDeployerOptions>): ExecuteGoal {
     const optsToUse: MavenDeployerOptions = {
         ...opts,
-        portForBranch: branch => 9090,
+        lowerPort: 9090,
         successPatterns: SpringBootSuccessPatterns,
         commandLineArgumentsFor: springBootMavenArgs,
         baseUrl: "http://127.0.0.1",
@@ -94,8 +98,11 @@ export function executeMavenDeploy(projectLoader: ProjectLoader,
  */
 class MavenDeployer {
 
+    // Already allocated ports
+    private repoBranchToPort: { [repoAndBranch: string]: number } = {};
+
     // Keys are ports: values are child processes
-    private portToChildProcess: { [port: number] : ChildProcess } = {};
+    private portToChildProcess: { [port: number]: ChildProcess } = {};
 
     constructor(private readonly options: MavenDeployerOptions) {
     }
@@ -104,15 +111,22 @@ class MavenDeployer {
         log: ProgressLog,
         project: LocalProject,
         branch: string): Promise<SpawnedDeployment> {
-        const contextRoot = `/${project.id.owner}/${project.id.repo}/${project.id.branch}`;
+        const contextRoot = `/${project.id.owner}/${project.id.repo}/${branch}`;
 
-        const port = this.options.portForBranch(branch);
+        let port = this.repoBranchToPort[project.id.repo + ":" + branch];
+        if (!port) {
+            logger.info("Looking for unused port for branch '%s' of %s:%s...", branch, project.id.owner, project.id.repo);
+            port = await portfinder.getPortPromise({/*host: this.options.baseUrl,*/ port: this.options.lowerPort});
+            this.repoBranchToPort[project.id.repo + ":" + branch] = port;
+            logger.info("Reserving port %d for branch '%s' of %s:%s", port, branch, project.id.owner, project.id.repo);
+        }
         const existingChildProcess = this.portToChildProcess[port];
         if (!!existingChildProcess) {
-            logger.info("Killing existing process for branch '%s' with pid %s", branch, existingChildProcess.pid);
+            logger.info("Killing existing process for branch '%s' of %s:%s with pid %s", branch,
+                project.id.owner, project.id.repo, existingChildProcess.pid);
             await poisonAndWait(existingChildProcess);
         } else {
-            logger.info("No existing process for branch '%s'", branch);
+            logger.info("No existing process for branch '%s' of %s:%s", branch, project.id.owner, project.id.repo);
         }
 
         const childProcess = spawn("mvn",

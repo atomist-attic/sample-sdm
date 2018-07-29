@@ -132,7 +132,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 
     sdm.addGoalImplementation("Maven deployment", MavenDeploymentGoal,
         executeMavenDeploy(sdm.configuration.sdm.projectLoader, {
-            portForBranch: () => 9090,
+            lowerPort: 9090,
         }));
 
     return sdm;
