@@ -74,11 +74,15 @@ import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
-import { cloudFoundryProductionDeploySpec, enableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
+import {
+    cloudFoundryProductionDeploySpec,
+    enableDeployOnCloudFoundryManifestAddition
+} from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { buttonMessage } from "./buttonMessage";
 import { addTeamPolicies } from "./teamPolicies";
+import { executeMavenDeploy, MavenDeploymentGoal } from "./MavenDeploymentGoal";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -123,7 +127,14 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 
     codeRules(sdm);
     buildRules(sdm);
-    deployRules(sdm);
+
+    //deployRules(sdm);
+
+    sdm.addGoalImplementation("Maven deployment", MavenDeploymentGoal,
+        executeMavenDeploy(sdm.configuration.sdm.projectLoader, {
+            portForBranch: () => 9090,
+        }));
+
     return sdm;
 }
 
@@ -136,7 +147,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         whenPushSatisfies(anySatisfied(IsMaven, IsNode))
             .setGoals(JustBuildGoal),
         whenPushSatisfies(HasSpringBootApplicationClass, ToDefaultBranch)
-            .setGoals(LocalDeploymentGoal),
+            .setGoals(MavenDeploymentGoal),
         // whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
         //     .setGoals([ArtifactGoal,
         //         StagingDeploymentGoal,
@@ -182,6 +193,13 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         NodeSupport,
         CloudFoundrySupport,
     );
+
+    sdm.addReviewListener(async l => {
+        await l.addressChannels(`${l.review.comments.length} review errors: ${l.review.comments}`);
+        for (const c of l.review.comments) {
+            await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
+        }
+    });
 }
 
 export function deployRules(sdm: SoftwareDeliveryMachine) {
