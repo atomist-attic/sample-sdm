@@ -17,10 +17,7 @@
 import { Configuration } from "@atomist/automation-client";
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import {
-    ConfigureOptions,
-    configureSdm,
-} from "@atomist/sdm-core";
+import { ConfigureOptions, configureSdm, } from "@atomist/sdm-core";
 // import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";

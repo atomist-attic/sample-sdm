@@ -84,7 +84,7 @@ export function executeMavenDeploy(projectLoader: ProjectLoader,
         try {
             const deployment = await projectLoader.doWithProject({ credentials, id, readOnly: true },
                 project => deployer.deployProject(new LoggingProgressLog("info"), project, goalInvocation.sdmGoal.branch));
-            await goalInvocation.addressChannels(`Deployed \`${id.owner}/${id.repo}\` at ${deployment.endpoint}`);
+            await goalInvocation.addressChannels(`Deployed \`${id.owner}/${id.repo}/${goalInvocation.sdmGoal.branch} [${goalInvocation.sdmGoal.sha}]\` at ${deployment.endpoint}`);
             return { code: 0 };
         }
         catch (err) {

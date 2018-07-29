@@ -146,7 +146,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(anySatisfied(IsMaven, IsNode))
             .setGoals(JustBuildGoal),
-        whenPushSatisfies(HasSpringBootApplicationClass, ToDefaultBranch)
+        whenPushSatisfies(HasSpringBootApplicationClass)
             .setGoals(MavenDeploymentGoal),
         // whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
         //     .setGoals([ArtifactGoal,
