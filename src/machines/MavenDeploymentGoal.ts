@@ -152,8 +152,12 @@ class MavenDeployer {
         childProcess.stdout.on("data", what => newLineDelimitedLog.write(what.toString()));
         childProcess.stderr.on("data", what => newLineDelimitedLog.write(what.toString()));
         return new Promise<SpawnedDeployment>((resolve, reject) => {
+            let stdout = "";
             childProcess.stdout.addListener("data", what => {
-                if (!!what && this.options.successPatterns.some(successPattern => successPattern.test(what.toString()))) {
+                if (!!what) {
+                    stdout += what;
+                }
+                if (this.options.successPatterns.some(successPattern => successPattern.test(stdout))) {
                     resolve(deployment);
                 }
             });
