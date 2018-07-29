@@ -49,6 +49,14 @@ export interface MavenDeployerOptions {
 
 }
 
+/** Successs patterns when Spring Boot starts
+ * @type {RegExp}
+ */
+export const SpringBootSuccessPatterns = [
+    /Tomcat started on port/,
+    /Started [A-Za-z0-9_$]+ in [0-9]+.[0-9]+ seconds/,
+];
+
 /**
  * Use Maven to deploy
  * @param projectLoader use to load projects
@@ -66,12 +74,13 @@ export function executeMavenDeploy(projectLoader: ProjectLoader,
     const deployer = new MavenDeployer(optsToUse);
 
     return async goalInvocation => {
-        await goalInvocation.addressChannels("should do Maven deploy");
+        //await goalInvocation.addressChannels("should do Maven deploy");
         const { credentials, id } = goalInvocation;
 
         try {
-            await projectLoader.doWithProject({ credentials, id, readOnly: true },
+            const deployment = await projectLoader.doWithProject({ credentials, id, readOnly: true },
                 project => deployer.deployProject(new LoggingProgressLog("info"), project, goalInvocation.sdmGoal.branch));
+            await goalInvocation.addressChannels(`Deployed \`${id.owner}/${id.repo}\` at ${deployment.endpoint}`);
             return { code: 0 };
         }
         catch (err) {
@@ -79,14 +88,6 @@ export function executeMavenDeploy(projectLoader: ProjectLoader,
         }
     };
 }
-
-/** Successs patterns when Spring Boot starts
- * @type {RegExp}
- */
-export const SpringBootSuccessPatterns = [
-    /Tomcat started on port/,
-    /Started [A-Za-z0-9_$]+ in [0-9]+.[0-9]+ seconds/,
-];
 
 /**
  * Holds state
@@ -135,9 +136,6 @@ class MavenDeployer {
         // TODO record
         const newLineDelimitedLog = new DelimitedWriteProgressLogDecorator(log, "\n");
         childProcess.stdout.on("data", what => newLineDelimitedLog.write(what.toString()));
-        childProcess.stdout.on("data", what => process.stdout.write(what.toString()));
-        childProcess.stderr.on("data", what => process.stderr.write(what.toString()));
-
         childProcess.stderr.on("data", what => newLineDelimitedLog.write(what.toString()));
         return new Promise<SpawnedDeployment>((resolve, reject) => {
             childProcess.stdout.addListener("data", what => {
