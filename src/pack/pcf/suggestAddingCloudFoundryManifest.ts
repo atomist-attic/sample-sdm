@@ -24,7 +24,7 @@ import {
     ProjectPredicate,
     RepoListener,
 } from "@atomist/sdm";
-import { IsNode } from "@atomist/sdm-core";
+import { IsNode } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootApplicationClass,
     IsMaven,

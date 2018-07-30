@@ -48,14 +48,19 @@ import {
     HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
-    IsNode,
     lookFor200OnEndpointRootGet,
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
     StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { HasSpringBootApplicationClass, IsMaven, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
+import { IsNode } from "@atomist/sdm-pack-node/dist";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    MavenBuilder,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
 import {
     configureLocalSpringBootDeploy,
     ReplaceReadmeTitle,

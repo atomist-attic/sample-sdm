@@ -17,7 +17,7 @@
 import { Project } from "@atomist/automation-client/project/Project";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
 import { AutofixRegistration } from "@atomist/sdm";
-import { IsNode } from "@atomist/sdm-core";
+import { IsNode } from "@atomist/sdm-pack-node";
 import * as _ from "lodash";
 
 export const AddBuildScript: AutofixRegistration = {

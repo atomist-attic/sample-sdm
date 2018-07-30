@@ -16,8 +16,12 @@
 
 import { logger } from "@atomist/automation-client";
 import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
-import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
-import { CloudFoundryManifestPath, NodeProjectIdentifier } from "@atomist/sdm-core";
+import {
+    CodeTransform,
+    CodeTransformRegistration,
+} from "@atomist/sdm";
+import { CloudFoundryManifestPath } from "@atomist/sdm-core";
+import { NodeProjectIdentifier } from "@atomist/sdm-pack-node/dist";
 import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
 import { HasSpringBootPom } from "@atomist/sdm-pack-spring/dist/support/spring/pushTests";
 

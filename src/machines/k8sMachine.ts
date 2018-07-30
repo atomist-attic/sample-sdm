@@ -30,16 +30,18 @@ import {
     DisplayDeployEnablement,
     EnableDeploy,
     HttpServiceGoals,
-    IsNode,
     K8sAutomationBuilder,
     LibraryGoals,
     lookFor200OnEndpointRootGet,
     NoGoals,
-    NpmBuildGoals,
-    NpmDeployGoals,
     requestDeployToK8s,
     ToPublicRepo,
 } from "@atomist/sdm-core";
+import {
+    IsNode,
+    NpmBuildGoals,
+    NpmDeployGoals,
+} from "@atomist/sdm-pack-node/dist";
 import {
     HasSpringBootApplicationClass,
     IsMaven,

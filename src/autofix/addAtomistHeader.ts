@@ -15,13 +15,17 @@
  */
 
 import {
-    allSatisfied, AutofixRegistration,
+    allSatisfied,
+    AutofixRegistration,
     hasFileContaining,
     PushTest,
 } from "@atomist/sdm";
-import { IsTypeScript } from "@atomist/sdm-core";
+import { IsTypeScript } from "@atomist/sdm-pack-node";
 import { IsJava } from "@atomist/sdm-pack-spring";
-import { AddHeaderParameters, addHeaderTransform } from "../commands/editors/license/addHeader";
+import {
+    AddHeaderParameters,
+    addHeaderTransform,
+} from "../commands/editors/license/addHeader";
 import { LicenseFilename } from "./addLicenseFile";
 
 export const AddAtomistJavaHeader: AutofixRegistration<AddHeaderParameters> = addAtomistHeader("Java header", "**/*.java", IsJava);

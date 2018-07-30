@@ -16,10 +16,12 @@
 
 import { logger } from "@atomist/automation-client";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { GraphGoals, summarizeGoalsInGitHubStatus } from "@atomist/sdm-core";
+import {
+    GraphGoals,
+    summarizeGoalsInGitHubStatus,
+} from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
-import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
 import { buildAwareCodeTransforms } from "@atomist/sdm/pack/build-aware-transform";
 import { AddApacheLicenseHeaderTransform } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
@@ -40,7 +42,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addClosedIssueListener(thankYouYouRock)
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
-        .addReviewListener(slackReviewListener())
+        // .addReviewListenerRegistration(slackReviewListener())
         .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
         .addNewRepoWithCodeListener(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
