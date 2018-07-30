@@ -40,7 +40,10 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addClosedIssueListener(thankYouYouRock)
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
-        .addReviewListener(slackReviewListener())
+        .addReviewListenerRegistration({
+            name: "slack",
+            listener: slackReviewListener(),
+        })
         .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
         .addNewRepoWithCodeListener(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
