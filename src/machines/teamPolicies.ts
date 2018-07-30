@@ -22,6 +22,7 @@ import {
 } from "@atomist/sdm-core";
 import { SlocSupport } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
+import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
 import { buildAwareCodeTransforms } from "@atomist/sdm/pack/build-aware-transform";
 import { AddApacheLicenseHeaderTransform } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
@@ -30,7 +31,6 @@ import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
 import { PublishNewRepo } from "../listener/repo/publishNewRepo";
 import { codeMetrics } from "../pack/codemetrics/codeMetrics";
-import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
 
 /**
  * Set up team policies independent of specific stacks

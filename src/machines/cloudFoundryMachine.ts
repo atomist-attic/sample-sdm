@@ -51,12 +51,13 @@ import {
     ToPublicRepo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { IsNode, nodeBuilder, NpmBuildGoals, NpmDeployGoals, NpmDockerGoals, NpmKubernetesDeployGoals, } from "@atomist/sdm-pack-node";
+import { IsNode, nodeBuilder, NpmBuildGoals, NpmDeployGoals, NpmDockerGoals, NpmKubernetesDeployGoals } from "@atomist/sdm-pack-node";
 
-import { HasSpringBootApplicationClass, IsMaven, MaterialChangeToJavaRepo, MavenBuilder, SpringSupport, } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator, } from "@atomist/sdm-pack-spring/dist";
+import { HasSpringBootApplicationClass, IsMaven, MaterialChangeToJavaRepo, MavenBuilder, SpringSupport } from "@atomist/sdm-pack-spring";
+import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator } from "@atomist/sdm-pack-spring/dist";
 import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 
+import { HasAtomistBuildFile, npmCustomBuilder } from "@atomist/sdm-pack-node";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -72,10 +73,9 @@ import {
     enableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
-import { SuggestAddingCloudFoundryManifest, suggestAddingCloudFoundryManifestOnNewRepo, } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest, suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { HasAtomistBuildFile, npmCustomBuilder } from "@atomist/sdm-pack-node";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry
