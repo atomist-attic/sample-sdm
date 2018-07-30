@@ -21,7 +21,6 @@ import { ConfigureOptions, configureSdm, } from "@atomist/sdm-core";
 // import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
-import { Config } from "./local";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 
 /*
@@ -72,10 +71,6 @@ const Options: ConfigureOptions = {
         mergeAutofixes: true,
         preferLocalSeeds: true,
     },
-    // sdm: {
-    //     // TODO get this from the config
-    //     logFactory: tryRolarLogFactory("http://rolar.cfapps.io"),
-    // },
 };
 
 export const configuration: Configuration = {
