@@ -39,7 +39,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 |`@atomist/automation-client-ext-eventlog`|`0.1.0-20180725112931`|Atomist, Inc.|[https://github.com/atomist/automation-client-ext-eventlog](https://github.com/atomist/automation-client-ext-eventlog)|
 |`@atomist/sdm-core`|`0.3.2-20180730094924`|Atomist, Inc.|[https://github.com/atomist/sdm-core](https://github.com/atomist/sdm-core)|
 |`@atomist/sdm-pack-checkstyle`|`0.1.2-20180629042836`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-checkstyle](https://github.com/atomist/sdm-pack-checkstyle)|
-|`@atomist/sdm-pack-node`|`0.1.0-20180730101702`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-node](https://github.com/atomist/sdm-pack-node)|
+|`@atomist/sdm-pack-node`|`0.1.0-20180730213105`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-node](https://github.com/atomist/sdm-pack-node)|
 |`@atomist/sdm-pack-sloc`|`0.1.6-20180710045956`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-sloc](https://github.com/atomist/sdm-pack-sloc)|
 |`@atomist/sdm-pack-sonarqube`|`0.1.3-20180629030539`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-sonarqube](https://github.com/atomist/sdm-pack-sonarqube)|
 |`@atomist/sdm-pack-spring`|`0.1.7-20180715090742`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-spring](https://github.com/atomist/sdm-pack-spring)|
