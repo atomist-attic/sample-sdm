@@ -28,6 +28,7 @@ import {
     CommentsFormatter,
     singleIssueManagingReviewListener,
 } from "../../listener/review-listener/issueManagingReviewListeners";
+import { ReviewListenerRegistration } from "@atomist/sdm/api/registration/ReviewListenerRegistration";
 
 const CloudReadinessIssueTitle = "Service Not Yet Cloud Native";
 const CloudReadinessReviewCommentCategories = [
@@ -56,7 +57,10 @@ const CloudReadinessBodyFormatter: CommentsFormatter = (comments, rr) => {
  * Manage cloud readiness issue
  * @type {ReviewListener}
  */
-export const CloudReadinessIssueManager: ReviewListener = singleIssueManagingReviewListener(
-    CloudReadinessCommentFilter,
-    CloudReadinessIssueTitle,
-    CloudReadinessBodyFormatter);
+export const CloudReadinessIssueManager: ReviewListenerRegistration = {
+    name: "Create and update one issue for cloud readiness",
+    listener: singleIssueManagingReviewListener(
+        CloudReadinessCommentFilter,
+        CloudReadinessIssueTitle,
+        CloudReadinessBodyFormatter)
+};

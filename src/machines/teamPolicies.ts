@@ -30,6 +30,7 @@ import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
 import { PublishNewRepo } from "../listener/repo/publishNewRepo";
 import { codeMetrics } from "../pack/codemetrics/codeMetrics";
+import { slackReviewListener } from "@atomist/sdm/api-helper/code/review/slackReviewListener";
 
 /**
  * Set up team policies independent of specific stacks
@@ -42,7 +43,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addClosedIssueListener(thankYouYouRock)
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
-        // .addReviewListenerRegistration(slackReviewListener())
+        .addReviewListenerRegistration({ name: "slack", listener: slackReviewListener() })
         .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
         .addNewRepoWithCodeListener(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
