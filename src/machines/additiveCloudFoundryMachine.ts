@@ -72,7 +72,7 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
-import { NodeSupport } from "../pack/node/nodeSupport";
+import { NodeSupport, IsNode } from "@atomist/sdm-pack-node";
 import {
     cloudFoundryProductionDeploySpec,
     enableDeployOnCloudFoundryManifestAddition

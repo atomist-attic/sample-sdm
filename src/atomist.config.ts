@@ -71,7 +71,7 @@ const Options: ConfigureOptions = {
         mergeAutofixes: true,
         preferLocalSeeds: true,
     },
-};
+} as any;
 
 export const configuration: Configuration = {
     sdm: {
