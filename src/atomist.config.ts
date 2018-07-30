@@ -24,8 +24,6 @@ import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { Config } from "./local";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 
-import { configureLocal, LocalLifecycle } from "@atomist/slalom";
-
 /*
  * This sample-sdm includes code for a variety of
  * software delivery machines. Choose one here.
@@ -57,10 +55,7 @@ import { configureLocal, LocalLifecycle } from "@atomist/slalom";
  */
 
 function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
-    const sdm = additiveCloudFoundryMachine(config);
-    // For local use
-    sdm.addExtensionPacks(LocalLifecycle);
-    return sdm;
+    return additiveCloudFoundryMachine(config);
 }
 
 const Options: ConfigureOptions = {
@@ -72,6 +67,11 @@ const Options: ConfigureOptions = {
         "sdm.cloudfoundry.spaces.production",
         "sdm.cloudfoundry.spaces.staging",
     ],
+    local: {
+        repositoryOwnerParentDirectory: process.env.SDM_PROJECTS_ROOT || "/Users/rodjohnson/temp/local-sdm",
+        mergeAutofixes: true,
+        preferLocalSeeds: true,
+    },
     // sdm: {
     //     // TODO get this from the config
     //     logFactory: tryRolarLogFactory("http://rolar.cfapps.io"),
@@ -98,7 +98,6 @@ export const configuration: Configuration = {
         level: "info",
     },
     postProcessors: [
-        configureLocal(Config),
         configureDashboardNotifications,
         configureSdm(createMachine, Options),
     ],
