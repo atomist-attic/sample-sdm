@@ -33,7 +33,7 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import {
     createSoftwareDeliveryMachine,
     DisableDeploy,
@@ -51,13 +51,6 @@ import {
     ToPublicRepo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { IsNode, nodeBuilder, NpmBuildGoals, NpmDeployGoals, NpmDockerGoals, NpmKubernetesDeployGoals, } from "@atomist/sdm-pack-node";
-
-import { HasSpringBootApplicationClass, IsMaven, MaterialChangeToJavaRepo, MavenBuilder, SpringSupport, } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, kotlinRestGenerator, springRestGenerator, } from "@atomist/sdm-pack-spring/dist";
-import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
-
-import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
@@ -75,7 +68,10 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SuggestAddingCloudFoundryManifest, suggestAddingCloudFoundryManifestOnNewRepo, } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { HasAtomistBuildFile, npmCustomBuilder } from "@atomist/sdm-pack-node";
+import { HasAtomistBuildFile, npmCustomBuilder, NpmDeployGoals, IsNode, NpmKubernetesDeployGoals, NpmDockerGoals, NpmBuildGoals, nodeBuilder } from "@atomist/sdm-pack-node";
+import { HasSpringBootApplicationClass, MaterialChangeToJavaRepo, IsMaven, MavenBuilder, SpringSupport, springRestGenerator, kotlinRestGenerator,
+    configureLocalSpringBootDeploy } from "@atomist/sdm-pack-spring";
+import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry

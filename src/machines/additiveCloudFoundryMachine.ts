@@ -18,13 +18,12 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import {
     AnyPush,
     anySatisfied,
-    ArtifactGoal,
     AutofixGoal,
+    CommandHandlerRegistration,
     goalContributors,
     Goals,
     JustBuildGoal,
     LocalDeploymentGoal,
-    not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
@@ -32,9 +31,6 @@ import {
     PushReactionGoal,
     ReviewGoal,
     SoftwareDeliveryMachine,
-    StagingDeploymentGoal,
-    StagingEndpointGoal,
-    StagingVerifiedGoal,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
@@ -48,27 +44,28 @@ import {
     HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
+    LocalEndpointGoal,
+    LocalUndeploymentGoal,
     lookFor200OnEndpointRootGet,
+    LookupStrategy,
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
-    StagingUndeploymentGoal,
+    StartupInfo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { IsNode } from "@atomist/sdm-pack-node/dist";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
+    ListLocalDeploys,
     MavenBuilder,
-    SpringSupport,
-} from "@atomist/sdm-pack-spring";
-import {
-    configureLocalSpringBootDeploy,
+    mavenDeployer,
     ReplaceReadmeTitle,
     SetAtomistTeamInApplicationYml,
-} from "@atomist/sdm-pack-spring/dist";
-import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
-import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
-import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
+    SpringBootSuccessPatterns,
+    SpringProjectCreationParameters,
+    SpringSupport,
+    TransformSeedToCustomProject,
+} from "@atomist/sdm-pack-spring";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -78,11 +75,13 @@ import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import {
     cloudFoundryProductionDeploySpec,
-    enableDeployOnCloudFoundryManifestAddition,
+    enableDeployOnCloudFoundryManifestAddition
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
+import { buttonMessage } from "./buttonMessage";
 import { addTeamPolicies } from "./teamPolicies";
+import { executeMavenDeploy, MavenDeploymentGoal } from "./MavenDeploymentGoal";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -98,9 +97,43 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             name: "Cloud Foundry software delivery machine",
             configuration,
         });
+
+    const helloCommand: CommandHandlerRegistration<{ name: string }> = {
+        name: "hello",
+        intent: "say hello",
+        parameters: {
+            name: { pattern: /[A-Za-z]+/ },
+        },
+        listener: async ci => {
+            return ci.addressChannels(`Hello _${ci.parameters.name}_ :wave:`);
+        },
+    };
+
+    sdm.addRepoCreationListener(async l =>
+        l.addressChannels(`New repo ${l.id.url}`));
+    sdm.addNewRepoWithCodeListener(async l =>
+        l.addressChannels(`New repo with code ${l.id.url}`));
+
+    sdm.addCommand(helloCommand);
+
+    sdm.addCommand({
+        name: "greet",
+        intent: "greet",
+        listener: async ci => {
+            return ci.addressChannels(buttonMessage({ text: "greet" }, helloCommand, { name: "Rod" }));
+        },
+    });
+
     codeRules(sdm);
     buildRules(sdm);
-    deployRules(sdm);
+
+    //deployRules(sdm);
+
+    sdm.addGoalImplementation("Maven deployment", MavenDeploymentGoal,
+        executeMavenDeploy(sdm.configuration.sdm.projectLoader, {
+            lowerPort: 9090,
+        }));
+
     return sdm;
 }
 
@@ -112,17 +145,17 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(anySatisfied(IsMaven, IsNode))
             .setGoals(JustBuildGoal),
-        whenPushSatisfies(HasSpringBootApplicationClass, not(ToDefaultBranch))
-            .setGoals(LocalDeploymentGoal),
-        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
-            .setGoals([ArtifactGoal,
-                StagingDeploymentGoal,
-                StagingEndpointGoal,
-                StagingVerifiedGoal]),
-        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-            .setGoals([ArtifactGoal,
-                ProductionDeploymentGoal,
-                ProductionEndpointGoal]),
+        whenPushSatisfies(HasSpringBootApplicationClass)
+            .setGoals(MavenDeploymentGoal),
+        // whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
+        //     .setGoals([ArtifactGoal,
+        //         StagingDeploymentGoal,
+        //         StagingEndpointGoal,
+        //         StagingVerifiedGoal]),
+        // whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+        //     .setGoals([ArtifactGoal,
+        //         ProductionDeploymentGoal,
+        //         ProductionEndpointGoal]),
     ));
 
     sdm
@@ -159,23 +192,52 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         NodeSupport,
         CloudFoundrySupport,
     );
+
+    sdm.addReviewListenerRegistration({
+        name: "consoleListener",
+        listener: async l => {
+            await l.addressChannels(`${l.review.comments.length} review errors: ${l.review.comments}`);
+            for (const c of l.review.comments) {
+                await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
+            }
+        }
+    });
 }
 
 export function deployRules(sdm: SoftwareDeliveryMachine) {
-    configureLocalSpringBootDeploy(sdm);
+    // //configureLocalSpringBootDeploy(sdm);
+    // sdm.addDeployRules(
+    //     deploy.when(IsMaven)
+    //         .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+    //         .using(
+    //             {
+    //                 deployer: localExecutableJarDeployer(),
+    //                 targeter: ManagedDeploymentTargeter,
+    //             },
+    //         ),
+
     sdm.addDeployRules(
         deploy.when(IsMaven)
-            .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+            .itMeans("Maven local deploy")
+            .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
             .using(
                 {
-                    deployer: localExecutableJarDeployer(),
+                    deployer: mavenDeployer(sdm.configuration.sdm.projectLoader, {
+                        baseUrl: "http://localhost",
+                        lowerPort: 9090,
+                        commandLineArgumentsFor: springBootMavenArgs,
+                        successPatterns: SpringBootSuccessPatterns,
+                        lookupStrategy: LookupStrategy.service,
+                    }),
                     targeter: ManagedDeploymentTargeter,
                 },
-            ),
-        deploy.when(IsMaven)
-            .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
-    );
+            ))
+        .addCommand(ListLocalDeploys);
+
+    deploy.when(IsMaven)
+        .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
+        .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm));
+
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)
             .itMeans("Java project to undeploy from PCF")
@@ -201,4 +263,12 @@ export function buildRules(sdm: SoftwareDeliveryMachine) {
     sdm.addBuildRules(
         build.setDefault(mb));
     return sdm;
+}
+
+// TODO come out of spring-pack
+function springBootMavenArgs(si: StartupInfo): string[] {
+    return [
+        `-Dserver.port=${si.port}`,
+        `-Dserver.contextPath=${si.contextRoot}`,
+    ];
 }

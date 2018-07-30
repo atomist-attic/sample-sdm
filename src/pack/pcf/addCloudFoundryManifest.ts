@@ -23,7 +23,7 @@ import {
 import { CloudFoundryManifestPath } from "@atomist/sdm-core";
 import { NodeProjectIdentifier } from "@atomist/sdm-pack-node/dist";
 import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
-import { HasSpringBootPom } from "@atomist/sdm-pack-spring/dist/support/spring/pushTests";
+import { HasSpringBootPom } from "@atomist/sdm-pack-spring";
 
 export const AddCloudFoundryManifestMarker = "[atomist:add-pcf-manifest]";
 

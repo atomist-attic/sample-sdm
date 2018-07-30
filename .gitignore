@@ -20,4 +20,4 @@ atomisthq.sh
 
 *.log
 *.log.gz
-log
+log/

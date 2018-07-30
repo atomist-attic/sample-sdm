@@ -18,9 +18,9 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
 import { springBootTagger } from "@atomist/sdm-pack-spring";
-import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring/dist";
-import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring/dist/support/spring/generate/SpringProjectCreationParameters";
-import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring/dist/support/spring/generate/transformSeedToCustomProject";
+import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring";
+import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring";
+import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";

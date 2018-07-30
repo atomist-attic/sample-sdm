@@ -43,7 +43,10 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addClosedIssueListener(thankYouYouRock)
         .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
-        .addReviewListenerRegistration({ name: "slack", listener: slackReviewListener() })
+        .addReviewListenerRegistration({
+            name: "slack",
+            listener: slackReviewListener(),
+        })
         .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
         .addNewRepoWithCodeListener(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
@@ -63,7 +66,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
     }
 
     sdm.addExtensionPacks(codeMetrics());
-    summarizeGoalsInGitHubStatus(sdm);
+    // summarizeGoalsInGitHubStatus(sdm);
 
     // sdm.addPushReactions(shutDownDeliveryIf(EverySecondOneGoesThrough));
 }

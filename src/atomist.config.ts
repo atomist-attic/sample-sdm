@@ -16,19 +16,12 @@
 
 import { Configuration } from "@atomist/automation-client";
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
-import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
-import {
-    SoftwareDeliveryMachine,
-    SoftwareDeliveryMachineOptions,
-} from "@atomist/sdm";
-import {
-    ConfigureOptions,
-    configureSdm,
-} from "@atomist/sdm-core";
-// import { LazyProjectLoader } from "@atomist/sdm/api-helper/project/LazyProjectLoader";
+import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
+import { ConfigureOptions, configureSdm, } from "@atomist/sdm-core";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
+import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -60,8 +53,7 @@ import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMach
  * start with any of these and change it to make it your own!
  */
 
-function createMachine(
-    config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     return additiveCloudFoundryMachine(config);
 }
 
@@ -74,15 +66,16 @@ const Options: ConfigureOptions = {
         "sdm.cloudfoundry.spaces.production",
         "sdm.cloudfoundry.spaces.staging",
     ],
-    // sdm: {
-    //     // TODO get this from the config
-    //     logFactory: tryRolarLogFactory("http://rolar.cfapps.io"),
-    // },
+    local: {
+        repositoryOwnerParentDirectory: process.env.SDM_PROJECTS_ROOT || "/Users/rodjohnson/temp/local-sdm",
+        mergeAutofixes: true,
+        preferLocalSeeds: true,
+    },
 };
 
 export const configuration: Configuration = {
     sdm: {
-       // projectLoader: new CachingProjectLoader(new LazyProjectLoader(CloningProjectLoader)),
+        // projectLoader: new CachingProjectLoader(new LazyProjectLoader(CloningProjectLoader)),
     } as Partial<SoftwareDeliveryMachineOptions>,
     http: {
         auth: {
