@@ -55,7 +55,6 @@ import {
     IsNode,
     nodeBuilder,
     NpmBuildGoals,
-    npmCustomBuilder,
     NpmDeployGoals,
     NpmDockerGoals,
     NpmKubernetesDeployGoals,

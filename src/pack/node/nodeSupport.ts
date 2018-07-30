@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import { MappedParameters } from "@atomist/automation-client";
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
+import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
 import {
     DeclarationType,
     ExtensionPack,
@@ -29,8 +31,6 @@ import {
     tslintFix,
 } from "@atomist/sdm-pack-node/dist";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
-import { MappedParameters } from "@atomist/automation-client";
-import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { UpdateReadmeTitle } from "../../commands/editors/updateReadmeTitle";
