@@ -37,8 +37,10 @@
     "properties-reader": "0.0.16",
     "winston-logzio": "^1.0.8"
   },
+  "peerDependencies": {
+    "@atomist/slalom": "*"
+  },
   "devDependencies": {
-    "@atomist/slalom": "0.1.0-20180730105931",
     "@types/mocha": "^2.2.48",
     "@types/node": "^8.9.5",
     "@types/power-assert": "^1.4.29",
