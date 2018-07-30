@@ -194,10 +194,13 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         CloudFoundrySupport,
     );
 
-    sdm.addReviewListener(async l => {
-        await l.addressChannels(`${l.review.comments.length} review errors: ${l.review.comments}`);
-        for (const c of l.review.comments) {
-            await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
+    sdm.addReviewListenerRegistration({
+        name: "consoleListener",
+        listener: async l => {
+            await l.addressChannels(`${l.review.comments.length} review errors: ${l.review.comments}`);
+            for (const c of l.review.comments) {
+                await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
+            }
         }
     });
 }
