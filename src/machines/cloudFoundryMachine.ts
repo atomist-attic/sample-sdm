@@ -51,6 +51,28 @@ import {
     ToPublicRepo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
+import {
+    HasAtomistBuildFile,
+    IsNode,
+    nodeBuilder,
+    NpmBuildGoals,
+    npmCustomBuilder,
+    NpmDeployGoals,
+    NpmDockerGoals,
+    NpmKubernetesDeployGoals,
+} from "@atomist/sdm-pack-node";
+
+import {
+    configureLocalSpringBootDeploy,
+    HasSpringBootApplicationClass,
+    IsMaven,
+    kotlinRestGenerator,
+    MaterialChangeToJavaRepo,
+    MavenBuilder,
+    springRestGenerator,
+    SpringSupport,
+} from "@atomist/sdm-pack-spring";
+import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
@@ -65,13 +87,9 @@ import {
     enableDeployOnCloudFoundryManifestAddition,
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
-import { SuggestAddingCloudFoundryManifest, suggestAddingCloudFoundryManifestOnNewRepo, } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import { SuggestAddingCloudFoundryManifest, suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { HasAtomistBuildFile, npmCustomBuilder, NpmDeployGoals, IsNode, NpmKubernetesDeployGoals, NpmDockerGoals, NpmBuildGoals, nodeBuilder } from "@atomist/sdm-pack-node";
-import { HasSpringBootApplicationClass, MaterialChangeToJavaRepo, IsMaven, MavenBuilder, SpringSupport, springRestGenerator, kotlinRestGenerator,
-    configureLocalSpringBootDeploy } from "@atomist/sdm-pack-spring";
-import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
 
 /**
  * Assemble a machine that supports Java, Spring and Node and deploys to Cloud Foundry

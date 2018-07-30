@@ -32,5 +32,5 @@ export const CloudReadinessChecks: ExtensionPack = {
             .addReviewerRegistration(ProvidedDependencyReviewer)
             .addReviewerRegistration(FileIoImportReviewer)
             .addReviewerRegistration(ImportDotStarReviewer)
-            .addReviewListenerRegistration(CloudReadinessIssueManager)
+            .addReviewListenerRegistration(CloudReadinessIssueManager),
 };

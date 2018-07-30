@@ -17,18 +17,17 @@
 import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { deepLink } from "@atomist/automation-client/util/gitHub";
 
-import { ReviewListener } from "@atomist/sdm";
 import {
     HardcodePropertyCategory,
     ImportDotStarCategory,
     ImportFileIoCategory,
 } from "@atomist/sdm-pack-spring";
+import { ReviewListenerRegistration } from "@atomist/sdm/api/registration/ReviewListenerRegistration";
 import * as _ from "lodash";
 import {
     CommentsFormatter,
     singleIssueManagingReviewListener,
 } from "../../listener/review-listener/issueManagingReviewListeners";
-import { ReviewListenerRegistration } from "@atomist/sdm/api/registration/ReviewListenerRegistration";
 
 const CloudReadinessIssueTitle = "Service Not Yet Cloud Native";
 const CloudReadinessReviewCommentCategories = [
@@ -62,5 +61,5 @@ export const CloudReadinessIssueManager: ReviewListenerRegistration = {
     listener: singleIssueManagingReviewListener(
         CloudReadinessCommentFilter,
         CloudReadinessIssueTitle,
-        CloudReadinessBodyFormatter)
+        CloudReadinessBodyFormatter),
 };
