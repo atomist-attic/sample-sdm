@@ -180,12 +180,13 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(UndeployEverywhereGoals),
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
-            .setGoals(RepositoryDeletionGoals))
-        .addCommand(EnableDeploy)
+            .setGoals(RepositoryDeletionGoals));
+
+    sdm.addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
-        .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm))
-        .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
+        .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm));
+    // sdm.addEndpointVerificationListener(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
 }
 
