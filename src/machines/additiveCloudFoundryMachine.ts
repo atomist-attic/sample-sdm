@@ -18,12 +18,13 @@ import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitH
 import {
     AnyPush,
     anySatisfied,
+    ArtifactGoal,
     AutofixGoal,
-    CommandHandlerRegistration,
     goalContributors,
     Goals,
     JustBuildGoal,
     LocalDeploymentGoal,
+    not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
@@ -31,6 +32,9 @@ import {
     PushReactionGoal,
     ReviewGoal,
     SoftwareDeliveryMachine,
+    StagingDeploymentGoal,
+    StagingEndpointGoal,
+    StagingVerifiedGoal,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
@@ -50,6 +54,7 @@ import {
     LookupStrategy,
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
+    StagingUndeploymentGoal,
     StartupInfo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
@@ -72,16 +77,16 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
-import { NodeSupport, IsNode } from "@atomist/sdm-pack-node";
+import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
 import {
     cloudFoundryProductionDeploySpec,
     enableDeployOnCloudFoundryManifestAddition
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { buttonMessage } from "./buttonMessage";
 import { addTeamPolicies } from "./teamPolicies";
 import { executeMavenDeploy, MavenDeploymentGoal } from "./MavenDeploymentGoal";
+import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -98,31 +103,10 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             configuration,
         });
 
-    const helloCommand: CommandHandlerRegistration<{ name: string }> = {
-        name: "hello",
-        intent: "say hello",
-        parameters: {
-            name: { pattern: /[A-Za-z]+/ },
-        },
-        listener: async ci => {
-            return ci.addressChannels(`Hello _${ci.parameters.name}_ :wave:`);
-        },
-    };
-
     sdm.addRepoCreationListener(async l =>
         l.addressChannels(`New repo ${l.id.url}`));
     sdm.addNewRepoWithCodeListener(async l =>
         l.addressChannels(`New repo with code ${l.id.url}`));
-
-    sdm.addCommand(helloCommand);
-
-    sdm.addCommand({
-        name: "greet",
-        intent: "greet",
-        listener: async ci => {
-            return ci.addressChannels(buttonMessage({ text: "greet" }, helloCommand, { name: "Rod" }));
-        },
-    });
 
     codeRules(sdm);
     buildRules(sdm);
@@ -147,15 +131,15 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(JustBuildGoal),
         whenPushSatisfies(HasSpringBootApplicationClass)
             .setGoals(MavenDeploymentGoal),
-        // whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
-        //     .setGoals([ArtifactGoal,
-        //         StagingDeploymentGoal,
-        //         StagingEndpointGoal,
-        //         StagingVerifiedGoal]),
-        // whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-        //     .setGoals([ArtifactGoal,
-        //         ProductionDeploymentGoal,
-        //         ProductionEndpointGoal]),
+        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
+            .setGoals([ArtifactGoal,
+                StagingDeploymentGoal,
+                StagingEndpointGoal,
+                StagingVerifiedGoal]),
+        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+            .setGoals([ArtifactGoal,
+                ProductionDeploymentGoal,
+                ProductionEndpointGoal]),
     ));
 
     sdm
@@ -205,18 +189,16 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 }
 
 export function deployRules(sdm: SoftwareDeliveryMachine) {
-    // //configureLocalSpringBootDeploy(sdm);
-    // sdm.addDeployRules(
-    //     deploy.when(IsMaven)
-    //         .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-    //         .using(
-    //             {
-    //                 deployer: localExecutableJarDeployer(),
-    //                 targeter: ManagedDeploymentTargeter,
-    //             },
-    //         ),
-
+    configureLocalSpringBootDeploy(sdm);
     sdm.addDeployRules(
+        deploy.when(IsMaven)
+            .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
+            .using(
+                {
+                    deployer: localExecutableJarDeployer(),
+                    targeter: ManagedDeploymentTargeter,
+                },
+            ),
         deploy.when(IsMaven)
             .itMeans("Maven local deploy")
             .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
@@ -231,8 +213,9 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
                     }),
                     targeter: ManagedDeploymentTargeter,
                 },
-            ))
-        .addCommand(ListLocalDeploys);
+            ));
+
+    sdm.addCommand(ListLocalDeploys);
 
     deploy.when(IsMaven)
         .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
