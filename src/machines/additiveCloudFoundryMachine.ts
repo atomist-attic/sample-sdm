@@ -23,7 +23,6 @@ import {
     goalContributors,
     Goals,
     JustBuildGoal,
-    LocalDeploymentGoal,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
@@ -48,14 +47,10 @@ import {
     HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
-    LocalEndpointGoal,
-    LocalUndeploymentGoal,
     lookFor200OnEndpointRootGet,
-    LookupStrategy,
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
     StagingUndeploymentGoal,
-    StartupInfo,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
 import {
@@ -85,7 +80,6 @@ import {
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
-import { executeMavenDeploy, MavenDeploymentGoal } from "./MavenDeploymentGoal";
 import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
@@ -103,21 +97,9 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             configuration,
         });
 
-    sdm.addRepoCreationListener(async l =>
-        l.addressChannels(`New repo ${l.id.url}`));
-    sdm.addNewRepoWithCodeListener(async l =>
-        l.addressChannels(`New repo with code ${l.id.url}`));
-
     codeRules(sdm);
     buildRules(sdm);
-
-    //deployRules(sdm);
-
-    sdm.addGoalImplementation("Maven deployment", MavenDeploymentGoal,
-        executeMavenDeploy(sdm.configuration.sdm.projectLoader, {
-            lowerPort: 9090,
-        }));
-
+    deployRules(sdm);
     return sdm;
 }
 
@@ -129,8 +111,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(anySatisfied(IsMaven, IsNode))
             .setGoals(JustBuildGoal),
-        whenPushSatisfies(HasSpringBootApplicationClass)
-            .setGoals(MavenDeploymentGoal),
         whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
             .setGoals([ArtifactGoal,
                 StagingDeploymentGoal,
@@ -176,16 +156,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         NodeSupport,
         CloudFoundrySupport,
     );
-
-    sdm.addReviewListenerRegistration({
-        name: "consoleListener",
-        listener: async l => {
-            await l.addressChannels(`${l.review.comments.length} review errors: ${l.review.comments}`);
-            for (const c of l.review.comments) {
-                await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
-            }
-        }
-    });
 }
 
 export function deployRules(sdm: SoftwareDeliveryMachine) {
@@ -200,26 +170,9 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
                 },
             ),
         deploy.when(IsMaven)
-            .itMeans("Maven local deploy")
-            .deployTo(LocalDeploymentGoal, LocalEndpointGoal, LocalUndeploymentGoal)
-            .using(
-                {
-                    deployer: mavenDeployer(sdm.configuration.sdm.projectLoader, {
-                        baseUrl: "http://localhost",
-                        lowerPort: 9090,
-                        commandLineArgumentsFor: springBootMavenArgs,
-                        successPatterns: SpringBootSuccessPatterns,
-                        lookupStrategy: LookupStrategy.service,
-                    }),
-                    targeter: ManagedDeploymentTargeter,
-                },
-            ));
-
-    sdm.addCommand(ListLocalDeploys);
-
-    deploy.when(IsMaven)
-        .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-        .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm));
+            .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
+            .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
+    );
 
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)
@@ -234,10 +187,6 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm))
         .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
     addTeamPolicies(sdm);
-
-    // demoRules(sdm);
-
-    // sdm.addExtensionPacks(DemoPolicies);
 }
 
 export function buildRules(sdm: SoftwareDeliveryMachine) {
@@ -246,12 +195,4 @@ export function buildRules(sdm: SoftwareDeliveryMachine) {
     sdm.addBuildRules(
         build.setDefault(mb));
     return sdm;
-}
-
-// TODO come out of spring-pack
-function springBootMavenArgs(si: StartupInfo): string[] {
-    return [
-        `-Dserver.port=${si.port}`,
-        `-Dserver.contextPath=${si.contextRoot}`,
-    ];
 }
