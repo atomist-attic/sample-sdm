@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { executeMavenDeploy, MavenDeploymentGoal } from "../MavenDeploymentGoal";
+import { SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
+import { HasSpringBootApplicationClass } from "@atomist/sdm-pack-spring/dist";
+import {
+    executeMavenPerBranchSpringBootDeploy,
+    MavenPerBranchSpringBootDeploymentGoal
+} from "@atomist/sdm-pack-spring/dist/support/java/deploy/MavenPerBranchSpringBootDeploymentGoal";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
-    // TODO needs it own push test
-    // whenPushSatisfies(HasSpringBootApplicationClass)
-    //     .setGoals(MavenDeploymentGoal),
-    sdm.addGoalImplementation("Maven deployment", MavenDeploymentGoal,
-        executeMavenDeploy(sdm.configuration.sdm.projectLoader, {
+    sdm.addGoalContributions(whenPushSatisfies(HasSpringBootApplicationClass)
+        .setGoals(MavenPerBranchSpringBootDeploymentGoal));
+    sdm.addGoalImplementation("Maven deployment", MavenPerBranchSpringBootDeploymentGoal,
+        executeMavenPerBranchSpringBootDeploy(sdm.configuration.sdm.projectLoader, {
             lowerPort: 9090,
         }));
 
