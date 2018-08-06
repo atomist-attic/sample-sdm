@@ -16,12 +16,12 @@
 
 import { Configuration } from "@atomist/automation-client";
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
+import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { ConfigureOptions, configureSdm, } from "@atomist/sdm-core";
+import { ConfigureOptions, configureSdm } from "@atomist/sdm-core";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
-import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
 
 /*
  * This sample-sdm includes code for a variety of

@@ -32,6 +32,6 @@ export function configureForLocal(sdm: SoftwareDeliveryMachine) {
             for (const c of l.review.comments) {
                 await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
             }
-        }
+        },
     });
 }

@@ -33,7 +33,6 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import {
     createSoftwareDeliveryMachine,
     DisableDeploy,
@@ -61,6 +60,7 @@ import {
     NpmDockerGoals,
     NpmKubernetesDeployGoals,
 } from "@atomist/sdm-pack-node";
+import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
 import {
     configureLocalSpringBootDeploy,

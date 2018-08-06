@@ -22,7 +22,6 @@ import {
     ProvidedDependencyReviewer,
 } from "@atomist/sdm-pack-spring";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
-import { CloudReadinessIssueManager } from "./cloudReadinessIssueManager";
 
 export const CloudReadinessChecks: ExtensionPack = {
     ...metadata("cloud-readiness"),
@@ -31,6 +30,6 @@ export const CloudReadinessChecks: ExtensionPack = {
             .addReviewerRegistration(HardCodedPropertyReviewer)
             .addReviewerRegistration(ProvidedDependencyReviewer)
             .addReviewerRegistration(FileIoImportReviewer)
-            .addReviewerRegistration(ImportDotStarReviewer)
+            .addReviewerRegistration(ImportDotStarReviewer),
            // .addReviewListenerRegistration(CloudReadinessIssueManager),
 };
