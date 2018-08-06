@@ -21,7 +21,7 @@
     "@atomist/automation-client": "^0.19.5-20180803222129",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
     "@atomist/automation-client-ext-eventlog": "0.1.0-20180725112931",
-    "@atomist/sdm": "0.3.2-20180730010005",
+    "@atomist/sdm": "^0.4.0-20180803232455",
     "@atomist/sdm-core": "^0.4.0-20180803134335",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-node": "0.1.0-20180730213105",

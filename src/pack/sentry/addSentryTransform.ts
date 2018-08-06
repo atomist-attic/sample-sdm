@@ -37,15 +37,15 @@ const AddSentryTransform: CodeTransformOrTransforms<AddSentryParams> = [
     // tslint:disable-next-line:max-line-length
     copyFileFromUrl("https://raw.githubusercontent.com/sdm-org/cd20/dc16c15584d77db6cf9a70fdcb4d7bebe24113d5/src/main/java/com/atomist/SentryConfiguration.java",
         "src/main/java/com/atomist/SentryConfiguration.java"),
-    async (p, ctx, params) => {
+    async (p, ci) => {
         await appendOrCreateFileContent({
-            toAppend: sentryYaml(params.dsn),
+            toAppend: sentryYaml(ci.parameters.dsn),
             path: "src/main/resources/application.yml",
-        })(p, ctx, params);
+        })(p, ci.context, ci.parameters);
         return appendOrCreateFileContent({
-            toAppend: sentryYaml(params.dsn),
+            toAppend: sentryYaml(ci.parameters.dsn),
             path: "src/test/resources/application.yml",
-        })(p, ctx, params);
+        })(p, ci.context, ci.parameters);
     },
 ];
 

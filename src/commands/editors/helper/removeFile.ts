@@ -31,12 +31,8 @@ export class RemoveFileParams {
 }
 
 export const RemoveFileEditor: CodeTransformRegistration<RemoveFileParams> = {
-    transform: removeFile,
+    transform: async (p, i) => p.deleteFile(i.parameters.path),
     name: "remove file",
     paramsMaker: RemoveFileParams,
     transformPresentation: ci => commitToMaster(`You asked me to remove file ${ci.parameters.path}!`),
 };
-
-async function removeFile(p: Project, ctx: HandlerContext, params: RemoveFileParams) {
-    return p.deleteFile(params.path);
-}

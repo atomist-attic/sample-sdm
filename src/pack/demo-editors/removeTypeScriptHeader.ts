@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { SimpleProjectEditor } from "@atomist/automation-client/operations/edit/projectEditor";
 import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
 /**
@@ -26,7 +25,7 @@ import { RequestedCommitParameters } from "../../commands/editors/support/Reques
  * @param {HandlerContext} ctx
  * @return {Promise<Project>}
  */
-const whackSomeHeader: SimpleProjectEditor = (p, ctx) => {
+const whackSomeHeader: CodeTransform = (p, ci) => {
     let count = 0;
     return doWithFiles(p, "src/**/*.*", async f => {
         if (CFamilySuffix.test(f.path)) {
@@ -37,7 +36,7 @@ const whackSomeHeader: SimpleProjectEditor = (p, ctx) => {
             if (count++ >= 1) {
                 return;
             }
-            await ctx.messageClient.respond(`Removing a header from \`${f.path}\``);
+            await ci.addressChannels(`Removing a header from \`${f.path}\``);
             return f.setContent(fileContent.replace(HeaderRegex, ""));
         }
     });

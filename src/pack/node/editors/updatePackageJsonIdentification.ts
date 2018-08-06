@@ -20,20 +20,20 @@ import { CodeTransform } from "@atomist/sdm";
 import { findAuthorName } from "../../../commands/generators/common/findAuthorName";
 import { NodeProjectCreationParameters } from "../nodeSupport";
 
-export const UpdatePackageJsonIdentification: CodeTransform =
-    async (project, context, params: NodeProjectCreationParameters) => {
-        logger.info("Updating JSON: params=%j", params);
-        const author = await findAuthorName(context, params.screenName)
-            .then(authorName => authorName || params.screenName,
+export const UpdatePackageJsonIdentification: CodeTransform<NodeProjectCreationParameters> =
+    async (project, i) => {
+        logger.info("Updating JSON: params=%j", i.parameters);
+        const author = await findAuthorName(i.context, i.parameters.screenName)
+            .then(authorName => authorName || i.parameters.screenName,
                 err => {
                     logger.warn("Cannot query for author name: %s", err.message);
-                    return params.screenName;
+                    return i.parameters.screenName;
                 });
         return doWithJson(project, "package.json", pkg => {
-            const repoUrl = params.target.repoRef.url;
-            pkg.name = params.appName;
-            pkg.description = params.target.description;
-            pkg.version = params.version;
+            const repoUrl = i.parameters.target.repoRef.url;
+            pkg.name = i.parameters.appName;
+            pkg.description = i.parameters.target.description;
+            pkg.version = i.parameters.version;
             pkg.author = author;
             pkg.repository = {
                 type: "git",

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { HandlerContext } from "@atomist/automation-client";
 import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
 import { Project } from "@atomist/automation-client/project/Project";
 import { CodeTransformRegistration } from "@atomist/sdm";
@@ -28,7 +27,7 @@ export const BreakNodeBuildTransform: CodeTransformRegistration = {
     transformPresentation: () => commitToMaster(`You asked me to break the build!`),
 };
 
-async function breakBuild(p: Project, ctx: HandlerContext) {
+async function breakBuild(p: Project) {
     await p.addFile(BadJavaScriptFileName, "this is not JavaScript");
     return p.addFile(BadTypeScriptFileName, "this is not TypeScript");
 }
