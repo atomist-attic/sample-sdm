@@ -66,11 +66,13 @@ const Options: ConfigureOptions = {
         "sdm.cloudfoundry.spaces.production",
         "sdm.cloudfoundry.spaces.staging",
     ],
+    /*
     local: {
         repositoryOwnerParentDirectory: process.env.SDM_PROJECTS_ROOT || "/Users/rodjohnson/temp/local-sdm",
         mergeAutofixes: true,
         preferLocalSeeds: true,
     },
+    */
 } as any;
 
 export const configuration: Configuration = {
