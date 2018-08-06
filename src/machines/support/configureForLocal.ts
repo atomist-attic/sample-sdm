@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
-import { HasSpringBootApplicationClass } from "@atomist/sdm-pack-spring/dist";
-import {
-    executeMavenPerBranchSpringBootDeploy,
-    MavenPerBranchSpringBootDeploymentGoal
-} from "@atomist/sdm-pack-spring/dist/support/java/deploy/MavenPerBranchSpringBootDeploymentGoal";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
+import { configureMavenPerBranchSpringBootDeploy } from "@atomist/sdm-pack-spring";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
-    sdm.addGoalContributions(whenPushSatisfies(HasSpringBootApplicationClass)
-        .setGoals(MavenPerBranchSpringBootDeploymentGoal));
-    sdm.addGoalImplementation("Maven deployment", MavenPerBranchSpringBootDeploymentGoal,
-        executeMavenPerBranchSpringBootDeploy(sdm.configuration.sdm.projectLoader, {
-            lowerPort: 9090,
-        }));
+    configureMavenPerBranchSpringBootDeploy(sdm);
 
     sdm.addRepoCreationListener(async l =>
         l.addressChannels(`New repo ${l.id.url}`));
