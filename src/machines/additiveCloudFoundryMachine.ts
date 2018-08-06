@@ -46,37 +46,42 @@ import {
     ExplainDeploymentFreezeGoal,
     HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
-    isDeploymentFrozen,
+    isDeploymentFrozen, isInLocalMode,
+    lookFor200OnEndpointRootGet,
     ManagedDeploymentTargeter,
     RepositoryDeletionGoals,
     StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
-import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
+    ListLocalDeploys,
     MavenBuilder,
+    mavenDeployer,
     ReplaceReadmeTitle,
     SetAtomistTeamInApplicationYml,
+    SpringBootSuccessPatterns,
     SpringProjectCreationParameters,
     SpringSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
+import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
 import {
     cloudFoundryProductionDeploySpec,
-    enableDeployOnCloudFoundryManifestAddition,
+    enableDeployOnCloudFoundryManifestAddition
 } from "../pack/pcf/cloudFoundryDeploy";
 import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
+import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist";
+import { configureForLocal } from "./support/configureForLocal";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -95,7 +100,13 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 
     codeRules(sdm);
     buildRules(sdm);
-    deployRules(sdm);
+
+    if (isInLocalMode()) {
+        configureForLocal(sdm);
+    } else {
+        deployRules(sdm);
+    }
+
     return sdm;
 }
 
