@@ -94,6 +94,15 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             configuration,
         });
 
+    sdm.addCommand<{name: string}>({
+        name: "hello",
+        intent: "hello",
+        parameters: {
+            name: { description: "Your name" },
+        },
+        listener: async cli => cli.addressChannels(`Hello ${cli.parameters.name}`),
+    });
+
     codeRules(sdm);
     buildRules(sdm);
 
