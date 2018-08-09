@@ -18,9 +18,9 @@ This page details all runtime OSS dependencies of `@atomist/sample-sdm`.
 |[CC0-1.0](#cc0-10)|3|
 |[Custom: https://github.com/douglascrockford/JSON-js](#custom-httpsgithubcomdouglascrockfordjson-js)|1|
 |[Custom: https://travis-ci.org/ember-cli/ember-cli.svg](#custom-httpstravis-ciorgember-cliember-clisvg)|1|
-|[GPL-3.0](#gpl-30)|5|
+|[GPL-3.0](#gpl-30)|6|
 |[ISC](#isc)|117|
-|[MIT](#mit)|782|
+|[MIT](#mit)|783|
 |[Public Domain](#public-domain)|1|
 |[Unlicense](#unlicense)|2|
 |[WTFPL](#wtfpl)|3|
@@ -44,7 +44,7 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 |`@atomist/sdm-pack-node`|`0.1.0-20180730213105`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-node](https://github.com/atomist/sdm-pack-node)|
 |`@atomist/sdm-pack-sloc`|`0.1.6-20180710045956`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-sloc](https://github.com/atomist/sdm-pack-sloc)|
 |`@atomist/sdm-pack-sonarqube`|`0.1.3-20180629030539`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-sonarqube](https://github.com/atomist/sdm-pack-sonarqube)|
-|`@atomist/sdm-pack-spring`|`0.1.8-20180806072300`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-spring](https://github.com/atomist/sdm-pack-spring)|
+|`@atomist/sdm-pack-spring`|`0.1.10-diag.20180809232649`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-spring](https://github.com/atomist/sdm-pack-spring)|
 |`@atomist/sdm`|`0.4.2-20180809172928`|Atomist, Inc.|[https://github.com/atomist/sdm](https://github.com/atomist/sdm)|
 |`@atomist/slack-messages`|`0.12.1`|Atomist|[https://github.com/atomist/slack-messages](https://github.com/atomist/slack-messages)|
 |`JSONStream`|`1.3.2`|Dominic Tarr|[https://github.com/dominictarr/JSONStream](https://github.com/dominictarr/JSONStream)|
@@ -199,6 +199,7 @@ GNU General Public License v3.0 only - [http://www.gnu.org/licenses/gpl-3.0-stan
 |`@atomist/automation-client`|`0.19.5-20180803222129`|Atomist, Inc.|[https://github.com/atomist/automation-client-ts](https://github.com/atomist/automation-client-ts)|
 |`@atomist/microgrammar`|`0.7.0`|Atomist|[https://github.com/atomist/microgrammar](https://github.com/atomist/microgrammar)|
 |`@atomist/microgrammar`|`0.7.0-20180528084001`|Atomist|[https://github.com/atomist/microgrammar](https://github.com/atomist/microgrammar)|
+|`@atomist/microgrammar`|`0.8.0`|Atomist|[https://github.com/atomist/microgrammar](https://github.com/atomist/microgrammar)|
 |`@atomist/tree-path`|`0.1.9`|Atomist, Inc.|[https://github.com/atomist/tree-path-ts](https://github.com/atomist/tree-path-ts)|
 
 #### ISC
@@ -389,6 +390,7 @@ MIT License - [http://www.opensource.org/licenses/MIT](http://www.opensource.org
 |`@types/sprintf-js`|`1.1.0`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/through`|`0.0.29`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/ws`|`4.0.2`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
+|`@types/xml2js`|`0.4.3`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
 |`@types/zen-observable`|`0.8.0`||[https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)|
 |`JSONStream`|`1.3.2`|Dominic Tarr|[https://github.com/dominictarr/JSONStream](https://github.com/dominictarr/JSONStream)|
 |`JSONStream`|`1.3.3`|Dominic Tarr|[https://github.com/dominictarr/JSONStream](https://github.com/dominictarr/JSONStream)|
