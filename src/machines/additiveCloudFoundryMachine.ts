@@ -63,7 +63,7 @@ import {
     SpringSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist";
+import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";

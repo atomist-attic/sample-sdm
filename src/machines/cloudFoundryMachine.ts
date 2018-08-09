@@ -72,7 +72,7 @@ import {
     springRestGenerator,
     SpringSupport,
 } from "@atomist/sdm-pack-spring";
-import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring/dist/support/spring/deploy/localSpringBootDeployers";
+import { localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { LocalDeploymentGoals } from "../deploy/localDeploymentGoals";
