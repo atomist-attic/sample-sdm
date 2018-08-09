@@ -138,6 +138,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .addGeneratorCommand<SpringProjectCreationParameters>({
             name: "create-spring",
             intent: "create spring",
+            description: "Create a new Java Spring Boot REST service",
             paramsMaker: SpringProjectCreationParameters,
             startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
             transform: [
@@ -149,6 +150,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .addGeneratorCommand<SpringProjectCreationParameters>({
             name: "create-spring-kotlin",
             intent: "create spring kotlin",
+            description: "Create a new Kotlin Spring Boot REST service",
             paramsMaker: SpringProjectCreationParameters,
             startingPoint: new GitHubRepoRef("johnsonr", "flux-flix-service"),
             transform: [
