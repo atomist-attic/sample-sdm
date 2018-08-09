@@ -111,6 +111,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
     } else {
         deployRules(sdm);
     }
+    addTeamPolicies(sdm);
 
     return sdm;
 }
@@ -201,7 +202,6 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         .addCommand(DisplayDeployEnablement)
         .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm));
     // sdm.addEndpointVerificationListener(lookFor200OnEndpointRootGet());
-    addTeamPolicies(sdm);
 }
 
 export function buildRules(sdm: SoftwareDeliveryMachine) {
