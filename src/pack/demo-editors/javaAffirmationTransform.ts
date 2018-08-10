@@ -39,6 +39,7 @@ const appendAffirmationToJava: CodeTransform<AffirmationParameters> = (p, ci) =>
  */
 export const JavaAffirmationTransform: CodeTransformRegistration<AffirmationParameters> = {
     transform: appendAffirmationToJava,
+    description: "Add a random comment to a Java file",
     name: "javaAffirmation",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement to write Java"),
     transformPresentation: ci => ci.parameters.editMode,

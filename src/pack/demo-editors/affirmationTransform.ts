@@ -49,6 +49,7 @@ export const appendAffirmationToReadMe: CodeTransform<AffirmationParameters> = a
 export const AffirmationTransform: CodeTransformRegistration<AffirmationParameters> = {
     transform: appendAffirmationToReadMe,
     name: AffirmationEditorName,
+    description: "Add a random comment to the project README.md",
     paramsMaker: () => new AffirmationParameters("Everyone needs encouragement"),
     transformPresentation: ci => ci.parameters.editMode,
     intent: "add affirmation",
