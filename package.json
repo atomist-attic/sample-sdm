@@ -18,12 +18,12 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/automation-client": "^0.19.5-20180803222129",
+    "@atomist/automation-client": "0.20.1-20180810085422",
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
     "@atomist/automation-client-ext-eventlog": "0.1.0-20180725112931",
     "@atomist/sdm": "^0.4.2-20180809172928",
     "@atomist/sdm-core": "^0.4.2-20180809180111",
-    "@atomist/sdm-local": "^0.1.7-20180809232346",
+    "@atomist/sdm-local": "0.1.7-20180810092206",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-node": "0.1.0-20180730213105",
     "@atomist/sdm-pack-sloc": "https://r.atomist.com/2853137397",
