@@ -16,7 +16,7 @@
 
 import { parseUtils } from "@atomist/sdm";
 
-import { logger } from "@atomist/automation-client";
+import { logger } from "@atomist/sdm";
 import { Microgrammar, RestOfLine } from "@atomist/microgrammar";
 import { CodeTransform } from "@atomist/sdm";
 import { NodeProjectCreationParameters } from "../../pack/node/nodeSupport";

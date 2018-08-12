@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { DefaultReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
-import { saveFromFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { DefaultReviewComment } from "@atomist/sdm";
+import { saveFromFiles } from "@atomist/sdm";
 import {
     Goals,
     ReviewerRegistration,

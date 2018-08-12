@@ -24,8 +24,8 @@ import {
     ApacheHeader,
 } from "../../../src/commands/editors/license/addHeader";
 
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { NodeFsLocalProject } from "@atomist/automation-client/project/local/NodeFsLocalProject";
+import { GitHubRepoRef } from "@atomist/sdm";
+import { NodeFsLocalProject } from "@atomist/sdm";
 import { fakeCommandListenerInvocation } from "@atomist/sdm/api-helper/test/fakeCommandListenerInvocation";
 import * as fs from "fs";
 import * as tmp from "tmp-promise";

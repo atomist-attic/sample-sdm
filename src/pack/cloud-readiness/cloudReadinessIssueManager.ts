@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
+import { GitHubRepoRef } from "@atomist/sdm";
 import { deepLink } from "@atomist/automation-client/util/gitHub";
 
 import {

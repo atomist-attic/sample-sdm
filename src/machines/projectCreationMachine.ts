@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
+import { GitHubRepoRef } from "@atomist/sdm";
 import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
 import { springBootTagger } from "@atomist/sdm-pack-spring";

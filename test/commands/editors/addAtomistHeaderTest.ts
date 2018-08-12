@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
+import { InMemoryProjectFile } from "@atomist/sdm";
 import { GitHubRepoRef } from "@atomist/sdm";
 
 import { successOn } from "@atomist/automation-client/action/ActionResult";
@@ -48,7 +48,7 @@ describe("addHeaderFix", () => {
             ++pushCount;
             return successOn(p);
         };
-        const f = new InMemoryFile("src/bad.ts", "const foo;\n");
+        const f = new InMemoryProjectFile("src/bad.ts", "const foo;\n");
         const pl = new SingleProjectLoader(p);
         // Now mess it up with a lint error that tslint can fix
         await p.addFile(f.path, f.content);

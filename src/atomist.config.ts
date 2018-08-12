@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Configuration } from "@atomist/automation-client";
+import { Configuration } from "@atomist/sdm";
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
 import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
