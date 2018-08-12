@@ -17,13 +17,13 @@
 import {
     Parameter,
     Parameters,
-} from "@atomist/automation-client";
-import { GitBranchRegExp } from "@atomist/automation-client/operations/common/params/gitHubPatterns";
+} from "@atomist/sdm";
+import { validationPatterns } from "@atomist/sdm";
 import {
     BranchCommit,
     EditMode,
     PullRequest,
-} from "@atomist/automation-client/operations/edit/editModes";
+} from "@atomist/sdm";
 
 /**
  * Allow user to specify a branch (with default master).
@@ -35,7 +35,7 @@ export class RequestedCommitParameters {
     @Parameter({
             required: false,
             description: "Branch to use. Default is 'master'.",
-            ...GitBranchRegExp,
+            ...validationPatterns.GitBranchRegExp,
         },
     )
     private readonly branch = "master";

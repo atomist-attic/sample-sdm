@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    Parameter,
-} from "@atomist/automation-client";
-import { Parameters } from "@atomist/automation-client/decorators";
-import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransformRegistration, commitToMaster, Parameter, Parameters } from "@atomist/sdm";
 
 @Parameters()
 export class RemoveFileParams {

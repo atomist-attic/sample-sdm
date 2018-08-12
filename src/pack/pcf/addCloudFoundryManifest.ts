@@ -15,7 +15,7 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
+import { PullRequest } from "@atomist/sdm";
 import {
     CodeTransform,
     CodeTransformRegistration,

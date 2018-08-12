@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { MappedParameters } from "@atomist/automation-client";
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
+import { MappedParameters } from "@atomist/sdm";
 import {
     DeclarationType,
     ExtensionPack,
@@ -24,6 +23,7 @@ import {
     SoftwareDeliveryMachine,
     ToDefaultBranch,
 } from "@atomist/sdm";
+import { GitHubRepoRef } from "@atomist/sdm";
 import {
     IsNode,
     nodeBuilder,

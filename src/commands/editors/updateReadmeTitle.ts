@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-import { doWithFileMatches } from "@atomist/automation-client/project/util/parseUtils";
+import { parseUtils } from "@atomist/sdm";
 
 import { logger } from "@atomist/automation-client";
-import { RestOfLine } from "@atomist/microgrammar/matchers/skip/Skip";
-import { Microgrammar } from "@atomist/microgrammar/Microgrammar";
+import { Microgrammar, RestOfLine } from "@atomist/microgrammar";
 import { CodeTransform } from "@atomist/sdm";
 import { NodeProjectCreationParameters } from "../../pack/node/nodeSupport";
 
 export const UpdateReadmeTitle: CodeTransform =
     (project, ctx, params: NodeProjectCreationParameters) => {
         logger.info("UpdateReadmeTitle: params=%j", params);
-        return doWithFileMatches(project, "README.md", h1Grammar, fm => {
+        return parseUtils.doWithFileMatches(project, "README.md", h1Grammar, fm => {
             if (fm.matches.length > 0) {
                 fm.matches[0].value = params.appName + "\n\n" + params.target.description;
             }

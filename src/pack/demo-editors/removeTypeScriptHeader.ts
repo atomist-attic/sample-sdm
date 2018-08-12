@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
+import { doWithFiles } from "@atomist/sdm";
 import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 

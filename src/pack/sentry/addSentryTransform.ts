@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import { Parameter } from "@atomist/automation-client";
-import { Parameters } from "@atomist/automation-client/decorators";
-import { PullRequest } from "@atomist/automation-client/operations/edit/editModes";
+import { Parameter, Parameters, PullRequest } from "@atomist/sdm";
 import { CodeTransformOrTransforms, CodeTransformRegistration } from "@atomist/sdm";
 import { VersionedArtifact } from "@atomist/sdm-pack-spring";
 import { addDependencyTransform } from "@atomist/sdm-pack-spring";

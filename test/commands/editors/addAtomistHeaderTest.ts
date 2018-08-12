@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import { InMemoryFile } from "@atomist/automation-client/project/mem/InMemoryFile";
+import { GitHubRepoRef } from "@atomist/sdm";
 
 import { successOn } from "@atomist/automation-client/action/ActionResult";
-import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
-import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
+import { RemoteRepoRef } from "@atomist/sdm";
+import { GitCommandGitProject } from "@atomist/sdm";
 import * as assert from "power-assert";
 
 import { GoalInvocation } from "@atomist/sdm";

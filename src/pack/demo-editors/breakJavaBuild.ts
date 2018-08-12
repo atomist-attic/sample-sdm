@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import { commitToMaster } from "@atomist/automation-client/operations/edit/editModes";
-import { Project } from "@atomist/automation-client/project/Project";
-import { CodeTransformRegistration } from "@atomist/sdm";
+import { CodeTransformRegistration, commitToMaster, Project } from "@atomist/sdm";
 
 export const BadJavaFileName = "src/main/java/Bad.java";
 

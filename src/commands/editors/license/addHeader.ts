@@ -16,15 +16,13 @@
 
 import {
     logger,
-    Parameter,
-    Parameters,
 } from "@atomist/automation-client";
-import { File } from "@atomist/automation-client/project/File";
-import { GitProject } from "@atomist/automation-client/project/git/GitProject";
-import { Project } from "@atomist/automation-client/project/Project";
-import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { MessageClient } from "@atomist/automation-client/spi/message/MessageClient";
+import { Parameter, Parameters, ProjectFile } from "@atomist/sdm";
+import { GitProject } from "@atomist/sdm";
+import { Project } from "@atomist/sdm";
+import { MessageClient } from "@atomist/sdm";
 import { CodeTransformRegistration, CommandListenerInvocation } from "@atomist/sdm";
+import { doWithFiles } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
@@ -119,7 +117,7 @@ export const AddApacheLicenseHeaderTransform: CodeTransformRegistration<AddHeade
 
 
 
-function reportAboutDifferentHeaders(messageClient: MessageClient, offendingFiles: File[]) {
+function reportAboutDifferentHeaders(messageClient: MessageClient, offendingFiles: ProjectFile[]) {
     if (offendingFiles.length === 0) {
         return;
     }

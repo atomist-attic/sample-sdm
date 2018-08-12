@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Project } from "@atomist/automation-client/project/Project";
 import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
+import { Project } from "@atomist/sdm";
 import { AutofixRegistration } from "@atomist/sdm";
 import { IsNode } from "@atomist/sdm-pack-node";
 import * as _ from "lodash";
