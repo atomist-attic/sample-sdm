@@ -125,14 +125,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         whenPushSatisfies(anySatisfied(IsMaven, IsNode))
             .setGoals(JustBuildGoal),
         whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
-            .setGoals([ArtifactGoal,
+            .setGoals(new Goals("StagingDeployment", ArtifactGoal,
                 StagingDeploymentGoal,
                 StagingEndpointGoal,
-                StagingVerifiedGoal]),
+                StagingVerifiedGoal)),
         whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-            .setGoals([ArtifactGoal,
+            .setGoals(new Goals("ProdDeployment", ArtifactGoal,
                 ProductionDeploymentGoal,
-                ProductionEndpointGoal]),
+                ProductionEndpointGoal),
     ));
 
     sdm
