@@ -133,7 +133,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(new Goals("ProdDeployment", ArtifactGoal,
                 ProductionDeploymentGoal,
                 ProductionEndpointGoal),
-    ));
+    )));
 
     sdm
         .addGeneratorCommand<SpringProjectCreationParameters>({
