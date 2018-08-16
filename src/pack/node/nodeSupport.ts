@@ -15,7 +15,6 @@
  */
 
 import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
-import { MappedParameters } from "@atomist/sdm";
 import {
     DeclarationType,
     ExtensionPack,
@@ -24,12 +23,11 @@ import {
     ToDefaultBranch,
 } from "@atomist/sdm";
 import { GitHubRepoRef } from "@atomist/sdm";
-import {
-    IsNode,
-    nodeBuilder,
-    PackageLockFingerprinter,
-    tslintFix,
-} from "@atomist/sdm-pack-node/dist";
+import { MappedParameters } from "@atomist/sdm";
+import {tslintFix} from "@atomist/sdm-pack-node/lib/autofix/tslintFix";
+import {nodeBuilder} from "@atomist/sdm-pack-node/lib/build/npmBuilder";
+import {PackageLockFingerprinter} from "@atomist/sdm-pack-node/lib/fingerprint/PackageLockFingerprinter";
+import {IsNode} from "@atomist/sdm-pack-node/lib/pushtest/nodePushTests";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
