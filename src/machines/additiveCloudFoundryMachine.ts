@@ -44,7 +44,6 @@ import {
     DisplayDeployEnablement,
     EnableDeploy,
     ExplainDeploymentFreezeGoal,
-    HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen, isInLocalMode,
     ManagedDeploymentTargeter,
@@ -52,7 +51,12 @@ import {
     StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
+import { CloudFoundrySupport } from "@atomist/sdm-pack-cloudfoundry/lib/CloudFoundrySupport";
+import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry/lib/config/cloudFoundryManifestPushTest";
+import { EnvironmentCloudFoundryTarget } from "@atomist/sdm-pack-cloudfoundry/lib/config/EnvironmentCloudFoundryTarget";
+import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm-pack-cloudfoundry/lib/push/CloudFoundryBlueGreenDeployer";
 import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
+import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
@@ -63,18 +67,12 @@ import {
     SpringSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
-import {
-    cloudFoundryProductionDeploySpec,
-    enableDeployOnCloudFoundryManifestAddition,
-} from "../pack/pcf/cloudFoundryDeploy";
-import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
@@ -186,7 +184,10 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
             ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
+            .using({
+                deployer: new CloudFoundryBlueGreenDeployer(sdm.configuration.sdm.projectLoader),
+                targeter: () => new EnvironmentCloudFoundryTarget("production"),
+            }),
     );
 
     sdm.addDisposalRules(
@@ -199,8 +200,9 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
 
     sdm.addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
-        .addCommand(DisplayDeployEnablement)
-        .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm));
+        .addCommand(DisplayDeployEnablement);
+
+    sdm.addExtensionPacks(CloudFoundrySupport);
     // sdm.addEndpointVerificationListener(lookFor200OnEndpointRootGet());
 }
 
