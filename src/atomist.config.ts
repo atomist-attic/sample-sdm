@@ -58,14 +58,6 @@ function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDe
 }
 
 const Options: ConfigureOptions = {
-    requiredConfigurationValues: [
-        "sdm",
-        "sdm.cloudfoundry.user",
-        "sdm.cloudfoundry.password",
-        "sdm.cloudfoundry.org",
-        "sdm.cloudfoundry.spaces.production",
-        "sdm.cloudfoundry.spaces.staging",
-    ],
     /*
     local: {
         repositoryOwnerParentDirectory: process.env.SDM_PROJECTS_ROOT || "/Users/rodjohnson/temp/local-sdm",
