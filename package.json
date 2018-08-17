@@ -23,7 +23,7 @@
     "@atomist/automation-client-ext-eventlog": "0.1.0-20180725112931",
     "@atomist/microgrammar": "^0.8.1",
     "@atomist/sdm": "https://r.atomist.com/3253322321",
-    "@atomist/sdm-core": "0.4.2-removeCloudFoundryPack.20180815183946",
+    "@atomist/sdm-core": "^0.4.2-20180817001202",
     "@atomist/sdm-local": "^0.1.7-20180811180736",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
     "@atomist/sdm-pack-cloudfoundry": "^0.1.0-20180815192009",
