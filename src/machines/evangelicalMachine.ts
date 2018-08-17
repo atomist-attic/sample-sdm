@@ -29,14 +29,11 @@ import {
     EnableDeploy,
     tagRepo,
 } from "@atomist/sdm-core";
+import { CloudFoundrySupport } from "@atomist/sdm-pack-cloudfoundry/lib/CloudFoundrySupport";
 import { HasSpringBootApplicationClass, IsMaven, springBootTagger } from "@atomist/sdm-pack-spring";
 import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
-import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
-import { enableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
-import { SuggestAddingCloudFoundryManifest,
-    suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
@@ -66,20 +63,17 @@ export function evangelicalMachine(
             EnableSpringBoot,
             executeSendMessageToSlack("Congratulations. You're using Spring Boot. It's cool :sunglasses: and so is Atomist. " +
                 "Atomist knows lots about Spring Boot and would love to help"))
-        .addChannelLinkListener(SuggestAddingCloudFoundryManifest)
-        .addNewRepoWithCodeAction(suggestAddingCloudFoundryManifestOnNewRepo(sdm.configuration.sdm.projectLoader))
-        .addNewRepoWithCodeAction(
+        .addNewRepoWithCodeListener(
             // TODO suggest creating projects with generator
             tagRepo(springBootTagger),
         )
-        .addCodeTransformCommand(AddCloudFoundryManifest)
         .addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
         .addExtensionPacks(
             DemoEditors,
-        )
-        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm));
+            CloudFoundrySupport,
+        );
 
     // addTeamPolicies(sdm);
     return sdm;

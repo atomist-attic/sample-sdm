@@ -9,7 +9,7 @@ This page details all runtime OSS dependencies of `@atomist/sample-sdm`.
 | License | Count |
 |---------|-------|
 |[AFLv2.1](#aflv21)|1|
-|[Apache-2.0](#apache-20)|42|
+|[Apache-2.0](#apache-20)|43|
 |[Artistic-2.0](#artistic-20)|4|
 |[BSD-2-Clause](#bsd-2-clause)|22|
 |[BSD-3-Clause](#bsd-3-clause)|29|
@@ -20,7 +20,7 @@ This page details all runtime OSS dependencies of `@atomist/sample-sdm`.
 |[Custom: https://travis-ci.org/ember-cli/ember-cli.svg](#custom-httpstravis-ciorgember-cliember-clisvg)|1|
 |[GPL-3.0](#gpl-30)|6|
 |[ISC](#isc)|118|
-|[MIT](#mit)|806|
+|[MIT](#mit)|807|
 |[Public Domain](#public-domain)|1|
 |[Unlicense](#unlicense)|2|
 |[WTFPL](#wtfpl)|3|
@@ -38,10 +38,11 @@ Apache License 2.0 - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apa
 |------|---------|-----------|------------|
 |`@atomist/automation-client-ext-dashboard`|`0.1.0-20180705210657`|Atomist, Inc.|[https://github.com/atomist/automation-client-ext-dashboard](https://github.com/atomist/automation-client-ext-dashboard)|
 |`@atomist/automation-client-ext-eventlog`|`0.1.0-20180725112931`|Atomist, Inc.|[https://github.com/atomist/automation-client-ext-eventlog](https://github.com/atomist/automation-client-ext-eventlog)|
-|`@atomist/sdm-core`|`0.4.2-20180809202807`|Atomist, Inc.|[https://github.com/atomist/sdm-core](https://github.com/atomist/sdm-core)|
+|`@atomist/sdm-core`|`0.4.2-removeCloudFoundryPack.20180815183946`|Atomist, Inc.|[https://github.com/atomist/sdm-core](https://github.com/atomist/sdm-core)|
 |`@atomist/sdm-local`|`0.1.7-20180811180736`|Atomist, Inc.|[https://github.com/atomist/sdm-local](https://github.com/atomist/sdm-local)|
 |`@atomist/sdm-pack-checkstyle`|`0.1.2-20180629042836`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-checkstyle](https://github.com/atomist/sdm-pack-checkstyle)|
-|`@atomist/sdm-pack-node`|`0.1.0-20180730213105`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-node](https://github.com/atomist/sdm-pack-node)|
+|`@atomist/sdm-pack-cloudfoundry`|`0.1.0-20180815192009`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-cloudfoundry](https://github.com/atomist/sdm-pack-cloudfoundry)|
+|`@atomist/sdm-pack-node`|`0.2.1`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-node](https://github.com/atomist/sdm-pack-node)|
 |`@atomist/sdm-pack-sloc`|`0.1.6-20180812192203`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-sloc](https://github.com/atomist/sdm-pack-sloc)|
 |`@atomist/sdm-pack-sonarqube`|`0.1.3-20180629030539`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-sonarqube](https://github.com/atomist/sdm-pack-sonarqube)|
 |`@atomist/sdm-pack-spring`|`0.1.10-diag.20180810013335`|Atomist, Inc.|[https://github.com/atomist/sdm-pack-spring](https://github.com/atomist/sdm-pack-spring)|
@@ -652,6 +653,7 @@ MIT License - [http://www.opensource.org/licenses/MIT](http://www.opensource.org
 |`fs-copy-file-sync`|`1.1.1`|coderaiser|[https://github.com/coderaiser/fs-copy-file-sync](https://github.com/coderaiser/fs-copy-file-sync)|
 |`fs-extra`|`5.0.0`|JP Richardson|[https://github.com/jprichardson/node-fs-extra](https://github.com/jprichardson/node-fs-extra)|
 |`fs-extra`|`6.0.1`|JP Richardson|[https://github.com/jprichardson/node-fs-extra](https://github.com/jprichardson/node-fs-extra)|
+|`fs-extra`|`7.0.0`|JP Richardson|[https://github.com/jprichardson/node-fs-extra](https://github.com/jprichardson/node-fs-extra)|
 |`generate-function`|`2.0.0`|Mathias Buus|[https://github.com/mafintosh/generate-function](https://github.com/mafintosh/generate-function)|
 |`generate-object-property`|`1.2.0`|Mathias Buus|[https://github.com/mafintosh/generate-object-property](https://github.com/mafintosh/generate-object-property)|
 |`get-func-name`|`2.0.0`|Jake Luer|[https://github.com/chaijs/get-func-name](https://github.com/chaijs/get-func-name)|

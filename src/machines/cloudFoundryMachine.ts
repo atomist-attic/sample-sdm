@@ -38,7 +38,6 @@ import {
     DisableDeploy,
     DisplayDeployEnablement,
     EnableDeploy,
-    HasCloudFoundryManifest,
     HasDockerfile,
     HttpServiceGoals,
     LibraryGoals,
@@ -62,6 +61,10 @@ import {
 } from "@atomist/sdm-pack-node";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 
+import { CloudFoundrySupport } from "@atomist/sdm-pack-cloudfoundry/lib/CloudFoundrySupport";
+import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry/lib/config/cloudFoundryManifestPushTest";
+import { EnvironmentCloudFoundryTarget } from "@atomist/sdm-pack-cloudfoundry/lib/config/EnvironmentCloudFoundryTarget";
+import { CloudFoundryBlueGreenDeployer } from "@atomist/sdm-pack-cloudfoundry/lib/push/CloudFoundryBlueGreenDeployer";
 import {
     configureLocalSpringBootDeploy,
     HasSpringBootApplicationClass,
@@ -81,13 +84,6 @@ import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { NodeSupport } from "../pack/node/nodeSupport";
 import { MaterialChangeToNodeRepo } from "../pack/node/pushtest/materialChangeToNodeRepo";
-import {
-    cloudFoundryProductionDeploySpec,
-    cloudFoundryStagingDeploySpec,
-    enableDeployOnCloudFoundryManifestAddition,
-} from "../pack/pcf/cloudFoundryDeploy";
-import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
-import { SuggestAddingCloudFoundryManifest, suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { addTeamPolicies } from "./teamPolicies";
 
@@ -165,11 +161,17 @@ export function cloudFoundryMachine(
             ),
         deploy.when(IsMaven)
             .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(configuration.sdm)),
+            .using({
+                deployer: new CloudFoundryBlueGreenDeployer(configuration.sdm.projectLoader),
+                targeter: () => new EnvironmentCloudFoundryTarget("production"),
+            }),
         deploy.when(IsNode)
             .itMeans("node run test")
             .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-            .using(cloudFoundryStagingDeploySpec(configuration.sdm)),
+            .using({
+                deployer: new CloudFoundryBlueGreenDeployer(configuration.sdm.projectLoader),
+                targeter: () => new EnvironmentCloudFoundryTarget("staging"),
+            }),
     );
     sdm.addDisposalRules(
         whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)
@@ -181,12 +183,9 @@ export function cloudFoundryMachine(
         whenPushSatisfies(AnyPush)
             .itMeans("We can always delete the repo")
             .setGoals(RepositoryDeletionGoals));
-    sdm.addChannelLinkListener(SuggestAddingCloudFoundryManifest)
-        .addNewRepoWithCodeAction(suggestAddingCloudFoundryManifestOnNewRepo(sdm.configuration.sdm.projectLoader))
-        .addCommand(EnableDeploy)
+    sdm.addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
-        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm))
         .addEndpointVerificationListener(lookFor200OnEndpointRootGet());
 
     sdm.addExtensionPacks(
@@ -196,6 +195,7 @@ export function cloudFoundryMachine(
         CloudReadinessChecks,
         JavaSupport,
         NodeSupport,
+        CloudFoundrySupport,
         CloudFoundrySupport,
     );
 
