@@ -22,7 +22,7 @@
     "@atomist/automation-client-ext-dashboard": "0.1.0-20180705210657",
     "@atomist/automation-client-ext-eventlog": "0.1.0-20180725112931",
     "@atomist/microgrammar": "^0.8.1",
-    "@atomist/sdm": "^0.4.8-20180824093654",
+    "@atomist/sdm": "https://r.atomist.com/2543416479",
     "@atomist/sdm-core": "^0.4.10-20180824060140",
     "@atomist/sdm-local": "^0.1.21-20180825205410",
     "@atomist/sdm-pack-checkstyle": "0.1.2-20180629042836",
