@@ -20,11 +20,11 @@ import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
 import { springBootTagger } from "@atomist/sdm-pack-spring";
 import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring";
 import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring";
+import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";
 import { NodeProjectCreationParametersDefinition } from "../pack/node/nodeSupport";
-import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 
 /**
  * Assemble a machine that performs only project creation and tagging,

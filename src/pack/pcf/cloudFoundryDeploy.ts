@@ -25,13 +25,13 @@ import {
     setDeployEnablement,
 } from "@atomist/sdm-core";
 import { SetDeployEnablementParameters } from "@atomist/sdm-core/handlers/commands/SetDeployEnablement";
-import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
-import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 import {
     CloudFoundryBlueGreenDeployer,
     CloudFoundryInfo,
-    EnvironmentCloudFoundryTarget
+    EnvironmentCloudFoundryTarget,
 } from "@atomist/sdm-pack-cloudfoundry";
+import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
+import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 
 /**
  * Deploy everything to the same Cloud Foundry space

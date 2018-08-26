@@ -51,6 +51,7 @@ import {
     StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
+import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
 import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootApplicationClass,
@@ -63,6 +64,7 @@ import {
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
 import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
+import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -77,8 +79,6 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
-import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
