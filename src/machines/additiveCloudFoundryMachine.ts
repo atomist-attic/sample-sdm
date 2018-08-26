@@ -44,7 +44,6 @@ import {
     DisplayDeployEnablement,
     EnableDeploy,
     ExplainDeploymentFreezeGoal,
-    HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen, isInLocalMode,
     ManagedDeploymentTargeter,
@@ -78,6 +77,8 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
+import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
+import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -140,7 +141,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             name: "create-spring",
             intent: "create spring",
             description: "Create a new Java Spring Boot REST service",
-            paramsMaker: SpringProjectCreationParameters,
+            parameters: SpringProjectCreationParameterDefinitions,
             startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
             transform: [
                 ReplaceReadmeTitle,
@@ -152,7 +153,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             name: "create-spring-kotlin",
             intent: "create spring kotlin",
             description: "Create a new Kotlin Spring Boot REST service",
-            paramsMaker: SpringProjectCreationParameters,
+            parameters: SpringProjectCreationParameterDefinitions,
             startingPoint: new GitHubRepoRef("johnsonr", "flux-flix-service"),
             transform: [
                 ReplaceReadmeTitle,
