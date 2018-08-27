@@ -22,12 +22,14 @@ import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import {
-    CloudFoundryBlueGreenDeployer,
-    CloudFoundryInfo,
-    EnvironmentCloudFoundryTarget,
     setDeployEnablement,
 } from "@atomist/sdm-core";
 import { SetDeployEnablementParameters } from "@atomist/sdm-core/handlers/commands/SetDeployEnablement";
+import {
+    CloudFoundryBlueGreenDeployer,
+    CloudFoundryInfo,
+    EnvironmentCloudFoundryTarget,
+} from "@atomist/sdm-pack-cloudfoundry";
 import { ArtifactStore } from "@atomist/sdm/spi/artifact/ArtifactStore";
 import { AddCloudFoundryManifestMarker } from "./addCloudFoundryManifest";
 

@@ -19,8 +19,8 @@ import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
 import { springBootTagger } from "@atomist/sdm-pack-spring";
 import { ReplaceReadmeTitle, SetAtomistTeamInApplicationYml } from "@atomist/sdm-pack-spring";
-import { SpringProjectCreationParameters } from "@atomist/sdm-pack-spring";
 import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring";
+import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";
@@ -39,7 +39,7 @@ export function projectCreationMachine(
         .addGeneratorCommand({
             name: "create-spring",
             intent: "create spring",
-            paramsMaker: SpringProjectCreationParameters,
+            parameters: SpringProjectCreationParameterDefinitions,
             startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
             transform: [
                 ReplaceReadmeTitle,
@@ -49,7 +49,6 @@ export function projectCreationMachine(
         })
         .addGeneratorCommand({
             name: "typescript-express-generator",
-            paramsMaker: SpringProjectCreationParameters,
             parameters: NodeProjectCreationParametersDefinition,
             startingPoint: new GitHubRepoRef("spring-team", "typescript-express-seed"),
             intent: "create node",

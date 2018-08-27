@@ -44,7 +44,6 @@ import {
     DisplayDeployEnablement,
     EnableDeploy,
     ExplainDeploymentFreezeGoal,
-    HasCloudFoundryManifest,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen, isInLocalMode,
     ManagedDeploymentTargeter,
@@ -52,6 +51,7 @@ import {
     StagingUndeploymentGoal,
     UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
+import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
 import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootApplicationClass,
@@ -64,6 +64,7 @@ import {
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
 import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
+import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -140,7 +141,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             name: "create-spring",
             intent: "create spring",
             description: "Create a new Java Spring Boot REST service",
-            paramsMaker: SpringProjectCreationParameters,
+            parameters: SpringProjectCreationParameterDefinitions,
             startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
             transform: [
                 ReplaceReadmeTitle,
@@ -152,7 +153,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             name: "create-spring-kotlin",
             intent: "create spring kotlin",
             description: "Create a new Kotlin Spring Boot REST service",
-            paramsMaker: SpringProjectCreationParameters,
+            parameters: SpringProjectCreationParameterDefinitions,
             startingPoint: new GitHubRepoRef("johnsonr", "flux-flix-service"),
             transform: [
                 ReplaceReadmeTitle,

@@ -17,7 +17,7 @@
 import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoId";
 import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
 
-import { CloudFoundryManifestPath } from "@atomist/sdm-core";
+import { CloudFoundryManifestPath } from "@atomist/sdm-pack-cloudfoundry/lib/api/CloudFoundryTarget";
 import { fakeContext } from "@atomist/sdm/api-helper/test/fakeContext";
 import * as assert from "power-assert";
 import {

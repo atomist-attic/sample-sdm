@@ -20,7 +20,7 @@ import {
     CodeTransform,
     CodeTransformRegistration,
 } from "@atomist/sdm";
-import { CloudFoundryManifestPath } from "@atomist/sdm-core";
+import { CloudFoundryManifestPath } from "@atomist/sdm-pack-cloudfoundry/lib/api/CloudFoundryTarget";
 import { NodeProjectIdentifier } from "@atomist/sdm-pack-node/dist";
 import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
 import { HasSpringBootPom } from "@atomist/sdm-pack-spring";
