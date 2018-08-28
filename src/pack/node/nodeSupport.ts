@@ -29,7 +29,7 @@ import {
     nodeBuilder,
     PackageLockFingerprinter,
     tslintFix,
-} from "@atomist/sdm-pack-node/dist";
+} from "@atomist/sdm-pack-node";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";

@@ -21,7 +21,7 @@ import {
     CodeTransformRegistration,
 } from "@atomist/sdm";
 import { CloudFoundryManifestPath } from "@atomist/sdm-pack-cloudfoundry/lib/api/CloudFoundryTarget";
-import { NodeProjectIdentifier } from "@atomist/sdm-pack-node/dist";
+import { NodeProjectIdentifier } from "@atomist/sdm-pack-node";
 import { MavenProjectIdentifier } from "@atomist/sdm-pack-spring";
 import { HasSpringBootPom } from "@atomist/sdm-pack-spring";
 
