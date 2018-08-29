@@ -2,7 +2,11 @@
   "name": "@atomist/sample-sdm",
   "version": "0.5.1",
   "description": "Sample Atomist automation for software delivery",
-  "author": "Atomist, Inc.",
+  "author": {
+    "name": "Atomist",
+    "email": "support@atomist.com",
+    "url": "https://atomist.com/"
+  },
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
