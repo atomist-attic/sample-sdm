@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GitHubRepoRef } from "@atomist/sdm";
+import { GitHubRepoRef, hasFile, ProjectFile } from "@atomist/sdm";
 import {
     AnyPush,
     anySatisfied,
@@ -79,6 +79,11 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
+import { doWithFileMatches, findFileMatches } from "@atomist/automation-client/project/util/parseUtils";
+import { fileExists, saveFromFiles, saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
+import { infoMessage } from "@atomist/sdm-local";
+
+import * as _ from "lodash";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -95,7 +100,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
             configuration,
         });
 
-    sdm.addCommand<{name: string}>({
+    sdm.addCommand<{ name: string }>({
         name: "hello",
         intent: "hello",
         parameters: {
@@ -134,21 +139,100 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(new Goals("ProdDeployment", ArtifactGoal,
                 ProductionDeploymentGoal,
                 ProductionEndpointGoal),
-    )));
+            )));
 
-    sdm
-        .addGeneratorCommand<SpringProjectCreationParameters>({
-            name: "create-spring",
-            intent: "create spring",
-            description: "Create a new Java Spring Boot REST service",
-            parameters: SpringProjectCreationParameterDefinitions,
-            startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
-            transform: [
-                ReplaceReadmeTitle,
-                SetAtomistTeamInApplicationYml,
-                TransformSeedToCustomProject,
-            ],
-        })
+    sdm.addPushImpactListener(async pu => {
+        const javaFilesChanged = await (pu.filesChanged || [])
+            .filter(path => path.endsWith(".java"))
+            .length;
+        return pu.addressChannels(javaFilesChanged === 0 ?
+            "No Java files changed :sleepy:" :
+            `${javaFilesChanged} Java files changed :eye:`);
+    });
+
+    interface FileAndLineCount {
+        file: ProjectFile,
+        lines: number
+    }
+
+    async function countLines(f: ProjectFile) {
+        return (await f.getContent()).split("\n").length;
+    }
+
+    function isCiFile(pl: FileAndLineCount) {
+        return pl.file.path.endsWith(".travis.yml") || (pl.file.path.includes("scripts/") && pl.file.path.endsWith(".sh"));
+    }
+
+    function actuallyDoesSomething(pl: FileAndLineCount) {
+        return ["java", "go", "rb", "cs", "js", "py"].includes(pl.file.extension);
+    }
+
+    function show(usefulLines: number, noiseLines: number) {
+        return `Lines of code: _${usefulLines}_, Lines of noise: _${noiseLines}_, ` +
+            `Noise as % of code: **${(100 * noiseLines / usefulLines).toFixed(2)}**`;
+    }
+
+    sdm.addCodeInspectionCommand({
+        name: "yamlFinder",
+        intent: "find yaml",
+        inspection: async (p, ci) => {
+            const fileAndLineCount: FileAndLineCount[] =
+                await saveFromFilesAsync(p, ["**/*.yml", "**/*.yaml"], async file => (
+                    {
+                        file,
+                        lines: (await file.getContent()).split("\n").length,
+                    }));
+            const yamlLines = _.sum(fileAndLineCount.map(pl => pl.lines));
+            await ci.addressChannels(`${p.id.repo} has ${yamlLines} lines of YAML`);
+        },
+    });
+
+    sdm.addCodeInspectionCommand<{ usefulLines: number, noiseLines: number }>({
+        name: "noiseFinder",
+        intent: "find noise",
+        projectTest: async p => !!(await p.getFile(".travis.yml")),
+        inspection: async (p, ci) => {
+            const fileAndLineCount: FileAndLineCount[] =
+                await saveFromFilesAsync(p, ["**/*", "**/.*"],
+                    async file => ({ file, lines: await countLines(file) }));
+            const noiseLines = _.sum(fileAndLineCount.filter(isCiFile).map(pl => pl.lines));
+            const usefulLines = _.sum(fileAndLineCount.filter(actuallyDoesSomething).map(pl => pl.lines));
+            if (usefulLines > 0) {
+                await ci.addressChannels(`\`${p.id.repo}\`: ${show(usefulLines, noiseLines)}`);
+                return { usefulLines, noiseLines };
+            }
+        },
+        onInspectionResults: async (results, ci) => {
+            const usefulLines = _.sum(results.filter(r => !!r.result).map(r => r.result.usefulLines));
+            const noiseLines = _.sum(results.filter(r => !!r.result).map(r => r.result.noiseLines));
+            return ci.addressChannels(`Results across ${results.length} projects: ${show(usefulLines, noiseLines)}`);
+        },
+    });
+
+    sdm.addAutofix({
+        name: "countJava",
+        transform: async p => {
+            const fileNames = (await saveFromFiles(p,
+                    "src/main/java/**/*.java", f => f.path)
+            );
+            return p.addFile("filecount.md",
+                `${fileNames.length} Java source files:\n\n${fileNames.join("\n")}\n`);
+        }
+    });
+
+    sdm.addGeneratorCommand<SpringProjectCreationParameters>({
+        name: "create-spring",
+        intent: "create spring",
+        description: "Create a new Java Spring Boot REST service",
+        parameters: SpringProjectCreationParameterDefinitions,
+        startingPoint: new GitHubRepoRef("spring-team", "spring-rest-seed"),
+        transform: [
+            ReplaceReadmeTitle,
+            SetAtomistTeamInApplicationYml,
+            TransformSeedToCustomProject,
+        ],
+    })
+
         .addGeneratorCommand<SpringProjectCreationParameters>({
             name: "create-spring-kotlin",
             intent: "create spring kotlin",

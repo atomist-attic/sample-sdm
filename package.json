@@ -26,7 +26,7 @@
     "@atomist/automation-client-ext-dashboard": "^1.0.0-M.1",
     "@atomist/automation-client-ext-eventlog": "^1.0.0-M.1",
     "@atomist/microgrammar": "^0.8.1",
-    "@atomist/sdm": "^1.0.0-M.1",
+    "@atomist/sdm": "https://r.atomist.com/4154014343",
     "@atomist/sdm-core": "^1.0.0-M.1",
     "@atomist/sdm-pack-checkstyle": "^1.0.0-M.1",
     "@atomist/sdm-pack-cloudfoundry": "^1.0.0-M.1",
