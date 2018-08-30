@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { GitHubRepoRef } from "@atomist/sdm";
+import {
+    CodeInspectionGoal,
+    GitHubRepoRef,
+} from "@atomist/sdm";
 import {
     AnyPush,
     anySatisfied,
@@ -29,7 +32,6 @@ import {
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
     PushReactionGoal,
-    ReviewGoal,
     SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     StagingEndpointGoal,
@@ -120,7 +122,7 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     // Each contributor contributes goals. The infrastructure assembles them into a goal set.
     sdm.addGoalContributions(goalContributors(
-        onAnyPush().setGoals(new Goals("Checks", ReviewGoal, PushReactionGoal, AutofixGoal)),
+        onAnyPush().setGoals(new Goals("Checks", CodeInspectionGoal, PushReactionGoal, AutofixGoal)),
         whenPushSatisfies(IsDeploymentFrozen)
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(anySatisfied(IsMaven, IsNode))
