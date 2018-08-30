@@ -15,7 +15,6 @@
  */
 
 import { SeedDrivenGeneratorParameters } from "@atomist/automation-client/operations/generate/SeedDrivenGeneratorParameters";
-import { MappedParameters } from "@atomist/sdm";
 import {
     DeclarationType,
     ExtensionPack,
@@ -24,13 +23,14 @@ import {
     ToDefaultBranch,
 } from "@atomist/sdm";
 import { GitHubRepoRef } from "@atomist/sdm";
+import {allOf, BuildGoal, MappedParameters} from "@atomist/sdm";
 import {
     IsNode,
     nodeBuilder,
     PackageLockFingerprinter,
     tslintFix,
 } from "@atomist/sdm-pack-node";
-import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
+import {executeBuild} from "@atomist/sdm/api-helper/goal/executeBuild";
 import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistTypeScriptHeader } from "../../autofix/addAtomistHeader";
 import { UpdateReadmeTitle } from "../../commands/editors/updateReadmeTitle";
@@ -116,20 +116,39 @@ export const NodeSupport: ExtensionPack = {
             .addAutofix(AddBuildScript)
             .addAutoInspectRegistration(CommonTypeScriptErrors)
             .addAutoInspectRegistration(DontImportOwnIndex)
-            .addFingerprinterRegistration(new PackageLockFingerprinter())
-            .addBuildRules(
-                build.when(IsNode, ToDefaultBranch, hasPackageLock)
-                    .itMeans("npm run build")
-                    .set(nodeBuilder(sdm, "npm ci", "npm run build")),
-                build.when(IsNode, hasPackageLock)
-                    .itMeans("npm run compile")
-                    .set(nodeBuilder(sdm, "npm ci", "npm run compile")),
-                build.when(IsNode, ToDefaultBranch)
-                    .itMeans("npm run build - no package lock")
-                    .set(nodeBuilder(sdm, "npm i", "npm run build")),
-                build.when(IsNode)
-                    .itMeans("npm run compile - no package lock")
-                    .set(nodeBuilder(sdm, "npm i", "npm run compile")));
+            .addFingerprinterRegistration(new PackageLockFingerprinter());
+        const nodeCiRunBuild = nodeBuilder(sdm, "npm ci", "npm run build");
+        const nodeCiRunCompile = nodeBuilder(sdm, "npm ci", "npm run compile");
+        const nodeIRunBuild = nodeBuilder(sdm, "npm i", "npm run build");
+        const nodeIRunCompile = nodeBuilder(sdm, "npm i", "npm run compile");
+        sdm.addGoalImplementation("npm run build",
+            BuildGoal,
+            executeBuild(sdm.configuration.sdm.projectLoader, nodeCiRunBuild),
+            {
+                pushTest: allOf(IsNode, ToDefaultBranch, hasPackageLock),
+                logInterpreter: nodeCiRunBuild.logInterpreter,
+            });
+        sdm.addGoalImplementation("npm run compile",
+            BuildGoal,
+            executeBuild(sdm.configuration.sdm.projectLoader, nodeCiRunCompile),
+            {
+                pushTest: allOf(IsNode, hasPackageLock),
+                logInterpreter: nodeCiRunCompile.logInterpreter,
+            });
+        sdm.addGoalImplementation("npm run build - no package lock",
+            BuildGoal,
+            executeBuild(sdm.configuration.sdm.projectLoader, nodeIRunBuild),
+            {
+                pushTest: allOf(IsNode, ToDefaultBranch),
+                logInterpreter: nodeIRunBuild.logInterpreter,
+            });
+        sdm.addGoalImplementation("npm run compile - no package lock",
+            BuildGoal,
+            executeBuild(sdm.configuration.sdm.projectLoader, nodeIRunCompile),
+            {
+                pushTest: allOf(IsNode),
+                logInterpreter: nodeIRunCompile.logInterpreter,
+            });
 
     },
 };

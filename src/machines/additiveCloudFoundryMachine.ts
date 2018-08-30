@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+import { saveFromFiles, saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
 import {
+    BuildGoal,
     CodeInspectionGoal,
     GitHubRepoRef,
-    hasFile,
     ProjectFile,
 } from "@atomist/sdm";
 import {
@@ -57,6 +58,7 @@ import {
 } from "@atomist/sdm-core";
 import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
 import { IsNode, NodeSupport } from "@atomist/sdm-pack-node";
+import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
@@ -67,10 +69,7 @@ import {
     SpringSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { configureLocalSpringBootDeploy, localExecutableJarDeployer } from "@atomist/sdm-pack-spring";
 import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
-import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
-import * as deploy from "@atomist/sdm/api-helper/dsl/deployDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
@@ -83,10 +82,10 @@ import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { doWithFileMatches, findFileMatches } from "@atomist/automation-client/project/util/parseUtils";
-import { fileExists, saveFromFiles, saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
-import { infoMessage } from "@atomist/sdm-local";
 
+import {executeBuild} from "@atomist/sdm/api-helper/goal/executeBuild";
+import {executeDeploy} from "@atomist/sdm/api-helper/goal/executeDeploy";
+import {executeUndeploy} from "@atomist/sdm/api-helper/goal/executeUndeploy";
 import * as _ from "lodash";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
@@ -163,12 +162,12 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         },
         onInspectionResult: async (result, ci) => {
             return ci.addressChannels(`The result was ${result}`);
-        }
+        },
     });
 
     interface FileAndLineCount {
-        file: ProjectFile,
-        lines: number
+        file: ProjectFile;
+        lines: number;
     }
 
     async function countLines(f: ProjectFile) {
@@ -233,7 +232,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             );
             return p.addFile("filecount.md",
                 `${fileNames.length} Java source files:\n\n${fileNames.join("\n")}\n`);
-        }
+        },
     });
 
     sdm.addGeneratorCommand<SpringProjectCreationParameters>({
@@ -276,18 +275,65 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 
 export function deployRules(sdm: SoftwareDeliveryMachine) {
     configureLocalSpringBootDeploy(sdm);
-    sdm.addDeployRules(
-        deploy.when(IsMaven)
-            .deployTo(StagingDeploymentGoal, StagingEndpointGoal, StagingUndeploymentGoal)
-            .using(
-                {
-                    deployer: localExecutableJarDeployer(),
-                    targeter: ManagedDeploymentTargeter,
-                },
-            ),
-        deploy.when(IsMaven)
-            .deployTo(ProductionDeploymentGoal, ProductionEndpointGoal, ProductionUndeploymentGoal)
-            .using(cloudFoundryProductionDeploySpec(sdm.configuration.sdm)),
+    const deployToStaging = {
+        deployer: localExecutableJarDeployer(),
+        targeter: ManagedDeploymentTargeter,
+        deployGoal: StagingDeploymentGoal,
+        endpointGoal: StagingEndpointGoal,
+        undeployGoal: StagingUndeploymentGoal,
+    };
+    sdm.addGoalImplementation("Staging local deployer",
+        deployToStaging.deployGoal,
+        executeDeploy(
+            sdm.configuration.sdm.artifactStore,
+            sdm.configuration.sdm.repoRefResolver,
+            deployToStaging.endpointGoal, deployToStaging),
+        {
+            pushTest: IsMaven,
+            logInterpreter: deployToStaging.deployer.logInterpreter,
+        },
+    );
+    sdm.addKnownSideEffect(
+        deployToStaging.endpointGoal,
+        deployToStaging.deployGoal.definition.displayName,
+        AnyPush);
+    sdm.addGoalImplementation("Staging undeployer",
+        deployToStaging.undeployGoal,
+        executeUndeploy(deployToStaging),
+        {
+            pushTest: IsMaven,
+            logInterpreter: deployToStaging.deployer.logInterpreter,
+        },
+    );
+
+    const deployToProduction = {
+        ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
+        deployGoal: ProductionDeploymentGoal,
+        endpointGoal: ProductionEndpointGoal,
+        undeployGoal: ProductionUndeploymentGoal,
+    };
+    sdm.addGoalImplementation("Production CF deployer",
+        deployToProduction.deployGoal,
+        executeDeploy(
+            sdm.configuration.sdm.artifactStore,
+            sdm.configuration.sdm.repoRefResolver,
+            deployToProduction.endpointGoal, deployToProduction),
+        {
+            pushTest: IsMaven,
+            logInterpreter: deployToProduction.deployer.logInterpreter,
+        },
+    );
+    sdm.addKnownSideEffect(
+        deployToProduction.endpointGoal,
+        deployToProduction.deployGoal.definition.displayName,
+        AnyPush);
+    sdm.addGoalImplementation("Production CF undeployer",
+        deployToProduction.undeployGoal,
+        executeUndeploy(deployToProduction),
+        {
+            pushTest: IsMaven,
+            logInterpreter: deployToProduction.deployer.logInterpreter,
+        },
     );
 
     sdm.addDisposalRules(
@@ -306,9 +352,12 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
 }
 
 export function buildRules(sdm: SoftwareDeliveryMachine) {
-    const mb = new MavenBuilder(sdm);
-    // mb.buildStatusUpdater = sdm as any as BuildStatusUpdater;
-    sdm.addBuildRules(
-        build.setDefault(mb));
-    return sdm;
+    const mavenBuilder = new MavenBuilder(sdm);
+    sdm.addGoalImplementation("Maven build",
+        BuildGoal,
+        executeBuild(sdm.configuration.sdm.projectLoader, mavenBuilder),
+        {
+            pushTest: IsMaven,
+            logInterpreter: mavenBuilder.logInterpreter,
+        });
 }
