@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { DefaultReviewComment } from "@atomist/sdm";
+import {
+    CodeInspectionGoal,
+    DefaultReviewComment,
+} from "@atomist/sdm";
 import { saveFromFiles } from "@atomist/sdm";
 import {
     Goals,
     ReviewerRegistration,
-    ReviewGoal,
     SoftwareDeliveryMachine,
     whenPushSatisfies,
 } from "@atomist/sdm";
@@ -45,7 +47,7 @@ export function staticAnalysisMachine(
         },
         whenPushSatisfies(IsJava, MaterialChangeToJavaRepo)
             .itMeans("Change to Java")
-            .setGoals(new Goals("Review only", ReviewGoal)));
+            .setGoals(new Goals("Code Inspection only", CodeInspectionGoal)));
     sdm.addExtensionPacks(
         CheckstyleSupport,
         DemoEditors,
