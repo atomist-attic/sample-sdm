@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
+import { logger, } from "@atomist/automation-client";
 import {
-    logger,
-} from "@atomist/automation-client";
-import { Parameter, Parameters, ProjectFile } from "@atomist/sdm";
-import { GitProject } from "@atomist/sdm";
-import { Project } from "@atomist/sdm";
-import { MessageClient } from "@atomist/sdm";
-import { CodeTransformRegistration, CommandListenerInvocation } from "@atomist/sdm";
-import { doWithFiles } from "@atomist/sdm";
+    CodeTransformRegistration,
+    doWithFiles,
+    GitProject,
+    MessageClient,
+    Parameter,
+    Parameters,
+    Project,
+    ProjectFile
+} from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
+import { ParametersInvocation } from "@atomist/sdm/api/listener/ParametersInvocation";
 
 /**
  * Default glob pattern matches all C family languages
@@ -77,7 +80,7 @@ export const ApacheHeader = `/*
  */`;
 
 export async function addHeaderTransform(p: Project,
-                                         ci: CommandListenerInvocation<AddHeaderParameters>): Promise<Project> {
+                                         ci: ParametersInvocation<AddHeaderParameters>): Promise<Project> {
     let headersAdded = 0;
     let matchingFiles = 0;
     let filesWithDifferentHeaders = [];

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { ArtifactGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSatisfies } from "@atomist/sdm";
+import {ArtifactGoal, BuildGoal, Goals, JustBuildGoal, SoftwareDeliveryMachine, whenPushSatisfies} from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import { IsMaven, MavenBuilder } from "@atomist/sdm-pack-spring";
 import * as build from "@atomist/sdm/api-helper/dsl/buildDsl";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import * as fs from "fs";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import {executeBuild} from "@atomist/sdm/api-helper/goal/executeBuild";
 
 /**
  * Assemble a machine that only builds and verifies Java artifacts.
@@ -35,14 +36,18 @@ export function artifactVerifyingMachine(
             .itMeans("Push to Maven repo")
             .setGoals(new Goals("Verify artifact", JustBuildGoal, ArtifactGoal)),
     );
+    const mavenBuilder = new MavenBuilder(sdm);
+    sdm.addGoalImplementation("Maven build",
+        BuildGoal,
+        executeBuild(sdm.configuration.sdm.projectLoader, mavenBuilder),
+        {
+            pushTest: IsMaven,
+            logInterpreter: mavenBuilder.logInterpreter,
+        });
     sdm
         .addExtensionPacks(
             DemoEditors,
         )
-        .addBuildRules(
-            build.when(IsMaven)
-                .itMeans("build with Maven")
-                .set(new MavenBuilder(sdm)))
         .addArtifactListener(async ai => {
             // Could invoke a security scanning tool etc.c
             const stat = fs.statSync(`${ai.deployableArtifact.cwd}/${ai.deployableArtifact.filename}`);
