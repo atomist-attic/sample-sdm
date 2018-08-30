@@ -27,9 +27,9 @@ export const CloudReadinessChecks: ExtensionPack = {
     ...metadata("cloud-readiness"),
     configure: softwareDeliveryMachine =>
         softwareDeliveryMachine
-            .addReviewerRegistration(HardCodedPropertyReviewer)
-            .addReviewerRegistration(ProvidedDependencyReviewer)
-            .addReviewerRegistration(FileIoImportReviewer)
-            .addReviewerRegistration(ImportDotStarReviewer),
+            .addAutoInspectRegistration(HardCodedPropertyReviewer)
+            .addAutoInspectRegistration(ProvidedDependencyReviewer)
+            .addAutoInspectRegistration(FileIoImportReviewer)
+            .addAutoInspectRegistration(ImportDotStarReviewer),
            // .addReviewListenerRegistration(CloudReadinessIssueManager),
 };

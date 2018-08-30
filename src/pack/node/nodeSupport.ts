@@ -114,8 +114,8 @@ export const NodeSupport: ExtensionPack = {
             .addAutofix(AddAtomistTypeScriptHeader)
             .addAutofix(tslintFix)
             .addAutofix(AddBuildScript)
-            .addReviewerRegistration(CommonTypeScriptErrors)
-            .addReviewerRegistration(DontImportOwnIndex)
+            .addAutoInspectRegistration(CommonTypeScriptErrors)
+            .addAutoInspectRegistration(DontImportOwnIndex)
             .addFingerprinterRegistration(new PackageLockFingerprinter())
             .addBuildRules(
                 build.when(IsNode, ToDefaultBranch, hasPackageLock)

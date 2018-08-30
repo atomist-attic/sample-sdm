@@ -50,18 +50,18 @@ export function staticAnalysisMachine(
         CheckstyleSupport,
         DemoEditors,
     )
-        .addReviewerRegistration(rodHatesYaml)
-        .addReviewerRegistration(hasNoReadMe);
+        .addAutoInspectRegistration(rodHatesYaml)
+        .addAutoInspectRegistration(hasNoReadMe);
 
     return sdm;
 }
 
 const rodHatesYaml: ReviewerRegistration = {
     name: "rodHatesYaml",
-    action: async cri => ({
-        repoId: cri.project.id,
+    inspection: async (project, cri) => ({
+        repoId: project.id,
         comments:
-            await saveFromFiles(cri.project, "**/*.yml", f =>
+            await saveFromFiles(project, "**/*.yml", f =>
                 new DefaultReviewComment("info", "yml-reviewer",
                     `Found YML in \`${f.path}\`: Rod regards the format as an insult to computer science`,
                     {
@@ -74,9 +74,9 @@ const rodHatesYaml: ReviewerRegistration = {
 
 const hasNoReadMe: ReviewerRegistration = {
     name: "hasNoReadme",
-    action: async cri => ({
-        repoId: cri.project.id,
-        comments: !!(await cri.project.getFile("README.me")) ?
+    inspection: async (project, cri) => ({
+        repoId: project.id,
+        comments: !!(await project.getFile("README.me")) ?
             [] :
             [new DefaultReviewComment("info", "readme",
                 "Project has no README",
