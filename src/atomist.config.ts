@@ -59,7 +59,6 @@ function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDe
 
 const Options: ConfigureOptions = {
     requiredConfigurationValues: [
-        "sdm",
         "sdm.cloudfoundry.user",
         "sdm.cloudfoundry.password",
         "sdm.cloudfoundry.org",
