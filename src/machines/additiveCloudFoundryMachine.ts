@@ -150,6 +150,18 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             `${javaFilesChanged} Java files changed :eye:`);
     });
 
+    sdm.addAutoInspectRegistration<boolean, {name: string}>({
+        name: "foo",
+        parametersInstance: { name: "donald"},
+        inspection: async (p, ci) => {
+            const files = await p.totalFileCount();
+            return ci.addressChannels(`There are ${files} in this project. President ${ci.parameters.name} is a moron`);
+        },
+        onInspectionResult: async (result, ci) => {
+            return ci.addressChannels(`The result was ${result}`);
+        }
+    });
+
     interface FileAndLineCount {
         file: ProjectFile,
         lines: number
