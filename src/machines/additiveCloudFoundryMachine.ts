@@ -155,10 +155,10 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 
     sdm.addAutoInspectRegistration<boolean, {name: string}>({
         name: "foo",
-        parametersInstance: { name: "donald"},
+        parametersInstance: { name: "tony"},
         inspection: async (p, ci) => {
             const files = await p.totalFileCount();
-            return ci.addressChannels(`There are ${files} in this project. President ${ci.parameters.name} is a moron`);
+            return ci.addressChannels(`There are ${files} in this project. Name was ${ci.parameters.name}`);
         },
         onInspectionResult: async (result, ci) => {
             return ci.addressChannels(`The result was ${result}`);
