@@ -47,7 +47,7 @@ import {
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
-import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
+import { CloudFoundrySupport, HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     IsMaven,
@@ -64,19 +64,14 @@ import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/S
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
-import {
-    cloudFoundryProductionDeploySpec,
-    enableDeployOnCloudFoundryManifestAddition,
-} from "../pack/pcf/cloudFoundryDeploy";
-import { CloudFoundrySupport } from "../pack/pcf/cloudFoundrySupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 
 import { executeBuild } from "@atomist/sdm/api-helper/goal/executeBuild";
 import { executeDeploy } from "@atomist/sdm/api-helper/goal/executeDeploy";
-import { executeUndeploy } from "@atomist/sdm/api-helper/goal/executeUndeploy";
 import { StagingUndeploymentGoal } from "@atomist/sdm/pack/well-known-goals/commonGoals";
+import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -228,23 +223,23 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
     //     deployToStaging.deployGoal.definition.displayName,
     //     AnyPush);
 
-    const deployToProduction = {
-        ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
-        deployGoal: ProductionDeploymentGoal,
-        endpointGoal: ProductionEndpointGoal,
-        undeployGoal: ProductionUndeploymentGoal,
-    };
-    sdm.addGoalImplementation("Production CF deployer",
-        deployToProduction.deployGoal,
-        executeDeploy(
-            sdm.configuration.sdm.artifactStore,
-            sdm.configuration.sdm.repoRefResolver,
-            deployToProduction.endpointGoal, deployToProduction),
-        {
-            pushTest: IsMaven,
-            logInterpreter: deployToProduction.deployer.logInterpreter,
-        },
-    );
+    // const deployToProduction = {
+    //     ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
+    //     deployGoal: ProductionDeploymentGoal,
+    //     endpointGoal: ProductionEndpointGoal,
+    //     undeployGoal: ProductionUndeploymentGoal,
+    // };
+    // sdm.addGoalImplementation("Production CF deployer",
+    //     deployToProduction.deployGoal,
+    //     executeDeploy(
+    //         sdm.configuration.sdm.artifactStore,
+    //         sdm.configuration.sdm.repoRefResolver,
+    //         deployToProduction.endpointGoal, deployToProduction),
+    //     {
+    //         pushTest: IsMaven,
+    //         logInterpreter: deployToProduction.deployer.logInterpreter,
+    //     },
+    // );
     // sdm.addKnownSideEffect(
     //     deployToProduction.endpointGoal,
     //     deployToProduction.deployGoal.definition.displayName,

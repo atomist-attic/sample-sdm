@@ -32,11 +32,13 @@ import { HasSpringBootApplicationClass, IsMaven, springBootTagger } from "@atomi
 import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
-import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
-import { enableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
-import { SuggestAddingCloudFoundryManifest,
-    suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
 import { executeSendMessageToSlack } from "@atomist/sdm/api-helper/goal/executeSendMessageToSlack";
+import {
+    SuggestAddingCloudFoundryManifest,
+    suggestAddingCloudFoundryManifestOnNewRepo
+} from "@atomist/sdm-pack-cloudfoundry/lib/listeners/suggestAddingCloudFoundryManifest";
+import { AddCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry/lib/handlers/addCloudFoundryManifest";
+import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
