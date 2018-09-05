@@ -46,7 +46,12 @@ import {
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
-import { CloudFoundrySupport, HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
+import {
+    CloudFoundryBlueGreenDeployer,
+    CloudFoundrySupport,
+    EnvironmentCloudFoundryTarget,
+    HasCloudFoundryManifest,
+} from "@atomist/sdm-pack-cloudfoundry";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     IsMaven,
@@ -68,10 +73,8 @@ import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
-import { executeBuild } from "@atomist/sdm/api-helper/goal/executeBuild";
 import { executeDeploy } from "@atomist/sdm/api-helper/goal/executeDeploy";
 import { StagingUndeploymentGoal } from "@atomist/sdm/pack/well-known-goals/commonGoals";
-import {cloudFoundryProductionDeploySpec} from "../../build/src/pack/pcf/cloudFoundryDeploy";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -233,7 +236,8 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
         AnyPush);
 
     const deployToProduction = {
-        ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
+        deployer: new CloudFoundryBlueGreenDeployer(sdm.configuration.sdm.projectLoader),
+        targeter: () => new EnvironmentCloudFoundryTarget("production"),
         deployGoal: ProductionDeploymentGoal,
         endpointGoal: ProductionEndpointGoal,
         undeployGoal: ProductionUndeploymentGoal,
