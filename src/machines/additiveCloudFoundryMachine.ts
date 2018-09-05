@@ -15,19 +15,18 @@
  */
 
 import {
-    ArtifactGoal,
-    AutofixGoal,
+    AnyPush,
+    ArtifactGoal, AutoCodeInspection, Autofix, AutofixRegistration, AutoInspectRegistration, Build,
     BuildGoal,
-    CodeInspectionGoal,
     GitHubRepoRef,
-    goalContributors,
+    goalContributors, goals,
     Goals,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    PushReactionGoal,
+    PushImpact, PushImpactListenerRegistration, saveFromFiles,
     SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     StagingEndpointGoal,
@@ -72,6 +71,7 @@ import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cl
 import { executeBuild } from "@atomist/sdm/api-helper/goal/executeBuild";
 import { executeDeploy } from "@atomist/sdm/api-helper/goal/executeDeploy";
 import { StagingUndeploymentGoal } from "@atomist/sdm/pack/well-known-goals/commonGoals";
+import {cloudFoundryProductionDeploySpec} from "../../build/src/pack/pcf/cloudFoundryDeploy";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -98,7 +98,6 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
     });
 
     codeRules(sdm);
-    buildRules(sdm);
 
     if (isInLocalMode()) {
         configureForLocal(sdm);
@@ -111,55 +110,65 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 }
 
 export function codeRules(sdm: SoftwareDeliveryMachine) {
-    // Each contributor contributes goals. The infrastructure assembles them into a goal set.
-    sdm.addGoalContributions(goalContributors(
-        onAnyPush().setGoals(new Goals("Checks", CodeInspectionGoal, PushReactionGoal, AutofixGoal)),
-        whenPushSatisfies(IsDeploymentFrozen)
-            .setGoals(ExplainDeploymentFreezeGoal),
-        whenPushSatisfies(IsMaven)
-            .setGoals(BuildGoal),
-        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
-            .setGoals(new Goals("StagingDeployment", ArtifactGoal,
-                StagingDeploymentGoal,
-                StagingEndpointGoal,
-                StagingVerifiedGoal)),
-        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-            .setGoals(new Goals("ProdDeployment", ArtifactGoal,
-                ProductionDeploymentGoal,
-                ProductionEndpointGoal),
-            )));
-
-    sdm.addPushImpactListener(async pu => {
+    const javaChanges: PushImpactListenerRegistration = { name: "javaChanges", action: async pu => {
         const javaFilesChanged = await (pu.filesChanged || [])
             .filter(path => path.endsWith(".java"))
             .length;
         return pu.addressChannels(javaFilesChanged === 0 ?
             "No Java files changed :sleepy:" :
             `${javaFilesChanged} Java files changed :eye:`);
-    });
+    }};
 
-    sdm.addAutoInspectRegistration<boolean, { name: string }>({
-        name: "foo",
-        parametersInstance: { name: "tony" },
-        inspection: async (p, ci) => {
-            const files = await p.totalFileCount();
-            return ci.addressChannels(`There are ${files} in this project. Name was ${ci.parameters.name}`);
-        },
-        onInspectionResult: async (result, ci) => {
-            return ci.addressChannels(`The result was ${result}`);
-        },
-    });
+    const fileCounterInspection: AutoInspectRegistration<boolean, { name: string }> = { name: "foo",
+            parametersInstance: { name: "tony" },
+            inspection: async (p, ci) => {
+                const files = await p.totalFileCount();
+                return ci.addressChannels(`There are ${files} in this project. Name was ${ci.parameters.name}`);
+            },
+            onInspectionResult: async (result, ci) => {
+                return ci.addressChannels(`The result was ${result}`);
+            },
+        };
 
-    // sdm.addAutofix({
-    //     name: "countJava",
-    //     transform: async p => {
-    //         const fileNames = (await saveFromFiles(p,
-    //                 "src/main/java/**/*.java", f => f.path)
-    //         );
-    //         return p.addFile("filecount.md",
-    //             `${fileNames.length} Java source files:\n\n${fileNames.join("\n")}\n`);
-    //     },
-    // });
+    const countJavaAutofix: AutofixRegistration = {
+        name: "countJava",
+            transform: async p => {
+                const fileNames = (await saveFromFiles(p,
+                        "src/main/java/**/*.java", f => f.path)
+                );
+                return p.addFile("filecount.md",
+                    `${fileNames.length} Java source files:\n\n${fileNames.join("\n")}\n`);
+            },
+    };
+
+    // Each contributor contributes goals. The infrastructure assembles them into a goal set.
+    const AutofixGoal = new Autofix().with(countJavaAutofix);
+    const PushReactionGoal = new PushImpact().with(javaChanges);
+    const CodeInspectionGoal = new AutoCodeInspection().with(fileCounterInspection);
+    const CheckGoals = goals("Checks")
+        .plan(CodeInspectionGoal, PushReactionGoal, AutofixGoal);
+    const BuildGoals = goals("Build")
+        .plan(new Build().with({name: "Maven", builder: new MavenBuilder(sdm)})).after(AutofixGoal);
+    const StagingDeploymentGoals = goals("StagingDeployment")
+        .plan(ArtifactGoal,
+            StagingDeploymentGoal,
+            StagingEndpointGoal,
+            StagingVerifiedGoal);
+    const ProductionDeploymentGoals = goals("ProdDeployment")
+        .plan(ArtifactGoal,
+            ProductionDeploymentGoal,
+            ProductionEndpointGoal);
+
+    sdm.addGoalContributions(goalContributors(
+        onAnyPush().setGoals(CheckGoals),
+        whenPushSatisfies(IsDeploymentFrozen)
+            .setGoals(ExplainDeploymentFreezeGoal),
+        whenPushSatisfies(IsMaven)
+            .setGoals(BuildGoals),
+        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
+            .setGoals(StagingDeploymentGoals),
+        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+            .setGoals(ProductionDeploymentGoals)));
 
     sdm.addGeneratorCommand<SpringProjectCreationParameters>({
         name: "create-spring",
@@ -218,47 +227,36 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
             logInterpreter: deployToStaging.deployer.logInterpreter,
         },
     );
-    // sdm.addKnownSideEffect(
-    //     deployToStaging.endpointGoal,
-    //     deployToStaging.deployGoal.definition.displayName,
-    //     AnyPush);
+    sdm.addGoalSideEffect(
+        deployToStaging.endpointGoal,
+        deployToStaging.deployGoal.definition.displayName,
+        AnyPush);
 
-    // const deployToProduction = {
-    //     ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
-    //     deployGoal: ProductionDeploymentGoal,
-    //     endpointGoal: ProductionEndpointGoal,
-    //     undeployGoal: ProductionUndeploymentGoal,
-    // };
-    // sdm.addGoalImplementation("Production CF deployer",
-    //     deployToProduction.deployGoal,
-    //     executeDeploy(
-    //         sdm.configuration.sdm.artifactStore,
-    //         sdm.configuration.sdm.repoRefResolver,
-    //         deployToProduction.endpointGoal, deployToProduction),
-    //     {
-    //         pushTest: IsMaven,
-    //         logInterpreter: deployToProduction.deployer.logInterpreter,
-    //     },
-    // );
-    // sdm.addKnownSideEffect(
-    //     deployToProduction.endpointGoal,
-    //     deployToProduction.deployGoal.definition.displayName,
-    //     AnyPush);
+    const deployToProduction = {
+        ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
+        deployGoal: ProductionDeploymentGoal,
+        endpointGoal: ProductionEndpointGoal,
+        undeployGoal: ProductionUndeploymentGoal,
+    };
+    sdm.addGoalImplementation("Production CF deployer",
+        deployToProduction.deployGoal,
+        executeDeploy(
+            sdm.configuration.sdm.artifactStore,
+            sdm.configuration.sdm.repoRefResolver,
+            deployToProduction.endpointGoal, deployToProduction),
+        {
+            pushTest: IsMaven,
+            logInterpreter: deployToProduction.deployer.logInterpreter,
+        },
+    );
+    sdm.addGoalSideEffect(
+        deployToProduction.endpointGoal,
+        deployToProduction.deployGoal.definition.displayName,
+        AnyPush);
 
     sdm.addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
         .addCommand(DisplayDeployEnablement)
         .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm));
     // sdm.addEndpointVerificationListener(lookFor200OnEndpointRootGet());
-}
-
-export function buildRules(sdm: SoftwareDeliveryMachine) {
-    const mavenBuilder = new MavenBuilder(sdm);
-    sdm.addGoalImplementation("Maven build",
-        BuildGoal,
-        executeBuild(mavenBuilder),
-        {
-            pushTest: IsMaven,
-            logInterpreter: mavenBuilder.logInterpreter,
-        });
 }
