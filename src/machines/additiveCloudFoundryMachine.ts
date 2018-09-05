@@ -57,7 +57,7 @@ import {
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameters,
     SpringSupport,
-    TransformSeedToCustomProject
+    TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
 import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
@@ -68,10 +68,10 @@ import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 
+import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { executeBuild } from "@atomist/sdm/api-helper/goal/executeBuild";
 import { executeDeploy } from "@atomist/sdm/api-helper/goal/executeDeploy";
 import { StagingUndeploymentGoal } from "@atomist/sdm/pack/well-known-goals/commonGoals";
-import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
