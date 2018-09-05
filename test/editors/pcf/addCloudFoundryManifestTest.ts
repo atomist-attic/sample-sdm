@@ -43,7 +43,10 @@ describe("AddCloudFoundryManifest", () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
             {path: "pom.xml", content: NonSpringPom});
         const teamId = "T123";
-        await addCloudFoundryManifestTransform(p, fakeContext(teamId) as any);
+        await addCloudFoundryManifestTransform(p, {
+            addressChannels: () => Promise.resolve(undefined),
+            ...fakeContext(teamId),
+        } as any);
         assert(!p.fileExistsSync(CloudFoundryManifestPath), "Should not have manifest file");
     });
 

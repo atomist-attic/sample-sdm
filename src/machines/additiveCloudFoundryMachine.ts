@@ -15,7 +15,6 @@
  */
 
 import {
-    AnyPush,
     ArtifactGoal,
     AutofixGoal,
     BuildGoal,
@@ -47,14 +46,10 @@ import {
     isDeploymentFrozen,
     isInLocalMode,
     ManagedDeploymentTargeter,
-    RepositoryDeletionGoals,
-    StagingUndeploymentGoal,
-    UndeployEverywhereGoals,
 } from "@atomist/sdm-core";
 import { HasCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
-    HasSpringBootApplicationClass,
     IsMaven,
     localExecutableJarDeployer,
     MavenBuilder,
@@ -81,7 +76,7 @@ import { addTeamPolicies } from "./teamPolicies";
 import { executeBuild } from "@atomist/sdm/api-helper/goal/executeBuild";
 import { executeDeploy } from "@atomist/sdm/api-helper/goal/executeDeploy";
 import { executeUndeploy } from "@atomist/sdm/api-helper/goal/executeUndeploy";
-import { TestRenamer } from "./support/testRenamer";
+import { StagingUndeploymentGoal } from "@atomist/sdm/pack/well-known-goals/commonGoals";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -116,8 +111,6 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
         deployRules(sdm);
     }
     addTeamPolicies(sdm);
-
-    sdm.addEnforceableInvariant(TestRenamer);
 
     return sdm;
 }
@@ -230,18 +223,10 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
             logInterpreter: deployToStaging.deployer.logInterpreter,
         },
     );
-    sdm.addKnownSideEffect(
-        deployToStaging.endpointGoal,
-        deployToStaging.deployGoal.definition.displayName,
-        AnyPush);
-    sdm.addGoalImplementation("Staging undeployer",
-        deployToStaging.undeployGoal,
-        executeUndeploy(deployToStaging),
-        {
-            pushTest: IsMaven,
-            logInterpreter: deployToStaging.deployer.logInterpreter,
-        },
-    );
+    // sdm.addKnownSideEffect(
+    //     deployToStaging.endpointGoal,
+    //     deployToStaging.deployGoal.definition.displayName,
+    //     AnyPush);
 
     const deployToProduction = {
         ...cloudFoundryProductionDeploySpec(sdm.configuration.sdm),
@@ -260,26 +245,10 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
             logInterpreter: deployToProduction.deployer.logInterpreter,
         },
     );
-    sdm.addKnownSideEffect(
-        deployToProduction.endpointGoal,
-        deployToProduction.deployGoal.definition.displayName,
-        AnyPush);
-    sdm.addGoalImplementation("Production CF undeployer",
-        deployToProduction.undeployGoal,
-        executeUndeploy(deployToProduction),
-        {
-            pushTest: IsMaven,
-            logInterpreter: deployToProduction.deployer.logInterpreter,
-        },
-    );
-
-    sdm.addDisposalRules(
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, HasCloudFoundryManifest)
-            .itMeans("Java project to undeploy from PCF")
-            .setGoals(UndeployEverywhereGoals),
-        whenPushSatisfies(AnyPush)
-            .itMeans("We can always delete the repo")
-            .setGoals(RepositoryDeletionGoals));
+    // sdm.addKnownSideEffect(
+    //     deployToProduction.endpointGoal,
+    //     deployToProduction.deployGoal.definition.displayName,
+    //     AnyPush);
 
     sdm.addCommand(EnableDeploy)
         .addCommand(DisableDeploy)
@@ -292,7 +261,7 @@ export function buildRules(sdm: SoftwareDeliveryMachine) {
     const mavenBuilder = new MavenBuilder(sdm);
     sdm.addGoalImplementation("Maven build",
         BuildGoal,
-        executeBuild(sdm.configuration.sdm.projectLoader, mavenBuilder),
+        executeBuild(mavenBuilder),
         {
             pushTest: IsMaven,
             logInterpreter: mavenBuilder.logInterpreter,

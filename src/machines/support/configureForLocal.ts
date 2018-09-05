@@ -22,7 +22,7 @@ export function configureForLocal(sdm: SoftwareDeliveryMachine) {
 
     sdm.addRepoCreationListener(async l =>
         l.addressChannels(`New repo ${l.id.url}`));
-    sdm.addNewRepoWithCodeListener(async l =>
+    sdm.addFirstPushListener(async l =>
         l.addressChannels(`New repo with code ${l.id.url}`));
 
     sdm.addReviewListenerRegistration({

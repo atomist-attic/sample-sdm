@@ -23,8 +23,7 @@ import { TransformSeedToCustomProject } from "@atomist/sdm-pack-spring";
 import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
 import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
-import { UpdatePackageJsonIdentification } from "../pack/node/editors/updatePackageJsonIdentification";
-import { NodeProjectCreationParametersDefinition } from "../pack/node/nodeSupport";
+import { NodeProjectCreationParametersDefinition, UpdatePackageJsonIdentification } from "@atomist/sdm-pack-node";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -65,6 +64,6 @@ export function projectCreationMachine(
                 UpdatePackageJsonIdentification,
                 UpdateReadmeTitle],
         })
-        .addNewRepoWithCodeListener(tagRepo(springBootTagger));
+        .addFirstPushListener(tagRepo(springBootTagger));
     return sdm;
 }

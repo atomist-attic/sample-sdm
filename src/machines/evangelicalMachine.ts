@@ -15,7 +15,6 @@
  */
 
 import {
-    executeSendMessageToSlack,
     MessageGoal,
     not,
     SoftwareDeliveryMachine,
@@ -37,6 +36,7 @@ import { AddCloudFoundryManifest } from "../pack/pcf/addCloudFoundryManifest";
 import { enableDeployOnCloudFoundryManifestAddition } from "../pack/pcf/cloudFoundryDeploy";
 import { SuggestAddingCloudFoundryManifest,
     suggestAddingCloudFoundryManifestOnNewRepo } from "../pack/pcf/suggestAddingCloudFoundryManifest";
+import { executeSendMessageToSlack } from "@atomist/sdm/api-helper/goal/executeSendMessageToSlack";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");

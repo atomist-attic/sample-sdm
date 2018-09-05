@@ -33,10 +33,10 @@ export const AtomistGeneratedMarker = "[atomist:generated]";
 export const AtomistConfigTsPath = "src/atomist.config.ts";
 
 // This should not have been invoked unless it's a Spring or Node project
-export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) => {
+export const addCloudFoundryManifestTransform: CodeTransform = async (p, ci) => {
     const javaId = await MavenProjectIdentifier(p);
     if (javaId && await HasSpringBootPom.predicate(p)) {
-        return p.addFile(CloudFoundryManifestPath, javaManifestFor(javaId.name, ctx.teamId));
+        return p.addFile(CloudFoundryManifestPath, javaManifestFor(javaId.name, ci.context.workspaceId));
     }
     const nodeId = await NodeProjectIdentifier(p);
     if (nodeId) {
@@ -44,11 +44,11 @@ export const addCloudFoundryManifestTransform: CodeTransform = async (p, ctx) =>
         logger.info(`addCloudFoundryManifestEditor: Node project %j: automation client=${isAutomationClient}`, p.id);
         return p.addFile(CloudFoundryManifestPath,
             isAutomationClient ?
-                automationClientManifestFor(nodeId.name, ctx.teamId) :
-                nodeManifestFor(nodeId.name, ctx.teamId))
+                automationClientManifestFor(nodeId.name, ci.context.workspaceId) :
+                nodeManifestFor(nodeId.name, ci.context.workspaceId))
             .then(() => p.addFile(".cfignore", "node_modules/"));
     }
-    return ctx.messageClient.respond(
+    return ci.addressChannels(
         `Unable to add Cloud Foundry manifest to project \`${p.id.owner}:${p.id.repo}\`: Neither Maven nor Node`);
 };
 

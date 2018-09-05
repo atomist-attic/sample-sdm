@@ -47,7 +47,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
             listener: slackReviewListener(),
         })
         .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
-        .addNewRepoWithCodeListener(PublishNewRepo)
+        .addFirstPushListener(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
         .addDeploymentListener(PostToDeploymentsChannel)
         .addUserJoiningChannelListener(je =>

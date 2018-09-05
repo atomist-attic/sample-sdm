@@ -22,18 +22,18 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/automation-client": "https://r.atomist.com/3120158635",
+    "@atomist/automation-client": "^1.0.0-master.20180904201520",
     "@atomist/automation-client-ext-dashboard": "1.0.0-master.20180829090955",
     "@atomist/automation-client-ext-eventlog": "1.0.0-master.20180829152033",
     "@atomist/microgrammar": "^0.8.1",
-    "@atomist/sdm": "1.0.0-master.20180830163028",
-    "@atomist/sdm-core": "1.0.0-master.20180830172204",
+    "@atomist/sdm": "^1.0.0-master.20180905004040",
+    "@atomist/sdm-core": "^1.0.0-master.20180904154825",
     "@atomist/sdm-pack-checkstyle": "1.0.0-master.20180829151606",
-    "@atomist/sdm-pack-cloudfoundry": "1.0.0-master.20180829162825",
-    "@atomist/sdm-pack-node": "1.0.0-master.20180829151541",
+    "@atomist/sdm-pack-cloudfoundry": "^1.0.0-master.20180904181051",
+    "@atomist/sdm-pack-node": "^1.0.0-master.20180904164452",
     "@atomist/sdm-pack-sloc": "1.0.0-master.20180829090313",
     "@atomist/sdm-pack-sonarqube": "1.0.0-master.20180829151550",
-    "@atomist/sdm-pack-spring": "https://r.atomist.com/4201379504",
+    "@atomist/sdm-pack-spring": "^1.0.0-master.20180904172213",
     "@atomist/slack-messages": "^0.12.1",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",
@@ -46,7 +46,7 @@
     "winston-logzio": "^1.0.8"
   },
   "devDependencies": {
-    "@atomist/sdm-local": "1.0.0-master.20180830112313",
+    "@atomist/sdm-local": "^1.0.0-master.20180904180944",
     "@types/mocha": "^2.2.48",
     "@types/node": "^8.9.5",
     "@types/power-assert": "^1.4.29",
