@@ -15,7 +15,8 @@
  */
 
 import {
-    AutofixGoal,
+    Autofix,
+    AutofixGoal, goals,
     Goals,
     onAnyPush,
     SoftwareDeliveryMachine,
@@ -35,14 +36,15 @@ import { DemoEditors } from "../pack/demo-editors/demoEditors";
  */
 export function autofixMachine(
     configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    const AutofixGoals = goals("Autofix")
+        .plan(new Autofix()
+            .with(AddAtomistJavaHeader)
+            .with(AddAtomistTypeScriptHeader)
+            .with(AddLicenseFile));
     const sdm = createSoftwareDeliveryMachine({name: "Autofix machine", configuration},
         onAnyPush()
-            .setGoals(new Goals("Autofix", AutofixGoal)));
-    sdm
-        .addAutofix(AddAtomistJavaHeader)
-        .addAutofix(AddAtomistTypeScriptHeader)
-        .addAutofix(AddLicenseFile)
-        .addExtensionPacks(
+            .setGoals(AutofixGoals));
+    sdm.addExtensionPacks(
             DemoEditors,
         );
 
