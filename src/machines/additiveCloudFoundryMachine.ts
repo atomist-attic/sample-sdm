@@ -16,17 +16,20 @@
 
 import {
     AnyPush,
-    ArtifactGoal, AutoCodeInspection, Autofix, AutofixRegistration, AutoInspectRegistration, Build,
-    BuildGoal,
+    ArtifactGoal,
+    AutoCodeInspection,
+    Autofix,
+    Build,
     GitHubRepoRef,
-    goalContributors, goals,
-    Goals,
+    goalContributors,
+    goals,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
-    PushImpact, PushImpactListenerRegistration, saveFromFiles,
+    PushImpact,
+    PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
     StagingDeploymentGoal,
     StagingEndpointGoal,
@@ -113,45 +116,16 @@ export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachi
 }
 
 export function codeRules(sdm: SoftwareDeliveryMachine) {
-    const javaChanges: PushImpactListenerRegistration = { name: "javaChanges", action: async pu => {
-        const javaFilesChanged = await (pu.filesChanged || [])
-            .filter(path => path.endsWith(".java"))
-            .length;
-        return pu.addressChannels(javaFilesChanged === 0 ?
-            "No Java files changed :sleepy:" :
-            `${javaFilesChanged} Java files changed :eye:`);
-    }};
-
-    const fileCounterInspection: AutoInspectRegistration<boolean, { name: string }> = { name: "foo",
-            parametersInstance: { name: "tony" },
-            inspection: async (p, ci) => {
-                const files = await p.totalFileCount();
-                return ci.addressChannels(`There are ${files} in this project. Name was ${ci.parameters.name}`);
-            },
-            onInspectionResult: async (result, ci) => {
-                return ci.addressChannels(`The result was ${result}`);
-            },
-        };
-
-    const countJavaAutofix: AutofixRegistration = {
-        name: "countJava",
-            transform: async p => {
-                const fileNames = (await saveFromFiles(p,
-                        "src/main/java/**/*.java", f => f.path)
-                );
-                return p.addFile("filecount.md",
-                    `${fileNames.length} Java source files:\n\n${fileNames.join("\n")}\n`);
-            },
-    };
 
     // Each contributor contributes goals. The infrastructure assembles them into a goal set.
-    const AutofixGoal = new Autofix().with(countJavaAutofix);
-    const PushReactionGoal = new PushImpact().with(javaChanges);
-    const CodeInspectionGoal = new AutoCodeInspection().with(fileCounterInspection);
+    const AutofixGoal = new Autofix();
+    const PushReactionGoal = new PushImpact();
+    const CodeInspectionGoal = new AutoCodeInspection();
     const CheckGoals = goals("Checks")
         .plan(CodeInspectionGoal, PushReactionGoal, AutofixGoal);
     const BuildGoals = goals("Build")
-        .plan(new Build().with({name: "Maven", builder: new MavenBuilder(sdm)})).after(AutofixGoal);
+        .plan(new Build().with({name: "Maven", builder: new MavenBuilder(sdm)}))
+        .after(AutofixGoal);
     const StagingDeploymentGoals = goals("StagingDeployment")
         .plan(ArtifactGoal,
             StagingDeploymentGoal,
