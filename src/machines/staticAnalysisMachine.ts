@@ -63,7 +63,7 @@ const rodHatesYaml: ReviewerRegistration = {
     inspection: async (project, cri) => ({
         repoId: project.id,
         comments:
-            await saveFromFiles(project, "**/*.yml", f =>
+            await saveFromFiles(project, "**/*.yml", async f =>
                 new DefaultReviewComment("info", "yml-reviewer",
                     `Found YML in \`${f.path}\`: Rod regards the format as an insult to computer science`,
                     {

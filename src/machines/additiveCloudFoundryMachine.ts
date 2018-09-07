@@ -124,7 +124,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const CheckGoals = goals("Checks")
         .plan(CodeInspectionGoal, PushReactionGoal, AutofixGoal);
     const BuildGoals = goals("Build")
-        .plan(new Build().with({name: "Maven", builder: new MavenBuilder(sdm)}))
+        .plan(new Build().with({ name: "Maven", builder: new MavenBuilder(sdm) }))
         .after(AutofixGoal);
     const StagingDeploymentGoals = goals("StagingDeployment")
         .plan(ArtifactGoal,
@@ -135,6 +135,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .plan(ArtifactGoal,
             ProductionDeploymentGoal,
             ProductionEndpointGoal);
+
+    PushReactionGoal.withListener(async (inv) => { inv.addressChannels("yes. this is a push.") })
 
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(CheckGoals),
