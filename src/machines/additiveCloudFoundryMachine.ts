@@ -136,8 +136,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             ProductionDeploymentGoal,
             ProductionEndpointGoal);
 
-    PushReactionGoal.withListener(async (inv) => { inv.addressChannels("yes. this is a push.") })
-
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(CheckGoals),
         whenPushSatisfies(IsDeploymentFrozen)
