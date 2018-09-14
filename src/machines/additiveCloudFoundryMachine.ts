@@ -39,11 +39,16 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import {
-    createSoftwareDeliveryMachine, deploymentFreeze, DisableDeploy, DisplayDeployEnablement, EnableDeploy,
+    createSoftwareDeliveryMachine,
+    deploymentFreeze,
+    DisableDeploy,
+    DisplayDeployEnablement,
+    EnableDeploy,
     ExplainDeploymentFreezeGoal,
     InMemoryDeploymentStatusManager,
     isDeploymentFrozen,
-    isInLocalMode, ManagedDeploymentTargeter,
+    isInLocalMode,
+    ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
 import {
     CloudFoundryBlueGreenDeployer,
@@ -54,11 +59,15 @@ import {
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
-    IsMaven, localExecutableJarDeployer,
+    IsMaven,
+    localExecutableJarDeployer,
     MavenBuilder,
-    ReplaceReadmeTitle, SetAtomistTeamInApplicationYml,
+    ReplaceReadmeTitle,
+    SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
-    SpringProjectCreationParameters, SpringSupport, TransformSeedToCustomProject,
+    SpringProjectCreationParameters,
+    SpringSupport,
+    TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
 import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/commonGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";

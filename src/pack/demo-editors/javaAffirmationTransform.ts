@@ -20,7 +20,10 @@ import {
     doWithFiles,
 } from "@atomist/sdm";
 import { AllJavaFiles } from "@atomist/sdm-pack-spring";
-import { AffirmationParameters, affirmations } from "./affirmationTransform";
+import {
+    AffirmationParameters,
+    affirmations,
+} from "./affirmationTransform";
 
 const appendAffirmationToJava: CodeTransform<AffirmationParameters> = (p, ci) => {
     const affirmation = ci.parameters.customAffirmation || randomAffirmation();

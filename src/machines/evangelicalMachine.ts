@@ -23,14 +23,25 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine, DisableDeploy, DisplayDeployEnablement, EnableDeploy, tagRepo } from "@atomist/sdm-core";
+import {
+    createSoftwareDeliveryMachine,
+    DisableDeploy,
+    DisplayDeployEnablement,
+    EnableDeploy,
+    tagRepo,
+} from "@atomist/sdm-core";
 import { AddCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry/lib/handlers/addCloudFoundryManifest";
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import {
     SuggestAddingCloudFoundryManifest,
     suggestAddingCloudFoundryManifestOnNewRepo,
 } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/suggestAddingCloudFoundryManifest";
-import { HasSpringBootApplicationClass, IsMaven, MaterialChangeToJavaRepo, springBootTagger } from "@atomist/sdm-pack-spring";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+    MaterialChangeToJavaRepo,
+    springBootTagger,
+} from "@atomist/sdm-pack-spring";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");

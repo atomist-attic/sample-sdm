@@ -19,11 +19,18 @@ import {
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
-import { NodeProjectCreationParametersDefinition, UpdatePackageJsonIdentification } from "@atomist/sdm-pack-node";
+import {
+    createSoftwareDeliveryMachine,
+    tagRepo,
+} from "@atomist/sdm-core";
+import {
+    NodeProjectCreationParametersDefinition,
+    UpdatePackageJsonIdentification,
+} from "@atomist/sdm-pack-node";
 import {
     ReplaceReadmeTitle,
-    SetAtomistTeamInApplicationYml, springBootTagger,
+    SetAtomistTeamInApplicationYml,
+    springBootTagger,
     SpringProjectCreationParameterDefinitions,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";

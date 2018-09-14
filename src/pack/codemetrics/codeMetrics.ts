@@ -24,7 +24,10 @@ import {
     RemoteRepoRef,
     TypedFingerprint,
 } from "@atomist/sdm";
-import { CodeStats, reportForLanguages } from "@atomist/sdm-pack-sloc/lib/slocReport";
+import {
+    CodeStats,
+    reportForLanguages,
+} from "@atomist/sdm-pack-sloc/lib/slocReport";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 

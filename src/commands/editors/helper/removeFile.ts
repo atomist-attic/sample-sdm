@@ -19,7 +19,8 @@ import {
 } from "@atomist/automation-client";
 import {
     CodeTransformRegistration,
-    commitToMaster, Parameter,
+    commitToMaster,
+    Parameter,
 } from "@atomist/sdm";
 
 @Parameters()
