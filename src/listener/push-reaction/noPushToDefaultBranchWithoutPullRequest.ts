@@ -15,7 +15,6 @@
  */
 
 import { logger } from "@atomist/automation-client";
-
 import {
     PushImpactListenerRegistration,
 } from "@atomist/sdm";
