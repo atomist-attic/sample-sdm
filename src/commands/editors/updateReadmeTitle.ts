@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
+import { Microgrammar, RestOfLine } from "@atomist/microgrammar";
 import {
     CodeTransform,
     logger,
-    NodeProjectCreationParameters,
     parseUtils,
 } from "@atomist/sdm";
-
-import { Microgrammar, RestOfLine } from "@atomist/microgrammar";
+import {NodeProjectCreationParameters} from "@atomist/sdm-pack-node";
 
 export const UpdateReadmeTitle: CodeTransform =
     (project, ctx, params: NodeProjectCreationParameters) => {

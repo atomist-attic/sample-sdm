@@ -17,8 +17,8 @@
 import { TokenCredentials } from "@atomist/automation-client";
 import {
     NewIssueListenerInvocation,
-    updateIssue,
 } from "@atomist/sdm";
+import { updateIssue } from "@atomist/sdm-core/lib/util/github/ghub";
 
 /**
  * Capitalize the first letter of an issue

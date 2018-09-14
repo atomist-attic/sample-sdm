@@ -16,12 +16,14 @@
 
 import {
     ExtensionPack,
+    metadata,
+} from "@atomist/sdm";
+import {
     FileIoImportReviewer,
     HardCodedPropertyReviewer,
     ImportDotStarReviewer,
-    metadata,
     ProvidedDependencyReviewer,
-} from "@atomist/sdm";
+} from "@atomist/sdm-pack-spring";
 
 export const CloudReadinessChecks: ExtensionPack = {
     ...metadata("cloud-readiness"),

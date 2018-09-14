@@ -15,7 +15,6 @@
  */
 
 import {
-    CodeStats,
     ExtensionPack,
     FingerprinterRegistration,
     FingerprintGoal,
@@ -23,9 +22,9 @@ import {
     onAnyPush,
     PushTest,
     RemoteRepoRef,
-    reportForLanguages,
     TypedFingerprint,
 } from "@atomist/sdm";
+import { CodeStats, reportForLanguages } from "@atomist/sdm-pack-sloc/lib/slocReport";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 

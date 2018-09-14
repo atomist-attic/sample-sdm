@@ -15,7 +15,6 @@
  */
 
 import {
-    DefaultRepoRefResolver,
     executeAutofixes,
     fakeGoalInvocation,
     GitCommandGitProject,
@@ -23,7 +22,6 @@ import {
     GoalInvocation,
     InMemoryProjectFile,
     RemoteRepoRef,
-    SingleProjectLoader,
 } from "@atomist/sdm";
 
 import { successOn } from "@atomist/automation-client";
@@ -42,13 +40,13 @@ describe("addHeaderFix", () => {
         // Make commit and push harmless
         let pushCount = 0;
         let commitCount = 0;
-        p.commit = async () => {
+        p.commit = async (message: string) => {
             ++commitCount;
-            return successOn(p);
+            return p;
         };
         p.push = async () => {
             ++pushCount;
-            return successOn(p);
+            return p;
         };
         const f = new InMemoryProjectFile("src/bad.ts", "const foo;\n");
         // Now mess it up with a lint error that tslint can fix

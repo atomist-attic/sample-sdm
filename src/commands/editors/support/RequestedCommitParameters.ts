@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
+import {Parameters} from "@atomist/automation-client";
 import {
     BranchCommit,
     EditMode,
     Parameter,
-    Parameters,
     PullRequest,
     validationPatterns,
 } from "@atomist/sdm";

@@ -20,58 +20,53 @@ import {
     AutoCodeInspection,
     Autofix,
     Build,
-    CloudFoundryBlueGreenDeployer,
-    CloudFoundrySupport,
-    createSoftwareDeliveryMachine,
-    deploymentFreeze,
-    DisableDeploy,
-    DisplayDeployEnablement,
-    EnableDeploy,
-    enableDeployOnCloudFoundryManifestAddition,
-    EnvironmentCloudFoundryTarget,
     executeDeploy,
-    ExplainDeploymentFreezeGoal,
     GitHubRepoRef,
     goalContributors,
     goals,
-    HasCloudFoundryManifest,
-    InMemoryDeploymentStatusManager,
-    isDeploymentFrozen,
-    isInLocalMode,
-    IsMaven,
-    localExecutableJarDeployer,
-    ManagedDeploymentTargeter,
-    MavenBuilder,
-    NodeSupport,
     not,
     onAnyPush,
     ProductionDeploymentGoal,
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
     PushImpact,
-    PushImpactListenerRegistration,
-    ReplaceReadmeTitle,
-    SetAtomistTeamInApplicationYml,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
-    SpringProjectCreationParameterDefinitions,
-    SpringProjectCreationParameters,
-    SpringSupport,
     StagingDeploymentGoal,
     StagingEndpointGoal,
-    StagingUndeploymentGoal,
     StagingVerifiedGoal,
     ToDefaultBranch,
-    TransformSeedToCustomProject,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import {
+    createSoftwareDeliveryMachine, deploymentFreeze, DisableDeploy, DisplayDeployEnablement, EnableDeploy,
+    ExplainDeploymentFreezeGoal,
+    InMemoryDeploymentStatusManager,
+    isDeploymentFrozen,
+    isInLocalMode, ManagedDeploymentTargeter,
+} from "@atomist/sdm-core";
+import {
+    CloudFoundryBlueGreenDeployer,
+    CloudFoundrySupport,
+    EnvironmentCloudFoundryTarget,
+    HasCloudFoundryManifest,
+} from "@atomist/sdm-pack-cloudfoundry";
+import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
+import { NodeSupport } from "@atomist/sdm-pack-node";
+import {
+    IsMaven, localExecutableJarDeployer,
+    MavenBuilder,
+    ReplaceReadmeTitle, SetAtomistTeamInApplicationYml,
+    SpringProjectCreationParameterDefinitions,
+    SpringProjectCreationParameters, SpringSupport, TransformSeedToCustomProject,
+} from "@atomist/sdm-pack-spring";
+import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/commonGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 

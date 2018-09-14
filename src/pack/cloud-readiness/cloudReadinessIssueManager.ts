@@ -17,12 +17,14 @@
 import { deepLink } from "@atomist/automation-client";
 import {
     GitHubRepoRef,
-    HardcodePropertyCategory,
-    ImportDotStarCategory,
-    ImportFileIoCategory,
     ReviewListenerRegistration,
 } from "@atomist/sdm";
 
+import {
+    HardcodePropertyCategory,
+    ImportDotStarCategory,
+    ImportFileIoCategory,
+} from "@atomist/sdm-pack-spring";
 import * as _ from "lodash";
 import {
     CommentsFormatter,

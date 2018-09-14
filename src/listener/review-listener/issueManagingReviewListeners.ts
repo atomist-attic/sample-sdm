@@ -24,16 +24,16 @@ import {
     TokenCredentials,
 } from "@atomist/automation-client";
 import {
-    authHeaders,
     OnPushToAnyBranch,
     ReviewListener,
     ReviewListenerInvocation,
 } from "@atomist/sdm";
+import Push = OnPushToAnyBranch.Push;
+import { authHeaders } from "@atomist/sdm-core/lib/util/github/ghub";
 import * as slack from "@atomist/slack-messages";
 import axios from "axios";
 import * as stringify from "json-stringify-safe";
 import * as _ from "lodash";
-import Push = OnPushToAnyBranch.Push;
 
 export type CommentFilter = (r: ReviewComment) => boolean;
 

@@ -15,10 +15,11 @@
  */
 
 import {
-    CodeTransformRegistration,
-    commitToMaster,
-    Parameter,
     Parameters,
+} from "@atomist/automation-client";
+import {
+    CodeTransformRegistration,
+    commitToMaster, Parameter,
 } from "@atomist/sdm";
 
 @Parameters()

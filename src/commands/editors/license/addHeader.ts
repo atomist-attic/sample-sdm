@@ -16,6 +16,7 @@
 
 import {
     logger,
+    Parameters,
 } from "@atomist/automation-client";
 import {
     CodeTransformRegistration,
@@ -23,7 +24,6 @@ import {
     GitProject,
     MessageClient,
     Parameter,
-    Parameters,
     ParametersInvocation,
     Project,
     ProjectFile,

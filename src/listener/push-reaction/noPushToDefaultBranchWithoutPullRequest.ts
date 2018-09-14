@@ -17,9 +17,9 @@
 import { logger } from "@atomist/automation-client";
 
 import {
-    PullRequestForSha,
     PushImpactListenerRegistration,
 } from "@atomist/sdm";
+import { PullRequestForSha } from "@atomist/sdm-core/lib/typings/types";
 import * as _ from "lodash";
 
 /**

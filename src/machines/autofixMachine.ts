@@ -16,14 +16,12 @@
 
 import {
     Autofix,
-    AutofixGoal,
-    createSoftwareDeliveryMachine,
     goals,
-    Goals,
     onAnyPush,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import {
     AddAtomistJavaHeader,
     AddAtomistTypeScriptHeader,

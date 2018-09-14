@@ -15,9 +15,9 @@
  */
 
 import {
-    configureMavenPerBranchSpringBootDeploy,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
+import { configureMavenPerBranchSpringBootDeploy } from "@atomist/sdm-pack-spring";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
     configureMavenPerBranchSpringBootDeploy(sdm);

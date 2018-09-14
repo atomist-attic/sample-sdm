@@ -20,8 +20,8 @@ import {
     hasFile,
     metadata,
     not,
-    updateIssue,
 } from "@atomist/sdm";
+import { updateIssue } from "@atomist/sdm-core/lib/util/github/ghub";
 import axios from "axios";
 
 /**

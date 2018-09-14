@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
+import { Parameters } from "@atomist/automation-client";
 import {
-    addDependencyTransform,
     appendOrCreateFileContent,
     CodeTransformOrTransforms,
     CodeTransformRegistration,
     copyFileFromUrl,
     Parameter,
-    Parameters,
     PullRequest,
-    VersionedArtifact,
 } from "@atomist/sdm";
+import { addDependencyTransform, VersionedArtifact } from "@atomist/sdm-pack-spring";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",

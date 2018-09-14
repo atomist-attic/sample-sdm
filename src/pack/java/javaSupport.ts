@@ -15,11 +15,11 @@
  */
 
 import {
-    CheckstyleSupport,
     ExtensionPack,
-    MavenFingerprinter,
     metadata,
 } from "@atomist/sdm";
+import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
+import { MavenFingerprinter } from "@atomist/sdm-pack-spring";
 import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 
 /**

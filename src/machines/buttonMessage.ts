@@ -19,7 +19,7 @@ import {
     actionableButton,
     CommandRegistration,
 } from "@atomist/sdm";
-import * as slack from "@atomist/slack-messages/SlackMessages";
+import * as slack from "@atomist/slack-messages";
 
 /**
  * Simple function to present an action button to run a command

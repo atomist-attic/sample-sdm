@@ -15,19 +15,18 @@
  */
 
 import {
-    CheckstyleSupport,
     CodeInspectionGoal,
-    createSoftwareDeliveryMachine,
     DefaultReviewComment,
     Goals,
-    IsJava,
-    MaterialChangeToJavaRepo,
     ReviewerRegistration,
     saveFromFiles,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
     whenPushSatisfies,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
+import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
+import { IsJava, MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 /**

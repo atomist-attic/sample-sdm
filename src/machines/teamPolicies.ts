@@ -16,13 +16,12 @@
 
 import { logger } from "@atomist/automation-client";
 import {
-    buildAwareCodeTransforms,
-    GraphGoals,
     slackReviewListener,
-    SlocSupport,
     SoftwareDeliveryMachine,
-    SonarQubeSupport,
 } from "@atomist/sdm";
+import { SlocSupport } from "@atomist/sdm-pack-sloc/lib/sloc";
+import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
+import { buildAwareCodeTransforms } from "@atomist/sdm/lib/pack/build-aware-transform";
 import { AddApacheLicenseHeaderTransform } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
 import { capitalizer } from "../listener/issue/capitalizer";
@@ -40,7 +39,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addNewIssueListener(requestDescription)
         .addNewIssueListener(capitalizer)
         .addClosedIssueListener(thankYouYouRock)
-        .addGoalsSetListener(GraphGoals)
+        // .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
         .addReviewListenerRegistration({
             name: "slack",

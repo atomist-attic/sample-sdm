@@ -16,12 +16,14 @@
 
 import { logger } from "@atomist/automation-client";
 import {
-    constructLogPath,
     firstAvailableProgressLog,
     LoggingProgressLog,
     ProgressLogFactory,
-    RolarProgressLog,
 } from "@atomist/sdm";
+import {
+    constructLogPath,
+    RolarProgressLog,
+} from "@atomist/sdm-core";
 
 /**
  * LogFactory that will try using Rolar

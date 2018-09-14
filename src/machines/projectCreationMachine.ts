@@ -15,19 +15,18 @@
  */
 
 import {
-    createSoftwareDeliveryMachine,
     GitHubRepoRef,
-    NodeProjectCreationParametersDefinition,
-    ReplaceReadmeTitle,
-    SetAtomistTeamInApplicationYml,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
-    springBootTagger,
-    SpringProjectCreationParameterDefinitions,
-    tagRepo,
-    TransformSeedToCustomProject,
-    UpdatePackageJsonIdentification,
 } from "@atomist/sdm";
+import { createSoftwareDeliveryMachine, tagRepo } from "@atomist/sdm-core";
+import { NodeProjectCreationParametersDefinition, UpdatePackageJsonIdentification } from "@atomist/sdm-pack-node";
+import {
+    ReplaceReadmeTitle,
+    SetAtomistTeamInApplicationYml, springBootTagger,
+    SpringProjectCreationParameterDefinitions,
+    TransformSeedToCustomProject,
+} from "@atomist/sdm-pack-spring";
 import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 
 /**
