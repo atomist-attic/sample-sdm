@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { doWithJson } from "@atomist/automation-client/project/util/jsonUtils";
-import { Project } from "@atomist/sdm";
-import { AutofixRegistration } from "@atomist/sdm";
-import { IsNode } from "@atomist/sdm-pack-node";
+import { doWithJson } from "@atomist/automation-client";
+import {
+    AutofixRegistration,
+    IsNode,
+    Project,
+} from "@atomist/sdm";
 import * as _ from "lodash";
 
 export const AddBuildScript: AutofixRegistration = {

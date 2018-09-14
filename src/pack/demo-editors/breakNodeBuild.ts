@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { CodeTransformRegistration, commitToMaster, Project } from "@atomist/sdm";
+import {
+    CodeTransformRegistration,
+    commitToMaster,
+    Project,
+} from "@atomist/sdm";
 
 export const BadTypeScriptFileName = "src/Bad.ts";
 export const BadJavaScriptFileName = "src/Bad.js";

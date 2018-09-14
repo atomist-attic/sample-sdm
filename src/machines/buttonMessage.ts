@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import { ButtonSpecification } from "@atomist/automation-client/spi/message/MessageClient";
-import { actionableButton } from "@atomist/sdm";
-import { CommandRegistration } from "@atomist/sdm/api/registration/CommandRegistration";
+import { ButtonSpecification } from "@atomist/automation-client";
+import {
+    actionableButton,
+    CommandRegistration,
+} from "@atomist/sdm";
 import * as slack from "@atomist/slack-messages/SlackMessages";
 
 /**

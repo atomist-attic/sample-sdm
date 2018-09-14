@@ -18,10 +18,10 @@ import {
     allSatisfied,
     AutofixRegistration,
     hasFileContaining,
+    IsJava,
+    IsTypeScript,
     PushTest,
 } from "@atomist/sdm";
-import { IsTypeScript } from "@atomist/sdm-pack-node";
-import { IsJava } from "@atomist/sdm-pack-spring";
 import {
     AddHeaderParameters,
     addHeaderTransform,

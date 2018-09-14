@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import { RemoteRepoRef } from "@atomist/sdm";
 import {
+    CodeStats,
     ExtensionPack,
     FingerprinterRegistration,
     FingerprintGoal,
+    metadata,
     onAnyPush,
     PushTest,
+    RemoteRepoRef,
+    reportForLanguages,
+    TypedFingerprint,
 } from "@atomist/sdm";
-import { CodeStats, reportForLanguages } from "@atomist/sdm-pack-sloc/slocReport";
-import { TypedFingerprint } from "@atomist/sdm/api-helper/code/fingerprint/TypedFingerprint";
-import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 
 const CodeMetricsFingerprintName = "CodeMetrics";
 

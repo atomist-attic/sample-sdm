@@ -15,30 +15,28 @@
  */
 
 import {
-    MessageGoal,
-    not,
-    SoftwareDeliveryMachine,
-    ToDefaultBranch,
-    whenPushSatisfies,
-} from "@atomist/sdm";
-import {
+    AddCloudFoundryManifest,
     createSoftwareDeliveryMachine,
     DisableDeploy,
     DisplayDeployEnablement,
     EnableDeploy,
-    tagRepo,
-} from "@atomist/sdm-core";
-import { HasSpringBootApplicationClass, IsMaven, springBootTagger } from "@atomist/sdm-pack-spring";
-import { MaterialChangeToJavaRepo } from "@atomist/sdm-pack-spring";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
-import { DemoEditors } from "../pack/demo-editors/demoEditors";
-import { executeSendMessageToSlack } from "@atomist/sdm/api-helper/goal/executeSendMessageToSlack";
-import {
+    enableDeployOnCloudFoundryManifestAddition,
+    executeSendMessageToSlack,
+    HasSpringBootApplicationClass,
+    IsMaven,
+    MaterialChangeToJavaRepo,
+    MessageGoal,
+    not,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineConfiguration,
+    springBootTagger,
     SuggestAddingCloudFoundryManifest,
-    suggestAddingCloudFoundryManifestOnNewRepo
-} from "@atomist/sdm-pack-cloudfoundry/lib/listeners/suggestAddingCloudFoundryManifest";
-import { AddCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry/lib/handlers/addCloudFoundryManifest";
-import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
+    suggestAddingCloudFoundryManifestOnNewRepo,
+    tagRepo,
+    ToDefaultBranch,
+    whenPushSatisfies,
+} from "@atomist/sdm";
+import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
 export const EnableSpringBoot = new MessageGoal("enableSpringBoot");

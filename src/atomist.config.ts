@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
-import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
-import { Configuration } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm";
-import { ConfigureOptions, configureSdm } from "@atomist/sdm-core";
+import {
+    configureDashboardNotifications,
+    configureEventLog,
+} from "@atomist/automation-client";
+import {
+    Configuration,
+    ConfigureOptions,
+    configureSdm,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineConfiguration,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 

@@ -15,14 +15,12 @@
  */
 
 import {
-    Parameter,
-    Parameters,
-} from "@atomist/sdm";
-import { validationPatterns } from "@atomist/sdm";
-import {
     BranchCommit,
     EditMode,
+    Parameter,
+    Parameters,
     PullRequest,
+    validationPatterns,
 } from "@atomist/sdm";
 
 /**

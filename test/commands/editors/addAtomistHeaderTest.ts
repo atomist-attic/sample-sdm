@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-import { InMemoryProjectFile } from "@atomist/sdm";
-import { GitHubRepoRef } from "@atomist/sdm";
+import {
+    DefaultRepoRefResolver,
+    executeAutofixes,
+    fakeGoalInvocation,
+    GitCommandGitProject,
+    GitHubRepoRef,
+    GoalInvocation,
+    InMemoryProjectFile,
+    RemoteRepoRef,
+    SingleProjectLoader,
+} from "@atomist/sdm";
 
-import { successOn } from "@atomist/automation-client/action/ActionResult";
-import { RemoteRepoRef } from "@atomist/sdm";
-import { GitCommandGitProject } from "@atomist/sdm";
+import { successOn } from "@atomist/automation-client";
 import * as assert from "power-assert";
 
-import { GoalInvocation } from "@atomist/sdm";
-import { DefaultRepoRefResolver } from "@atomist/sdm-core";
-import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
-import { fakeGoalInvocation } from "@atomist/sdm/api-helper/test/fakeGoalInvocation";
-import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 

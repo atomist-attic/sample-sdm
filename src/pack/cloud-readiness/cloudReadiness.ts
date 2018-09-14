@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { ExtensionPack } from "@atomist/sdm";
 import {
+    ExtensionPack,
     FileIoImportReviewer,
     HardCodedPropertyReviewer,
     ImportDotStarReviewer,
+    metadata,
     ProvidedDependencyReviewer,
-} from "@atomist/sdm-pack-spring";
-import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
+} from "@atomist/sdm";
 
 export const CloudReadinessChecks: ExtensionPack = {
     ...metadata("cloud-readiness"),
