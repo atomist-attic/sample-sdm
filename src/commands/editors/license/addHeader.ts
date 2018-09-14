@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { logger, } from "@atomist/automation-client";
+import {
+    logger,
+} from "@atomist/automation-client";
 import {
     CodeTransformRegistration,
     doWithFiles,
@@ -22,13 +24,13 @@ import {
     MessageClient,
     Parameter,
     Parameters,
+    ParametersInvocation,
     Project,
-    ProjectFile
+    ProjectFile,
 } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
 import { RequestedCommitParameters } from "../support/RequestedCommitParameters";
-import { ParametersInvocation } from "@atomist/sdm/api/listener/ParametersInvocation";
 
 /**
  * Default glob pattern matches all C family languages

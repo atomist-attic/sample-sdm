@@ -15,23 +15,19 @@
  */
 
 import {
+    CheckstyleSupport,
     CodeInspectionGoal,
+    createSoftwareDeliveryMachine,
     DefaultReviewComment,
-} from "@atomist/sdm";
-import { saveFromFiles } from "@atomist/sdm";
-import {
     Goals,
-    ReviewerRegistration,
-    SoftwareDeliveryMachine,
-    whenPushSatisfies,
-} from "@atomist/sdm";
-import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
-import {
     IsJava,
     MaterialChangeToJavaRepo,
-} from "@atomist/sdm-pack-spring";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
+    ReviewerRegistration,
+    saveFromFiles,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineConfiguration,
+    whenPushSatisfies,
+} from "@atomist/sdm";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 /**

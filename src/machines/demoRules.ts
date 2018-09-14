@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-import { Project } from "@atomist/automation-client/project/Project";
-import { doWithFiles } from "@atomist/automation-client/project/util/projectUtils";
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { makeBuildAware } from "@atomist/sdm/pack/build-aware-transform";
+import {
+    doWithFiles,
+    Project,
+} from "@atomist/automation-client";
+import {
+    makeBuildAware,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
     sdm.addPushImpactListener(async pu => {

@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine } from "@atomist/sdm";
-import { configureMavenPerBranchSpringBootDeploy } from "@atomist/sdm-pack-spring";
+import {
+    configureMavenPerBranchSpringBootDeploy,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
     configureMavenPerBranchSpringBootDeploy(sdm);

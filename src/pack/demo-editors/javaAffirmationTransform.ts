@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-import { doWithFiles } from "@atomist/sdm";
-import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
-import { AllJavaFiles } from "@atomist/sdm-pack-spring";
+import {
+    AllJavaFiles,
+    CodeTransform,
+    CodeTransformRegistration,
+    doWithFiles,
+} from "@atomist/sdm";
 import { AffirmationParameters, affirmations } from "./affirmationTransform";
 
 const appendAffirmationToJava: CodeTransform<AffirmationParameters> = (p, ci) => {

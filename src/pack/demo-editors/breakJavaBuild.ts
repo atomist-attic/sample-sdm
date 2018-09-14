@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { CodeTransformRegistration, commitToMaster, Project } from "@atomist/sdm";
+import {
+    CodeTransformRegistration,
+    commitToMaster,
+    Project,
+} from "@atomist/sdm";
 
 export const BadJavaFileName = "src/main/java/Bad.java";
 

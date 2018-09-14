@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
 import {
+    GitHubRepoRef,
+    Issue,
+    logger,
     ProjectOperationCredentials,
+    RemoteRepoRef,
+    ReviewComment,
     TokenCredentials,
-} from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
-import { RemoteRepoRef } from "@atomist/automation-client/operations/common/RepoId";
-import { ReviewComment } from "@atomist/automation-client/operations/review/ReviewResult";
-import { Issue } from "@atomist/automation-client/util/gitHub";
+} from "@atomist/automation-client";
 import {
+    authHeaders,
+    OnPushToAnyBranch,
     ReviewListener,
     ReviewListenerInvocation,
 } from "@atomist/sdm";
-import { authHeaders } from "@atomist/sdm-core";
-import { OnPushToAnyBranch } from "@atomist/sdm/typings/types";
 import * as slack from "@atomist/slack-messages";
 import axios from "axios";
 import * as stringify from "json-stringify-safe";

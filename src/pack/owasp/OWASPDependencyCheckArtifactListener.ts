@@ -16,13 +16,11 @@
 
 import {
     ArtifactListenerRegistration,
+    asSpawnCommand,
+    LoggingProgressLog,
+    spawnAndWatch,
     ToDefaultBranch,
 } from "@atomist/sdm";
-import { LoggingProgressLog } from "@atomist/sdm/api-helper/log/LoggingProgressLog";
-import {
-    asSpawnCommand,
-    spawnAndWatch,
-} from "@atomist/sdm/api-helper/misc/spawned";
 
 export const OWASPDependencyCheck: ArtifactListenerRegistration = {
     name: "OWASP dependency check",

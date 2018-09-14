@@ -15,6 +15,7 @@
  */
 
 import {
+    addressEvent,
     AutomationContextAware,
     CommandHandler,
     HandleCommand,
@@ -23,10 +24,9 @@ import {
     MappedParameter,
     MappedParameters,
     Parameter,
+    QueryNoCacheOptions,
     Tags,
 } from "@atomist/automation-client";
-import { QueryNoCacheOptions } from "@atomist/automation-client/spi/graph/GraphClient";
-import { addressEvent } from "@atomist/automation-client/spi/message/MessageClient";
 import * as _ from "lodash";
 import { SdmGoalById } from "../typings/types";
 

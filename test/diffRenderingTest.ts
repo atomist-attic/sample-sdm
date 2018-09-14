@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {renderCommitMessage} from "@atomist/sdm-core";
+import { renderCommitMessage } from "@atomist/sdm";
 import * as assert from "power-assert";
 
 describe("commit rendering", () => {

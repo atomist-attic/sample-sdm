@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { CodeTransformRegistration, commitToMaster, Parameter, Parameters } from "@atomist/sdm";
+import {
+    CodeTransformRegistration,
+    commitToMaster,
+    Parameter,
+    Parameters,
+} from "@atomist/sdm";
 
 @Parameters()
 export class RemoveFileParams {
