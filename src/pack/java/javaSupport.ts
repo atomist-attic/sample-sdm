@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { ExtensionPack } from "@atomist/sdm";
+import {
+    ExtensionPack,
+    metadata,
+} from "@atomist/sdm";
 import { CheckstyleSupport } from "@atomist/sdm-pack-checkstyle";
 import { MavenFingerprinter } from "@atomist/sdm-pack-spring";
-import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { AddAtomistJavaHeader } from "../../autofix/addAtomistHeader";
 
 /**

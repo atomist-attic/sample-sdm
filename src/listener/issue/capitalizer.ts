@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import { TokenCredentials } from "@atomist/automation-client/operations/common/ProjectOperationCredentials";
-import { NewIssueListenerInvocation } from "@atomist/sdm";
-import { updateIssue } from "@atomist/sdm-core";
+import { TokenCredentials } from "@atomist/automation-client";
+import {
+    NewIssueListenerInvocation,
+} from "@atomist/sdm";
+import { updateIssue } from "@atomist/sdm-core/lib/util/github/ghub";
 
 /**
  * Capitalize the first letter of an issue

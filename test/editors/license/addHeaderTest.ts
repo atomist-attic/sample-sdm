@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-import { SimpleRepoId } from "@atomist/automation-client/operations/common/RepoId";
-import { InMemoryProject } from "@atomist/automation-client/project/mem/InMemoryProject";
+import {
+    InMemoryProject,
+    SimpleRepoId,
+} from "@atomist/automation-client";
 
 import * as assert from "power-assert";
 import {
@@ -24,9 +26,11 @@ import {
     ApacheHeader,
 } from "../../../src/commands/editors/license/addHeader";
 
-import { GitHubRepoRef } from "@atomist/sdm";
-import { NodeFsLocalProject } from "@atomist/sdm";
-import { fakeCommandListenerInvocation } from "@atomist/sdm/api-helper/test/fakeCommandListenerInvocation";
+import {
+    fakeCommandListenerInvocation,
+    GitHubRepoRef,
+    NodeFsLocalProject,
+} from "@atomist/sdm";
 import * as fs from "fs";
 import * as tmp from "tmp-promise";
 

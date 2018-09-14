@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-import { deepLink } from "@atomist/automation-client/util/gitHub";
-import { GitHubRepoRef } from "@atomist/sdm";
+import { deepLink } from "@atomist/automation-client";
+import {
+    GitHubRepoRef,
+    ReviewListenerRegistration,
+} from "@atomist/sdm";
 
 import {
     HardcodePropertyCategory,
     ImportDotStarCategory,
     ImportFileIoCategory,
 } from "@atomist/sdm-pack-spring";
-import { ReviewListenerRegistration } from "@atomist/sdm/api/registration/ReviewListenerRegistration";
 import * as _ from "lodash";
 import {
     CommentsFormatter,

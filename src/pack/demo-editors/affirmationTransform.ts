@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-import { Parameter, Parameters } from "@atomist/sdm";
-import { doWithFiles } from "@atomist/sdm";
-import { CodeTransform, CodeTransformRegistration } from "@atomist/sdm";
+import { Parameters } from "@atomist/automation-client";
+import {
+    CodeTransform,
+    CodeTransformRegistration,
+    doWithFiles,
+    Parameter,
+} from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 
 export const AffirmationEditorName = "affirmation";

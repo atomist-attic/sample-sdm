@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-import { ProjectFile, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    ProjectFile,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import * as _ from "lodash";
-import { saveFromFilesAsync } from "@atomist/automation-client/project/util/projectUtils";
+import { saveFromFilesAsync } from "@atomist/automation-client";
 
 interface FileAndLineCount {
     file: ProjectFile;

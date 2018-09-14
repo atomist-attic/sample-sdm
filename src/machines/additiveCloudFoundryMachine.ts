@@ -20,6 +20,7 @@ import {
     AutoCodeInspection,
     Autofix,
     Build,
+    executeDeploy,
     GitHubRepoRef,
     goalContributors,
     goals,
@@ -29,8 +30,8 @@ import {
     ProductionEndpointGoal,
     ProductionUndeploymentGoal,
     PushImpact,
-    PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineConfiguration,
     StagingDeploymentGoal,
     StagingEndpointGoal,
     StagingVerifiedGoal,
@@ -55,6 +56,7 @@ import {
     EnvironmentCloudFoundryTarget,
     HasCloudFoundryManifest,
 } from "@atomist/sdm-pack-cloudfoundry";
+import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     IsMaven,
@@ -62,22 +64,18 @@ import {
     MavenBuilder,
     ReplaceReadmeTitle,
     SetAtomistTeamInApplicationYml,
+    SpringProjectCreationParameterDefinitions,
     SpringProjectCreationParameters,
     SpringSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { SpringProjectCreationParameterDefinitions } from "@atomist/sdm-pack-spring/lib/spring/generate/SpringProjectCreationParameters";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
+import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/commonGoals";
 import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-
-import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
-import { executeDeploy } from "@atomist/sdm/api-helper/goal/executeDeploy";
-import { StagingUndeploymentGoal } from "@atomist/sdm/pack/well-known-goals/commonGoals";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 

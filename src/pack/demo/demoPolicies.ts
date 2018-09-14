@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { Issue } from "@atomist/automation-client/util/gitHub";
+import { Issue } from "@atomist/automation-client";
 import {
     ExtensionPack,
     hasFile,
+    metadata,
     not,
 } from "@atomist/sdm";
-import { updateIssue } from "@atomist/sdm-core";
-import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
+import { updateIssue } from "@atomist/sdm-core/lib/util/github/ghub";
 import axios from "axios";
 
 /**

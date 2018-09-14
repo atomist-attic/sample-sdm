@@ -17,12 +17,11 @@
 import {
     CodeInspectionGoal,
     DefaultReviewComment,
-} from "@atomist/sdm";
-import { saveFromFiles } from "@atomist/sdm";
-import {
     Goals,
     ReviewerRegistration,
+    saveFromFiles,
     SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineConfiguration,
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
@@ -31,7 +30,6 @@ import {
     IsJava,
     MaterialChangeToJavaRepo,
 } from "@atomist/sdm-pack-spring";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm/api/machine/SoftwareDeliveryMachineOptions";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 
 /**

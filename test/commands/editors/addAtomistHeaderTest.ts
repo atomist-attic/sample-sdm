@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { InMemoryProjectFile } from "@atomist/sdm";
-import { GitHubRepoRef } from "@atomist/sdm";
+import {
+    executeAutofixes,
+    fakeGoalInvocation,
+    GitCommandGitProject,
+    GitHubRepoRef,
+    GoalInvocation,
+    InMemoryProjectFile,
+    RemoteRepoRef,
+} from "@atomist/sdm";
 
-import { successOn } from "@atomist/automation-client/action/ActionResult";
-import { RemoteRepoRef } from "@atomist/sdm";
-import { GitCommandGitProject } from "@atomist/sdm";
+import { successOn } from "@atomist/automation-client";
 import * as assert from "power-assert";
 
-import { GoalInvocation } from "@atomist/sdm";
-import { DefaultRepoRefResolver } from "@atomist/sdm-core";
-import { executeAutofixes } from "@atomist/sdm/api-helper/listener/executeAutofixes";
-import { fakeGoalInvocation } from "@atomist/sdm/api-helper/test/fakeGoalInvocation";
-import { SingleProjectLoader } from "@atomist/sdm/api-helper/test/SingleProjectLoader";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 
@@ -40,13 +40,13 @@ describe("addHeaderFix", () => {
         // Make commit and push harmless
         let pushCount = 0;
         let commitCount = 0;
-        p.commit = async () => {
+        p.commit = async (message: string) => {
             ++commitCount;
-            return successOn(p);
+            return p;
         };
         p.push = async () => {
             ++pushCount;
-            return successOn(p);
+            return p;
         };
         const f = new InMemoryProjectFile("src/bad.ts", "const foo;\n");
         // Now mess it up with a lint error that tslint can fix

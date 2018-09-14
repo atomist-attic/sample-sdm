@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-import { ExtensionPack } from "@atomist/sdm";
-import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
+import {
+    ExtensionPack,
+    metadata,
+} from "@atomist/sdm";
 import { AddSentry } from "./addSentryTransform";
 
 export const SentrySupport: ExtensionPack = {

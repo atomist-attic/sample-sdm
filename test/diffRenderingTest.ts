@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {renderCommitMessage} from "@atomist/sdm-core";
+import { renderCommitMessage } from "@atomist/sdm-core";
 import * as assert from "power-assert";
 
 describe("commit rendering", () => {
@@ -22,7 +22,7 @@ describe("commit rendering", () => {
     it("can render a commit", () => {
 
         const text = renderCommitMessage({ owner: "somewhere", name: "over" }, {
-            sha: "blue",
+            sha: "bzlue",
             message: "a stripe, it's pretty",
             author: { login: "Dorothy" },
         });

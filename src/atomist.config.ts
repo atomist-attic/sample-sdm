@@ -16,10 +16,16 @@
 
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
-import { Configuration } from "@atomist/sdm";
-import { SoftwareDeliveryMachine, SoftwareDeliveryMachineOptions } from "@atomist/sdm";
-import { SoftwareDeliveryMachineConfiguration } from "@atomist/sdm";
-import { ConfigureOptions, configureSdm } from "@atomist/sdm-core";
+import {
+    Configuration,
+    SoftwareDeliveryMachine,
+    SoftwareDeliveryMachineConfiguration,
+    SoftwareDeliveryMachineOptions,
+} from "@atomist/sdm";
+import {
+    ConfigureOptions,
+    configureSdm,
+} from "@atomist/sdm-core";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
 
