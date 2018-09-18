@@ -26,9 +26,7 @@ import {
     goals,
     not,
     onAnyPush,
-    ProductionDeploymentGoal,
     ProductionEndpointGoal,
-    ProductionUndeploymentGoal,
     PushImpact,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
@@ -51,7 +49,6 @@ import {
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
 import {
-    CloudFoundryBlueGreenDeployer,
     CloudFoundrySupport,
     EnvironmentCloudFoundryTarget,
     HasCloudFoundryManifest,
@@ -76,6 +73,9 @@ import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
+import { CloudFoundryDeploymentGoal } from "../goal/CloudFoundryDeploymentGoal";
+import { PlaceholderDeploy } from "../deployment/placeholderDeploy";
+import { SuggestedActionGoal } from "../goal/SuggestedActionGoal";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -119,6 +119,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const AutofixGoal = new Autofix();
     const PushReactionGoal = new PushImpact();
     const CodeInspectionGoal = new AutoCodeInspection();
+
+    //const ProductionDeploymentGoal = new CloudFoundryDeploymentGoal(sdm, new EnvironmentCloudFoundryTarget("production"));
     const CheckGoals = goals("Checks")
         .plan(CodeInspectionGoal, PushReactionGoal, AutofixGoal);
     const BuildGoals = goals("Build")
@@ -130,9 +132,12 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             StagingEndpointGoal,
             StagingVerifiedGoal);
     const ProductionDeploymentGoals = goals("ProdDeployment")
-        .plan(ArtifactGoal,
-            ProductionDeploymentGoal,
-            ProductionEndpointGoal);
+        .plan(
+            new SuggestedActionGoal("Production Deploy",
+                "I'd love to deploy for you, but you haven't told me how!\n" +
+                "For example, to deploy to Cloud Foundry, add the PCF pack and  a CloudFoundryDeploymentGoal",
+                "https://github.com/atomist/sdm-pack-cloudfoundry/blob/master/README.md"
+            )).after(ArtifactGoal, StagingVerifiedGoal);
 
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(CheckGoals),
@@ -143,7 +148,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
             .setGoals(StagingDeploymentGoals),
         whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-            .setGoals(ProductionDeploymentGoals)));
+            .setGoals(ProductionDeploymentGoals)
+    ));
 
     sdm.addGeneratorCommand<SpringProjectCreationParameters>({
         name: "create-spring",
@@ -205,29 +211,6 @@ export function deployRules(sdm: SoftwareDeliveryMachine) {
     sdm.addGoalSideEffect(
         deployToStaging.endpointGoal,
         deployToStaging.deployGoal.definition.displayName,
-        AnyPush);
-
-    const deployToProduction = {
-        deployer: new CloudFoundryBlueGreenDeployer(sdm.configuration.sdm.projectLoader),
-        targeter: () => new EnvironmentCloudFoundryTarget("production"),
-        deployGoal: ProductionDeploymentGoal,
-        endpointGoal: ProductionEndpointGoal,
-        undeployGoal: ProductionUndeploymentGoal,
-    };
-    sdm.addGoalImplementation("Production CF deployer",
-        deployToProduction.deployGoal,
-        executeDeploy(
-            sdm.configuration.sdm.artifactStore,
-            sdm.configuration.sdm.repoRefResolver,
-            deployToProduction.endpointGoal, deployToProduction),
-        {
-            pushTest: IsMaven,
-            logInterpreter: deployToProduction.deployer.logInterpreter,
-        },
-    );
-    sdm.addGoalSideEffect(
-        deployToProduction.endpointGoal,
-        deployToProduction.deployGoal.definition.displayName,
         AnyPush);
 
     sdm.addCommand(EnableDeploy)

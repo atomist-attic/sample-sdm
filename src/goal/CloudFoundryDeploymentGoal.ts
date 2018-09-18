@@ -22,10 +22,7 @@ import {
     IndependentOfEnvironment,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import {
-    CloudFoundryBlueGreenDeployer,
-    CloudFoundryInfo,
-} from "@atomist/sdm-pack-cloudfoundry";
+import { CloudFoundryInfo, CloudFoundryPushDeployer, } from "@atomist/sdm-pack-cloudfoundry";
 import { CloudFoundryDeployment } from "@atomist/sdm-pack-cloudfoundry/lib/api/CloudFoundryTarget";
 
 /**
@@ -33,8 +30,9 @@ import { CloudFoundryDeployment } from "@atomist/sdm-pack-cloudfoundry/lib/api/C
  */
 export class CloudFoundryDeploymentGoal extends GoalWithFulfillment {
 
-    constructor(sdm: SoftwareDeliveryMachine, where: CloudFoundryInfo,
-                deployer: Deployer<CloudFoundryInfo, CloudFoundryDeployment> = new CloudFoundryBlueGreenDeployer(sdm.configuration.sdm.projectLoader)) {
+    constructor(sdm: SoftwareDeliveryMachine,
+                where: CloudFoundryInfo,
+                deployer: Deployer<CloudFoundryInfo, CloudFoundryDeployment> = new CloudFoundryPushDeployer(sdm.configuration.sdm.projectLoader)) {
         super({
             uniqueName: `pcf-${where.api}-${where.org}-${where.space}`,
             environment: IndependentOfEnvironment
@@ -54,7 +52,7 @@ function pcfDeploy(sdm: SoftwareDeliveryMachine, cfi: CloudFoundryInfo, deployer
         const deployableArtifact = await sdm.configuration.sdm.artifactStore.checkout(
             gi.sdmGoal.push.after.image.imageName,
             gi.id, gi.credentials);
-        await deployer.deploy(deployableArtifact, cfi, gi.progressLog, gi.credentials, gi.context.workspaceId);
-        return { code: 0, message: "" };
+        const deployments = await deployer.deploy(deployableArtifact, cfi, gi.progressLog, gi.credentials, gi.context.workspaceId);
+        return { code: 0, message: `Deployed ${deployments.length} applications` };
     };
 }
