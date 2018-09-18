@@ -1,6 +1,6 @@
 {
   "name": "@atomist/sample-sdm",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Sample Atomist automation for software delivery",
   "author": {
     "name": "Atomist",
