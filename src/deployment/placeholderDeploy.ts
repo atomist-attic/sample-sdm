@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { ExecuteGoal, GenericGoal } from "@atomist/sdm";
+import {
+    ExecuteGoal,
+    GenericGoal,
+} from "@atomist/sdm";
 
 export const PlaceholderDeploy = new GenericGoal({
     uniqueName: "Deploy",

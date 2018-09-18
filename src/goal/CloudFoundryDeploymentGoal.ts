@@ -20,9 +20,12 @@ import {
     Fulfillment,
     GoalWithFulfillment,
     IndependentOfEnvironment,
-    SoftwareDeliveryMachine
+    SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { CloudFoundryBlueGreenDeployer, CloudFoundryInfo } from "@atomist/sdm-pack-cloudfoundry";
+import {
+    CloudFoundryBlueGreenDeployer,
+    CloudFoundryInfo,
+} from "@atomist/sdm-pack-cloudfoundry";
 import { CloudFoundryDeployment } from "@atomist/sdm-pack-cloudfoundry/lib/api/CloudFoundryTarget";
 
 /**
