@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import { AddressChannels, ExecuteGoal, Fulfillment, GoalWithFulfillment, IndependentOfEnvironment } from "@atomist/sdm";
+import {
+    AddressChannels,
+    ExecuteGoal,
+    Fulfillment,
+    GoalWithFulfillment,
+    IndependentOfEnvironment,
+} from "@atomist/sdm";
 import { SlackMessage } from "@atomist/slack-messages";
 
 export class CallbackGoal extends GoalWithFulfillment {

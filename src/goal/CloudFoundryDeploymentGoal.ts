@@ -22,7 +22,10 @@ import {
     IndependentOfEnvironment,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { CloudFoundryInfo, CloudFoundryPushDeployer, } from "@atomist/sdm-pack-cloudfoundry";
+import {
+    CloudFoundryInfo,
+    CloudFoundryPushDeployer,
+} from "@atomist/sdm-pack-cloudfoundry";
 import { CloudFoundryDeployment } from "@atomist/sdm-pack-cloudfoundry/lib/api/CloudFoundryTarget";
 
 /**
