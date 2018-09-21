@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
+import { ComparisonPolicy, Feature, } from "../Feature";
 import {
-    ComparisonPolicy,
-    Feature,
-} from "../Feature";
-import {
-    AutoCodeInspection, CodeInspectionRegistration, CommandHandlerRegistration, CommandRegistration,
+    AutoCodeInspection,
+    CodeInspectionRegistration,
     PushImpact,
-    PushImpactListenerInvocation, PushImpactListenerRegistration,
+    PushImpactListenerInvocation,
+    PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import {
-    buttonForCommand,
-    Fingerprint,
-    logger,
-    RemoteRepoRef,
-} from "@atomist/automation-client";
+import { Fingerprint as FingerprintGoal } from "@atomist/sdm";
+import { buttonForCommand, Fingerprint, logger, RemoteRepoRef, } from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
-import {
-    Attachment,
-    SlackMessage,
-} from "@atomist/slack-messages";
+import { Attachment, SlackMessage, } from "@atomist/slack-messages";
 
 /**
  * Integrate a number of features with an SDM
@@ -46,29 +38,34 @@ export class Features {
     /**
      * Enable these features on the given SDM
      */
-    public enable(sdm: SoftwareDeliveryMachine, opts: {
+    public enable(sdm: SoftwareDeliveryMachine, goals: {
         pushImpactGoal?: PushImpact,
         inspectGoal?: AutoCodeInspection,
+        fingerprintGoal?: FingerprintGoal,
     } = {}): void {
         sdm.addCodeInspectionCommand(this.listFeaturesCommand());
 
         this.features.filter(f => !!f.apply)
             .forEach(f => {
-                logger.info("Enabling %d features: %j", this.features.length, opts);
+                logger.info("Enabling %d features: %j", this.features.length, goals);
                 const transformName = `tr-${f.name}`;
                 sdm.addCodeTransformCommand({
                     name: transformName,
                     intent: `transform ${f.name}`,
                     transform: f.apply(f.ideal),
                 });
-                if (!!opts.inspectGoal) {
+                if (!!goals.inspectGoal) {
                     logger.info("Registering inspection goal");
-                    opts.inspectGoal.with(f.inspection);
+                    goals.inspectGoal.with(f.inspection);
                 }
-                if (!!opts.pushImpactGoal) {
+                if (!!goals.pushImpactGoal) {
                     logger.info("Registering push impact goal");
                     // Register a push reaction when a project with this features changes
-                    opts.pushImpactGoal.with(rolloutOnUpgradeToProjectWithFeature(sdm, this.store, f, transformName));
+                    goals.pushImpactGoal.with(rolloutOnUpgradeToProjectWithFeature(sdm, this.store, f, transformName));
+                }
+                if (!!goals.fingerprintGoal) {
+                    logger.info("Registering fingerprinter");
+                    goals.fingerprintGoal.with(f.fingerprinterRegistration);
                 }
             });
     }
@@ -112,7 +109,7 @@ function rolloutOnUpgradeToProjectWithFeature(sdm: SoftwareDeliveryMachine,
                     if (f.compare(ideal, after, ComparisonPolicy.quality) > 0) {
                         // TODO ask
                         await store.setIdeal(after);
-                        return rollout(f, ideal, transformName, sdm, pu);
+                        return rolloutToDownstreamProjects(f, ideal, transformName, sdm, pu);
                     }
                 }
             } else {
@@ -124,16 +121,13 @@ function rolloutOnUpgradeToProjectWithFeature(sdm: SoftwareDeliveryMachine,
 
 /**
  * Roll out buttons in all repos
- * @param {Feature} feature
- * @param {SoftwareDeliveryMachine} sdm
- * @param {PushImpactListenerInvocation} i
  * @return {Promise<void>}
  */
-async function rollout<S extends Fingerprint>(feature: Feature<S>,
-                                              value: S,
-                                              command: string,
-                                              sdm: SoftwareDeliveryMachine,
-                                              i: PushImpactListenerInvocation) {
+async function rolloutToDownstreamProjects<S extends Fingerprint>(feature: Feature<S>,
+                                                                  value: S,
+                                                                  command: string,
+                                                                  sdm: SoftwareDeliveryMachine,
+                                                                  i: PushImpactListenerInvocation) {
     // TODO factor out iteration and put in sdm
     const repos = await sdm.configuration.sdm.repoFinder(i.context);
     for (const id of repos) {
@@ -145,7 +139,7 @@ async function rollout<S extends Fingerprint>(feature: Feature<S>,
                     const attachment: Attachment = {
                         text: `Accept new feature ${feature.name}: ${feature.summary(value)}?`,
                         fallback: "accept feature",
-                        actions: [buttonForCommand({ text: `Accept feature ${feature.name}` },
+                        actions: [buttonForCommand({ text: `Accept feature ${feature.name}?` },
                             command,
                             { "targets.owner": id.owner, "targets.repo": id.repo },
                         ),
