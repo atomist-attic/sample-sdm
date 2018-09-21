@@ -24,9 +24,7 @@ import {
     GitHubRepoRef,
     goalContributors,
     goals,
-    not,
     onAnyPush,
-    ProductionEndpointGoal,
     PushImpact,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
@@ -38,21 +36,14 @@ import {
 } from "@atomist/sdm";
 import {
     createSoftwareDeliveryMachine,
-    deploymentFreeze,
     DisableDeploy,
     DisplayDeployEnablement,
     EnableDeploy,
-    ExplainDeploymentFreezeGoal,
     InMemoryDeploymentStatusManager,
-    isDeploymentFrozen,
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
-import {
-    CloudFoundrySupport,
-    EnvironmentCloudFoundryTarget,
-    HasCloudFoundryManifest,
-} from "@atomist/sdm-pack-cloudfoundry";
+import { CloudFoundrySupport, HasCloudFoundryManifest, } from "@atomist/sdm-pack-cloudfoundry";
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
@@ -73,13 +64,10 @@ import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { CloudFoundryDeploymentGoal } from "../goal/CloudFoundryDeploymentGoal";
-import { PlaceholderDeploy } from "../deployment/placeholderDeploy";
 import { SuggestedActionGoal } from "../goal/SuggestedActionGoal";
-
-const freezeStore = new InMemoryDeploymentStatusManager();
-
-const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
+import { InMemoryFeatureStore } from "../feature/support/InMemoryFeatureStore";
+import { SpringBootVersionFeature, SpringBootVersionFingerprint } from "./SpringBootVersionFeature";
+import { Features } from "../feature/support/Features";
 
 /**
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
@@ -139,15 +127,17 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 "https://github.com/atomist/sdm-pack-cloudfoundry/blob/master/README.md"
             )).after(ArtifactGoal, StagingVerifiedGoal);
 
+    const features = new Features(new InMemoryFeatureStore(new SpringBootVersionFingerprint()),
+        new SpringBootVersionFeature());
+    features.enable(sdm, { pushImpactGoal: PushReactionGoal, inspectGoal: CodeInspectionGoal });
+
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(CheckGoals),
-        whenPushSatisfies(IsDeploymentFrozen)
-            .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(IsMaven)
             .setGoals(BuildGoals),
         whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
             .setGoals(StagingDeploymentGoals),
-        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
             .setGoals(ProductionDeploymentGoals)
     ));
 
@@ -179,7 +169,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 
     sdm.addExtensionPacks(
         DemoEditors,
-        deploymentFreeze(freezeStore),
         SpringSupport,
         SentrySupport,
         CloudReadinessChecks,
