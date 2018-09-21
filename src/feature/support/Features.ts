@@ -18,6 +18,8 @@ export class Features {
         pushImpactGoal?: PushImpact,
         inspectGoal?: AutoCodeInspection,
     } = {}): void {
+        // TODO add command to list features on a repo
+
         this.features.filter(f => !!f.apply)
             .forEach(f => {
                 logger.info("Enabling %d features: %j", this.features.length, opts);

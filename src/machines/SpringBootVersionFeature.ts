@@ -52,10 +52,3 @@ export class SpringBootVersionFeature extends AbstractFeature<SpringBootVersionF
 
 }
 
-// list features
-// grab feature <name> [project] - From organizational knowledge
-// Learning team
-
-// Learning? - Advance organization if not seen before or if better
-
-// Comparisons can go later? - When you see a new one, you ask
