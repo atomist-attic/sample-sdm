@@ -43,7 +43,10 @@ import {
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
-import { CloudFoundrySupport, HasCloudFoundryManifest, } from "@atomist/sdm-pack-cloudfoundry";
+import {
+    CloudFoundrySupport,
+    HasCloudFoundryManifest,
+} from "@atomist/sdm-pack-cloudfoundry";
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
@@ -66,7 +69,10 @@ import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 import { SuggestedActionGoal } from "../goal/SuggestedActionGoal";
 import { InMemoryFeatureStore } from "../feature/support/InMemoryFeatureStore";
-import { SpringBootVersionFeature, SpringBootVersionFingerprint } from "./SpringBootVersionFeature";
+import {
+    SpringBootVersionFeature,
+    SpringBootVersionFingerprint,
+} from "./SpringBootVersionFeature";
 import { Features } from "../feature/support/Features";
 
 /**

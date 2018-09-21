@@ -14,11 +14,27 @@
  * limitations under the License.
  */
 
-import { ComparisonPolicy, Feature } from "../Feature";
-import { AutoCodeInspection, PushImpact, PushImpactListenerInvocation, SoftwareDeliveryMachine } from "@atomist/sdm";
-import { buttonForCommand, Fingerprint, logger, RemoteRepoRef } from "@atomist/automation-client";
+import {
+    ComparisonPolicy,
+    Feature,
+} from "../Feature";
+import {
+    AutoCodeInspection,
+    PushImpact,
+    PushImpactListenerInvocation,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
+import {
+    buttonForCommand,
+    Fingerprint,
+    logger,
+    RemoteRepoRef,
+} from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
-import { Attachment, SlackMessage } from "@atomist/slack-messages";
+import {
+    Attachment,
+    SlackMessage,
+} from "@atomist/slack-messages";
 
 /**
  * Integrate a number of features with an SDM

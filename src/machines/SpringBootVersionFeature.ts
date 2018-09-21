@@ -15,14 +15,23 @@
  */
 
 import * as _ from "lodash";
-import { CodeTransform, TypedFingerprint } from "@atomist/sdm";
-import { ComparisonPolicy, ProjectFingerprinter } from "../feature/Feature";
+import {
+    CodeTransform,
+    TypedFingerprint,
+} from "@atomist/sdm";
+import {
+    ComparisonPolicy,
+    ProjectFingerprinter,
+} from "../feature/Feature";
 import {
     SpringBootVersionInspection,
-    SpringBootVersions
+    SpringBootVersions,
 } from "@atomist/sdm-pack-spring/lib/spring/inspect/springBootVersionInspection";
 import { AbstractFeature } from "../feature/support/AbstractFeature";
-import { IsMaven, setSpringBootVersionTransform } from "@atomist/sdm-pack-spring";
+import {
+    IsMaven,
+    setSpringBootVersionTransform,
+} from "@atomist/sdm-pack-spring";
 
 const DefaultSpringBootVersion = "2.0.5.RELEASE";
 

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { Fingerprint, RemoteRepoRef } from "@atomist/automation-client";
+import {
+    Fingerprint,
+    RemoteRepoRef,
+} from "@atomist/automation-client";
 
 export interface FeatureStore {
 

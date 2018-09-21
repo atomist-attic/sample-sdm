@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-import { Fingerprint, Project } from "@atomist/automation-client";
-import { CodeInspectionRegistration, CodeTransform, FingerprinterRegistration, PushTest, ReviewerRegistration } from "@atomist/sdm";
+import {
+    Fingerprint,
+    Project,
+} from "@atomist/automation-client";
+import {
+    CodeInspectionRegistration,
+    CodeTransform,
+    FingerprinterRegistration,
+    PushTest,
+    ReviewerRegistration,
+} from "@atomist/sdm";
 import { RatingScale } from "./RatingScale";
 
 export enum ComparisonPolicy {

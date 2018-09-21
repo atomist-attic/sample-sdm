@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { ComparisonPolicy, Feature, ProjectFingerprinter, Rater } from "../Feature";
+import {
+    ComparisonPolicy,
+    Feature,
+    ProjectFingerprinter,
+    Rater,
+} from "../Feature";
 import { RatingScale } from "../RatingScale";
 import {
     CodeInspectionRegistration,
@@ -23,7 +28,7 @@ import {
     isMapping,
     predicatePushTest,
     PushTest,
-    ReviewerRegistration
+    ReviewerRegistration,
 } from "@atomist/sdm";
 import { Fingerprint } from "@atomist/automation-client";
 import { ProjectPredicate } from "@atomist/sdm/lib/api/mapping/PushTest";
