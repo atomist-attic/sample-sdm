@@ -19,9 +19,9 @@ import {
     Feature,
 } from "../Feature";
 import {
-    AutoCodeInspection,
+    AutoCodeInspection, CodeInspectionRegistration, CommandHandlerRegistration, CommandRegistration,
     PushImpact,
-    PushImpactListenerInvocation,
+    PushImpactListenerInvocation, PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import {
@@ -50,7 +50,7 @@ export class Features {
         pushImpactGoal?: PushImpact,
         inspectGoal?: AutoCodeInspection,
     } = {}): void {
-        // TODO add command to list features on a repo
+        sdm.addCodeInspectionCommand(this.listFeaturesCommand());
 
         this.features.filter(f => !!f.apply)
             .forEach(f => {
@@ -68,35 +68,58 @@ export class Features {
                 if (!!opts.pushImpactGoal) {
                     logger.info("Registering push impact goal");
                     // Register a push reaction when a project with this features changes
-                    opts.pushImpactGoal.with({
-                        name: `pi-${f.name}`,
-                        pushTest: f.isPresent,
-                        action: async pu => {
-                            logger.info("Push on project with feature %s", f.name);
-                            if (f.supportedComparisonPolicies.includes(ComparisonPolicy.quality)) {
-                                const ideal = await this.store.ideal(f.name);
-                                logger.info("Ideal feature %s value is %j", f.name, ideal);
-                                if (!!ideal) {
-                                    const after = await f.projectFingerprinter(pu.project);
-                                    if (f.compare(ideal, after, ComparisonPolicy.quality) > 0) {
-                                        // TODO ask
-                                        await this.store.setIdeal(after);
-                                        return rollout(f, ideal, transformName, sdm, pu);
-                                    }
-                                }
-                            } else {
-                                logger.info("Feature %s doesn't support quality comparison", f.name);
-                            }
-                        },
-                    });
+                    opts.pushImpactGoal.with(rolloutOnUpgradeToProjectWithFeature(sdm, this.store, f, transformName));
                 }
             });
+    }
+
+    private listFeaturesCommand(): CodeInspectionRegistration<string[]> {
+        return {
+            name: "feature-list",
+            intent: "list features",
+            inspection: async p => {
+                const scans = await Promise.all(this.features.map(f => f.projectFingerprinter(p)));
+                return scans.map(s => s.name).sort();
+            },
+            onInspectionResults: async (results, ci) => {
+                for (const r of results) {
+                    await ci.addressChannels(`Repo ${r.repoId.url}: \`${results.map(r => r.result)}\``)
+                }
+            },
+        };
     }
 
     constructor(private readonly store: FeatureStore, ...features: Feature[]) {
         this.features = features;
     }
 
+}
+
+function rolloutOnUpgradeToProjectWithFeature(sdm: SoftwareDeliveryMachine,
+                                              store: FeatureStore,
+                                              f: Feature,
+                                              transformName: string): PushImpactListenerRegistration {
+    return {
+        name: `pi-${f.name}`,
+        pushTest: f.isPresent,
+        action: async pu => {
+            logger.info("Push on project with feature %s", f.name);
+            if (f.supportedComparisonPolicies.includes(ComparisonPolicy.quality)) {
+                const ideal = await store.ideal(f.name);
+                logger.info("Ideal feature %s value is %j", f.name, ideal);
+                if (!!ideal) {
+                    const after = await f.projectFingerprinter(pu.project);
+                    if (f.compare(ideal, after, ComparisonPolicy.quality) > 0) {
+                        // TODO ask
+                        await store.setIdeal(after);
+                        return rollout(f, ideal, transformName, sdm, pu);
+                    }
+                }
+            } else {
+                logger.info("Feature %s doesn't support quality comparison", f.name);
+            }
+        },
+    };
 }
 
 /**
