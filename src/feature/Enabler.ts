@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { AutoCodeInspection, Fingerprint as FingerprintGoal, PushImpact, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    AutoCodeInspection,
+    Fingerprint as FingerprintGoal,
+    PushImpact,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 
 // TODO moves along with extension pack
 

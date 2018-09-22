@@ -38,7 +38,10 @@ import {
     Attachment,
     SlackMessage,
 } from "@atomist/slack-messages";
-import { Enabler, GoalsToCustomize } from "../Enabler";
+import {
+    Enabler,
+    GoalsToCustomize,
+} from "../Enabler";
 
 /**
  * Integrate a number of features with an SDM
