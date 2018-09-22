@@ -29,7 +29,8 @@ import {
     buttonForCommand,
     Fingerprint,
     logger,
-    RemoteRepoRef, RepoRef,
+    RemoteRepoRef,
+    RepoRef,
 } from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
 import {
