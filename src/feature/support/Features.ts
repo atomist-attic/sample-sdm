@@ -14,34 +14,19 @@
  * limitations under the License.
  */
 
+import { ComparisonPolicy, Feature, } from "../Feature";
 import {
-    ComparisonPolicy,
-    Feature,
-} from "../Feature";
-import {
-    AutoCodeInspection,
     CodeInspectionRegistration,
-    PushImpact,
     PushImpactListenerInvocation,
     PushImpactListenerRegistration,
+    SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { Fingerprint as FingerprintGoal } from "@atomist/sdm";
-import {
-    buttonForCommand,
-    Fingerprint,
-    logger,
-    RemoteRepoRef,
-} from "@atomist/automation-client";
+import { buttonForCommand, Fingerprint, logger, RemoteRepoRef, } from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
-import {
-    Attachment,
-    SlackMessage,
-} from "@atomist/slack-messages";
-import {
-    Enabler,
-    GoalsToCustomize,
-} from "../Enabler";
+import { Attachment, SlackMessage, } from "@atomist/slack-messages";
+import { Enabler, GoalsToCustomize, } from "../Enabler";
+import { WithLoadedProject } from "@atomist/sdm/lib/spi/project/ProjectLoader";
 
 /**
  * Integrate a number of features with an SDM
@@ -94,7 +79,7 @@ function enableFeature(sdm: SoftwareDeliveryMachine,
                        store: FeatureStore,
                        f: Feature,
                        goals: GoalsToCustomize) {
-    const transformName = `tr-${f.name}`;
+    const transformName = `tr-${f.name.replace(" ", "_")}`;
     sdm.addCodeTransformCommand({
         name: transformName,
         intent: `transform ${f.name}`,
@@ -142,6 +127,8 @@ function listenAndRolloutUpgrades(sdm: SoftwareDeliveryMachine,
                         // TODO ask
                         await store.setIdeal(after);
                         return rolloutToDownstreamProjects(f, ideal, transformName, sdm, pu);
+                    } else {
+                        logger.info("Ideal feature %s value is %j, ours is %j and it's fine", f.name, ideal, after);
                     }
                 }
             } else {
@@ -156,33 +143,47 @@ function listenAndRolloutUpgrades(sdm: SoftwareDeliveryMachine,
  * @return {Promise<void>}
  */
 async function rolloutToDownstreamProjects<S extends Fingerprint>(feature: Feature<S>,
-                                                                  value: S,
+                                                                  valueToUpgradeTo: S,
                                                                   command: string,
                                                                   sdm: SoftwareDeliveryMachine,
                                                                   i: PushImpactListenerInvocation) {
-    // TODO factor out iteration and put in sdm
-    const repos = await sdm.configuration.sdm.repoFinder(i.context);
-    for (const id of repos) {
-        await sdm.configuration.sdm.projectLoader.doWithProject(
-            { credentials: i.credentials, id: id as RemoteRepoRef, readOnly: false },
-            async p => {
-                const found = !!await feature.projectFingerprinter(p);
-                if (found) {
-                    const attachment: Attachment = {
-                        text: `Accept new feature ${feature.name}: ${feature.summary(value)}?`,
-                        fallback: "accept feature",
-                        actions: [buttonForCommand({ text: `Accept feature ${feature.name}?` },
-                            command,
-                            { "targets.owner": id.owner, "targets.repo": id.repo },
-                        ),
-                        ],
-                    };
-                    const message: SlackMessage = {
-                        attachments: [attachment],
-                    };
-                    await i.context.messageClient.addressChannels(message, p.id.repo);
-                }
-            });
-    }
+    logger.info("Rolling out command '%s' to apply feature %s", command, feature.name);
+    return doWithRepos(sdm, i,
+        async p => {
+            const found = await feature.projectFingerprinter(p);
+            // Only upgrade if they have a lower level of this feature
+            if (!!found && feature.compare(found, valueToUpgradeTo, ComparisonPolicy.quality) < 0) {
+                const attachment: Attachment = {
+                    text: `Accept new feature *${feature.name}*: ${feature.summary(valueToUpgradeTo)}?`,
+                    fallback: "accept feature",
+                    actions: [buttonForCommand({ text: `Accept feature ${feature.name}?` },
+                        command,
+                        { "targets.owner": p.id.owner, "targets.repo": p.id.repo },
+                    ),
+                    ],
+                };
+                const message: SlackMessage = {
+                    attachments: [attachment],
+                };
+                await i.context.messageClient.addressChannels(message, p.id.repo);
+            }
+        });
 }
 
+/**
+ * Perform a readonly action on all accessible repos in parallel
+ * @param {SoftwareDeliveryMachine} sdm
+ * @param {SdmContext} i
+ * @param {WithLoadedProject<any>} action
+ * @return {Promise<any>}
+ */
+async function doWithRepos(sdm: SoftwareDeliveryMachine,
+                           i: SdmContext,
+                           action: WithLoadedProject<any>): Promise<any> {
+    const repos = await sdm.configuration.sdm.repoFinder(i.context);
+    await Promise.all(repos.map(id => {
+        return sdm.configuration.sdm.projectLoader.doWithProject(
+            { credentials: i.credentials, id: id as RemoteRepoRef, readOnly: true },
+            action);
+    }));
+}
