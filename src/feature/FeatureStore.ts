@@ -21,10 +21,27 @@ import {
 
 export interface FeatureStore {
 
+    /**
+     * Store a feature value for this project
+     * @param {RemoteRepoRef} id
+     * @param {Fingerprint} f
+     * @return {Promise<any>}
+     */
     store(id: RemoteRepoRef, f: Fingerprint): Promise<any>;
 
+    /**
+     * Set the ideal state of this feature
+     * @param {Fingerprint} f
+     * @return {Promise<any>}
+     */
     setIdeal(f: Fingerprint): Promise<any>;
 
+    /**
+     * Return the ideal state of the feature with the given name,
+     * or undefined if none is set
+     * @param {string} name
+     * @return {Promise<Fingerprint | undefined>}
+     */
     ideal(name: string): Promise<Fingerprint | undefined>;
 
 }

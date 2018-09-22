@@ -38,47 +38,24 @@ import {
     Attachment,
     SlackMessage,
 } from "@atomist/slack-messages";
+import { Enabler, GoalsToCustomize } from "../Enabler";
 
 /**
  * Integrate a number of features with an SDM
  */
-export class Features {
+export class Features implements Enabler {
 
     private readonly features: Feature[];
 
     /**
      * Enable these features on the given SDM
      */
-    public enable(sdm: SoftwareDeliveryMachine, goals: {
-        pushImpactGoal?: PushImpact,
-        inspectGoal?: AutoCodeInspection,
-        fingerprintGoal?: FingerprintGoal,
-    } = {}): void {
+    public enable(sdm: SoftwareDeliveryMachine, goals: GoalsToCustomize = {}): void {
         sdm.addCodeInspectionCommand(this.listFeaturesCommand());
-
-        this.features.filter(f => !!f.apply)
-            .forEach(f => {
-                logger.info("Enabling %d features: %j", this.features.length, goals);
-                const transformName = `tr-${f.name}`;
-                sdm.addCodeTransformCommand({
-                    name: transformName,
-                    intent: `transform ${f.name}`,
-                    transform: f.apply(f.ideal),
-                });
-                if (!!goals.inspectGoal) {
-                    logger.info("Registering inspection goal");
-                    goals.inspectGoal.with(f.inspection);
-                }
-                if (!!goals.pushImpactGoal) {
-                    logger.info("Registering push impact goal");
-                    // Register a push reaction when a project with this features changes
-                    goals.pushImpactGoal.with(rolloutOnUpgradeToProjectWithFeature(sdm, this.store, f, transformName));
-                }
-                if (!!goals.fingerprintGoal) {
-                    logger.info("Registering fingerprinter");
-                    goals.fingerprintGoal.with(f.fingerprinterRegistration);
-                }
-            });
+        logger.info("Enabling %d features with goals: %j", this.features.length, goals);
+        this.features
+            .filter(f => !!f.apply)
+            .forEach(f => enableFeature(sdm, this.store, f, goals));
     }
 
     private listFeaturesCommand(): CodeInspectionRegistration<string[]> {
@@ -103,10 +80,51 @@ export class Features {
 
 }
 
-function rolloutOnUpgradeToProjectWithFeature(sdm: SoftwareDeliveryMachine,
-                                              store: FeatureStore,
-                                              f: Feature,
-                                              transformName: string): PushImpactListenerRegistration {
+/**
+ * Enable this feature on the well-known goals
+ * @param {SoftwareDeliveryMachine} sdm
+ * @param {FeatureStore} store
+ * @param {Feature} f
+ * @param {GoalsToCustomize} goals
+ */
+function enableFeature(sdm: SoftwareDeliveryMachine,
+                       store: FeatureStore,
+                       f: Feature,
+                       goals: GoalsToCustomize) {
+    const transformName = `tr-${f.name}`;
+    sdm.addCodeTransformCommand({
+        name: transformName,
+        intent: `transform ${f.name}`,
+        transform: f.apply(f.ideal),
+    });
+    if (!!goals.inspectGoal) {
+        logger.info("Registering inspection goal");
+        goals.inspectGoal.with(f.inspection);
+    }
+    if (!!goals.pushImpactGoal) {
+        logger.info("Registering push impact goal");
+        // Register a push reaction when a project with this features changes
+        goals.pushImpactGoal.with(listenAndRolloutUpgrades(sdm, store, f, transformName));
+    }
+    if (!!goals.fingerprintGoal) {
+        logger.info("Registering fingerprinter");
+        goals.fingerprintGoal.with(f.fingerprinterRegistration);
+    }
+}
+
+/**
+ * Listen to pushes of relevant projects and roll out upgrades
+ * to relevant downstream projects
+ * @param {SoftwareDeliveryMachine} sdm
+ * @param {FeatureStore} store
+ * @param {Feature} f
+ * @param {string} transformName
+ * @return {PushImpactListenerRegistration}
+ */
+function listenAndRolloutUpgrades(sdm: SoftwareDeliveryMachine,
+                                  store: FeatureStore,
+                                  f: Feature,
+                                  transformName: string): PushImpactListenerRegistration {
     return {
         name: `pi-${f.name}`,
         pushTest: f.isPresent,
@@ -131,7 +149,7 @@ function rolloutOnUpgradeToProjectWithFeature(sdm: SoftwareDeliveryMachine,
 }
 
 /**
- * Roll out buttons in all repos
+ * Roll out buttons in all repos to apply this version of the feature
  * @return {Promise<void>}
  */
 async function rolloutToDownstreamProjects<S extends Fingerprint>(feature: Feature<S>,
@@ -165,10 +183,3 @@ async function rolloutToDownstreamProjects<S extends Fingerprint>(feature: Featu
     }
 }
 
-// function reviewerRegistration(f: Feature): ReviewerRegistration {
-//     return {
-//         name: f.name,
-//         pushTest: f.isRelevant,
-//         inspection: f.reviewer,
-//     };
-// }

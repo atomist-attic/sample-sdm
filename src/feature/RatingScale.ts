@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-
+/**
+ * Rating scale for features snapshots (fingerprints)
+ */
 export interface RatingScale<V> {
 
     /**
