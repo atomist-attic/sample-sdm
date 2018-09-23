@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { ComparisonPolicy, Feature, } from "../Feature";
+import {
+    ComparisonPolicy,
+    Feature,
+} from "../Feature";
 import {
     CodeInspectionRegistration,
     PushImpactListenerRegistration,
@@ -22,10 +25,22 @@ import {
     SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { buttonForCommand, Fingerprint, logger, RemoteRepoRef, RepoRef, } from "@atomist/automation-client";
+import {
+    buttonForCommand,
+    Fingerprint,
+    logger,
+    RemoteRepoRef,
+    RepoRef,
+} from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
-import { Attachment, SlackMessage, } from "@atomist/slack-messages";
-import { Enabler, GoalsToCustomize, } from "../Enabler";
+import {
+    Attachment,
+    SlackMessage,
+} from "@atomist/slack-messages";
+import {
+    Enabler,
+    GoalsToCustomize,
+} from "../Enabler";
 import { WithLoadedProject } from "@atomist/sdm/lib/spi/project/ProjectLoader";
 import { Store } from "../Store";
 
