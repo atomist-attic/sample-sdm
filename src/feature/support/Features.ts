@@ -14,34 +14,20 @@
  * limitations under the License.
  */
 
-import {
-    ComparisonPolicy,
-    Feature,
-} from "../Feature";
+import { ComparisonPolicy, Feature, } from "../Feature";
 import {
     CodeInspectionRegistration,
-    PushImpactListenerInvocation,
     PushImpactListenerRegistration,
+    RepoContext,
     SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import {
-    buttonForCommand,
-    Fingerprint,
-    logger,
-    RemoteRepoRef,
-    RepoRef,
-} from "@atomist/automation-client";
+import { buttonForCommand, Fingerprint, logger, RemoteRepoRef, RepoRef, } from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
-import {
-    Attachment,
-    SlackMessage,
-} from "@atomist/slack-messages";
-import {
-    Enabler,
-    GoalsToCustomize,
-} from "../Enabler";
+import { Attachment, SlackMessage, } from "@atomist/slack-messages";
+import { Enabler, GoalsToCustomize, } from "../Enabler";
 import { WithLoadedProject } from "@atomist/sdm/lib/spi/project/ProjectLoader";
+import { Store } from "../Store";
 
 /**
  * Integrate a number of features with an SDM
@@ -58,7 +44,7 @@ export class Features implements Enabler {
         logger.info("Enabling %d features with goals: %j", this.features.length, goals);
         this.features
             .filter(f => !!f.apply)
-            .forEach(f => enableFeature(sdm, this.store, f, goals));
+            .forEach(f => enableFeature(sdm, this.store, this.featureStore, f, goals));
     }
 
     private listFeaturesCommand(): CodeInspectionRegistration<Fingerprint[]> {
@@ -70,7 +56,7 @@ export class Features implements Enabler {
                     this.features.map(f => f.projectFingerprinter(p)));
                 return scans
                     .filter(s => !!s)
-                    .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+                    .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             },
             onInspectionResults: async (results, ci) => {
                 for (const r of results) {
@@ -80,28 +66,44 @@ export class Features implements Enabler {
         };
     }
 
-    constructor(private readonly store: FeatureStore, ...features: Feature[]) {
+    constructor(private readonly store: Store,
+                private readonly featureStore: FeatureStore,
+                ...features: Feature[]) {
         this.features = features;
     }
 
 }
 
 /**
- * Enable this feature on the well-known goals
+ * Enable this feature on the SDM and well-known goals
  * @param {SoftwareDeliveryMachine} sdm
- * @param {FeatureStore} store
+ * @param {FeatureStore} featureStore
  * @param {Feature} f
  * @param {GoalsToCustomize} goals
  */
 function enableFeature(sdm: SoftwareDeliveryMachine,
-                       store: FeatureStore,
+                       store: Store,
+                       featureStore: FeatureStore,
                        f: Feature,
                        goals: GoalsToCustomize) {
     const transformName = `tr-${f.name.replace(" ", "_")}`;
+    const rolloutCommandName = `rollout-${f.name.replace(" ", "_")}`;
+
     sdm.addCodeTransformCommand({
         name: transformName,
         intent: `transform ${f.name}`,
         transform: f.apply(f.ideal),
+    });
+    sdm.addCommand<{ key: string }>({
+        name: rolloutCommandName,
+        listener: async ci => {
+            const ideal = await store.load(ci.parameters.key);
+            if (!ideal) {
+                throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
+            }
+            await featureStore.setIdeal(ideal);
+            return rolloutQualityOrderedFeatureToDownstreamProjects(f, ideal, transformName, sdm, ci);
+        }
     });
     if (!!goals.inspectGoal) {
         logger.info("Registering inspection goal");
@@ -110,7 +112,7 @@ function enableFeature(sdm: SoftwareDeliveryMachine,
     if (!!goals.pushImpactGoal) {
         logger.info("Registering push impact goal");
         // Register a push reaction when a project with this features changes
-        goals.pushImpactGoal.with(listenAndRolloutUpgrades(sdm, store, f, transformName));
+        goals.pushImpactGoal.with(listenAndRolloutUpgrades(sdm, store, featureStore, f, rolloutCommandName));
     }
     if (!!goals.fingerprintGoal) {
         logger.info("Registering fingerprinter");
@@ -122,31 +124,30 @@ function enableFeature(sdm: SoftwareDeliveryMachine,
  * Listen to pushes to projects with this feature and roll out upgrades
  * to relevant downstream projects if the relevant version moves the ideal
  * @param {SoftwareDeliveryMachine} sdm
- * @param {FeatureStore} store
+ * @param {FeatureStore} featureStore
  * @param {Feature} f
- * @param {string} transformName
+ * @param {string} rolloutName
  * @return {PushImpactListenerRegistration}
  */
 function listenAndRolloutUpgrades(sdm: SoftwareDeliveryMachine,
-                                  store: FeatureStore,
+                                  store: Store,
+                                  featureStore: FeatureStore,
                                   f: Feature,
-                                  transformName: string): PushImpactListenerRegistration {
+                                  rolloutCommandName: string): PushImpactListenerRegistration {
     return {
         name: `pi-${f.name}`,
         pushTest: f.isPresent,
         action: async pu => {
             logger.info("Push on project with feature %s", f.name);
             if (f.supportedComparisonPolicies.includes(ComparisonPolicy.quality)) {
-                const ideal = await store.ideal(f.name);
+                const ideal = await featureStore.ideal(f.name);
                 logger.info("Ideal feature %s value is %j", f.name, ideal);
                 if (!!ideal) {
-                    const after = await f.projectFingerprinter(pu.project);
-                    if (f.compare(ideal, after, ComparisonPolicy.quality) > 0) {
-                        // TODO ask about setting ideal
-                        await store.setIdeal(after);
-                        return rolloutQualityOrderedFeatureToDownstreamProjects(f, ideal, transformName, sdm, pu);
+                    const valueInProject = await f.projectFingerprinter(pu.project);
+                    if (f.compare(ideal, valueInProject, ComparisonPolicy.quality) < 0) {
+                        await onUpgradedFeatureDetected(store, featureStore, f, ideal, valueInProject, rolloutCommandName, pu);
                     } else {
-                        logger.info("Ideal feature %s value is %j, ours is %j and it's fine", f.name, ideal, after);
+                        logger.info("Ideal feature %s value is %j, ours is %j and it's unremarkable", f.name, ideal, valueInProject);
                     }
                 }
             } else {
@@ -154,6 +155,31 @@ function listenAndRolloutUpgrades(sdm: SoftwareDeliveryMachine,
             }
         },
     };
+}
+
+async function onUpgradedFeatureDetected<S extends Fingerprint>(store: Store,
+                                                                featureStore: FeatureStore,
+                                                                f: Feature,
+                                                                ideal: S,
+                                                                valueInProject: S,
+                                                                rolloutCommandName: string,
+                                                                i: RepoContext) {
+
+    logger.info("Better than ideal feature %s found: value is %s vs %s", valueInProject, f.summary(valueInProject), f.summary(ideal));
+    const stored = await store.save(valueInProject);
+    const attachment: Attachment = {
+        text: `Set new ideal for feature *${f.name}*: ${f.summary(valueInProject)} vs existing ${f.summary(ideal)}?`,
+        fallback: "accept feature",
+        actions: [buttonForCommand({ text: `Accept feature ${f.name}?` },
+            rolloutCommandName, {
+                key: stored,
+            }),
+        ],
+    };
+    const message: SlackMessage = {
+        attachments: [attachment],
+    };
+    await i.addressChannels(message);
 }
 
 /**
@@ -164,7 +190,7 @@ async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends Finger
                                                                                        valueToUpgradeTo: S,
                                                                                        command: string,
                                                                                        sdm: SoftwareDeliveryMachine,
-                                                                                       i: PushImpactListenerInvocation) {
+                                                                                       i: SdmContext) {
     logger.info("Rolling out command '%s' to apply feature %s", command, feature.name);
     return doWithRepos(sdm, i,
         async p => {

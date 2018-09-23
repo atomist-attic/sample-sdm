@@ -74,6 +74,7 @@ import {
     SpringBootVersionFingerprint,
 } from "./SpringBootVersionFeature";
 import { Features } from "../feature/support/Features";
+import { InMemoryStore } from "../feature/support/InMemoryStore";
 
 /**
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
@@ -133,7 +134,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 "https://github.com/atomist/sdm-pack-cloudfoundry/blob/master/README.md"
             )).after(ArtifactGoal, StagingVerifiedGoal);
 
-    const features = new Features(new InMemoryFeatureStore(new SpringBootVersionFingerprint()),
+    const features = new Features(new InMemoryStore(),
+        new InMemoryFeatureStore(new SpringBootVersionFingerprint("1.5.8.RELEASE")),
         new SpringBootVersionFeature());
     features.enable(sdm, { pushImpactGoal: PushReactionGoal, inspectGoal: CodeInspectionGoal });
 

@@ -22,7 +22,7 @@ import {
 export interface FeatureStore {
 
     /**
-     * Store a feature value for this project
+     * Store the feature value for this project
      * @param {RemoteRepoRef} id
      * @param {Fingerprint} f
      * @return {Promise<any>}
