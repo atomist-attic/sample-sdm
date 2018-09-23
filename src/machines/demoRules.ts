@@ -21,7 +21,7 @@ import {
 import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { makeBuildAware } from "@atomist/sdm/lib/pack/build-aware-transform";
+import { makeBuildAware } from "@atomist/sdm-core/lib/pack/build-aware-transform";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
     sdm.addPushImpactListener(async pu => {

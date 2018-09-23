@@ -24,7 +24,6 @@ import {
     RemoteRepoRef,
 } from "@atomist/sdm";
 
-import { successOn } from "@atomist/automation-client";
 import * as assert from "power-assert";
 
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
@@ -55,13 +54,13 @@ describe("addHeaderFix", () => {
 
         const gi: GoalInvocation = fakeGoalInvocation(p.id as RemoteRepoRef);
         const r = await executeAutofixes([AddAtomistTypeScriptHeader])(gi);
-        assert.equal(r.code, 1);
+        assert.equal((r as any).code, 1);
         assert.equal(pushCount, 1);
         assert.equal(commitCount, 1);
 
         const fileNow = p.findFileSync(f.path);
         assert(!!fileNow);
         assert(fileNow.getContentSync().startsWith(ApacheHeader));
-    }) ; // .timeout(40000);
+    }); // .timeout(40000);
 
 });

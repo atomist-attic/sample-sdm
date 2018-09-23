@@ -39,7 +39,6 @@ import {
     DisableDeploy,
     DisplayDeployEnablement,
     EnableDeploy,
-    InMemoryDeploymentStatusManager,
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
