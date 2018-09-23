@@ -80,6 +80,9 @@ export abstract class AbstractFeature<S extends Fingerprint> implements Feature<
      * @return {string}
      */
     public summary(s: S): string {
+        if (s == undefined) {
+            return "feature is null"
+        }
         return JSON.stringify(s.data);
     }
 

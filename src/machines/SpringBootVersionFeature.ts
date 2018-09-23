@@ -64,7 +64,7 @@ export class SpringBootVersionFeature extends AbstractFeature<SpringBootVersionF
         // Later versions are better
         this.addComparison(
             ComparisonPolicy.quality,
-            (a, b) => a.bootVersion.localeCompare(b.bootVersion));
+            undefinedIsLess((a, b) => a.bootVersion.localeCompare(b.bootVersion)));
     }
 
     public apply(s: SpringBootVersionFingerprint): CodeTransform {
@@ -77,3 +77,14 @@ export class SpringBootVersionFeature extends AbstractFeature<SpringBootVersionF
 
 }
 
+function undefinedIsLess<T>(f: (a: T, b: T) => number): (a: T, b: T) => number {
+    return (a, b) => {
+        if (a == undefined) {
+            return 1;
+        }
+        if (b == undefined) {
+            return -1;
+        }
+        return f(a, b);
+    }
+}
