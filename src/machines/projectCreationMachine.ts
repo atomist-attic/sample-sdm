@@ -25,7 +25,7 @@ import {
 } from "@atomist/sdm-core";
 import {
     NodeProjectCreationParametersDefinition,
-    UpdatePackageJsonIdentification,
+    UpdatePackageJsonIdentification, UpdateReadmeTitle,
 } from "@atomist/sdm-pack-node";
 import {
     ReplaceReadmeTitle,
@@ -34,7 +34,6 @@ import {
     SpringProjectCreationParameterDefinitions,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { UpdateReadmeTitle } from "../commands/editors/updateReadmeTitle";
 
 /**
  * Assemble a machine that performs only project creation and tagging,
@@ -64,7 +63,8 @@ export function projectCreationMachine(
             intent: "create node",
             transform: [
                 UpdatePackageJsonIdentification,
-                UpdateReadmeTitle],
+                UpdateReadmeTitle
+            ],
         })
         .addGeneratorCommand({
             name: "minimal-node-generator",

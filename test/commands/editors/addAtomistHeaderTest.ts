@@ -55,7 +55,6 @@ describe("addHeaderFix", () => {
 
         const gi: GoalInvocation = fakeGoalInvocation(p.id as RemoteRepoRef);
         const r = await executeAutofixes([AddAtomistTypeScriptHeader])(gi);
-        assert.equal(r.code, 1);
         assert.equal(pushCount, 1);
         assert.equal(commitCount, 1);
 

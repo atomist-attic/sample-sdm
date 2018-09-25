@@ -40,13 +40,9 @@ import {
 } from "@atomist/sdm";
 import {
     createSoftwareDeliveryMachine,
-    deploymentFreeze,
     DisableDeploy,
     DisplayDeployEnablement,
     EnableDeploy,
-    ExplainDeploymentFreezeGoal,
-    InMemoryDeploymentStatusManager,
-    isDeploymentFrozen,
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
@@ -66,16 +62,17 @@ import {
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
     SpringProjectCreationParameters,
-    SpringSupport,
+    springSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
 import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/commonGoals";
-import { CloudReadinessChecks } from "../pack/cloud-readiness/cloudReadiness";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
+import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
+import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "../pack/freeze/deploymentFreeze";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -174,9 +171,11 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     sdm.addExtensionPacks(
         DemoEditors,
         deploymentFreeze(freezeStore),
-        SpringSupport,
+        springSupport({
+            review: {},
+            autofix: {},
+        }),
         SentrySupport,
-        CloudReadinessChecks,
         JavaSupport,
         NodeSupport,
         CloudFoundrySupport,
