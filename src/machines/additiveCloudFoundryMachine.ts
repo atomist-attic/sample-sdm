@@ -72,7 +72,11 @@ import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen } from "../pack/freeze/deploymentFreeze";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../pack/freeze/deploymentFreeze";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 

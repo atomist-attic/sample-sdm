@@ -25,7 +25,8 @@ import {
 } from "@atomist/sdm-core";
 import {
     NodeProjectCreationParametersDefinition,
-    UpdatePackageJsonIdentification, UpdateReadmeTitle,
+    UpdatePackageJsonIdentification,
+    UpdateReadmeTitle,
 } from "@atomist/sdm-pack-node";
 import {
     ReplaceReadmeTitle,
