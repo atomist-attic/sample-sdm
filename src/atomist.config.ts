@@ -27,7 +27,7 @@ import {
     configureSdm,
 } from "@atomist/sdm-core";
 import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
-import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMachine";
+import { cloudFoundryMachine } from "./machines/cloudFoundryMachine";
 
 /*
  * This sample-sdm includes code for a variety of
@@ -60,7 +60,7 @@ import { additiveCloudFoundryMachine } from "./machines/additiveCloudFoundryMach
  */
 
 function createMachine(config: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
-    return additiveCloudFoundryMachine(config);
+    return cloudFoundryMachine(config);
 }
 
 const Options: ConfigureOptions = {

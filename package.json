@@ -33,7 +33,7 @@
     "@atomist/sdm-pack-node": "1.0.0-master.20180916165427",
     "@atomist/sdm-pack-sloc": "1.0.0-master.20180924171241",
     "@atomist/sdm-pack-sonarqube": "1.0.0-master.20180916182022",
-    "@atomist/sdm-pack-spring": "1.0.0-master.20180925183752",
+    "@atomist/sdm-pack-spring": "https://r.atomist.com/1524161367",
     "@atomist/slack-messages": "1.0.1-master.20180830190736",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",

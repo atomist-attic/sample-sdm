@@ -56,9 +56,14 @@ import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cl
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     IsMaven,
+    IsRiff,
     localExecutableJarDeployer,
     MavenBuilder,
     ReplaceReadmeTitle,
+    RiffDeployment,
+    RiffProjectCreationParameterDefinitions,
+    RiffProjectCreationParameters,
+    RiffProjectCreationTransform,
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
     SpringProjectCreationParameters,
@@ -86,7 +91,7 @@ const IsDeploymentFrozen = isDeploymentFrozen(freezeStore);
  * Variant of cloudFoundryMachine that uses additive, "contributor" style goal setting.
  * @return {SoftwareDeliveryMachine}
  */
-export function additiveCloudFoundryMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm: SoftwareDeliveryMachine = createSoftwareDeliveryMachine(
         {
             name: "Cloud Foundry software delivery machine",
@@ -135,6 +140,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             ProductionDeploymentGoal,
             ProductionEndpointGoal);
 
+    const RiffDeploy = new RiffDeployment();
+
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(CheckGoals),
         whenPushSatisfies(IsDeploymentFrozen)
@@ -144,7 +151,18 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
             .setGoals(StagingDeploymentGoals),
         whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
-            .setGoals(ProductionDeploymentGoals)));
+            .setGoals(ProductionDeploymentGoals),
+        whenPushSatisfies(IsRiff).setGoals(RiffDeploy))
+    );
+
+    sdm.addGeneratorCommand<RiffProjectCreationParameters>({
+        name: "create-riff",
+        intent: "create riff",
+        description: "Create a new Riff function",
+        parameters: RiffProjectCreationParameterDefinitions,
+        startingPoint: new GitHubRepoRef("trisberg", "upper"),
+        transform: RiffProjectCreationTransform,
+    });
 
     sdm.addGeneratorCommand<SpringProjectCreationParameters>({
         name: "create-spring",
