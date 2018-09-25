@@ -15,9 +15,13 @@
  */
 
 import {
-    SoftwareDeliveryMachine, whenPushSatisfies,
+    SoftwareDeliveryMachine,
+    whenPushSatisfies,
 } from "@atomist/sdm";
-import { HasSpringBootPom, MavenPerBranchDeployment } from "@atomist/sdm-pack-spring";
+import {
+    HasSpringBootPom,
+    MavenPerBranchDeployment,
+} from "@atomist/sdm-pack-spring";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
     const branchDeploy = new MavenPerBranchDeployment();
