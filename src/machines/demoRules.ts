@@ -21,7 +21,7 @@ import {
 import {
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { makeBuildAware } from "@atomist/sdm/lib/pack/build-aware-transform";
+import { pack } from "@atomist/sdm-core";
 
 export function demoRules(sdm: SoftwareDeliveryMachine) {
     sdm.addPushImpactListener(async pu => {
@@ -45,7 +45,7 @@ export function demoRules(sdm: SoftwareDeliveryMachine) {
         },
     });
 
-    sdm.addCodeTransformCommand(makeBuildAware({
+    sdm.addCodeTransformCommand(pack.buildAware.makeBuildAware({
         name: "topping",
         intent: "topping",
         transform: async p => {
