@@ -16,17 +16,9 @@
 
 import {
     SoftwareDeliveryMachine,
-    whenPushSatisfies,
 } from "@atomist/sdm";
-import {
-    HasSpringBootPom,
-    MavenPerBranchDeployment,
-} from "@atomist/sdm-pack-spring";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
-    const branchDeploy = new MavenPerBranchDeployment();
-    sdm.addGoalContributions(whenPushSatisfies(HasSpringBootPom).setGoals(branchDeploy));
-
     sdm.addRepoCreationListener(async l =>
         l.addressChannels(`New repo ${l.id.url}`));
     sdm.addFirstPushListener(async l =>
