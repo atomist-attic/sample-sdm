@@ -42,8 +42,9 @@ import {
     createSoftwareDeliveryMachine,
     DisableDeploy,
     DisplayDeployEnablement,
-    EnableDeploy, IsInLocalMode,
+    EnableDeploy,
     isInLocalMode,
+    IsInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
 import {
@@ -59,7 +60,8 @@ import {
     IsMaven,
     IsRiff,
     localExecutableJarDeployer,
-    MavenBuilder, MavenPerBranchDeployment,
+    MavenBuilder,
+    MavenPerBranchDeployment,
     ReplaceReadmeTitle,
     RiffDeployment,
     RiffProjectCreationParameterDefinitions,

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { SoftwareDeliveryMachine, } from "@atomist/sdm";
+import {
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
     sdm.addRepoCreationListener(async l =>
