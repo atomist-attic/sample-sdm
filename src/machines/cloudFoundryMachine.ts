@@ -79,10 +79,17 @@ import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { configureForLocal, ConsoleReviewListener } from "./support/configureForLocal";
+import {
+    configureForLocal,
+    ConsoleReviewListener,
+} from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen, } from "../pack/freeze/deploymentFreeze";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../pack/freeze/deploymentFreeze";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
