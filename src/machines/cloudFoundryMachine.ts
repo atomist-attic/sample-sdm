@@ -70,7 +70,8 @@ import {
     RiffProjectCreationTransform,
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
-    SpringProjectCreationParameters, SpringStyleGitHubIssueRaisingReviewListener,
+    SpringProjectCreationParameters,
+    SpringStyleGitHubIssueRaisingReviewListener,
     springSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
@@ -81,11 +82,7 @@ import { SentrySupport } from "../pack/sentry/sentrySupport";
 import { configureForLocal, ConsoleReviewListener } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import {
-    deploymentFreeze,
-    ExplainDeploymentFreezeGoal,
-    isDeploymentFrozen,
-} from "../pack/freeze/deploymentFreeze";
+import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen, } from "../pack/freeze/deploymentFreeze";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -210,7 +207,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             },
             inspectGoal: codeInspectionGoal,
             autofixGoal,
-            reviewListeners: IsInLocalMode ? [
+            reviewListeners: isInLocalMode() ? [
                 ConsoleReviewListener,
             ] : [
                 CloudNativeGitHubIssueRaisingReviewListener,
