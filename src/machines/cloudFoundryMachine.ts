@@ -120,16 +120,14 @@ export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfig
 }
 
 export function codeRules(sdm: SoftwareDeliveryMachine) {
-
-    // Each contributor contributes goals. The infrastructure assembles them into a goal set.
-    const AutofixGoal = new Autofix();
-    const PushReactionGoal = new PushImpact();
-    const CodeInspectionGoal = new AutoCodeInspection();
+    const autofixGoal = new Autofix();
+    const pushReactionGoal = new PushImpact();
+    const codeInspectionGoal = new AutoCodeInspection();
     const CheckGoals = goals("Checks")
-        .plan(CodeInspectionGoal, PushReactionGoal, AutofixGoal);
+        .plan(codeInspectionGoal, pushReactionGoal, autofixGoal);
     const BuildGoals = goals("Build")
         .plan(new Build().with({ name: "Maven", builder: new MavenBuilder(sdm) }))
-        .after(AutofixGoal);
+        .after(autofixGoal);
     const StagingDeploymentGoals = goals("StagingDeployment")
         .plan(ArtifactGoal,
             StagingDeploymentGoal,
@@ -194,8 +192,15 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         DemoEditors,
         deploymentFreeze(freezeStore),
         springSupport({
-            review: {},
-            autofix: {},
+            review: {
+                springStyle: true,
+                cloudNative: true,
+            },
+            autofix: {
+                springStyle: true,
+            },
+            inspectGoal: codeInspectionGoal,
+            autofixGoal,
         }),
         SentrySupport,
         JavaSupport,
