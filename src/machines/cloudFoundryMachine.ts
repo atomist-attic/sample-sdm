@@ -56,6 +56,7 @@ import {
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
+    CloudNativeGitHubIssueRaisingReviewListener,
     HasSpringBootPom,
     IsMaven,
     IsRiff,
@@ -69,7 +70,7 @@ import {
     RiffProjectCreationTransform,
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
-    SpringProjectCreationParameters,
+    SpringProjectCreationParameters, SpringStyleGitHubIssueRaisingReviewListener,
     springSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
@@ -77,7 +78,7 @@ import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { configureForLocal } from "./support/configureForLocal";
+import { configureForLocal, ConsoleReviewListener } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
 import {
@@ -209,13 +210,19 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             },
             inspectGoal: codeInspectionGoal,
             autofixGoal,
-            //reviewListeners: springs
+            reviewListeners: IsInLocalMode ? [
+                ConsoleReviewListener,
+            ] : [
+                CloudNativeGitHubIssueRaisingReviewListener,
+                SpringStyleGitHubIssueRaisingReviewListener,
+            ],
         }),
         SentrySupport,
         JavaSupport,
         NodeSupport,
         CloudFoundrySupport,
-    );
+    )
+    ;
 }
 
 export function deployRules(sdm: SoftwareDeliveryMachine) {

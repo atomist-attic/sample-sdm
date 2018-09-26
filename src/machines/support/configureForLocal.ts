@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-import {
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
+import { ReviewListener, ReviewListenerRegistration, SoftwareDeliveryMachine } from "@atomist/sdm";
 
 export function configureForLocal(sdm: SoftwareDeliveryMachine) {
     sdm.addRepoCreationListener(async l =>
         l.addressChannels(`New repo ${l.id.url}`));
     sdm.addFirstPushListener(async l =>
         l.addressChannels(`New repo with code ${l.id.url}`));
-
-    sdm.addReviewListenerRegistration({
-        name: "consoleListener",
-        listener: async l => {
-            await l.addressChannels(`${l.review.comments.length} review errors: ${l.review.comments}`);
-            for (const c of l.review.comments) {
-                await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
-            }
-        },
-    });
 }
+
+export const ConsoleReviewListener: ReviewListenerRegistration = {
+    name: "ConsoleReviewListener",
+    listener: async l => {
+        await l.addressChannels(`${l.review.comments.length} review comments:`);
+        for (const c of l.review.comments) {
+            await l.addressChannels(`${c.severity}: ${c.category} - ${c.detail} ${JSON.stringify(c.sourceLocation)}`);
+        }
+    },
+};
