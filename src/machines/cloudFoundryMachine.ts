@@ -42,7 +42,7 @@ import {
     createSoftwareDeliveryMachine,
     DisableDeploy,
     DisplayDeployEnablement,
-    EnableDeploy,
+    EnableDeploy, IsInLocalMode,
     isInLocalMode,
     ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
@@ -55,10 +55,11 @@ import {
 import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
+    HasSpringBootPom,
     IsMaven,
     IsRiff,
     localExecutableJarDeployer,
-    MavenBuilder,
+    MavenBuilder, MavenPerBranchDeployment,
     ReplaceReadmeTitle,
     RiffDeployment,
     RiffProjectCreationParameterDefinitions,
@@ -123,11 +124,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const autofixGoal = new Autofix();
     const pushReactionGoal = new PushImpact();
     const codeInspectionGoal = new AutoCodeInspection();
-    const CheckGoals = goals("Checks")
+    const checkGoals = goals("Checks")
         .plan(codeInspectionGoal, pushReactionGoal, autofixGoal);
-    const BuildGoals = goals("Build")
+    const buildGoals = goals("Build")
         .plan(new Build().with({ name: "Maven", builder: new MavenBuilder(sdm) }))
         .after(autofixGoal);
+    const localDeploymentGoals = goals("local-deploy")
+        .plan(new MavenPerBranchDeployment()).after(buildGoals);
+
     const StagingDeploymentGoals = goals("StagingDeployment")
         .plan(ArtifactGoal,
             StagingDeploymentGoal,
@@ -141,14 +145,16 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const RiffDeploy = new RiffDeployment();
 
     sdm.addGoalContributions(goalContributors(
-        onAnyPush().setGoals(CheckGoals),
+        onAnyPush().setGoals(checkGoals),
         whenPushSatisfies(IsDeploymentFrozen)
             .setGoals(ExplainDeploymentFreezeGoal),
         whenPushSatisfies(IsMaven)
-            .setGoals(BuildGoals),
-        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch)
+            .setGoals(buildGoals),
+        whenPushSatisfies(IsMaven, HasSpringBootPom, IsInLocalMode)
+            .setGoals(localDeploymentGoals),
+        whenPushSatisfies(HasCloudFoundryManifest, ToDefaultBranch, not(IsInLocalMode))
             .setGoals(StagingDeploymentGoals),
-        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch)
+        whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch, not(IsInLocalMode))
             .setGoals(ProductionDeploymentGoals),
         whenPushSatisfies(IsRiff).setGoals(RiffDeploy))
     );
