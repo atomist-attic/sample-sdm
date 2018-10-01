@@ -18,7 +18,6 @@ import {
     ArtifactGoal,
     AutoCodeInspection,
     Autofix,
-    Build,
     GitHubRepoRef,
     goalContributors,
     goals,
@@ -40,7 +39,6 @@ import { createSoftwareDeliveryMachine, isInLocalMode, IsInLocalMode, } from "@a
 import { CloudFoundrySupport, HasCloudFoundryManifest, } from "@atomist/sdm-pack-cloudfoundry";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
-    CloudNativeGitHubIssueRaisingReviewListener,
     HasSpringBootPom,
     IsMaven,
     IsRiff,
@@ -54,7 +52,6 @@ import {
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
     SpringProjectCreationParameters,
-    SpringStyleGitHubIssueRaisingReviewListener,
     springSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
@@ -124,8 +121,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             ProductionDeploymentGoal,
             ProductionEndpointGoal);
 
-    const RiffDeploy = new RiffDeployment();
-
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",
         message: "I don't yet know how to deploy a Riff function, but you could teach me!",
@@ -143,7 +138,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(StagingDeploymentGoals),
         whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch, not(IsInLocalMode))
             .setGoals(ProductionDeploymentGoals),
-        whenPushSatisfies(IsRiff).setGoals(RiffDeploy))
+        whenPushSatisfies(IsRiff).setGoals(riffDeploy))
     );
 
     sdm.addGeneratorCommand<RiffProjectCreationParameters>({
@@ -197,8 +192,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             reviewListeners: isInLocalMode() ? [
                 ConsoleReviewListener,
             ] : [
-                CloudNativeGitHubIssueRaisingReviewListener,
-                SpringStyleGitHubIssueRaisingReviewListener,
+                // CloudNativeGitHubIssueRaisingReviewListener,
+                // SpringStyleGitHubIssueRaisingReviewListener,
             ],
         }),
         SentrySupport,
