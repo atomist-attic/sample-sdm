@@ -35,8 +35,15 @@ import {
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import { createSoftwareDeliveryMachine, isInLocalMode, IsInLocalMode, } from "@atomist/sdm-core";
-import { CloudFoundrySupport, HasCloudFoundryManifest, } from "@atomist/sdm-pack-cloudfoundry";
+import {
+    createSoftwareDeliveryMachine,
+    isInLocalMode,
+    IsInLocalMode,
+} from "@atomist/sdm-core";
+import {
+    CloudFoundrySupport,
+    HasCloudFoundryManifest,
+} from "@atomist/sdm-pack-cloudfoundry";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootPom,
@@ -58,10 +65,17 @@ import {
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
-import { configureForLocal, ConsoleReviewListener, } from "./support/configureForLocal";
+import {
+    configureForLocal,
+    ConsoleReviewListener,
+} from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
 import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import { deploymentFreeze, ExplainDeploymentFreezeGoal, isDeploymentFrozen, } from "../pack/freeze/deploymentFreeze";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../pack/freeze/deploymentFreeze";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
