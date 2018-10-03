@@ -34,6 +34,7 @@ import {
     suggestAction,
     ToDefaultBranch,
     whenPushSatisfies,
+    AnyPush,
 } from "@atomist/sdm";
 import {
     createSoftwareDeliveryMachine,
@@ -77,6 +78,10 @@ import {
     isDeploymentFrozen,
 } from "../pack/freeze/deploymentFreeze";
 import { Build } from "@atomist/sdm-pack-build";
+import { 
+    CloudFoundryDeploy, 
+    CloudFoundryDeploymentStrategy,
+} from "@atomist/sdm-pack-cloudfoundry";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -118,23 +123,31 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const autofixGoal = new Autofix();
     const pushReactionGoal = new PushImpact();
     const codeInspectionGoal = new AutoCodeInspection();
+    const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
+    const mavenDeploy = new MavenPerBranchDeployment();
+    const pcfDeploy = new CloudFoundryDeploy({
+        uniqueName: "production-deployment",
+        approval: true,
+        preApproval: true,
+        retry: true,
+    })
+        .with({ environment: "production", strategy: CloudFoundryDeploymentStrategy.BLUE_GREEN });
+
     const checkGoals = goals("Checks")
         .plan(codeInspectionGoal, pushReactionGoal, autofixGoal);
     const buildGoals = goals("Build")
-        .plan(new Build().with({ name: "Maven", builder: mavenBuilder() }))
-        .after(autofixGoal);
+        .plan(build).after(autofixGoal);
     const localDeploymentGoals = goals("local-deploy")
-        .plan(new MavenPerBranchDeployment()).after(buildGoals);
+        .plan(mavenDeploy).after(build);
 
     const StagingDeploymentGoals = goals("StagingDeployment")
-        .plan(ArtifactGoal,
-            StagingDeploymentGoal,
-            StagingEndpointGoal,
-            StagingVerifiedGoal);
+        .plan(ArtifactGoal)
+        .plan(mavenDeploy).after(build);
+    
     const ProductionDeploymentGoals = goals("ProdDeployment")
-        .plan(ArtifactGoal,
-            ProductionDeploymentGoal,
-            ProductionEndpointGoal);
+        .plan(pcfDeploy).after(mavenDeploy);
+
+    sdm.addGoalSideEffect(ArtifactGoal, "other", AnyPush);
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",
