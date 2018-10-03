@@ -19,64 +19,56 @@ import {
     ArtifactGoal,
     AutoCodeInspection,
     Autofix,
-    Build,
-    executeDeploy,
     GitHubRepoRef,
     goalContributors,
     goals,
     not,
     onAnyPush,
-    ProductionDeploymentGoal,
-    ProductionEndpointGoal,
-    ProductionUndeploymentGoal,
     PushImpact,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
-    StagingDeploymentGoal,
-    StagingEndpointGoal,
-    StagingVerifiedGoal,
+    suggestAction,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
 import {
     createSoftwareDeliveryMachine,
-    DisableDeploy,
-    DisplayDeployEnablement,
-    EnableDeploy,
     isInLocalMode,
     IsInLocalMode,
-    ManagedDeploymentTargeter,
 } from "@atomist/sdm-core";
+import { Build } from "@atomist/sdm-pack-build";
 import {
-    CloudFoundryBlueGreenDeployer,
+    CloudFoundryDeploy,
+    CloudFoundryDeploymentStrategy,
+} from "@atomist/sdm-pack-cloudfoundry";
+import {
     CloudFoundrySupport,
-    EnvironmentCloudFoundryTarget,
     HasCloudFoundryManifest,
 } from "@atomist/sdm-pack-cloudfoundry";
-import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
 import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
-    CloudNativeGitHubIssueRaisingReviewListener,
     HasSpringBootPom,
     IsMaven,
     IsRiff,
-    localExecutableJarDeployer,
-    MavenBuilder,
+    mavenBuilder,
     MavenPerBranchDeployment,
     ReplaceReadmeTitle,
-    RiffDeployment,
     RiffProjectCreationParameterDefinitions,
     RiffProjectCreationParameters,
     RiffProjectCreationTransform,
     SetAtomistTeamInApplicationYml,
     SpringProjectCreationParameterDefinitions,
     SpringProjectCreationParameters,
-    SpringStyleGitHubIssueRaisingReviewListener,
     springSupport,
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
-import { StagingUndeploymentGoal } from "@atomist/sdm/lib/pack/well-known-goals/commonGoals";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../pack/freeze/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import {
@@ -84,12 +76,6 @@ import {
     ConsoleReviewListener,
 } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import {
-    deploymentFreeze,
-    ExplainDeploymentFreezeGoal,
-    isDeploymentFrozen,
-} from "../pack/freeze/deploymentFreeze";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -120,7 +106,7 @@ export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfig
     if (isInLocalMode()) {
         configureForLocal(sdm);
     } else {
-        deployRules(sdm);
+        // nothing
     }
     addTeamPolicies(sdm);
 
@@ -131,25 +117,36 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const autofixGoal = new Autofix();
     const pushReactionGoal = new PushImpact();
     const codeInspectionGoal = new AutoCodeInspection();
+    const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
+    const mavenDeploy = new MavenPerBranchDeployment();
+    const pcfDeploy = new CloudFoundryDeploy({
+        uniqueName: "production-deployment",
+        approval: true,
+        preApproval: true,
+        retry: true,
+    })
+        .with({ environment: "production", strategy: CloudFoundryDeploymentStrategy.BLUE_GREEN });
+
     const checkGoals = goals("Checks")
         .plan(codeInspectionGoal, pushReactionGoal, autofixGoal);
     const buildGoals = goals("Build")
-        .plan(new Build().with({ name: "Maven", builder: new MavenBuilder(sdm) }))
-        .after(autofixGoal);
+        .plan(build).after(autofixGoal);
     const localDeploymentGoals = goals("local-deploy")
-        .plan(new MavenPerBranchDeployment()).after(buildGoals);
+        .plan(mavenDeploy).after(build);
 
     const StagingDeploymentGoals = goals("StagingDeployment")
-        .plan(ArtifactGoal,
-            StagingDeploymentGoal,
-            StagingEndpointGoal,
-            StagingVerifiedGoal);
-    const ProductionDeploymentGoals = goals("ProdDeployment")
-        .plan(ArtifactGoal,
-            ProductionDeploymentGoal,
-            ProductionEndpointGoal);
+        .plan(ArtifactGoal)
+        .plan(mavenDeploy).after(build);
 
-    const RiffDeploy = new RiffDeployment();
+    const ProductionDeploymentGoals = goals("ProdDeployment")
+        .plan(pcfDeploy).after(mavenDeploy);
+
+    sdm.addGoalSideEffect(ArtifactGoal, "other", AnyPush);
+
+    const riffDeploy = suggestAction({
+        displayName: "Riff Deploy",
+        message: "I don't yet know how to deploy a Riff function, but you could teach me!",
+    });
 
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(checkGoals),
@@ -163,7 +160,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(StagingDeploymentGoals),
         whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch, not(IsInLocalMode))
             .setGoals(ProductionDeploymentGoals),
-        whenPushSatisfies(IsRiff).setGoals(RiffDeploy))
+        whenPushSatisfies(IsRiff).setGoals(riffDeploy)),
     );
 
     sdm.addGeneratorCommand<RiffProjectCreationParameters>({
@@ -217,8 +214,8 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             reviewListeners: isInLocalMode() ? [
                 ConsoleReviewListener,
             ] : [
-                CloudNativeGitHubIssueRaisingReviewListener,
-                SpringStyleGitHubIssueRaisingReviewListener,
+                // CloudNativeGitHubIssueRaisingReviewListener,
+                // SpringStyleGitHubIssueRaisingReviewListener,
             ],
         }),
         SentrySupport,
@@ -227,58 +224,4 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         CloudFoundrySupport,
     )
     ;
-}
-
-export function deployRules(sdm: SoftwareDeliveryMachine) {
-    const deployToStaging = {
-        deployer: localExecutableJarDeployer(),
-        targeter: ManagedDeploymentTargeter,
-        deployGoal: StagingDeploymentGoal,
-        endpointGoal: StagingEndpointGoal,
-        undeployGoal: StagingUndeploymentGoal,
-    };
-    sdm.addGoalImplementation("Staging local deployer",
-        deployToStaging.deployGoal,
-        executeDeploy(
-            sdm.configuration.sdm.artifactStore,
-            sdm.configuration.sdm.repoRefResolver,
-            deployToStaging.endpointGoal, deployToStaging),
-        {
-            pushTest: IsMaven,
-            logInterpreter: deployToStaging.deployer.logInterpreter,
-        },
-    );
-    sdm.addGoalSideEffect(
-        deployToStaging.endpointGoal,
-        deployToStaging.deployGoal.definition.displayName,
-        AnyPush);
-
-    const deployToProduction = {
-        deployer: new CloudFoundryBlueGreenDeployer(sdm.configuration.sdm.projectLoader),
-        targeter: () => new EnvironmentCloudFoundryTarget("production"),
-        deployGoal: ProductionDeploymentGoal,
-        endpointGoal: ProductionEndpointGoal,
-        undeployGoal: ProductionUndeploymentGoal,
-    };
-    sdm.addGoalImplementation("Production CF deployer",
-        deployToProduction.deployGoal,
-        executeDeploy(
-            sdm.configuration.sdm.artifactStore,
-            sdm.configuration.sdm.repoRefResolver,
-            deployToProduction.endpointGoal, deployToProduction),
-        {
-            pushTest: IsMaven,
-            logInterpreter: deployToProduction.deployer.logInterpreter,
-        },
-    );
-    sdm.addGoalSideEffect(
-        deployToProduction.endpointGoal,
-        deployToProduction.deployGoal.definition.displayName,
-        AnyPush);
-
-    sdm.addCommand(EnableDeploy)
-        .addCommand(DisableDeploy)
-        .addCommand(DisplayDeployEnablement)
-        .addPushImpactListener(enableDeployOnCloudFoundryManifestAddition(sdm));
-    // sdm.addEndpointVerificationListener(lookFor200OnEndpointRootGet());
 }
