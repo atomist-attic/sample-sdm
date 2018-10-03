@@ -120,11 +120,12 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
     const mavenDeploy = new MavenPerBranchDeployment();
     const pcfDeploy = new CloudFoundryDeploy({
-        uniqueName: "production-deployment",
-        approval: true,
-        preApproval: true,
-        retry: true,
-    })
+            uniqueName: "production-deployment",
+            environment: "production",
+            approval: false,
+            preApproval: true,
+            retry: true,
+        })
         .with({ environment: "production", strategy: CloudFoundryDeploymentStrategy.BLUE_GREEN });
 
     const checkGoals = goals("Checks")
@@ -132,14 +133,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const buildGoals = goals("Build")
         .plan(build).after(autofixGoal);
     const localDeploymentGoals = goals("local-deploy")
-        .plan(mavenDeploy).after(build);
+        .plan(mavenDeploy).after(buildGoals);
 
     const StagingDeploymentGoals = goals("StagingDeployment")
-        .plan(ArtifactGoal)
-        .plan(mavenDeploy).after(build);
+        .plan(ArtifactGoal).after(checkGoals)
+        .plan(mavenDeploy).after(buildGoals);
 
     const ProductionDeploymentGoals = goals("ProdDeployment")
-        .plan(pcfDeploy).after(mavenDeploy);
+        .plan(pcfDeploy).after(StagingDeploymentGoals);
 
     sdm.addGoalSideEffect(ArtifactGoal, "other", AnyPush);
 

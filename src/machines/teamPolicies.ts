@@ -21,7 +21,7 @@ import {
 } from "@atomist/sdm";
 import { codeMetrics } from "@atomist/sdm-pack-sloc";
 import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
-import { pack } from "@atomist/sdm-core";
+import { buildAwareCodeTransforms } from "@atomist/sdm-pack-build";
 import { AddApacheLicenseHeaderTransform } from "../commands/editors/license/addHeader";
 import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
 import { capitalizer } from "../listener/issue/capitalizer";
@@ -52,7 +52,7 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
     sdm.addExtensionPacks(
-        pack.buildAware.buildAwareCodeTransforms(),
+        buildAwareCodeTransforms(),
         codeMetrics(),
     );
 
