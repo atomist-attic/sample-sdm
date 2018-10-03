@@ -15,6 +15,7 @@
  */
 
 import {
+    AnyPush,
     ArtifactGoal,
     AutoCodeInspection,
     Autofix,
@@ -34,7 +35,6 @@ import {
     suggestAction,
     ToDefaultBranch,
     whenPushSatisfies,
-    AnyPush,
 } from "@atomist/sdm";
 import {
     createSoftwareDeliveryMachine,
@@ -78,8 +78,8 @@ import {
     isDeploymentFrozen,
 } from "../pack/freeze/deploymentFreeze";
 import { Build } from "@atomist/sdm-pack-build";
-import { 
-    CloudFoundryDeploy, 
+import {
+    CloudFoundryDeploy,
     CloudFoundryDeploymentStrategy,
 } from "@atomist/sdm-pack-cloudfoundry";
 
