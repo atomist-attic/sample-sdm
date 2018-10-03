@@ -48,7 +48,8 @@ import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootPom,
     IsMaven,
-    IsRiff, mavenBuilder,
+    IsRiff,
+    mavenBuilder,
     MavenPerBranchDeployment,
     ReplaceReadmeTitle,
     RiffDeployment,
