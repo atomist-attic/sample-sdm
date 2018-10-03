@@ -48,8 +48,7 @@ import { NodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootPom,
     IsMaven,
-    IsRiff,
-    MavenBuilder,
+    IsRiff, mavenBuilder,
     MavenPerBranchDeployment,
     ReplaceReadmeTitle,
     RiffDeployment,
@@ -76,6 +75,7 @@ import {
     ExplainDeploymentFreezeGoal,
     isDeploymentFrozen,
 } from "../pack/freeze/deploymentFreeze";
+import { Build } from "@atomist/sdm-pack-build";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -120,7 +120,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const checkGoals = goals("Checks")
         .plan(codeInspectionGoal, pushReactionGoal, autofixGoal);
     const buildGoals = goals("Build")
-        .plan(new Build().with({ name: "Maven", builder: new MavenBuilder(sdm) }))
+        .plan(new Build().with({ name: "Maven", builder: mavenBuilder() }))
         .after(autofixGoal);
     const localDeploymentGoals = goals("local-deploy")
         .plan(new MavenPerBranchDeployment()).after(buildGoals);
