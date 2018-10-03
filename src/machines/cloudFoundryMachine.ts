@@ -24,14 +24,9 @@ import {
     goals,
     not,
     onAnyPush,
-    ProductionDeploymentGoal,
-    ProductionEndpointGoal,
     PushImpact,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
-    StagingDeploymentGoal,
-    StagingEndpointGoal,
-    StagingVerifiedGoal,
     suggestAction,
     ToDefaultBranch,
     whenPushSatisfies,
@@ -41,6 +36,11 @@ import {
     isInLocalMode,
     IsInLocalMode,
 } from "@atomist/sdm-core";
+import { Build } from "@atomist/sdm-pack-build";
+import {
+    CloudFoundryDeploy,
+    CloudFoundryDeploymentStrategy,
+} from "@atomist/sdm-pack-cloudfoundry";
 import {
     CloudFoundrySupport,
     HasCloudFoundryManifest,
@@ -53,7 +53,6 @@ import {
     mavenBuilder,
     MavenPerBranchDeployment,
     ReplaceReadmeTitle,
-    RiffDeployment,
     RiffProjectCreationParameterDefinitions,
     RiffProjectCreationParameters,
     RiffProjectCreationTransform,
@@ -64,6 +63,12 @@ import {
     TransformSeedToCustomProject,
 } from "@atomist/sdm-pack-spring";
 import { DemoEditors } from "../pack/demo-editors/demoEditors";
+import {
+    deploymentFreeze,
+    ExplainDeploymentFreezeGoal,
+    isDeploymentFrozen,
+} from "../pack/freeze/deploymentFreeze";
+import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
 import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import {
@@ -71,17 +76,6 @@ import {
     ConsoleReviewListener,
 } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import {
-    deploymentFreeze,
-    ExplainDeploymentFreezeGoal,
-    isDeploymentFrozen,
-} from "../pack/freeze/deploymentFreeze";
-import { Build } from "@atomist/sdm-pack-build";
-import {
-    CloudFoundryDeploy,
-    CloudFoundryDeploymentStrategy,
-} from "@atomist/sdm-pack-cloudfoundry";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -143,7 +137,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const StagingDeploymentGoals = goals("StagingDeployment")
         .plan(ArtifactGoal)
         .plan(mavenDeploy).after(build);
-    
+
     const ProductionDeploymentGoals = goals("ProdDeployment")
         .plan(pcfDeploy).after(mavenDeploy);
 
@@ -152,7 +146,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",
         message: "I don't yet know how to deploy a Riff function, but you could teach me!",
-    });// new RiffDeployment();
+    });
 
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(checkGoals),
@@ -166,7 +160,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             .setGoals(StagingDeploymentGoals),
         whenPushSatisfies(HasCloudFoundryManifest, not(IsDeploymentFrozen), ToDefaultBranch, not(IsInLocalMode))
             .setGoals(ProductionDeploymentGoals),
-        whenPushSatisfies(IsRiff).setGoals(riffDeploy))
+        whenPushSatisfies(IsRiff).setGoals(riffDeploy)),
     );
 
     sdm.addGeneratorCommand<RiffProjectCreationParameters>({
@@ -231,4 +225,3 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     )
     ;
 }
-

@@ -30,7 +30,7 @@
     "@atomist/sdm-core": "^1.0.0-master.20180930200405",
     "@atomist/sdm-pack-build": "^1.0.0-master.20181001213708",
     "@atomist/sdm-pack-checkstyle": "1.0.0-master.20180916182154",
-    "@atomist/sdm-pack-cloudfoundry": "1.0.0-master.20181001200716",
+    "@atomist/sdm-pack-cloudfoundry": "1.0.0-master.20181003150738",
     "@atomist/sdm-pack-node": "https://r.atomist.com/676890220",
     "@atomist/sdm-pack-sloc": "1.0.0-master.20180924171241",
     "@atomist/sdm-pack-sonarqube": "1.0.0-master.20180916182022",
