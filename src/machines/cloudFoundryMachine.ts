@@ -76,6 +76,7 @@ import {
     ConsoleReviewListener,
 } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
+import { RegisterNewRiffRepos } from "./RiffDeployment";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -148,6 +149,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         displayName: "Riff Deploy",
         message: "I don't yet know how to deploy a Riff function, but you could teach me!",
     });
+    sdm.addFirstPushListener(RegisterNewRiffRepos);
 
     sdm.addGoalContributions(goalContributors(
         onAnyPush().setGoals(checkGoals),
