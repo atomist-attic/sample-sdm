@@ -16,18 +16,14 @@
 
 import {
     asSpawnCommand,
-    createEphemeralProgressLog,
     ExecuteGoal,
     Fulfillment,
     GoalWithFulfillment,
     IndependentOfEnvironment,
     LoggingProgressLog,
-    PredicatePushTest,
     ProjectListener,
     spawnAndWatch,
 } from "@atomist/sdm";
-import { OnFirstPushToRepo } from "@atomist/sdm-core/lib/handlers/events/repo/OnFirstPushToRepo";
-import { IsRiff } from "@atomist/sdm-pack-spring";
 
 // tslint:disable-next-line:no-empty-interface
 export interface RiffDeploymentOptions {
@@ -36,7 +32,8 @@ export interface RiffDeploymentOptions {
 }
 
 /**
- * Goal for Riff deployment
+ * Goal for Riff deployment. Relies on Kube Control pointing at a Kube cluster
+ * with Knative, and the Riff command line.
  */
 export class RiffDeployment extends GoalWithFulfillment {
 
@@ -60,11 +57,26 @@ export class RiffDeployment extends GoalWithFulfillment {
 
 }
 
+/**
+ * Execute "riff function build" in response to any push to a Riff project
+ * @param {Partial<RiffDeploymentOptions>} opts
+ * @return {ExecuteGoal}
+ */
 function executeRiffDeploy(opts: Partial<RiffDeploymentOptions>): ExecuteGoal {
-    return async gi => {
-        const projectDir = ""; // check it out
-        const riffCommand = `riff function build ${gi.id.repo} --local-path ${projectDir}`;
-        await gi.addressChannels("Do Riff deployment with fields on GoalInvocation");
+    return async goalInvocation => {
+        const { credentials, id } = goalInvocation;
+        try {
+            await goalInvocation.configuration.sdm.projectLoader.doWithProject(
+                { credentials, id, readOnly: true },
+                async project => {
+                    const riffBuildCommand = `riff function build ${goalInvocation.id.repo} --local-path ${project.baseDir}`;
+                    await spawnAndWatch(asSpawnCommand(riffBuildCommand), {}, goalInvocation.progressLog);
+                    await goalInvocation.addressChannels(`Riff deployment of ${id.url} complete`);
+                });
+        } catch (err) {
+            return { code: 1, message: err.stack };
+        }
+        await goalInvocation.addressChannels("Do Riff deployment with fields on GoalInvocation");
     };
 }
 
@@ -85,9 +97,8 @@ export const RegisterNewRiffRepos: ProjectListener = async i => {
         await i.addressChannels(`Registering Riff project at ${i.id.url}`);
         // TODO may want to use spawn
         const riffCreateCommand = `riff function create java ${i.id.repo} --local-path ${i.project.baseDir} --image dev.local/${i.id.repo}:v1`;
-            //"riff function create java --git-repo";
+        //"riff function create java --git-repo";
         process.stdout.write("My riff command is " + riffCreateCommand);
-        await spawnAndWatch(asSpawnCommand(riffCreateCommand), {
-        }, new LoggingProgressLog("riff create") )
+        await spawnAndWatch(asSpawnCommand(riffCreateCommand), {}, new LoggingProgressLog("riff create"))
     }
 };
