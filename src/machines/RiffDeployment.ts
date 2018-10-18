@@ -15,11 +15,16 @@
  */
 
 import {
-    asSpawnCommand, createEphemeralProgressLog,
+    asSpawnCommand,
+    createEphemeralProgressLog,
     ExecuteGoal,
     Fulfillment,
     GoalWithFulfillment,
-    IndependentOfEnvironment, LoggingProgressLog, PredicatePushTest, ProjectListener, spawnAndWatch,
+    IndependentOfEnvironment,
+    LoggingProgressLog,
+    PredicatePushTest,
+    ProjectListener,
+    spawnAndWatch,
 } from "@atomist/sdm";
 import { OnFirstPushToRepo } from "@atomist/sdm-core/lib/handlers/events/repo/OnFirstPushToRepo";
 import { IsRiff } from "@atomist/sdm-pack-spring";
