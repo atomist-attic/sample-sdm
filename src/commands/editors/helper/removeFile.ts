@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-import {
-    Parameters,
-} from "@atomist/automation-client";
-import {
-    CodeTransformRegistration,
-    commitToMaster,
-    Parameter,
-} from "@atomist/sdm";
+import { commitToMaster } from "@atomist/automation-client/lib/operations/edit/editModes";
+import { CodeTransformRegistration } from "@atomist/sdm";
 
-@Parameters()
-export class RemoveFileParams {
+export interface RemoveFileParams {
 
-    @Parameter()
-    public path: string;
+    path: string;
 }
 
 export const RemoveFileEditor: CodeTransformRegistration<RemoveFileParams> = {
     transform: async (p, i) => p.deleteFile(i.parameters.path),
     name: "remove file",
-    paramsMaker: RemoveFileParams,
+    parameters: {
+        path: {},
+    },
     transformPresentation: ci => commitToMaster(`You asked me to remove file ${ci.parameters.path}!`),
 };

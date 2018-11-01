@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { doWithJson } from "@atomist/automation-client";
+import {
+    doWithJson,
+    Project,
+} from "@atomist/automation-client";
 import {
     AutofixRegistration,
-    Project,
 } from "@atomist/sdm";
 import { IsNode } from "@atomist/sdm-pack-node";
 import * as _ from "lodash";

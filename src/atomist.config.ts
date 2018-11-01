@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+import { Configuration } from "@atomist/automation-client";
 import { configureDashboardNotifications } from "@atomist/automation-client-ext-dashboard";
 import { configureEventLog } from "@atomist/automation-client-ext-eventlog";
 import {
-    Configuration,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
     SoftwareDeliveryMachineOptions,
@@ -26,7 +26,6 @@ import {
     ConfigureOptions,
     configureSdm,
 } from "@atomist/sdm-core";
-import { UpdateSdmGoalState } from "./commands/UpdateSdmGoalState";
 import { cloudFoundryMachine } from "./machines/cloudFoundryMachine";
 
 /*
@@ -105,6 +104,5 @@ export const configuration: Configuration = {
         configureSdm(createMachine, Options),
     ],
     commands: [
-        () => new UpdateSdmGoalState(),
     ],
 };

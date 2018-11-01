@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import { Parameters } from "@atomist/automation-client";
+import { PullRequest } from "@atomist/automation-client/lib/operations/edit/editModes";
 import {
     appendOrCreateFileContent,
     CodeTransformOrTransforms,
     CodeTransformRegistration,
     copyFileFromUrl,
-    Parameter,
-    PullRequest,
 } from "@atomist/sdm";
 import {
     addDependencyTransform,
@@ -54,11 +52,9 @@ const AddSentryTransform: CodeTransformOrTransforms<AddSentryParams> = [
     },
 ];
 
-@Parameters()
-export class AddSentryParams {
+export interface AddSentryParams {
 
-    @Parameter()
-    public dsn: string;
+    dsn: string;
 }
 
 /**
@@ -68,7 +64,9 @@ export class AddSentryParams {
 export const AddSentry: CodeTransformRegistration<AddSentryParams> = {
     transform: AddSentryTransform,
     name: "AddSentry",
-    paramsMaker: AddSentryParams,
+    parameters: {
+        dsn: {},
+    },
     transformPresentation: () => new PullRequest(
         `add-sentry-${new Date().getTime()}`,
         "Add Sentry support",

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { asSpawnCommand } from "@atomist/automation-client";
 import {
     ArtifactListenerRegistration,
-    asSpawnCommand,
     LoggingProgressLog,
     spawnAndWatch,
     ToDefaultBranch,

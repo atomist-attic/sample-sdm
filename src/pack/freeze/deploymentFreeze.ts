@@ -18,20 +18,21 @@ import { logger } from "@atomist/automation-client";
 import {
     allOf,
     CommandHandlerRegistration,
-    executeSendMessageToSlack,
     ExtensionPack,
-    MessageGoal,
     metadata,
     PushListenerInvocation,
     PushTest,
+    suggestAction,
 } from "@atomist/sdm";
 
 /**
  * Goal to explain a deployment freeze to the user.
  * Available after adding deploymentFreeze capability.
- * @type {MessageGoal}
  */
-export const ExplainDeploymentFreezeGoal = new MessageGoal("deploymentFreeze");
+export const ExplainDeploymentFreezeGoal = suggestAction({
+    displayName: "deploymentFreeze",
+    message: "Deployment is frozen :no_entry:",
+});
 
 /**
  * Implemented by objects that know how to persist deployment freeze status.
@@ -56,9 +57,6 @@ export function deploymentFreeze(dsm: DeploymentStatusManager): ExtensionPack {
             sdm.addCommand(
                 freezeCommand(dsm))
                 .addCommand(unfreezeCommand(dsm));
-            sdm.addGoalImplementation("ExplainDeploymentFreezeGoal",
-                ExplainDeploymentFreezeGoal,
-                executeSendMessageToSlack("*Attention*: Not deploying as deployment is currently frozen :no_entry:"));
         },
     };
 }

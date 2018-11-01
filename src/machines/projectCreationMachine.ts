@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import { GitHubRepoRef } from "@atomist/automation-client";
 import {
-    GitHubRepoRef,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
 } from "@atomist/sdm";
@@ -64,7 +64,7 @@ export function projectCreationMachine(
             intent: "create node",
             transform: [
                 UpdatePackageJsonIdentification,
-                UpdateReadmeTitle
+                UpdateReadmeTitle,
             ],
         })
         .addGeneratorCommand({

@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-import { Parameters } from "@atomist/automation-client";
+import {
+    Parameter,
+    Parameters,
+} from "@atomist/automation-client";
+import { doWithFiles } from "@atomist/automation-client/lib/project/util/projectUtils";
 import {
     CodeTransform,
     CodeTransformRegistration,
-    doWithFiles,
-    Parameter,
 } from "@atomist/sdm";
 import { RequestedCommitParameters } from "../../commands/editors/support/RequestedCommitParameters";
 

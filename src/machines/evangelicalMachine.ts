@@ -15,77 +15,60 @@
  */
 
 import {
-    executeSendMessageToSlack,
-    MessageGoal,
-    not,
     SoftwareDeliveryMachine,
     SoftwareDeliveryMachineConfiguration,
+    suggestAction,
     ToDefaultBranch,
     whenPushSatisfies,
 } from "@atomist/sdm";
-import {
-    createSoftwareDeliveryMachine,
-    DisableDeploy,
-    DisplayDeployEnablement,
-    EnableDeploy,
-    tagRepo,
-} from "@atomist/sdm-core";
-import { AddCloudFoundryManifest } from "@atomist/sdm-pack-cloudfoundry/lib/handlers/addCloudFoundryManifest";
-import { enableDeployOnCloudFoundryManifestAddition } from "@atomist/sdm-pack-cloudfoundry/lib/listeners/enableDeployOnCloudFoundryManifestAddition";
-import {
-    SuggestAddingCloudFoundryManifest,
-    suggestAddingCloudFoundryManifestOnNewRepo,
-} from "@atomist/sdm-pack-cloudfoundry/lib/listeners/suggestAddingCloudFoundryManifest";
+import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
 import {
     HasSpringBootApplicationClass,
     IsMaven,
-    MaterialChangeToJavaRepo,
-    springBootTagger,
 } from "@atomist/sdm-pack-spring";
-import { DemoEditors } from "../pack/demo-editors/demoEditors";
-
-export const ImmaterialChangeToJava = new MessageGoal("immaterialChangeToJava");
-export const EnableSpringBoot = new MessageGoal("enableSpringBoot");
 
 /**
  * Assemble a machine that suggests the potential to use more SDM features
  */
 export function evangelicalMachine(
-                                   configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
+    configuration: SoftwareDeliveryMachineConfiguration): SoftwareDeliveryMachine {
     const sdm = createSoftwareDeliveryMachine(
-        {name: "Helpful software delivery machine. You need to be saved.", configuration},
-        whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
-            .itMeans("No material change to Java")
-            .setGoals(ImmaterialChangeToJava),
+        { name: "Helpful software delivery machine. You need to be saved.", configuration },
+        // whenPushSatisfies(IsMaven, HasSpringBootApplicationClass, not(MaterialChangeToJavaRepo))
+        //     .itMeans("No material change to Java")
+        //     .setNoMoreGoals(),
         whenPushSatisfies(ToDefaultBranch, IsMaven, HasSpringBootApplicationClass)
             .itMeans("Spring Boot service to deploy")
-            .setGoals(EnableSpringBoot),
+            .setGoals(suggestAction({
+                displayName: "addSpring",
+                message: "This is a Spring project. I can help with that",
+            })),
     );
 
     // TODO check if we've sent the message before.
     // Could do in a PushTest
-    sdm.addGoalImplementation("ImmaterialChangeToJava",
-        ImmaterialChangeToJava,
-        executeSendMessageToSlack("Looks like you didn't change Java in a material way. " +
-            "Atomist could prevent you needing to build! :atomist_build_started:"))
-        .addGoalImplementation("EnableSpringBoot",
-            EnableSpringBoot,
-            executeSendMessageToSlack("Congratulations. You're using Spring Boot. It's cool :sunglasses: and so is Atomist. " +
-                "Atomist knows lots about Spring Boot and would love to help"))
-        .addChannelLinkListener(SuggestAddingCloudFoundryManifest)
-        .addNewRepoWithCodeAction(suggestAddingCloudFoundryManifestOnNewRepo(sdm.configuration.sdm.projectLoader))
-        .addNewRepoWithCodeAction(
-            // TODO suggest creating projects with generator
-            tagRepo(springBootTagger),
-        )
-        .addCodeTransformCommand(AddCloudFoundryManifest)
-        .addCommand(EnableDeploy)
-        .addCommand(DisableDeploy)
-        .addCommand(DisplayDeployEnablement)
-        .addExtensionPacks(
-            DemoEditors,
-        )
-        .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm));
+    // sdm.addGoalImplementation("ImmaterialChangeToJava",
+    //     ImmaterialChangeToJava,
+    //     executeSendMessageToSlack("Looks like you didn't change Java in a material way. " +
+    //         "Atomist could prevent you needing to build! :atomist_build_started:"))
+    //     .addGoalImplementation("EnableSpringBoot",
+    //         EnableSpringBoot,
+    //         executeSendMessageToSlack("Congratulations. You're using Spring Boot. It's cool :sunglasses: and so is Atomist. " +
+    //             "Atomist knows lots about Spring Boot and would love to help"))
+    //     .addChannelLinkListener(SuggestAddingCloudFoundryManifest)
+    //     .addNewRepoWithCodeAction(suggestAddingCloudFoundryManifestOnNewRepo(sdm.configuration.sdm.projectLoader))
+    //     .addNewRepoWithCodeAction(
+    //         // TODO suggest creating projects with generator
+    //         tagRepo(springBootTagger),
+    //     )
+    //     .addCodeTransformCommand(AddCloudFoundryManifest)
+    //     .addCommand(EnableDeploy)
+    //     .addCommand(DisableDeploy)
+    //     .addCommand(DisplayDeployEnablement)
+    //     .addExtensionPacks(
+    //         DemoEditors,
+    //     )
+    //     .addPushReaction(enableDeployOnCloudFoundryManifestAddition(sdm));
 
     // addTeamPolicies(sdm);
     return sdm;

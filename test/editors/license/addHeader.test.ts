@@ -15,7 +15,9 @@
  */
 
 import {
+    GitHubRepoRef,
     InMemoryProject,
+    NodeFsLocalProject,
     SimpleRepoId,
 } from "@atomist/automation-client";
 
@@ -28,8 +30,6 @@ import {
 
 import {
     fakeCommandListenerInvocation,
-    GitHubRepoRef,
-    NodeFsLocalProject,
 } from "@atomist/sdm";
 import * as fs from "fs";
 import * as tmp from "tmp-promise";

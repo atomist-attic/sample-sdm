@@ -16,9 +16,12 @@
 
 import {
     CodeTransformRegistration,
-    commitToMaster,
-    Project,
 } from "@atomist/sdm";
+
+import {
+    Project,
+} from "@atomist/automation-client";
+import { commitToMaster } from "@atomist/automation-client/lib/operations/edit/editModes";
 
 export const BadTypeScriptFileName = "src/Bad.ts";
 export const BadJavaScriptFileName = "src/Bad.js";

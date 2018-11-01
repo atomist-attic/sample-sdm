@@ -15,15 +15,11 @@
  */
 
 import { logger } from "@atomist/automation-client";
-import {
-    slackReviewListener,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
-import { codeMetrics } from "@atomist/sdm-pack-sloc";
-import { SonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
+import { SoftwareDeliveryMachine } from "@atomist/sdm";
 import { buildAwareCodeTransforms } from "@atomist/sdm-pack-build";
+import { codeMetrics } from "@atomist/sdm-pack-sloc";
+import { sonarQubeSupport } from "@atomist/sdm-pack-sonarqube";
 import { AddApacheLicenseHeaderTransform } from "../commands/editors/license/addHeader";
-import { PostToDeploymentsChannel } from "../listener/deployment/postToDeploymentsChannel";
 import { capitalizer } from "../listener/issue/capitalizer";
 import { requestDescription } from "../listener/issue/requestDescription";
 import { thankYouYouRock } from "../listener/issue/thankYouYouRock";
@@ -40,27 +36,25 @@ export function addTeamPolicies(sdm: SoftwareDeliveryMachine) {
         .addClosedIssueListener(thankYouYouRock)
         // .addGoalsSetListener(GraphGoals)
         // .addArtifactListeners(OWASPDependencyCheck)
-        .addReviewListenerRegistration({
-            name: "slack",
-            listener: slackReviewListener(),
-        })
         .addCodeTransformCommand(AddApacheLicenseHeaderTransform)
         .addFirstPushListener(PublishNewRepo)
         // .addCodeReactions(NoPushToDefaultBranchWithoutPullRequest)
-        .addDeploymentListener(PostToDeploymentsChannel)
         .addUserJoiningChannelListener(je =>
             je.addressChannels(`Welcome, ${je.joinEvent.user.screenName}`));
     // .addFingerprintDifferenceListeners(diff1)
     sdm.addExtensionPacks(
-        buildAwareCodeTransforms(),
+        // TODO restore build aware transforms
+       // buildAwareCodeTransforms({ buildGoal}),
         codeMetrics(),
     );
 
-    if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
-        sdm.addExtensionPacks(SonarQubeSupport);
-    } else {
-        logger.info("SonarQube integration not enabled");
-    }
+    // if (sdm.configuration.sdm.sonar && sdm.configuration.sdm.sonar.enabled) {
+    //     sdm.addExtensionPacks(sonarQubeSupport({
+    //         enabled: false,
+    //     }));
+    // } else {
+    //     logger.info("SonarQube integration not enabled");
+    // }
 
     sdm.addExtensionPacks(codeMetrics());
     // summarizeGoalsInGitHubStatus(sdm);
