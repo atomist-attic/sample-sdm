@@ -20,7 +20,10 @@ import {
     Parameter,
     validationPatterns,
 } from "@atomist/automation-client";
-import { BranchCommit, PullRequest } from "@atomist/automation-client/lib/operations/edit/editModes";
+import {
+    BranchCommit,
+    PullRequest,
+} from "@atomist/automation-client/lib/operations/edit/editModes";
 
 /**
  * Allow user to specify a branch (with default master).

@@ -21,7 +21,8 @@ import {
     ExtensionPack,
     metadata,
     PushListenerInvocation,
-    PushTest, suggestAction,
+    PushTest,
+    suggestAction,
 } from "@atomist/sdm";
 
 /**

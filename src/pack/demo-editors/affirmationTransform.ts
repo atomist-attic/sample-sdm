@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { Parameter, Parameters } from "@atomist/automation-client";
+import {
+    Parameter,
+    Parameters,
+} from "@atomist/automation-client";
 import { doWithFiles } from "@atomist/automation-client/lib/project/util/projectUtils";
 import {
     CodeTransform,

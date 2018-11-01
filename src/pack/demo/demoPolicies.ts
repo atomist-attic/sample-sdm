@@ -20,7 +20,8 @@ import {
     ExtensionPack,
     hasFile,
     metadata,
-    not, PushImpact,
+    not,
+    PushImpact,
 } from "@atomist/sdm";
 import { updateIssue } from "@atomist/sdm-core/lib/util/github/ghub";
 import axios from "axios";

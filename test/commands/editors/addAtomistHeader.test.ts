@@ -22,7 +22,12 @@ import {
 
 import * as assert from "power-assert";
 
-import { GitCommandGitProject, GitHubRepoRef, InMemoryProjectFile, RemoteRepoRef } from "@atomist/automation-client";
+import {
+    GitCommandGitProject,
+    GitHubRepoRef,
+    InMemoryProjectFile,
+    RemoteRepoRef,
+} from "@atomist/automation-client";
 import { AddAtomistTypeScriptHeader } from "../../../src/autofix/addAtomistHeader";
 import { ApacheHeader } from "../../../src/commands/editors/license/addHeader";
 

@@ -21,7 +21,10 @@ import {
     CodeTransformRegistration,
     copyFileFromUrl,
 } from "@atomist/sdm";
-import { addDependencyTransform, VersionedArtifact } from "@atomist/sdm-pack-spring";
+import {
+    addDependencyTransform,
+    VersionedArtifact,
+} from "@atomist/sdm-pack-spring";
 
 const SentryDependency: VersionedArtifact = {
     group: "io.sentry",

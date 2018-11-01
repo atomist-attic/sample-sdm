@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { doWithJson, Project } from "@atomist/automation-client";
+import {
+    doWithJson,
+    Project,
+} from "@atomist/automation-client";
 import {
     AutofixRegistration,
 } from "@atomist/sdm";

@@ -35,7 +35,10 @@ import {
     isInLocalMode,
     IsInLocalMode,
 } from "@atomist/sdm-core";
-import { Artifact, Build } from "@atomist/sdm-pack-build";
+import {
+    Artifact,
+    Build,
+} from "@atomist/sdm-pack-build";
 import {
     HasCloudFoundryManifest,
 } from "@atomist/sdm-pack-cloudfoundry";

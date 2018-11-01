@@ -22,7 +22,10 @@ import {
     whenPushSatisfies,
 } from "@atomist/sdm";
 import { createSoftwareDeliveryMachine } from "@atomist/sdm-core";
-import { HasSpringBootApplicationClass, IsMaven } from "@atomist/sdm-pack-spring";
+import {
+    HasSpringBootApplicationClass,
+    IsMaven,
+} from "@atomist/sdm-pack-spring";
 
 /**
  * Assemble a machine that suggests the potential to use more SDM features

@@ -16,8 +16,12 @@
 
 import {
     GitProject,
-    logger, MessageClient, Parameter,
-    Parameters, Project, ProjectFile,
+    logger,
+    MessageClient,
+    Parameter,
+    Parameters,
+    Project,
+    ProjectFile,
 } from "@atomist/automation-client";
 import { doWithFiles } from "@atomist/automation-client/lib/project/util/projectUtils";
 import {

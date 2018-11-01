@@ -16,7 +16,8 @@
 
 import {
     GitHubRepoRef,
-    InMemoryProject, NodeFsLocalProject,
+    InMemoryProject,
+    NodeFsLocalProject,
     SimpleRepoId,
 } from "@atomist/automation-client";
 
