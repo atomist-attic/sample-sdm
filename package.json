@@ -89,7 +89,7 @@
     "lint": "npm-run-all lint:ts lint:gql",
     "lint:ts": "tslint --format verbose --project . --exclude \"{build,node_modules}/**\" \"**/*.ts\"",
     "lint:gql": "prettier --list-different \"src/graphql/**/*.graphql\"",
-    "lint:fix": "npm-run-all lint:ts:fix fmt:gql",
+    "lint:fix": "npm-run-all lint:ts:fix",
     "lint:ts:fix": "npm run lint:ts -- --fix",
     "start": "atm-start",
     "test": "mocha --exit --require espower-typescript/guess \"test/**/*.ts\"",

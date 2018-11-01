@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+import { ProjectFile } from "@atomist/automation-client";
+import { gatherFromFiles } from "@atomist/automation-client/lib/project/util/projectUtils";
 import {
-    ProjectFile,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import * as _ from "lodash";
-import { saveFromFilesAsync } from "@atomist/automation-client";
 
 interface FileAndLineCount {
     file: ProjectFile;
@@ -49,7 +49,7 @@ export function findNoise(sdm: SoftwareDeliveryMachine) {
         intent: "find yaml",
         inspection: async (p, ci) => {
             const fileAndLineCount: FileAndLineCount[] =
-                await saveFromFilesAsync(p, ["**/*.yml", "**/*.yaml"], async file => (
+                await gatherFromFiles(p, ["**/*.yml", "**/*.yaml"], async file => (
                     {
                         file,
                         lines: (await file.getContent()).split("\n").length,
@@ -65,7 +65,7 @@ export function findNoise(sdm: SoftwareDeliveryMachine) {
         projectTest: async p => !!(await p.getFile(".travis.yml")),
         inspection: async (p, ci) => {
             const fileAndLineCount: FileAndLineCount[] =
-                await saveFromFilesAsync(p, ["**/*", "**/.*"],
+                await gatherFromFiles(p, ["**/*", "**/.*"],
                     async file => ({ file, lines: await countLines(file) }));
             const noiseLines = _.sum(fileAndLineCount.filter(isCiFile).map(pl => pl.lines));
             const usefulLines = _.sum(fileAndLineCount.filter(actuallyDoesSomething).map(pl => pl.lines));

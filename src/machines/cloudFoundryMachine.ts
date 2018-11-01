@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
+import { GitHubRepoRef } from "@atomist/automation-client";
 import {
     AnyPush,
-    ArtifactGoal,
     AutoCodeInspection,
     Autofix,
-    GitHubRepoRef,
     goalContributors,
     goals,
     not,
@@ -36,16 +35,15 @@ import {
     isInLocalMode,
     IsInLocalMode,
 } from "@atomist/sdm-core";
-import { Build } from "@atomist/sdm-pack-build";
+import { Artifact, Build } from "@atomist/sdm-pack-build";
+import {
+    HasCloudFoundryManifest,
+} from "@atomist/sdm-pack-cloudfoundry";
 import {
     CloudFoundryDeploy,
     CloudFoundryDeploymentStrategy,
 } from "@atomist/sdm-pack-cloudfoundry";
-import {
-    CloudFoundrySupport,
-    HasCloudFoundryManifest,
-} from "@atomist/sdm-pack-cloudfoundry";
-import { NodeSupport } from "@atomist/sdm-pack-node";
+import { nodeSupport } from "@atomist/sdm-pack-node";
 import {
     HasSpringBootPom,
     IsMaven,
@@ -69,7 +67,6 @@ import {
     isDeploymentFrozen,
 } from "../pack/freeze/deploymentFreeze";
 import { InMemoryDeploymentStatusManager } from "../pack/freeze/InMemoryDeploymentStatusManager";
-import { JavaSupport } from "../pack/java/javaSupport";
 import { SentrySupport } from "../pack/sentry/sentrySupport";
 import {
     configureForLocal,
@@ -116,6 +113,7 @@ export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfig
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     const autofixGoal = new Autofix();
     const pushReactionGoal = new PushImpact();
+    const artifactGoal = new Artifact();
     const codeInspectionGoal = new AutoCodeInspection();
     const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
     const mavenDeploy = new MavenPerBranchDeployment();
@@ -136,13 +134,13 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .plan(mavenDeploy).after(buildGoals);
 
     const StagingDeploymentGoals = goals("StagingDeployment")
-        .plan(ArtifactGoal).after(checkGoals)
+        .plan(artifactGoal).after(checkGoals)
         .plan(mavenDeploy).after(buildGoals);
 
     const ProductionDeploymentGoals = goals("ProdDeployment")
         .plan(pcfDeploy).after(StagingDeploymentGoals);
 
-    sdm.addGoalSideEffect(ArtifactGoal, "other", AnyPush);
+    // sdm.addGoalSideEffect(ArtifactGoal, "other", AnyPush);
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",
@@ -220,9 +218,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             ],
         }),
         SentrySupport,
-        JavaSupport,
-        NodeSupport,
-        CloudFoundrySupport,
-    )
-    ;
+        nodeSupport({
+            review: {
+                typescriptErrors: false,
+            },
+            autofix: {
+                typescriptErrors: false,
+            },
+        }),
+       // cloudFoundrySupport({}),
+    );
 }

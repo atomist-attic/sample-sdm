@@ -15,18 +15,14 @@
  */
 
 import {
-    logger,
-    Parameters,
+    GitProject,
+    logger, MessageClient, Parameter,
+    Parameters, Project, ProjectFile,
 } from "@atomist/automation-client";
+import { doWithFiles } from "@atomist/automation-client/lib/project/util/projectUtils";
 import {
     CodeTransformRegistration,
-    doWithFiles,
-    GitProject,
-    MessageClient,
-    Parameter,
     ParametersInvocation,
-    Project,
-    ProjectFile,
 } from "@atomist/sdm";
 import * as minimatch from "minimatch";
 import { CFamilyLanguageSourceFiles } from "../GlobPatterns";
@@ -119,7 +115,6 @@ export const AddApacheLicenseHeaderTransform: CodeTransformRegistration<AddHeade
     paramsMaker: AddHeaderParameters,
     transformPresentation: ci => ci.parameters.editMode,
 };
-
 
 
 function reportAboutDifferentHeaders(messageClient: MessageClient, offendingFiles: ProjectFile[]) {

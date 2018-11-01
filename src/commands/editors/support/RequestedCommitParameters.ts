@@ -16,12 +16,11 @@
 
 import { Parameters } from "@atomist/automation-client";
 import {
-    BranchCommit,
     EditMode,
     Parameter,
-    PullRequest,
     validationPatterns,
-} from "@atomist/sdm";
+} from "@atomist/automation-client";
+import { BranchCommit, PullRequest } from "@atomist/automation-client/lib/operations/edit/editModes";
 
 /**
  * Allow user to specify a branch (with default master).
