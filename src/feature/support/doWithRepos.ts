@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-import { logger, RemoteRepoRef } from "@atomist/automation-client";
-import { SdmContext, SoftwareDeliveryMachine } from "@atomist/sdm";
+import {
+    logger,
+    RemoteRepoRef,
+} from "@atomist/automation-client";
+import {
+    SdmContext,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { WithLoadedProject } from "@atomist/sdm/lib/spi/project/ProjectLoader";
 
 /**

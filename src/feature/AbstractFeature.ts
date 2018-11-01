@@ -31,7 +31,10 @@ import {
     ReviewerRegistration,
 } from "@atomist/sdm";
 import { ProjectPredicate } from "@atomist/sdm/lib/api/mapping/PushTest";
-import { FingerprintData, logger } from "@atomist/automation-client";
+import {
+    FingerprintData,
+    logger,
+} from "@atomist/automation-client";
 
 export interface Comparison<S extends FingerprintData> {
     policy: ComparisonPolicy;

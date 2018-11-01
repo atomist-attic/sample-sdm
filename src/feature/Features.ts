@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { ComparisonPolicy, Feature, } from "./Feature";
+import {
+    ComparisonPolicy,
+    Feature,
+} from "./Feature";
 import {
     CodeInspectionRegistration,
     ExtensionPack,
@@ -22,11 +25,20 @@ import {
     PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { FingerprintData, logger, } from "@atomist/automation-client";
+import {
+    FingerprintData,
+    logger,
+} from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
-import { ExtensionPackCreator, WellKnownGoals, } from "./ExtensionPackCreator";
+import {
+    ExtensionPackCreator,
+    WellKnownGoals,
+} from "./ExtensionPackCreator";
 import { Store } from "./Store";
-import { FeatureUpdateInvocation, FeatureUpdateListener } from "./FeatureUpdateListener";
+import {
+    FeatureUpdateInvocation,
+    FeatureUpdateListener,
+} from "./FeatureUpdateListener";
 import { OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout";
 
 /**

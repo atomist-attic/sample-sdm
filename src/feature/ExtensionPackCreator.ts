@@ -15,7 +15,9 @@
  */
 
 import {
-    AutoCodeInspection, Autofix, ExtensionPack,
+    AutoCodeInspection,
+    Autofix,
+    ExtensionPack,
     Fingerprint as FingerprintGoal,
     PushImpact,
     SoftwareDeliveryMachine,

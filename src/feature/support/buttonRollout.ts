@@ -14,12 +14,26 @@
  * limitations under the License.
  */
 
-import { SdmContext, SoftwareDeliveryMachine } from "@atomist/sdm";
-import { Attachment, SlackMessage } from "@atomist/slack-messages";
+import {
+    SdmContext,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
+import {
+    Attachment,
+    SlackMessage,
+} from "@atomist/slack-messages";
 import { doWithRepos } from "./doWithRepos";
-import { buttonForCommand, FingerprintData, logger, RepoRef } from "@atomist/automation-client";
+import {
+    buttonForCommand,
+    FingerprintData,
+    logger,
+    RepoRef,
+} from "@atomist/automation-client";
 import { FeatureUpdateListener } from "../FeatureUpdateListener";
-import { ComparisonPolicy, Feature } from "../Feature";
+import {
+    ComparisonPolicy,
+    Feature,
+} from "../Feature";
 
 /**
  * Put a button on each project to add the feature

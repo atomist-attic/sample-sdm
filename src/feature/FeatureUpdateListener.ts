@@ -17,7 +17,10 @@
 import { FingerprintData } from "@atomist/automation-client";
 import { Store } from "./Store";
 import { FeatureStore } from "./FeatureStore";
-import { RepoListenerInvocation, SdmListener } from "@atomist/sdm";
+import {
+    RepoListenerInvocation,
+    SdmListener,
+} from "@atomist/sdm";
 import { Feature } from "./Feature";
 
 /**

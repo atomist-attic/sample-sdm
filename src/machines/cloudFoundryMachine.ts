@@ -18,7 +18,8 @@ import { GitHubRepoRef } from "@atomist/automation-client";
 import {
     AnyPush,
     AutoCodeInspection,
-    Autofix, Fingerprint,
+    Autofix,
+    Fingerprint,
     goalContributors,
     goals,
     not,
@@ -79,7 +80,10 @@ import { addTeamPolicies } from "./teamPolicies";
 import { Features } from "../feature/Features";
 import { InMemoryStore } from "../feature/support/InMemoryStore";
 import { StoreFeatureStore } from "../feature/support/StoreFeatureStore";
-import { SpringBootVersionFeature, SpringBootVersionFingerprint } from "./SpringBootVersionFeature";
+import {
+    SpringBootVersionFeature,
+    SpringBootVersionFingerprint,
+} from "./SpringBootVersionFeature";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
