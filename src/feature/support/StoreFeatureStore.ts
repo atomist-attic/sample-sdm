@@ -17,29 +17,39 @@
 import { FeatureStore } from "../FeatureStore";
 import { FingerprintData } from "@atomist/automation-client";
 import { RemoteRepoRef } from "@atomist/automation-client";
+import { Store } from "../Store";
 
-/**
- * FeatureStore in memory
- */
-export class InMemoryFeatureStore implements FeatureStore {
+export class StoreFeatureStore implements FeatureStore {
 
-    private ideals: { [name: string]: FingerprintData } = {};
+    public static create(store: Store, ...ideals: FingerprintData[]): FeatureStore {
+        const fs = new StoreFeatureStore(store);
+        for (const ideal of ideals) {
+            fs.setIdeal(ideal);
+        }
+        return fs;
+    }
 
     public async ideal(name: string): Promise<FingerprintData | undefined> {
-        return this.ideals[name];
+        const found = await this.internalStore.load(toIdealKey(name));
+        return found;
     }
 
     public async setIdeal(f: FingerprintData): Promise<any> {
-        this.ideals[f.name] = f;
+        return this.internalStore.save(f, toIdealKey(f.name));
     }
 
     public async store(id: RemoteRepoRef, f: FingerprintData): Promise<any> {
-        throw new Error();
+        return this.internalStore.save(f, toKey(id));
     }
 
-    constructor(...ideals: FingerprintData[]) {
-        for (const ideal of ideals) {
-            this.ideals[ideal.name] = ideal;
-        }
-    }
+    private constructor(private readonly internalStore: Store) {}
+
+}
+
+function toKey(rr: RemoteRepoRef): string {
+    return rr.url;
+}
+
+function toIdealKey(name: string): string {
+    return `ideal_${name}`;
 }

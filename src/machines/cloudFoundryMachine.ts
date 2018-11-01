@@ -18,7 +18,7 @@ import { GitHubRepoRef } from "@atomist/automation-client";
 import {
     AnyPush,
     AutoCodeInspection,
-    Autofix,
+    Autofix, Fingerprint,
     goalContributors,
     goals,
     not,
@@ -76,6 +76,10 @@ import {
     ConsoleReviewListener,
 } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
+import { Features } from "../feature/support/Features";
+import { InMemoryStore } from "../feature/support/InMemoryStore";
+import { StoreFeatureStore } from "../feature/support/StoreFeatureStore";
+import { SpringBootVersionFeature, SpringBootVersionFingerprint } from "./SpringBootVersionFeature";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -115,22 +119,23 @@ export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfig
 
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     const autofixGoal = new Autofix();
-    const pushReactionGoal = new PushImpact();
+    const pushImpactGoal = new PushImpact();
     const artifactGoal = new Artifact();
+    const fingerprintGoal = new Fingerprint();
     const codeInspectionGoal = new AutoCodeInspection();
     const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
     const mavenDeploy = new MavenPerBranchDeployment();
     const pcfDeploy = new CloudFoundryDeploy({
-            uniqueName: "production-deployment",
-            environment: "production",
-            approval: false,
-            preApproval: true,
-            retry: true,
-        })
+        uniqueName: "production-deployment",
+        environment: "production",
+        approval: false,
+        preApproval: true,
+        retry: true,
+    })
         .with({ environment: "production", strategy: CloudFoundryDeploymentStrategy.BLUE_GREEN });
 
     const checkGoals = goals("Checks")
-        .plan(codeInspectionGoal, pushReactionGoal, autofixGoal);
+        .plan(fingerprintGoal, codeInspectionGoal, pushImpactGoal, autofixGoal);
     const buildGoals = goals("Build")
         .plan(build).after(autofixGoal);
     const localDeploymentGoals = goals("local-deploy")
@@ -143,7 +148,14 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const ProductionDeploymentGoals = goals("ProdDeployment")
         .plan(pcfDeploy).after(StagingDeploymentGoals);
 
-    // sdm.addGoalSideEffect(ArtifactGoal, "other", AnyPush);
+    const store = new InMemoryStore();
+    const featureStore = StoreFeatureStore.create(store,
+        new SpringBootVersionFingerprint("2.1.0")
+    );
+    const features = new Features(store, featureStore,
+        new SpringBootVersionFeature()
+    );
+    features.enable(sdm, { codeInspectionGoal, pushImpactGoal, fingerprintGoal });
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",
@@ -229,6 +241,6 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
                 typescriptErrors: false,
             },
         }),
-       // cloudFoundrySupport({}),
+        // cloudFoundrySupport({}),
     );
 }
