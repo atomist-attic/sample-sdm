@@ -16,7 +16,7 @@
 
 import { ComparisonPolicy, Feature, } from "../Feature";
 import {
-    CodeInspectionRegistration,
+    CodeInspectionRegistration, ExtensionPack, metadata,
     PushImpactListenerRegistration,
     RepoListenerInvocation,
     SdmContext,
@@ -26,28 +26,35 @@ import {
 import { buttonForCommand, FingerprintData, logger, RepoRef, } from "@atomist/automation-client";
 import { FeatureStore } from "../FeatureStore";
 import { Attachment, SlackMessage, } from "@atomist/slack-messages";
-import { Enabler, GoalsToCustomize, } from "../Enabler";
+import { ExtensionPackCreator, WellKnownGoals, } from "../ExtensionPackCreator";
 import { Store } from "../Store";
 import { doWithRepos } from "./doWithRepos";
 
 /**
- * Integrate a number of features with an SDM
+ * Integrate a number of features with an SDM. Exposes commands to list features,
+ * as well as to react to pushes to cascade.
  */
-export class Features implements Enabler {
+export class Features implements ExtensionPackCreator {
 
     private readonly features: Feature[];
 
     private readonly featureUpdateListeners: FeatureUpdateListener[] = [];
 
     /**
-     * Enable these features on the given SDM
+     * Create an extension pack
      */
-    public enable(sdm: SoftwareDeliveryMachine, goals: GoalsToCustomize = {}): void {
-        sdm.addCodeInspectionCommand(this.listFeaturesCommand());
-        logger.info("Enabling %d features with goals: %j", this.features.length, goals);
-        this.features
-            .filter(f => !!f.apply)
-            .forEach(f => this.enableFeature(sdm, f, goals));
+    public createExtensionPack(goals: WellKnownGoals = {}): ExtensionPack {
+        return {
+            ...metadata(),
+            vendor: "atomist",
+            configure: sdm => {
+                sdm.addCodeInspectionCommand(this.listFeaturesCommand());
+                logger.info("Enabling %d features with goals: %j", this.features.length, goals);
+                this.features
+                    .filter(f => !!f.apply)
+                    .forEach(f => this.enableFeature(sdm, f, goals));
+            },
+        };
     }
 
     private listFeaturesCommand(): CodeInspectionRegistration<FingerprintData[]> {
@@ -77,11 +84,11 @@ export class Features implements Enabler {
      * Enable this feature on the SDM and well-known goals
      * @param {SoftwareDeliveryMachine} sdm
      * @param {Feature} f
-     * @param {GoalsToCustomize} goals
+     * @param {WellKnownGoals} goals
      */
     private enableFeature(sdm: SoftwareDeliveryMachine,
                           f: Feature,
-                          goals: GoalsToCustomize) {
+                          goals: WellKnownGoals) {
         const transformName = `tr-${f.name.replace(" ", "_")}`;
         const rolloutCommandName = `rollout-${f.name.replace(" ", "_")}`;
 
@@ -108,9 +115,9 @@ export class Features implements Enabler {
                 return rolloutQualityOrderedFeatureToDownstreamProjects(f, ideal, transformName, sdm, ci);
             }
         });
-        if (!!goals.codeInspectionGoal) {
+        if (!!goals.inspectGoal) {
             logger.info("Registering inspection goal");
-            goals.codeInspectionGoal.with(f.inspection);
+            goals.inspectGoal.with(f.inspection);
         }
         if (!!goals.pushImpactGoal) {
             logger.info("Registering push impact goal");

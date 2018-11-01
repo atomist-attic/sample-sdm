@@ -122,7 +122,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const pushImpactGoal = new PushImpact();
     const artifactGoal = new Artifact();
     const fingerprintGoal = new Fingerprint();
-    const codeInspectionGoal = new AutoCodeInspection();
+    const inspectGoal = new AutoCodeInspection();
     const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
     const mavenDeploy = new MavenPerBranchDeployment();
     const pcfDeploy = new CloudFoundryDeploy({
@@ -135,7 +135,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .with({ environment: "production", strategy: CloudFoundryDeploymentStrategy.BLUE_GREEN });
 
     const checkGoals = goals("Checks")
-        .plan(fingerprintGoal, codeInspectionGoal, pushImpactGoal, autofixGoal);
+        .plan(fingerprintGoal, inspectGoal, pushImpactGoal, autofixGoal);
     const buildGoals = goals("Build")
         .plan(build).after(autofixGoal);
     const localDeploymentGoals = goals("local-deploy")
@@ -155,7 +155,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
     const features = new Features(store, featureStore,
         new SpringBootVersionFeature()
     );
-    features.enable(sdm, { codeInspectionGoal, pushImpactGoal, fingerprintGoal });
+    sdm.addExtensionPacks(features.createExtensionPack({ inspectGoal, pushImpactGoal, fingerprintGoal }));
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",
@@ -223,7 +223,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
             autofix: {
                 springStyle: true,
             },
-            inspectGoal: codeInspectionGoal,
+            inspectGoal,
             autofixGoal,
             reviewListeners: isInLocalMode() ? [
                 ConsoleReviewListener,
