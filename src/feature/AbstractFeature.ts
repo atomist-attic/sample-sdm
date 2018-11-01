@@ -19,8 +19,8 @@ import {
     Feature,
     ProjectFingerprinter,
     Rater,
-} from "../Feature";
-import { RatingScale } from "../RatingScale";
+} from "./Feature";
+import { RatingScale } from "./RatingScale";
 import {
     CodeInspectionRegistration,
     CodeTransform,
@@ -31,7 +31,7 @@ import {
     ReviewerRegistration,
 } from "@atomist/sdm";
 import { ProjectPredicate } from "@atomist/sdm/lib/api/mapping/PushTest";
-import { FingerprintData } from "@atomist/automation-client";
+import { FingerprintData, logger } from "@atomist/automation-client";
 
 export interface Comparison<S extends FingerprintData> {
     policy: ComparisonPolicy;
@@ -104,6 +104,7 @@ export abstract class AbstractFeature<S extends FingerprintData> implements Feat
     get isPresent(): PushTest {
         return predicatePushTest(this.name, async p => {
             const found = await this.projectFingerprinter(p);
+            logger.info("PushTest for feature '%s', returns %j", this.name, found);
             return !!found;
         });
     }

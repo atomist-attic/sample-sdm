@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-import { ComparisonPolicy, Feature, } from "../Feature";
+import { ComparisonPolicy, Feature, } from "./Feature";
 import {
-    CodeInspectionRegistration, ExtensionPack, metadata,
+    CodeInspectionRegistration,
+    ExtensionPack,
+    metadata,
     PushImpactListenerRegistration,
-    RepoListenerInvocation,
-    SdmContext,
-    SdmListener,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { buttonForCommand, FingerprintData, logger, RepoRef, } from "@atomist/automation-client";
-import { FeatureStore } from "../FeatureStore";
-import { Attachment, SlackMessage, } from "@atomist/slack-messages";
-import { ExtensionPackCreator, WellKnownGoals, } from "../ExtensionPackCreator";
-import { Store } from "../Store";
-import { doWithRepos } from "./doWithRepos";
+import { FingerprintData, logger, } from "@atomist/automation-client";
+import { FeatureStore } from "./FeatureStore";
+import { ExtensionPackCreator, WellKnownGoals, } from "./ExtensionPackCreator";
+import { Store } from "./Store";
+import { FeatureUpdateInvocation, FeatureUpdateListener } from "./FeatureUpdateListener";
+import { OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout";
 
 /**
  * Integrate a number of features with an SDM. Exposes commands to list features,
  * as well as to react to pushes to cascade.
  */
 export class Features implements ExtensionPackCreator {
-
-    private readonly features: Feature[];
 
     private readonly featureUpdateListeners: FeatureUpdateListener[] = [];
 
@@ -104,17 +101,17 @@ export class Features implements ExtensionPackCreator {
                 }
             }
         });
-        sdm.addCommand<{ key: string }>({
-            name: rolloutCommandName,
-            listener: async ci => {
-                const ideal = await this.store.load(ci.parameters.key);
-                if (!ideal) {
-                    throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
-                }
-                await this.featureStore.setIdeal(ideal);
-                return rolloutQualityOrderedFeatureToDownstreamProjects(f, ideal, transformName, sdm, ci);
-            }
-        });
+        // sdm.addCommand<{ key: string }>({
+        //     name: rolloutCommandName,
+        //     listener: async ci => {
+        //         const ideal = await this.store.load(ci.parameters.key);
+        //         if (!ideal) {
+        //             throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
+        //         }
+        //         await this.featureStore.setIdeal(ideal);
+        //         return rolloutQualityOrderedFeatureToDownstreamProjects(f, ideal, transformName, sdm, ci);
+        //     }
+        // });
         if (!!goals.inspectGoal) {
             logger.info("Registering inspection goal");
             goals.inspectGoal.with(f.inspection);
@@ -122,7 +119,7 @@ export class Features implements ExtensionPackCreator {
         if (!!goals.pushImpactGoal) {
             logger.info("Registering push impact goal");
             // Register a push reaction when a project with this features changes
-            goals.pushImpactGoal.with(this.listenAndRolloutUpgrades(sdm, f, rolloutCommandName));
+            goals.pushImpactGoal.with(this.listenAndInvokeFeatureListeners(sdm, f, rolloutCommandName));
         }
         if (!!goals.fingerprintGoal) {
             logger.info("Registering fingerprinter");
@@ -138,9 +135,9 @@ export class Features implements ExtensionPackCreator {
      * @param rolloutCommandName command name to roll out the feature
      * @return {PushImpactListenerRegistration}
      */
-    private listenAndRolloutUpgrades(sdm: SoftwareDeliveryMachine,
-                                     feature: Feature,
-                                     rolloutCommandName: string): PushImpactListenerRegistration {
+    private listenAndInvokeFeatureListeners(sdm: SoftwareDeliveryMachine,
+                                            feature: Feature,
+                                            rolloutCommandName: string): PushImpactListenerRegistration {
         return {
             name: `pi-${feature.name}`,
             pushTest: feature.isPresent,
@@ -150,7 +147,20 @@ export class Features implements ExtensionPackCreator {
                     const ideal = await this.featureStore.ideal(feature.name);
                     logger.info("Ideal feature %s value is %j", feature.name, ideal);
                     if (!!ideal) {
+
+                        let pom = await (await pu.project.getFile("pom.xml")).getContent();
+                        logger.info("POM IS " + pom + " fingerprinter=" + feature.projectFingerprinter);
+
                         const valueInProject = await feature.projectFingerprinter(pu.project);
+
+                        pom = await (await pu.project.getFile("pom.xml")).getContent();
+                        logger.info("POM2 IS " + pom + " fingerprinter=" + feature.projectFingerprinter);
+
+                        if (!valueInProject) {
+                            logger.warn("Anomaly: PushTest should not have returned true as the feature isn't found: Project is %j", pu.project);
+                            return;
+                        }
+
                         if (feature.compare(ideal, valueInProject, ComparisonPolicy.quality) < 0) {
                             const fui: FeatureUpdateInvocation = {
                                 addressChannels: pu.addressChannels,
@@ -168,6 +178,8 @@ export class Features implements ExtensionPackCreator {
                         } else {
                             logger.info("Ideal feature %s value is %j, ours is %j and it's unremarkable", feature.name, ideal, valueInProject);
                         }
+                    } else {
+                        logger.info("No ideal found for feature %s", feature.name);
                     }
                 } else {
                     logger.info("Feature %s doesn't support quality comparison", feature.name);
@@ -178,93 +190,11 @@ export class Features implements ExtensionPackCreator {
 
     constructor(private readonly store: Store,
                 private readonly featureStore: FeatureStore,
-                ...features: Feature[]) {
-        this.features = features;
-        this.addFeatureUpdateListener(OfferToRolloutFeatureToEligibleProjects);
+                private readonly features: Feature[],
+                featureUpdateListeners: FeatureUpdateListener[] = [OfferToRolloutFeatureToEligibleProjects]) {
+        featureUpdateListeners.forEach(ful =>
+            this.addFeatureUpdateListener(ful),
+        );
     }
 
-}
-
-/**
- * Invocation when a feature has been upgraded in a project
- */
-export interface FeatureUpdateInvocation<S extends FingerprintData = any> extends RepoListenerInvocation {
-
-    store: Store;
-    featureStore: FeatureStore;
-    feature: Feature;
-    ideal: S;
-    valueInProject: S;
-    rolloutCommandName: string;
-}
-
-export type FeatureUpdateListener = SdmListener<FeatureUpdateInvocation<any>>;
-
-export const OfferToRolloutFeatureToEligibleProjects: FeatureUpdateListener = async fui => {
-    logger.info("Better than ideal feature %s found: value is %s vs %s", fui.valueInProject.name, fui.feature.summary(fui.valueInProject), fui.feature.summary(fui.ideal));
-    const stored = await fui.store.save(fui.valueInProject);
-    const attachment: Attachment = {
-        text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.valueInProject)} vs existing ${fui.feature.summary(fui.ideal)}`,
-        fallback: "accept feature",
-        actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}?` },
-            fui.rolloutCommandName, {
-                key: stored,
-            }),
-        ],
-    };
-    const message: SlackMessage = {
-        attachments: [attachment],
-    };
-    await fui.addressChannels(message);
-};
-
-/**
- * Roll out buttons in all repos to apply this version of the feature
- * @return {Promise<void>}
- */
-async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends FingerprintData>(feature: Feature<S>,
-                                                                                       valueToUpgradeTo: S,
-                                                                                       command: string,
-                                                                                       sdm: SoftwareDeliveryMachine,
-                                                                                       i: SdmContext) {
-    logger.info("Rolling out command '%s' to apply feature %s", command, feature.name);
-    return doWithRepos(sdm, i,
-        async p => {
-            const existingValue = await feature.projectFingerprinter(p);
-            // Only upgrade if the project have a lower level of this feature
-            if (!!existingValue && feature.compare(existingValue, valueToUpgradeTo, ComparisonPolicy.quality) < 0) {
-                await offerFeatureToProject(feature, existingValue, valueToUpgradeTo, command, p.id, i);
-            }
-        });
-}
-
-/**
- * Offer the given feature value to the project with the given id
- * @param {Feature<S extends Fingerprint>} feature
- * @param existingValue value of the feature currently in this project
- * @param {S} valueToUpgradeTo
- * @param {string} command
- * @param {RepoRef} id
- * @param {SdmContext} i
- * @return {Promise<void>}
- */
-async function offerFeatureToProject<S extends FingerprintData>(feature: Feature<S>,
-                                                            existingValue: S,
-                                                            valueToUpgradeTo: S,
-                                                            command: string,
-                                                            id: RepoRef,
-                                                            i: SdmContext) {
-    const attachment: Attachment = {
-        text: `Accept new feature *${feature.name}*: ${feature.summary(valueToUpgradeTo)} vs existing ${feature.summary(existingValue)}?`,
-        fallback: "accept feature",
-        actions: [buttonForCommand({ text: `Accept feature ${feature.name}?` },
-            command,
-            { "targets.owner": id.owner, "targets.repo": id.repo },
-        ),
-        ],
-    };
-    const message: SlackMessage = {
-        attachments: [attachment],
-    };
-    await i.context.messageClient.addressChannels(message, id.repo);
 }

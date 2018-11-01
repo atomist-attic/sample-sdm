@@ -76,7 +76,7 @@ import {
     ConsoleReviewListener,
 } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { Features } from "../feature/support/Features";
+import { Features } from "../feature/Features";
 import { InMemoryStore } from "../feature/support/InMemoryStore";
 import { StoreFeatureStore } from "../feature/support/StoreFeatureStore";
 import { SpringBootVersionFeature, SpringBootVersionFingerprint } from "./SpringBootVersionFeature";
@@ -120,7 +120,7 @@ export function cloudFoundryMachine(configuration: SoftwareDeliveryMachineConfig
 export function codeRules(sdm: SoftwareDeliveryMachine) {
     const autofixGoal = new Autofix();
     const pushImpactGoal = new PushImpact();
-    const artifactGoal = new Artifact();
+    // const artifactGoal = new Artifact();
     const fingerprintGoal = new Fingerprint();
     const inspectGoal = new AutoCodeInspection();
     const build = new Build().with({ name: "Maven", builder: mavenBuilder() });
@@ -142,7 +142,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .plan(mavenDeploy).after(buildGoals);
 
     const StagingDeploymentGoals = goals("StagingDeployment")
-        .plan(artifactGoal).after(checkGoals)
+        //.plan(artifactGoal).after(checkGoals)
         .plan(mavenDeploy).after(buildGoals);
 
     const ProductionDeploymentGoals = goals("ProdDeployment")
@@ -150,10 +150,11 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
 
     const store = new InMemoryStore();
     const featureStore = StoreFeatureStore.create(store,
-        new SpringBootVersionFingerprint("2.1.0")
+        // Deliberately make this old
+        new SpringBootVersionFingerprint("2.0.0")
     );
     const features = new Features(store, featureStore,
-        new SpringBootVersionFeature()
+        [new SpringBootVersionFeature()],
     );
     sdm.addExtensionPacks(features.createExtensionPack({ inspectGoal, pushImpactGoal, fingerprintGoal }));
 

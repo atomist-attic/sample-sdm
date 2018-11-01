@@ -27,7 +27,7 @@ import {
     SpringBootVersionInspection,
     SpringBootVersions,
 } from "@atomist/sdm-pack-spring/lib/spring/inspect/springBootVersionInspection";
-import { AbstractFeature } from "../feature/support/AbstractFeature";
+import { AbstractFeature } from "../feature/AbstractFeature";
 import {
     IsMaven,
     setSpringBootVersionTransform,
