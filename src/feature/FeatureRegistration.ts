@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    FingerprintData,
-    Project,
-} from "@atomist/automation-client";
+import { FingerprintData, } from "@atomist/automation-client";
 import {
     CodeInspectionRegistration,
     CodeTransform,
@@ -26,6 +23,7 @@ import {
     ReviewerRegistration,
 } from "@atomist/sdm";
 import { RatingScale } from "./RatingScale";
+import { ProjectFingerprinter } from "./support/ProjectFingerprinter";
 
 export enum ComparisonPolicy {
     quality = "quality",
@@ -38,32 +36,49 @@ export interface Rater<S extends FingerprintData, V> {
 }
 
 /**
- * Function that can fingerprint a project
- */
-export type ProjectFingerprinter<S extends FingerprintData> = (p: Project) => Promise<S>;
-
-/**
  * Interface for working with a particular kind of fingerprint.
- * Inherited action takes a snapshot
+ * An example of a feature is use of Spring Boot.
+ * This feature can exist in a number of versions: It is present regardless of
+ * which version it's at. FeatureManager can usually be ranked by version, with
+ * later versions considered better.
+ * This feature is relevant only to JVM projects.
+ * This feature can be added to or removed from a project.
+ *
+ * The status of this feature can be determined by looking at a Maven POM file
+ * and any relevant configuration or Java code. (A feature may be spread
+ * across multiple files.)
  */
-export interface Feature<S extends FingerprintData = FingerprintData> {
+export interface FeatureRegistration<S extends FingerprintData = FingerprintData> {
 
     readonly name: string;
 
+    /**
+     * Provide a human-readable summary of this fingerprint
+     * @param {S} s
+     * @return {string}
+     */
     summary(s: S): string;
 
     /**
-     * Ratings are only guaranteed accurate across versions
+     * Version of this FeatureRegistration.
+     * Ratings are only guaranteed accurate across versions.
+     * Not the same as the version of the feature itself:
+     * e.g. FeatureRegistration 0.1.0 might be able to handle all versions
+     * of the related feature less than 2.0.0.
      */
     readonly version: string;
 
     /**
-     * PushTest: Is this feature relevant to this project
+     * PushTest: Is this feature relevant to this project.
+     * For example, if it's a Spring Boot project a Spring Boot starter is relevant.
+     * If the project doesn't use Spring Boot, not starter is relevant.
      */
     readonly isRelevant: PushTest;
 
     /**
-     * PushTest: Is this feature present in this project
+     * PushTest: Is this feature present in this project?
+     * It may be present in another version, in which case the PushTest
+     * will return true.
      */
     readonly isPresent: PushTest;
 
@@ -73,19 +88,21 @@ export interface Feature<S extends FingerprintData = FingerprintData> {
     readonly projectFingerprinter: ProjectFingerprinter<S>;
 
     /**
-     * Fingerprint projects. Includes PushTest
+     * Fingerprint projects.
      */
     readonly fingerprinterRegistration: FingerprinterRegistration;
 
     /**
-     * Return a transform to get a project to the given fingerprint state
+     * Return a transform to get a project to the given fingerprint state.
+     * Must be idempotent.
+     * Throw an exception if this is impossible.
      */
-    apply?(s: S): CodeTransform;
+    convergenceTransform?(s: S): CodeTransform;
 
     /**
-     * Return a transform to remove this feature altogether from a project
+     * Return a transform to removalTransform this feature altogether from a project
      */
-    remove?: CodeTransform;
+    removalTransform?: CodeTransform;
 
     /**
      * Inspection against this fingerprint
@@ -116,10 +133,10 @@ export interface Feature<S extends FingerprintData = FingerprintData> {
     rate<V>(s: S, scale: RatingScale<V>): V;
 
     /**
-     * Return the unique values in this array
+     * Return the distinct values in this array. Useful in ranking.
      * @param {S[]} snapshots
      * @return {S[]}
      */
-    uniques(snapshots: S[]): S[];
+    distinct(snapshots: S[]): S[];
 
 }

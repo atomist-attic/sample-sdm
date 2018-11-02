@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    AutoCodeInspection,
-    Autofix,
-    ExtensionPack,
-    Fingerprint as FingerprintGoal,
-    PushImpact,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
+import { AutoCodeInspection, Autofix, Fingerprint as FingerprintGoal, PushImpact, } from "@atomist/sdm";
 
 /**
  * Goals in an SDM that should be customized by an ExtensionPack returned by an ExtensionPackCreator
@@ -50,21 +43,4 @@ export interface WellKnownGoals {
      * Fingerprint functionality won't work otherwise.
      */
     fingerprintGoal?: FingerprintGoal;
-}
-
-/**
- * Enable the SDM with given capabilities including customization
- * of well-known goal instances
- */
-export interface ExtensionPackCreator {
-
-    /**
-     * Enable a feature in the SDM with the given goals
-     * @param {WellKnownGoals} goals to customize
-     * @param {SoftwareDeliveryMachine} sdm the SDM the extension pack will add to.
-     * This method should not modify it, but should
-     */
-    createExtensionPack(goals: WellKnownGoals, sdm?: SoftwareDeliveryMachine): ExtensionPack;
-
-
 }

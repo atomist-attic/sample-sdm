@@ -14,56 +14,32 @@
  * limitations under the License.
  */
 
-import {
-    ComparisonPolicy,
-    Feature,
-} from "./Feature";
-import {
-    CodeInspectionRegistration,
-    ExtensionPack,
-    metadata,
-    PushImpactListenerRegistration,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
-import {
-    FingerprintData,
-    logger,
-} from "@atomist/automation-client";
+import { ComparisonPolicy, FeatureRegistration, } from "./FeatureRegistration";
+import { CodeInspectionRegistration, PushImpactListenerRegistration, SoftwareDeliveryMachine, } from "@atomist/sdm";
+import { FingerprintData, logger, } from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
-import {
-    ExtensionPackCreator,
-    WellKnownGoals,
-} from "./ExtensionPackCreator";
+import { ExtensionPackCreator, WellKnownGoals, } from "./ExtensionPackCreator";
 import { Store } from "./Store";
-import {
-    FeatureUpdateInvocation,
-    FeatureUpdateListener,
-} from "./FeatureUpdateListener";
+import { FeatureUpdateInvocation, FeatureUpdateListener, } from "./FeatureUpdateListener";
 import { OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout";
 
 /**
  * Integrate a number of features with an SDM. Exposes commands to list features,
  * as well as to react to pushes to cascade.
  */
-export class Features implements ExtensionPackCreator {
+export class FeatureManager {
 
     private readonly featureUpdateListeners: FeatureUpdateListener[] = [];
 
     /**
-     * Create an extension pack
+     * Add the capabilities of this FeatureManager to the given SDM
      */
-    public createExtensionPack(goals: WellKnownGoals = {}): ExtensionPack {
-        return {
-            ...metadata(),
-            vendor: "atomist",
-            configure: sdm => {
-                sdm.addCodeInspectionCommand(this.listFeaturesCommand());
-                logger.info("Enabling %d features with goals: %j", this.features.length, goals);
-                this.features
-                    .filter(f => !!f.apply)
-                    .forEach(f => this.enableFeature(sdm, f, goals));
-            },
-        };
+    public enable(sdm: SoftwareDeliveryMachine, goals: WellKnownGoals = {}): void {
+        sdm.addCodeInspectionCommand(this.listFeaturesCommand());
+        logger.info("Enabling %d features with goals: %j", this.features.length, goals);
+        this.features
+            .filter(f => !!f.convergenceTransform)
+            .forEach(f => this.enableFeature(sdm, f, goals));
     }
 
     private listFeaturesCommand(): CodeInspectionRegistration<FingerprintData[]> {
@@ -92,11 +68,11 @@ export class Features implements ExtensionPackCreator {
     /**
      * Enable this feature on the SDM and well-known goals
      * @param {SoftwareDeliveryMachine} sdm
-     * @param {Feature} f
+     * @param {FeatureRegistration} f
      * @param {WellKnownGoals} goals
      */
     private enableFeature(sdm: SoftwareDeliveryMachine,
-                          f: Feature,
+                          f: FeatureRegistration,
                           goals: WellKnownGoals) {
         const transformName = `tr-${f.name.replace(" ", "_")}`;
         const rolloutCommandName = `rollout-${f.name.replace(" ", "_")}`;
@@ -107,7 +83,7 @@ export class Features implements ExtensionPackCreator {
             transform: async (p, ci) => {
                 const ideal = await this.featureStore.ideal(f.name);
                 if (!!ideal) {
-                    return f.apply(ideal)(p, ci);
+                    return f.convergenceTransform(ideal)(p, ci);
                 } else {
                     return ci.addressChannels(`No ideal found for feature ${f.name}`);
                 }
@@ -143,12 +119,12 @@ export class Features implements ExtensionPackCreator {
      * Listen to pushes to projects with this feature and roll out upgrades
      * to relevant downstream projects if the relevant version moves the ideal
      * @param {SoftwareDeliveryMachine} sdm
-     * @param {Feature} feature
+     * @param {FeatureRegistration} feature
      * @param rolloutCommandName command name to roll out the feature
      * @return {PushImpactListenerRegistration}
      */
     private listenAndInvokeFeatureListeners(sdm: SoftwareDeliveryMachine,
-                                            feature: Feature,
+                                            feature: FeatureRegistration,
                                             rolloutCommandName: string): PushImpactListenerRegistration {
         return {
             name: `pi-${feature.name}`,
@@ -186,7 +162,7 @@ export class Features implements ExtensionPackCreator {
                         logger.info("No ideal found for feature %s", feature.name);
                     }
                 } else {
-                    logger.info("Feature %s doesn't support quality comparison", feature.name);
+                    logger.info("FeatureRegistration %s doesn't support quality comparison", feature.name);
                 }
             },
         };
@@ -194,7 +170,7 @@ export class Features implements ExtensionPackCreator {
 
     constructor(private readonly store: Store,
                 private readonly featureStore: FeatureStore,
-                private readonly features: Feature[],
+                private readonly features: FeatureRegistration[],
                 featureUpdateListeners: FeatureUpdateListener[] = [OfferToRolloutFeatureToEligibleProjects]) {
         featureUpdateListeners.forEach(ful =>
             this.addFeatureUpdateListener(ful),

@@ -20,18 +20,16 @@ import {
     TypedFingerprint,
 } from "@atomist/sdm";
 import {
-    ComparisonPolicy,
-    ProjectFingerprinter,
-} from "../feature/Feature";
-import {
     SpringBootVersionInspection,
     SpringBootVersions,
 } from "@atomist/sdm-pack-spring/lib/spring/inspect/springBootVersionInspection";
-import { AbstractFeature } from "../feature/AbstractFeature";
+import { AbstractFeatureRegistration } from "../feature/AbstractFeatureRegistration";
 import {
     IsMaven,
     setSpringBootVersionTransform,
 } from "@atomist/sdm-pack-spring";
+import { ProjectFingerprinter } from "../feature/support/ProjectFingerprinter";
+import { ComparisonPolicy } from "../feature/FeatureRegistration";
 
 const SpringBootVersionSnapshotName = "SpringBootVersionSnapshot";
 
@@ -51,7 +49,7 @@ const SpringBootVersionFingerprinter: ProjectFingerprinter<SpringBootVersionFing
         undefined;
 };
 
-export class SpringBootVersionFeature extends AbstractFeature<SpringBootVersionFingerprint> {
+export class SpringBootVersionFeatureRegistration extends AbstractFeatureRegistration<SpringBootVersionFingerprint> {
 
     constructor() {
         super(SpringBootVersionSnapshotName, "0.1.0",
@@ -64,11 +62,11 @@ export class SpringBootVersionFeature extends AbstractFeature<SpringBootVersionF
             undefinedIsLess((a, b) => a.bootVersion.localeCompare(b.bootVersion)));
     }
 
-    public apply(s: SpringBootVersionFingerprint): CodeTransform {
+    public convergenceTransform(s: SpringBootVersionFingerprint): CodeTransform {
         return setSpringBootVersionTransform(s.bootVersion);
     }
 
-    public uniques(snapshots: SpringBootVersionFingerprint[]): SpringBootVersionFingerprint[] {
+    public distinct(snapshots: SpringBootVersionFingerprint[]): SpringBootVersionFingerprint[] {
         return _.uniqBy(snapshots, s => s.bootVersion);
     }
 

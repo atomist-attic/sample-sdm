@@ -24,7 +24,7 @@ export interface RemoveFileParams {
 
 export const RemoveFileEditor: CodeTransformRegistration<RemoveFileParams> = {
     transform: async (p, i) => p.deleteFile(i.parameters.path),
-    name: "remove file",
+    name: "removalTransform file",
     parameters: {
         path: {},
     },

@@ -54,7 +54,7 @@ export const WhackHeaderEditor: CodeTransformRegistration<RequestedCommitParamet
     name: "removeHeader",
     paramsMaker: () => new RequestedCommitParameters("Who needs all these extra characters"),
     transformPresentation: ci => ci.parameters.editMode,
-    intent: "remove a header",
+    intent: "removalTransform a header",
 };
 
 // TODO switch to CFamily constant from GlobPatterns

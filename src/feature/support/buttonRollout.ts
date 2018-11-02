@@ -32,8 +32,8 @@ import {
 import { FeatureUpdateListener } from "../FeatureUpdateListener";
 import {
     ComparisonPolicy,
-    Feature,
-} from "../Feature";
+    FeatureRegistration,
+} from "../FeatureRegistration";
 
 /**
  * Put a button on each project to add the feature
@@ -63,15 +63,15 @@ export const OfferToRolloutFeatureToEligibleProjects: FeatureUpdateListener = as
 };
 
 /**
- * Roll out buttons in all repos to apply this version of the feature
+ * Roll out buttons in all repos to convergenceTransform this version of the feature
  * @return {Promise<void>}
  */
-async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends FingerprintData>(feature: Feature<S>,
+async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends FingerprintData>(feature: FeatureRegistration<S>,
                                                                                            valueToUpgradeTo: S,
                                                                                            command: string,
                                                                                            sdm: SoftwareDeliveryMachine,
                                                                                            i: SdmContext) {
-    logger.info("Rolling out command '%s' to apply feature %s", command, feature.name);
+    logger.info("Rolling out command '%s' to convergenceTransform feature %s", command, feature.name);
     return doWithRepos(sdm, i,
         async p => {
             const existingValue = await feature.projectFingerprinter(p);
@@ -84,7 +84,7 @@ async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends Finger
 
 /**
  * Offer the given feature value to the project with the given id
- * @param {Feature<S extends Fingerprint>} feature
+ * @param {FeatureRegistration<S extends Fingerprint>} feature
  * @param existingValue value of the feature currently in this project
  * @param {S} valueToUpgradeTo
  * @param {string} command
@@ -92,7 +92,7 @@ async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends Finger
  * @param {SdmContext} i
  * @return {Promise<void>}
  */
-async function offerFeatureToProject<S extends FingerprintData>(feature: Feature<S>,
+async function offerFeatureToProject<S extends FingerprintData>(feature: FeatureRegistration<S>,
                                                                 existingValue: S,
                                                                 valueToUpgradeTo: S,
                                                                 command: string,

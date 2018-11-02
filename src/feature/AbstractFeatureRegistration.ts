@@ -16,10 +16,9 @@
 
 import {
     ComparisonPolicy,
-    Feature,
-    ProjectFingerprinter,
+    FeatureRegistration,
     Rater,
-} from "./Feature";
+} from "./FeatureRegistration";
 import { RatingScale } from "./RatingScale";
 import {
     CodeInspectionRegistration,
@@ -35,6 +34,7 @@ import {
     FingerprintData,
     logger,
 } from "@atomist/automation-client";
+import { ProjectFingerprinter } from "./support/ProjectFingerprinter";
 
 export interface Comparison<S extends FingerprintData> {
     policy: ComparisonPolicy;
@@ -42,12 +42,12 @@ export interface Comparison<S extends FingerprintData> {
 }
 
 /**
- * Convenient superclass for Feature, allowing comparison
+ * Convenient superclass for FeatureRegistration, allowing comparison
  * and rating functions
  */
-export abstract class AbstractFeature<S extends FingerprintData> implements Feature<S> {
+export abstract class AbstractFeatureRegistration<S extends FingerprintData> implements FeatureRegistration<S> {
 
-    public readonly remove: CodeTransform;
+    public readonly removalTransform: CodeTransform;
 
     public readonly reviewer: ReviewerRegistration;
 
@@ -70,7 +70,7 @@ export abstract class AbstractFeature<S extends FingerprintData> implements Feat
                               reviewer?: ReviewerRegistration,
                               relevant?: PushTest | ProjectPredicate,
                           } = {}) {
-        this.remove = opts.remove;
+        this.removalTransform = opts.remove;
         this.reviewer = opts.reviewer;
     }
 
@@ -155,6 +155,6 @@ export abstract class AbstractFeature<S extends FingerprintData> implements Feat
         return rater.rate(s);
     }
 
-    public abstract uniques(snapshots: S[]): S[];
+    public abstract distinct(snapshots: S[]): S[];
 
 }

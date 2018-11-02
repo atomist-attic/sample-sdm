@@ -77,13 +77,13 @@ import {
     ConsoleReviewListener,
 } from "./support/configureForLocal";
 import { addTeamPolicies } from "./teamPolicies";
-import { Features } from "../feature/Features";
+import { FeatureManager } from "../feature/FeatureManager";
 import { InMemoryStore } from "../feature/support/InMemoryStore";
 import { StoreFeatureStore } from "../feature/support/StoreFeatureStore";
 import {
-    SpringBootVersionFeature,
+    SpringBootVersionFeatureRegistration,
     SpringBootVersionFingerprint,
-} from "./SpringBootVersionFeature";
+} from "./SpringBootVersionFeatureRegistration";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -157,10 +157,10 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         // Deliberately make this old
         new SpringBootVersionFingerprint("2.0.0")
     );
-    const features = new Features(store, featureStore,
-        [new SpringBootVersionFeature()],
+    const featureManager = new FeatureManager(store, featureStore,
+        [new SpringBootVersionFeatureRegistration()],
     );
-    sdm.addExtensionPacks(features.createExtensionPack({ inspectGoal, pushImpactGoal, fingerprintGoal }));
+    featureManager.enable(sdm, { inspectGoal, pushImpactGoal, fingerprintGoal });
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",

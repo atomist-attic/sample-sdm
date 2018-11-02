@@ -21,7 +21,7 @@ import {
     RepoListenerInvocation,
     SdmListener,
 } from "@atomist/sdm";
-import { Feature } from "./Feature";
+import { FeatureRegistration } from "./FeatureRegistration";
 
 /**
  * Invocation when a feature has been upgraded in a project
@@ -30,7 +30,7 @@ export interface FeatureUpdateInvocation<S extends FingerprintData = any> extend
 
     store: Store;
     featureStore: FeatureStore;
-    feature: Feature;
+    feature: FeatureRegistration;
     ideal: S;
     valueInProject: S;
     rolloutCommandName: string;
