@@ -15,28 +15,23 @@
  */
 
 import * as _ from "lodash";
-import {
-    CodeTransform,
-    TypedFingerprint,
-} from "@atomist/sdm";
+import { allSatisfied, CodeTransform, TypedFingerprint, } from "@atomist/sdm";
 import {
     SpringBootVersionInspection,
     SpringBootVersions,
 } from "@atomist/sdm-pack-spring/lib/spring/inspect/springBootVersionInspection";
-import { AbstractFeatureRegistration } from "../feature/AbstractFeatureRegistration";
-import {
-    IsMaven,
-    setSpringBootVersionTransform,
-} from "@atomist/sdm-pack-spring";
-import { ProjectFingerprinter } from "../feature/support/ProjectFingerprinter";
-import { ComparisonPolicy } from "../feature/FeatureRegistration";
+import { AbstractFeatureRegistration } from "../../feature/AbstractFeatureRegistration";
+import { IsJava, IsMaven, setSpringBootVersionTransform, } from "@atomist/sdm-pack-spring";
+import { ProjectFingerprinter } from "../../feature/support/ProjectFingerprinter";
+import { ComparisonPolicy } from "../../feature/FeatureRegistration";
+import { undefinedIsLess } from "../../feature/support/featureUtils";
 
-const SpringBootVersionSnapshotName = "SpringBootVersionSnapshot";
+const SpringBootVersionFingerprintName = "SpringBootVersion";
 
 export class SpringBootVersionFingerprint extends TypedFingerprint<{ bootVersion: string }> {
 
     constructor(public readonly bootVersion: string) {
-        super(SpringBootVersionSnapshotName, "sbv", "0.1.0", { bootVersion });
+        super(SpringBootVersionFingerprintName, "sbv", "0.1.0", { bootVersion });
     }
 
 }
@@ -52,10 +47,12 @@ const SpringBootVersionFingerprinter: ProjectFingerprinter<SpringBootVersionFing
 export class SpringBootVersionFeatureRegistration extends AbstractFeatureRegistration<SpringBootVersionFingerprint> {
 
     constructor() {
-        super(SpringBootVersionSnapshotName, "0.1.0",
-            SpringBootVersionFingerprinter, {
-                relevant: IsMaven,
-            });
+        super({
+            name: SpringBootVersionFingerprintName,
+            version: "0.1.0",
+            projectFingerprinter: SpringBootVersionFingerprinter,
+            relevant: allSatisfied(IsMaven, IsJava),
+        });
         // Later versions are better
         this.addComparison(
             ComparisonPolicy.quality,
@@ -70,16 +67,4 @@ export class SpringBootVersionFeatureRegistration extends AbstractFeatureRegistr
         return _.uniqBy(snapshots, s => s.bootVersion);
     }
 
-}
-
-function undefinedIsLess<T>(f: (a: T, b: T) => number): (a: T, b: T) => number {
-    return (a, b) => {
-        if (a == undefined) {
-            return 1;
-        }
-        if (b == undefined) {
-            return -1;
-        }
-        return f(a, b);
-    }
 }

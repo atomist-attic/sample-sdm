@@ -55,21 +55,27 @@ export abstract class AbstractFeatureRegistration<S extends FingerprintData> imp
 
     private readonly raters: Array<Rater<S, any>> = [];
 
+    public readonly name: string;
+
+    public readonly version: string;
+
+    public readonly projectFingerprinter: ProjectFingerprinter<S>;
+
     /**
      * By default all features are relevant
-     * @param {string} name
-     * @param {string} version
-     * @param projectFingerprinter
      * @param opts
      */
-    protected constructor(public readonly name: string,
-                          public readonly version: string,
-                          public readonly projectFingerprinter: ProjectFingerprinter<S>,
-                          private readonly opts: {
-                              remove?: CodeTransform,
-                              reviewer?: ReviewerRegistration,
-                              relevant?: PushTest | ProjectPredicate,
-                          } = {}) {
+    protected constructor(private readonly opts: {
+        readonly name: string,
+        readonly version: string,
+        readonly projectFingerprinter: ProjectFingerprinter<S>,
+        remove?: CodeTransform,
+        reviewer?: ReviewerRegistration,
+        relevant?: PushTest | ProjectPredicate,
+    }) {
+        this.name = opts.name;
+        this.version = opts.version;
+        this.projectFingerprinter = opts.projectFingerprinter;
         this.removalTransform = opts.remove;
         this.reviewer = opts.reviewer;
     }

@@ -83,7 +83,7 @@ import { StoreFeatureStore } from "../feature/support/StoreFeatureStore";
 import {
     SpringBootVersionFeatureRegistration,
     SpringBootVersionFingerprint,
-} from "./SpringBootVersionFeatureRegistration";
+} from "./feature/SpringBootVersionFeatureRegistration";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
