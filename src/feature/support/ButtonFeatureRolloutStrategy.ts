@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-import { SdmContext, SoftwareDeliveryMachine, } from "@atomist/sdm";
-import { Attachment, SlackMessage, } from "@atomist/slack-messages";
-import { doWithRepos } from "./doWithRepos";
-import { buttonForCommand, FingerprintData, logger, RepoRef, } from "@atomist/automation-client";
-import { ComparisonPolicy, FeatureRegistration, } from "../FeatureRegistration";
 import {
-    FeatureRolloutStrategy, PossibleNewIdealFeatureListener,
-    rolloutBetterThanIdealFeatureListener
+    SdmContext,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
+import {
+    Attachment,
+    SlackMessage,
+} from "@atomist/slack-messages";
+import { doWithRepos } from "./doWithRepos";
+import {
+    buttonForCommand,
+    FingerprintData,
+    logger,
+    RepoRef,
+} from "@atomist/automation-client";
+import {
+    ComparisonPolicy,
+    FeatureRegistration,
+} from "../FeatureRegistration";
+import {
+    FeatureRolloutStrategy,
+    PossibleNewIdealFeatureListener,
+    rolloutBetterThanIdealFeatureListener,
 } from "../FeatureRolloutStrategy";
 import { Store } from "../Store";
 import { FeatureStore } from "../FeatureStore";

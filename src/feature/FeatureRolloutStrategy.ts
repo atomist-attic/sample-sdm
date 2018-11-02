@@ -18,9 +18,19 @@ import {
     FeatureInvocation,
     FeatureListener,
 } from "./FeatureListener";
-import { ComparisonPolicy, FeatureRegistration } from "./FeatureRegistration";
-import { SdmContext, SdmListener, SoftwareDeliveryMachine } from "@atomist/sdm";
-import { FingerprintData, logger } from "@atomist/automation-client";
+import {
+    ComparisonPolicy,
+    FeatureRegistration,
+} from "./FeatureRegistration";
+import {
+    SdmContext,
+    SdmListener,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
+import {
+    FingerprintData,
+    logger,
+} from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
 import { Store } from "./Store";
 
