@@ -14,27 +14,17 @@
  * limitations under the License.
  */
 
-import {
-    SdmContext,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
-import {
-    Attachment,
-    SlackMessage,
-} from "@atomist/slack-messages";
+import { SdmContext, SoftwareDeliveryMachine, } from "@atomist/sdm";
+import { Attachment, SlackMessage, } from "@atomist/slack-messages";
 import { doWithRepos } from "./doWithRepos";
+import { buttonForCommand, FingerprintData, logger, RepoRef, } from "@atomist/automation-client";
+import { ComparisonPolicy, FeatureRegistration, } from "../FeatureRegistration";
 import {
-    buttonForCommand,
-    FingerprintData,
-    logger,
-    RepoRef,
-} from "@atomist/automation-client";
-import { PossibleNewIdealFeatureListener } from "../PossibleNewIdealFeatureListener";
-import {
-    ComparisonPolicy,
-    FeatureRegistration,
-} from "../FeatureRegistration";
-import { FeatureRolloutStrategy } from "../FeatureManager";
+    FeatureRolloutStrategy, PossibleNewIdealFeatureListener,
+    rolloutBetterThanIdealFeatureListener
+} from "../FeatureRolloutStrategy";
+import { Store } from "../Store";
+import { FeatureStore } from "../FeatureStore";
 
 export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any> {
 
@@ -44,7 +34,7 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
      * @return {Promise<void>}
      * @constructor
      */
-    public listener: PossibleNewIdealFeatureListener = async fui => {
+    private newIdealListener: PossibleNewIdealFeatureListener = async fui => {
         logger.info("Better than ideal feature %s found: value is %s vs %s. Stored at %s",
             fui.newValue.name,
             fui.feature.summary(fui.newValue),
@@ -67,6 +57,15 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
     };
 
     /**
+     * Put a button on each project to add the feature
+     * @param {PossibleNewIdealFeatureInvocation<any>} fui
+     * @return {Promise<void>}
+     * @constructor
+     */
+    public listener: PossibleNewIdealFeatureListener =
+        rolloutBetterThanIdealFeatureListener(this.store, this.featureStore, this.newIdealListener);
+
+    /**
      * Roll out buttons in all repos to convergenceTransform this version of the feature
      * @return {Promise<void>}
      */
@@ -87,6 +86,8 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
                 }
             });
     }
+
+    constructor(private readonly store: Store, private readonly featureStore: FeatureStore) {}
 }
 
 /**

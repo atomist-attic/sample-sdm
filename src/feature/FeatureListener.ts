@@ -21,21 +21,12 @@ import {
 } from "@atomist/sdm";
 import { FeatureRegistration } from "./FeatureRegistration";
 
-/**
- * Invocation when we've seen a version of a feature in a project
- * that is better than our present team-wide ideal.
- */
-export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = any> extends RepoListenerInvocation {
+export interface FeatureInvocation<S extends FingerprintData> extends RepoListenerInvocation {
 
     /**
      * The feature we're concerned with
      */
     feature: FeatureRegistration;
-
-    /**
-     * The current ideal for this feature
-     */
-    ideal: S;
 
     /**
      * The new value we've seen.
@@ -52,6 +43,11 @@ export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = a
      * Name of the rollout command.
      */
     rolloutCommandName: string;
+
 }
 
-export type PossibleNewIdealFeatureListener = SdmListener<PossibleNewIdealFeatureInvocation<any>>;
+/**
+ * The feature may already be in the project
+ * TODO what about getting old value
+ */
+export type FeatureListener = SdmListener<FeatureInvocation<any>>;
