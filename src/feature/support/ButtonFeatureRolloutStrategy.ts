@@ -53,7 +53,7 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
         const attachment: Attachment = {
             text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
             fallback: "accept feature",
-            actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}?` },
+            actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}` },
                 fui.rolloutCommandName, {
                     storageKey: fui.storageKeyOfNewValue,
                 }),
@@ -73,17 +73,17 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
     public async rolloutFeatureToDownstreamProjects(what: {
         feature: FeatureRegistration<any>,
         valueToUpgradeTo: FingerprintData,
-        command: string,
+        transformCommandName: string,
         sdm: SoftwareDeliveryMachine,
         i: SdmContext
     }): Promise<void> {
-        logger.info("Rolling out command '%s' to convergenceTransform feature %s", what.command, what.feature.name);
+        logger.info("Rolling out command '%s' to convergenceTransform feature %s", what.transformCommandName, what.feature.name);
         return doWithRepos(what.sdm, what.i,
             async p => {
                 const existingValue = await what.feature.projectFingerprinter(p);
                 // Only upgrade if the project have a lower level of this feature
                 if (!!existingValue && what.feature.compare(existingValue, what.valueToUpgradeTo, ComparisonPolicy.quality) < 0) {
-                    await offerFeatureToProject(what.feature, existingValue, what.valueToUpgradeTo, what.command, p.id, what.i);
+                    await offerFeatureToProject(what.feature, existingValue, what.valueToUpgradeTo, what.transformCommandName, p.id, what.i);
                 }
             });
     }
@@ -94,7 +94,7 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
  * @param {FeatureRegistration<S extends Fingerprint>} feature
  * @param existingValue value of the feature currently in this project
  * @param {S} valueToUpgradeTo
- * @param {string} command
+ * @param {string} transformCommandName
  * @param {RepoRef} id
  * @param {SdmContext} i
  * @return {Promise<void>}
@@ -102,14 +102,14 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
 async function offerFeatureToProject<S extends FingerprintData>(feature: FeatureRegistration<S>,
                                                                 existingValue: S,
                                                                 valueToUpgradeTo: S,
-                                                                command: string,
+                                                                transformCommandName: string,
                                                                 id: RepoRef,
                                                                 i: SdmContext) {
     const attachment: Attachment = {
         text: `Accept new feature *${feature.name}*: ${feature.summary(valueToUpgradeTo)} vs existing ${feature.summary(existingValue)}?`,
         fallback: "accept feature",
         actions: [buttonForCommand({ text: `Accept feature ${feature.name}?` },
-            command,
+            transformCommandName,
             { "targets.owner": id.owner, "targets.repo": id.repo },
         ),
         ],

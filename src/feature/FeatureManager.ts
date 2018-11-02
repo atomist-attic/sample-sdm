@@ -51,7 +51,11 @@ export interface FeatureRolloutStrategy<S extends FingerprintData> {
     rolloutFeatureToDownstreamProjects(what: {
         feature: FeatureRegistration<S>,
         valueToUpgradeTo: S,
-        command: string,
+
+        /**
+         * Name of the code transform
+         */
+        transformCommandName: string,
         sdm: SoftwareDeliveryMachine,
         i: SdmContext
     }): Promise<void>;
@@ -108,11 +112,11 @@ export class FeatureManager {
     private enableFeature(sdm: SoftwareDeliveryMachine,
                           f: FeatureRegistration,
                           goals: WellKnownGoals) {
-        const transformName = `tr-${f.name.replace(" ", "_")}`;
+        const transformCommandName = `tr-${f.name.replace(" ", "_")}`;
         const rolloutCommandName = `rollout-${f.name.replace(" ", "_")}`;
 
         sdm.addCodeTransformCommand({
-            name: transformName,
+            name: transformCommandName,
             intent: `ideal ${f.name}`,
             transform: async (p, ci) => {
                 const ideal = await this.featureStore.ideal(f.name);
@@ -126,13 +130,16 @@ export class FeatureManager {
         sdm.addCommand<{ storageKey: string }>({
             name: rolloutCommandName,
             listener: async ci => {
+                if (!ci.parameters.storageKey) {
+                    throw new Error(`Internal error on command '${rolloutCommandName}': storageKey=${ci.parameters.storageKey}`);
+                }
                 const ideal = await this.store.load(ci.parameters.storageKey);
                 if (!ideal) {
-                    throw new Error(`Internal error: No feature with storageKey ${ci.parameters.storageKey}`);
+                    throw new Error(`Internal error: No feature with storageKey=${ci.parameters.storageKey}`);
                 }
                 await this.featureStore.setIdeal(ideal);
                 return this.rolloutStrategy.rolloutFeatureToDownstreamProjects({
-                    feature: f, valueToUpgradeTo: ideal, command: transformName, sdm, i: ci
+                    feature: f, valueToUpgradeTo: ideal, transformCommandName, sdm, i: ci
                 });
             }
         });
