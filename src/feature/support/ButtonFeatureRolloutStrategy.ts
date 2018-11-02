@@ -44,7 +44,7 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
             text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
             fallback: "accept feature",
             actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}` },
-                fui.rolloutCommandName, {
+                rolloutName(fui.feature), {
                     storageKey: fui.storageKeyOfNewValue,
                 }),
             ],
@@ -56,6 +56,7 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
         await fui.addressChannels(message);
     };
 
+
     /**
      * Put a button on each project to add the feature
      * @param {PossibleNewIdealFeatureInvocation<any>} fui
@@ -65,11 +66,35 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
     public listener: PossibleNewIdealFeatureListener =
         rolloutBetterThanIdealFeatureListener(this.store, this.featureStore, this.newIdealListener);
 
+    public enableFeature(sdm: SoftwareDeliveryMachine, feature: FeatureRegistration, transformCommandName: string) {
+        const rolloutCommandName = rolloutName(feature);
+
+        sdm.addCommand<{ storageKey: string }>({
+            name: rolloutCommandName,
+            parameters: {
+                storageKey: { description: "Storage key of the version of this feature we want to roll out" },
+            },
+            listener: async ci => {
+                if (!ci.parameters.storageKey) {
+                    throw new Error(`Internal error on command '${rolloutCommandName}': storageKey=${ci.parameters.storageKey}`);
+                }
+                const ideal = await this.store.load(ci.parameters.storageKey);
+                if (!ideal) {
+                    throw new Error(`Internal error: No feature with storageKey=${ci.parameters.storageKey}`);
+                }
+                await this.featureStore.setIdeal(ideal);
+                return this.rolloutFeatureToDownstreamProjects({
+                    feature, valueToUpgradeTo: ideal, transformCommandName, sdm, i: ci
+                });
+            }
+        });
+    }
+
     /**
      * Roll out buttons in all repos to convergenceTransform this version of the feature
      * @return {Promise<void>}
      */
-    public async rolloutFeatureToDownstreamProjects(what: {
+    private async rolloutFeatureToDownstreamProjects(what: {
         feature: FeatureRegistration<any>,
         valueToUpgradeTo: FingerprintData,
         transformCommandName: string,
@@ -88,6 +113,10 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
     }
 
     constructor(private readonly store: Store, private readonly featureStore: FeatureStore) {}
+}
+
+function rolloutName(feature: FeatureRegistration) {
+    return `rollout-${feature.name.replace(" ", "_")}`;
 }
 
 /**

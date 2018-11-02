@@ -1,9 +1,6 @@
-import {
-    FeatureInvocation,
-    FeatureListener,
-} from "./FeatureListener";
+import { FeatureInvocation, FeatureListener, } from "./FeatureListener";
 import { ComparisonPolicy, FeatureRegistration } from "./FeatureRegistration";
-import { SdmContext, SdmListener, SoftwareDeliveryMachine } from "@atomist/sdm";
+import { SdmListener, SoftwareDeliveryMachine } from "@atomist/sdm";
 import { FingerprintData, logger } from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
 import { Store } from "./Store";
@@ -18,17 +15,8 @@ export interface FeatureRolloutStrategy<S extends FingerprintData> {
      */
     listener: FeatureListener;
 
-    rolloutFeatureToDownstreamProjects(what: {
-        feature: FeatureRegistration<S>,
-        valueToUpgradeTo: S,
+    enableFeature(sdm: SoftwareDeliveryMachine, feature: FeatureRegistration, transformCommandName: string);
 
-        /**
-         * Name of the code transform
-         */
-        transformCommandName: string,
-        sdm: SoftwareDeliveryMachine,
-        i: SdmContext
-    }): Promise<void>;
 }
 
 /**
@@ -72,7 +60,6 @@ export function rolloutBetterThanIdealFeatureListener(
                         newValue: valueInProject,
                         ideal,
                         storageKeyOfNewValue: stored,
-                        rolloutCommandName: fi.rolloutCommandName,
                     };
                     await Promise.all(possibleNewIdealFeatureListeners.map(ful => ful(fui)));
                 } else {

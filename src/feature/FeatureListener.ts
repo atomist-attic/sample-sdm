@@ -42,7 +42,7 @@ export interface FeatureInvocation<S extends FingerprintData> extends RepoListen
     /**
      * Name of the rollout command.
      */
-    rolloutCommandName: string;
+    //rolloutCommandName: string;
 
 }
 

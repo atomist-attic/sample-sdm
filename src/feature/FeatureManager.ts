@@ -73,59 +73,40 @@ export class FeatureManager {
     /**
      * Enable this feature on the SDM and well-known goals
      * @param {SoftwareDeliveryMachine} sdm
-     * @param {FeatureRegistration} f
+     * @param {FeatureRegistration} feature
      * @param {WellKnownGoals} goals
      */
     private enableFeature(sdm: SoftwareDeliveryMachine,
-                          f: FeatureRegistration,
+                          feature: FeatureRegistration,
                           goals: WellKnownGoals) {
-        const transformCommandName = `tr-${f.name.replace(" ", "_")}`;
-        const rolloutCommandName = `rollout-${f.name.replace(" ", "_")}`;
+        const transformCommandName = `tr-${feature.name.replace(" ", "_")}`;
 
         sdm.addCodeTransformCommand({
             name: transformCommandName,
-            intent: `ideal ${f.name}`,
+            intent: `ideal ${feature.name}`,
             transform: async (p, ci) => {
-                const ideal = await this.featureStore.ideal(f.name);
+                const ideal = await this.featureStore.ideal(feature.name);
                 if (!!ideal) {
-                    return f.convergenceTransform(ideal)(p, ci);
+                    return feature.convergenceTransform(ideal)(p, ci);
                 } else {
-                    return ci.addressChannels(`No ideal found for feature ${f.name}`);
+                    return ci.addressChannels(`No ideal found for feature ${feature.name}`);
                 }
-            }
-        });
-        sdm.addCommand<{ storageKey: string }>({
-            name: rolloutCommandName,
-            parameters: {
-                storageKey: { description: "Storage key of the version of this feature we want to roll out" },
-            },
-            listener: async ci => {
-                if (!ci.parameters.storageKey) {
-                    throw new Error(`Internal error on command '${rolloutCommandName}': storageKey=${ci.parameters.storageKey}`);
-                }
-                const ideal = await this.store.load(ci.parameters.storageKey);
-                if (!ideal) {
-                    throw new Error(`Internal error: No feature with storageKey=${ci.parameters.storageKey}`);
-                }
-                await this.featureStore.setIdeal(ideal);
-                return this.rolloutStrategy.rolloutFeatureToDownstreamProjects({
-                    feature: f, valueToUpgradeTo: ideal, transformCommandName, sdm, i: ci
-                });
             }
         });
         if (!!goals.inspectGoal) {
             logger.info("Registering inspection goal");
-            goals.inspectGoal.with(f.inspection);
+            goals.inspectGoal.with(feature.inspection);
         }
         if (!!goals.pushImpactGoal) {
             logger.info("Registering push impact goal");
             // Register a push reaction when a project with this features changes
-            goals.pushImpactGoal.with(this.listenAndInvokeFeatureListeners(sdm, f, rolloutCommandName));
+            goals.pushImpactGoal.with(this.listenAndInvokeFeatureListeners(sdm, feature));
         }
         if (!!goals.fingerprintGoal) {
             logger.info("Registering fingerprinter");
-            goals.fingerprintGoal.with(f.fingerprinterRegistration);
+            goals.fingerprintGoal.with(feature.fingerprinterRegistration);
         }
+        this.rolloutStrategy.enableFeature(sdm, feature, transformCommandName);
     }
 
     /**
@@ -133,12 +114,10 @@ export class FeatureManager {
      * to relevant downstream projects if the relevant version moves the ideal
      * @param {SoftwareDeliveryMachine} sdm
      * @param {FeatureRegistration} feature
-     * @param rolloutCommandName command name to roll out the feature
      * @return {PushImpactListenerRegistration}
      */
     private listenAndInvokeFeatureListeners(sdm: SoftwareDeliveryMachine,
-                                            feature: FeatureRegistration,
-                                            rolloutCommandName: string): PushImpactListenerRegistration {
+                                            feature: FeatureRegistration): PushImpactListenerRegistration {
         return {
             name: `pi-${feature.name}`,
             pushTest: feature.isPresent,
@@ -162,7 +141,6 @@ export class FeatureManager {
                     feature,
                     newValue: valueInProject,
                     storageKeyOfNewValue: stored,
-                    rolloutCommandName,
                 };
                 await Promise.all(this.featureListeners.map(ful => ful(fi)));
             },
