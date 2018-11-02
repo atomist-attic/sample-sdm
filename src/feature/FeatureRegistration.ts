@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { FingerprintData, } from "@atomist/automation-client";
+import {
+    FingerprintData,
+} from "@atomist/automation-client";
 import {
     CodeInspectionRegistration,
     CodeTransform,

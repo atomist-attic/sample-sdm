@@ -14,19 +14,33 @@
  * limitations under the License.
  */
 
-import { ComparisonPolicy, FeatureRegistration, } from "./FeatureRegistration";
+import {
+    ComparisonPolicy,
+    FeatureRegistration,
+} from "./FeatureRegistration";
 import {
     CodeInspectionRegistration,
     PushImpactListenerRegistration,
     SdmContext,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { FingerprintData, logger, } from "@atomist/automation-client";
+import {
+    FingerprintData,
+    logger,
+} from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
-import { WellKnownGoals, } from "./ExtensionPackCreator";
+import {
+    WellKnownGoals,
+} from "./ExtensionPackCreator";
 import { Store } from "./Store";
-import { PossibleNewIdealFeatureInvocation, PossibleNewIdealFeatureListener, } from "./PossibleNewIdealFeatureListener";
-import { ButtonRollerOuter, OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout";
+import {
+    PossibleNewIdealFeatureInvocation,
+    PossibleNewIdealFeatureListener,
+} from "./PossibleNewIdealFeatureListener";
+import {
+    ButtonRollerOuter,
+    OfferToRolloutFeatureToEligibleProjects,
+} from "./support/buttonRollout";
 
 /**
  * Implemented by types that can roll out a version of a feature to many projects.

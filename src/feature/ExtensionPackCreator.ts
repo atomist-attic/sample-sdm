@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { AutoCodeInspection, Autofix, Fingerprint as FingerprintGoal, PushImpact, } from "@atomist/sdm";
+import {
+    AutoCodeInspection,
+    Autofix,
+    Fingerprint as FingerprintGoal,
+    PushImpact,
+} from "@atomist/sdm";
 
 /**
  * Goals in an SDM that should be customized by an ExtensionPack returned by an ExtensionPackCreator
