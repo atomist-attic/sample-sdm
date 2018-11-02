@@ -38,7 +38,7 @@ describe("addHeaderTransform", () => {
 
     it("should add header to Java when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
-            { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
+            { path: "src/main/java/RollerOuter.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: "public class Thing1 {}" });
         const parameters = new AddHeaderParameters();
         await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters }));
@@ -49,7 +49,7 @@ describe("addHeaderTransform", () => {
 
     it("should add header to TypeScript when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
-            { path: "src/Thing.ts", content: TsWithApacheHeader },
+            { path: "src/RollerOuter.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content: "export class Thing1 {}" });
         const parameters = new AddHeaderParameters();
         await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters }));
@@ -61,7 +61,7 @@ describe("addHeaderTransform", () => {
     it("should respect exclude glob", async () => {
         const content = "export class Thing1 {}";
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
-            { path: "src/Thing.ts", content: TsWithApacheHeader },
+            { path: "src/RollerOuter.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content });
         const parameters = new AddHeaderParameters();
         parameters.excludeGlob = "src/Thing1.ts";
@@ -73,7 +73,7 @@ describe("addHeaderTransform", () => {
 
     it("should ignore irrelevant exclude glob", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
-            { path: "src/Thing.ts", content: TsWithApacheHeader },
+            { path: "src/RollerOuter.ts", content: TsWithApacheHeader },
             { path: "src/Thing1.ts", content: "export class Thing1 {}" });
         const parameters = new AddHeaderParameters();
         parameters.excludeGlob = "other.thing";
@@ -85,7 +85,7 @@ describe("addHeaderTransform", () => {
 
     it("should add header to JS when not found", async () => {
         const p = InMemoryProject.from(new GitHubRepoRef("owner", "repoName", "abcd"),
-            { path: "src/Thing.js", content: TsWithApacheHeader },
+            { path: "src/RollerOuter.js", content: TsWithApacheHeader },
             { path: "src/Thing1.js", content: "export class Thing1 {}" });
         const parameters = new AddHeaderParameters();
         await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
@@ -137,7 +137,7 @@ describe("addHeaderTransform", () => {
     it("should add header when not found and persist to disk", async () => {
         const tmpDir = tmp.dirSync({ unsafeCleanup: true }).name;
         const p = new NodeFsLocalProject(new GitHubRepoRef("owner", "repoName", "abcd"), tmpDir);
-        p.addFileSync("src/main/java/Thing.java", JavaWithApacheHeader);
+        p.addFileSync("src/main/java/RollerOuter.java", JavaWithApacheHeader);
         p.addFileSync("src/main/java/Thing1.java", "public class Thing1 {}");
         const c1 = fs.readFileSync(tmpDir + "/src/main/java/Thing1.java");
         assert(!c1.toString().startsWith(ApacheHeader), "Header should not yet be there");
@@ -153,7 +153,7 @@ describe("addHeaderTransform", () => {
 
     it("should not add header when already present", async () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
-            { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
+            { path: "src/main/java/RollerOuter.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: JavaWithApacheHeader });
         const parameters = new AddHeaderParameters();
         await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));
@@ -164,7 +164,7 @@ describe("addHeaderTransform", () => {
 
     it("should not add header when another header is present", async () => {
         const p = InMemoryProject.from(new SimpleRepoId("owner", "repoName"),
-            { path: "src/main/java/Thing.java", content: JavaWithApacheHeader },
+            { path: "src/main/java/RollerOuter.java", content: JavaWithApacheHeader },
             { path: "src/main/java/Thing1.java", content: JavaWithGplHeader });
         const parameters = new AddHeaderParameters();
         await addHeaderTransform(p, fakeCommandListenerInvocation<AddHeaderParameters>({ parameters}));

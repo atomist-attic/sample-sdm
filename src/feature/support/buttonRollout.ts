@@ -29,19 +29,20 @@ import {
     logger,
     RepoRef,
 } from "@atomist/automation-client";
-import { FeatureUpdateListener } from "../FeatureUpdateListener";
+import { PossibleNewIdealFeatureListener } from "../PossibleNewIdealFeatureListener";
 import {
     ComparisonPolicy,
     FeatureRegistration,
 } from "../FeatureRegistration";
+import { RollerOuter } from "../FeatureManager";
 
 /**
  * Put a button on each project to add the feature
- * @param {FeatureUpdateInvocation<any>} fui
+ * @param {PossibleNewIdealFeatureInvocation<any>} fui
  * @return {Promise<void>}
  * @constructor
  */
-export const OfferToRolloutFeatureToEligibleProjects: FeatureUpdateListener = async fui => {
+export const OfferToRolloutFeatureToEligibleProjects: PossibleNewIdealFeatureListener = async fui => {
     logger.info("Better than ideal feature %s found: value is %s vs %s",
         fui.valueInProject.name,
         fui.feature.summary(fui.valueInProject),
@@ -62,24 +63,29 @@ export const OfferToRolloutFeatureToEligibleProjects: FeatureUpdateListener = as
     await fui.addressChannels(message);
 };
 
-/**
- * Roll out buttons in all repos to convergenceTransform this version of the feature
- * @return {Promise<void>}
- */
-async function rolloutQualityOrderedFeatureToDownstreamProjects<S extends FingerprintData>(feature: FeatureRegistration<S>,
-                                                                                           valueToUpgradeTo: S,
-                                                                                           command: string,
-                                                                                           sdm: SoftwareDeliveryMachine,
-                                                                                           i: SdmContext) {
-    logger.info("Rolling out command '%s' to convergenceTransform feature %s", command, feature.name);
-    return doWithRepos(sdm, i,
-        async p => {
-            const existingValue = await feature.projectFingerprinter(p);
-            // Only upgrade if the project have a lower level of this feature
-            if (!!existingValue && feature.compare(existingValue, valueToUpgradeTo, ComparisonPolicy.quality) < 0) {
-                await offerFeatureToProject(feature, existingValue, valueToUpgradeTo, command, p.id, i);
-            }
-        });
+export class ButtonRollerOuter implements RollerOuter<any> {
+
+    /**
+     * Roll out buttons in all repos to convergenceTransform this version of the feature
+     * @return {Promise<void>}
+     */
+    public async rolloutFeatureToDownstreamProjects(what: {
+        feature: FeatureRegistration<any>,
+        valueToUpgradeTo: FingerprintData,
+        command: string,
+        sdm: SoftwareDeliveryMachine,
+        i: SdmContext
+    }): Promise<void> {
+        logger.info("Rolling out command '%s' to convergenceTransform feature %s", what.command, what.feature.name);
+        return doWithRepos(what.sdm, what.i,
+            async p => {
+                const existingValue = await what.feature.projectFingerprinter(p);
+                // Only upgrade if the project have a lower level of this feature
+                if (!!existingValue && what.feature.compare(existingValue, what.valueToUpgradeTo, ComparisonPolicy.quality) < 0) {
+                    await offerFeatureToProject(what.feature, existingValue, what.valueToUpgradeTo, what.command, p.id, what.i);
+                }
+            });
+    }
 }
 
 /**

@@ -15,13 +15,32 @@
  */
 
 import { ComparisonPolicy, FeatureRegistration, } from "./FeatureRegistration";
-import { CodeInspectionRegistration, PushImpactListenerRegistration, SoftwareDeliveryMachine, } from "@atomist/sdm";
+import {
+    CodeInspectionRegistration,
+    PushImpactListenerRegistration,
+    SdmContext,
+    SoftwareDeliveryMachine,
+} from "@atomist/sdm";
 import { FingerprintData, logger, } from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
-import { ExtensionPackCreator, WellKnownGoals, } from "./ExtensionPackCreator";
+import { WellKnownGoals, } from "./ExtensionPackCreator";
 import { Store } from "./Store";
-import { FeatureUpdateInvocation, FeatureUpdateListener, } from "./FeatureUpdateListener";
-import { OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout";
+import { PossibleNewIdealFeatureInvocation, PossibleNewIdealFeatureListener, } from "./PossibleNewIdealFeatureListener";
+import { ButtonRollerOuter, OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout";
+
+/**
+ * Implemented by types that can roll out a version of a feature to many projects.
+ */
+export interface RollerOuter<S extends FingerprintData> {
+
+    rolloutFeatureToDownstreamProjects(what: {
+        feature: FeatureRegistration<S>,
+        valueToUpgradeTo: S,
+        command: string,
+        sdm: SoftwareDeliveryMachine,
+        i: SdmContext
+    }): Promise<void>;
+}
 
 /**
  * Integrate a number of features with an SDM. Exposes commands to list features,
@@ -29,7 +48,7 @@ import { OfferToRolloutFeatureToEligibleProjects } from "./support/buttonRollout
  */
 export class FeatureManager {
 
-    private readonly featureUpdateListeners: FeatureUpdateListener[] = [];
+    private readonly possibleNewIdealFeatureListeners: PossibleNewIdealFeatureListener[] = [];
 
     /**
      * Add the capabilities of this FeatureManager to the given SDM
@@ -61,8 +80,8 @@ export class FeatureManager {
         };
     }
 
-    public addFeatureUpdateListener(ful: FeatureUpdateListener) {
-        this.featureUpdateListeners.push(ful);
+    public addFeatureUpdateListener(ful: PossibleNewIdealFeatureListener) {
+        this.possibleNewIdealFeatureListeners.push(ful);
     }
 
     /**
@@ -89,17 +108,19 @@ export class FeatureManager {
                 }
             }
         });
-        // sdm.addCommand<{ key: string }>({
-        //     name: rolloutCommandName,
-        //     listener: async ci => {
-        //         const ideal = await this.store.load(ci.parameters.key);
-        //         if (!ideal) {
-        //             throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
-        //         }
-        //         await this.featureStore.setIdeal(ideal);
-        //         return rolloutQualityOrderedFeatureToDownstreamProjects(f, ideal, transformName, sdm, ci);
-        //     }
-        // });
+        sdm.addCommand<{ key: string }>({
+            name: rolloutCommandName,
+            listener: async ci => {
+                const ideal = await this.store.load(ci.parameters.key);
+                if (!ideal) {
+                    throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
+                }
+                await this.featureStore.setIdeal(ideal);
+                return this.rollerOuter.rolloutFeatureToDownstreamProjects({
+                    feature: f, valueToUpgradeTo: ideal, command: transformName, sdm, i: ci
+                });
+            }
+        });
         if (!!goals.inspectGoal) {
             logger.info("Registering inspection goal");
             goals.inspectGoal.with(f.inspection);
@@ -142,7 +163,7 @@ export class FeatureManager {
                         }
 
                         if (feature.compare(ideal, valueInProject, ComparisonPolicy.quality) < 0) {
-                            const fui: FeatureUpdateInvocation = {
+                            const fui: PossibleNewIdealFeatureInvocation = {
                                 addressChannels: pu.addressChannels,
                                 id: pu.id,
                                 credentials: pu.credentials,
@@ -154,7 +175,7 @@ export class FeatureManager {
                                 ideal,
                                 rolloutCommandName,
                             };
-                            await Promise.all(this.featureUpdateListeners.map(ful => ful(fui)));
+                            await Promise.all(this.possibleNewIdealFeatureListeners.map(ful => ful(fui)));
                         } else {
                             logger.info("Ideal feature %s value is %j, ours is %j and it's unremarkable", feature.name, ideal, valueInProject);
                         }
@@ -171,7 +192,8 @@ export class FeatureManager {
     constructor(private readonly store: Store,
                 private readonly featureStore: FeatureStore,
                 private readonly features: FeatureRegistration[],
-                featureUpdateListeners: FeatureUpdateListener[] = [OfferToRolloutFeatureToEligibleProjects]) {
+                private readonly rollerOuter: RollerOuter<any> = new ButtonRollerOuter(),
+                featureUpdateListeners: PossibleNewIdealFeatureListener[] = [OfferToRolloutFeatureToEligibleProjects]) {
         featureUpdateListeners.forEach(ful =>
             this.addFeatureUpdateListener(ful),
         );

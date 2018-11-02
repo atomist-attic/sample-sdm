@@ -24,9 +24,10 @@ import {
 import { FeatureRegistration } from "./FeatureRegistration";
 
 /**
- * Invocation when a feature has been upgraded in a project
+ * Invocation when we've seen a version of a feature in a project
+ * that is better than our present team-wide ideal.
  */
-export interface FeatureUpdateInvocation<S extends FingerprintData = any> extends RepoListenerInvocation {
+export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = any> extends RepoListenerInvocation {
 
     store: Store;
     featureStore: FeatureStore;
@@ -36,4 +37,4 @@ export interface FeatureUpdateInvocation<S extends FingerprintData = any> extend
     rolloutCommandName: string;
 }
 
-export type FeatureUpdateListener = SdmListener<FeatureUpdateInvocation<any>>;
+export type PossibleNewIdealFeatureListener = SdmListener<PossibleNewIdealFeatureInvocation<any>>;
