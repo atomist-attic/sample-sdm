@@ -27,15 +27,30 @@ import { FeatureRegistration } from "./FeatureRegistration";
  */
 export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = any> extends RepoListenerInvocation {
 
+    /**
+     * The feature we're concerned with
+     */
     feature: FeatureRegistration;
+
+    /**
+     * The current ideal for this feature
+     */
     ideal: S;
+
+    /**
+     * The new value we've seen.
+     */
     newValue: S;
 
     /***
-     * Key in the store of our storageKeyOfNewValue value
+     * Key in the store of our storageKeyOfNewValue value.
+     * Useful to pass to command handlers.
      */
     storageKeyOfNewValue: string;
 
+    /**
+     * Name of the rollout command.
+     */
     rolloutCommandName: string;
 }
 
