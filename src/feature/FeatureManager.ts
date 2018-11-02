@@ -38,14 +38,15 @@ import {
     PossibleNewIdealFeatureListener,
 } from "./PossibleNewIdealFeatureListener";
 import {
-    ButtonRollerOuter,
-    OfferToRolloutFeatureToEligibleProjects,
-} from "./support/buttonRollout";
+    ButtonFeatureRolloutStrategy,
+} from "./support/ButtonFeatureRolloutStrategy";
 
 /**
  * Implemented by types that can roll out a version of a feature to many projects.
  */
-export interface RollerOuter<S extends FingerprintData> {
+export interface FeatureRolloutStrategy<S extends FingerprintData> {
+
+    listener: PossibleNewIdealFeatureListener;
 
     rolloutFeatureToDownstreamProjects(what: {
         feature: FeatureRegistration<S>,
@@ -94,7 +95,7 @@ export class FeatureManager {
         };
     }
 
-    public addFeatureUpdateListener(ful: PossibleNewIdealFeatureListener) {
+    public addPossibleNewIdealFeatureListener(ful: PossibleNewIdealFeatureListener) {
         this.possibleNewIdealFeatureListeners.push(ful);
     }
 
@@ -130,7 +131,7 @@ export class FeatureManager {
                     throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
                 }
                 await this.featureStore.setIdeal(ideal);
-                return this.rollerOuter.rolloutFeatureToDownstreamProjects({
+                return this.rolloutStrategy.rolloutFeatureToDownstreamProjects({
                     feature: f, valueToUpgradeTo: ideal, command: transformName, sdm, i: ci
                 });
             }
@@ -207,10 +208,11 @@ export class FeatureManager {
     constructor(private readonly store: Store,
                 private readonly featureStore: FeatureStore,
                 private readonly features: FeatureRegistration[],
-                private readonly rollerOuter: RollerOuter<any> = new ButtonRollerOuter(),
-                featureUpdateListeners: PossibleNewIdealFeatureListener[] = [OfferToRolloutFeatureToEligibleProjects]) {
+                private readonly rolloutStrategy: FeatureRolloutStrategy<any> = new ButtonFeatureRolloutStrategy(),
+                featureUpdateListeners: PossibleNewIdealFeatureListener[] = []) {
+        this.addPossibleNewIdealFeatureListener(this.rolloutStrategy.listener);
         featureUpdateListeners.forEach(ful =>
-            this.addFeatureUpdateListener(ful),
+            this.addPossibleNewIdealFeatureListener(ful),
         );
     }
 

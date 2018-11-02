@@ -34,35 +34,35 @@ import {
     ComparisonPolicy,
     FeatureRegistration,
 } from "../FeatureRegistration";
-import { RollerOuter } from "../FeatureManager";
+import { FeatureRolloutStrategy } from "../FeatureManager";
 
-/**
- * Put a button on each project to add the feature
- * @param {PossibleNewIdealFeatureInvocation<any>} fui
- * @return {Promise<void>}
- * @constructor
- */
-export const OfferToRolloutFeatureToEligibleProjects: PossibleNewIdealFeatureListener = async fui => {
-    logger.info("Better than ideal feature %s found: value is %s vs %s",
-        fui.newValue.name,
-        fui.feature.summary(fui.newValue),
-        fui.feature.summary(fui.ideal));
-    const attachment: Attachment = {
-        text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
-        fallback: "accept feature",
-        actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}?` },
-            fui.rolloutCommandName, {
-                key: fui.storageKeyOfNewValue,
-            }),
-        ],
-    };
-    const message: SlackMessage = {
-        attachments: [attachment],
-    };
-    await fui.addressChannels(message);
-};
+export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any> {
 
-export class ButtonRollerOuter implements RollerOuter<any> {
+    /**
+     * Put a button on each project to add the feature
+     * @param {PossibleNewIdealFeatureInvocation<any>} fui
+     * @return {Promise<void>}
+     * @constructor
+     */
+    public listener: PossibleNewIdealFeatureListener = async fui => {
+        logger.info("Better than ideal feature %s found: value is %s vs %s",
+            fui.newValue.name,
+            fui.feature.summary(fui.newValue),
+            fui.feature.summary(fui.ideal));
+        const attachment: Attachment = {
+            text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
+            fallback: "accept feature",
+            actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}?` },
+                fui.rolloutCommandName, {
+                    key: fui.storageKeyOfNewValue,
+                }),
+            ],
+        };
+        const message: SlackMessage = {
+            attachments: [attachment],
+        };
+        await fui.addressChannels(message);
+    };
 
     /**
      * Roll out buttons in all repos to convergenceTransform this version of the feature
