@@ -163,18 +163,19 @@ export class FeatureManager {
                         }
 
                         if (feature.compare(ideal, valueInProject, ComparisonPolicy.quality) < 0) {
+                            const stored = await this.store.save(valueInProject);
                             const fui: PossibleNewIdealFeatureInvocation = {
                                 addressChannels: pu.addressChannels,
                                 id: pu.id,
                                 credentials: pu.credentials,
                                 context: pu.context,
-                                featureStore: this.featureStore,
-                                store: this.store,
                                 feature,
-                                valueInProject,
+                                newValue: valueInProject,
                                 ideal,
+                                storageKeyOfNewValue: stored,
                                 rolloutCommandName,
                             };
+
                             await Promise.all(this.possibleNewIdealFeatureListeners.map(ful => ful(fui)));
                         } else {
                             logger.info("Ideal feature %s value is %j, ours is %j and it's unremarkable", feature.name, ideal, valueInProject);

@@ -15,12 +15,7 @@
  */
 
 import { FingerprintData } from "@atomist/automation-client";
-import { Store } from "./Store";
-import { FeatureStore } from "./FeatureStore";
-import {
-    RepoListenerInvocation,
-    SdmListener,
-} from "@atomist/sdm";
+import { RepoListenerInvocation, SdmListener, } from "@atomist/sdm";
 import { FeatureRegistration } from "./FeatureRegistration";
 
 /**
@@ -29,11 +24,15 @@ import { FeatureRegistration } from "./FeatureRegistration";
  */
 export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = any> extends RepoListenerInvocation {
 
-    store: Store;
-    featureStore: FeatureStore;
     feature: FeatureRegistration;
     ideal: S;
-    valueInProject: S;
+    newValue: S;
+
+    /***
+     * Key in the store of our storageKeyOfNewValue value
+     */
+    storageKeyOfNewValue: string;
+
     rolloutCommandName: string;
 }
 

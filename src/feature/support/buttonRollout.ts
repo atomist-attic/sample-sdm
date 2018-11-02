@@ -44,16 +44,15 @@ import { RollerOuter } from "../FeatureManager";
  */
 export const OfferToRolloutFeatureToEligibleProjects: PossibleNewIdealFeatureListener = async fui => {
     logger.info("Better than ideal feature %s found: value is %s vs %s",
-        fui.valueInProject.name,
-        fui.feature.summary(fui.valueInProject),
+        fui.newValue.name,
+        fui.feature.summary(fui.newValue),
         fui.feature.summary(fui.ideal));
-    const stored = await fui.store.save(fui.valueInProject);
     const attachment: Attachment = {
-        text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.valueInProject)} vs existing ${fui.feature.summary(fui.ideal)}`,
+        text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
         fallback: "accept feature",
         actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}?` },
             fui.rolloutCommandName, {
-                key: stored,
+                key: fui.storageKeyOfNewValue,
             }),
         ],
     };
