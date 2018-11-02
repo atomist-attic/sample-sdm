@@ -129,6 +129,9 @@ export class FeatureManager {
         });
         sdm.addCommand<{ storageKey: string }>({
             name: rolloutCommandName,
+            parameters: {
+                storageKey: { description: "Storage key of the version of this feature we want to roll out"},
+            },
             listener: async ci => {
                 if (!ci.parameters.storageKey) {
                     throw new Error(`Internal error on command '${rolloutCommandName}': storageKey=${ci.parameters.storageKey}`);
