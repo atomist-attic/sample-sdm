@@ -31,7 +31,7 @@ import {
 import { FeatureStore } from "./FeatureStore";
 import {
     WellKnownGoals,
-} from "./ExtensionPackCreator";
+} from "@atomist/sdm";
 import { Store } from "./Store";
 import {
     PossibleNewIdealFeatureInvocation,
