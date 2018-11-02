@@ -34,7 +34,7 @@
     "@atomist/sdm-pack-node": "^1.0.0-RC.2",
     "@atomist/sdm-pack-sloc": "^1.0.0-RC.2",
     "@atomist/sdm-pack-sonarqube": "^1.0.0-RC.2",
-    "@atomist/sdm-pack-spring": "^1.0.0-RC.2",
+    "@atomist/sdm-pack-spring": "https://r.atomist.com/2053585992",
     "@atomist/slack-messages": "^1.0.0",
     "@commitlint/config-conventional": "^6.1.3",
     "@commitlint/lint": "^6.2.0",

@@ -159,18 +159,7 @@ export class Features implements ExtensionPackCreator {
                     const ideal = await this.featureStore.ideal(feature.name);
                     logger.info("Ideal feature %s value is %j", feature.name, ideal);
                     if (!!ideal) {
-
-                        // TODO diagnostics only
-                        let pom = await (await pu.project.getFile("pom.xml")).getContent();
-                        logger.info("POM IS " + pom + " fingerprinter=" + feature.projectFingerprinter);
-
                         const valueInProject = await feature.projectFingerprinter(pu.project);
-
-                        // TODO diagnostics only. Even if the previous line
-                        // is commented out content is empty
-                        pom = await (await pu.project.getFile("pom.xml")).getContent();
-                        logger.info("POM2 IS " + pom + " fingerprinter=" + feature.projectFingerprinter);
-
                         if (!valueInProject) {
                             logger.warn("Anomaly: PushTest should not have returned true as the feature isn't found: Project is %j", pu.project);
                             return;
