@@ -123,12 +123,12 @@ export class FeatureManager {
                 }
             }
         });
-        sdm.addCommand<{ key: string }>({
+        sdm.addCommand<{ storageKey: string }>({
             name: rolloutCommandName,
             listener: async ci => {
-                const ideal = await this.store.load(ci.parameters.key);
+                const ideal = await this.store.load(ci.parameters.storageKey);
                 if (!ideal) {
-                    throw new Error(`Internal error: No feature with key ${ci.parameters.key}`);
+                    throw new Error(`Internal error: No feature with storageKey ${ci.parameters.storageKey}`);
                 }
                 await this.featureStore.setIdeal(ideal);
                 return this.rolloutStrategy.rolloutFeatureToDownstreamProjects({

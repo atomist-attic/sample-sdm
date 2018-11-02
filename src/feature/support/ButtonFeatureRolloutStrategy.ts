@@ -45,22 +45,24 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
      * @constructor
      */
     public listener: PossibleNewIdealFeatureListener = async fui => {
-        logger.info("Better than ideal feature %s found: value is %s vs %s",
+        logger.info("Better than ideal feature %s found: value is %s vs %s. Stored at %s",
             fui.newValue.name,
             fui.feature.summary(fui.newValue),
-            fui.feature.summary(fui.ideal));
+            fui.feature.summary(fui.ideal),
+            fui.storageKeyOfNewValue);
         const attachment: Attachment = {
             text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
             fallback: "accept feature",
             actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}?` },
                 fui.rolloutCommandName, {
-                    key: fui.storageKeyOfNewValue,
+                    storageKey: fui.storageKeyOfNewValue,
                 }),
             ],
         };
         const message: SlackMessage = {
             attachments: [attachment],
         };
+        logger.info("Slack message structure is %j", message);
         await fui.addressChannels(message);
     };
 
