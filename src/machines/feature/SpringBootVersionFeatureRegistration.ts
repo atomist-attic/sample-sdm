@@ -15,13 +15,21 @@
  */
 
 import * as _ from "lodash";
-import { allSatisfied, CodeTransform, TypedFingerprint, } from "@atomist/sdm";
+import {
+    allSatisfied,
+    CodeTransform,
+    TypedFingerprint,
+} from "@atomist/sdm";
 import {
     SpringBootVersionInspection,
     SpringBootVersions,
 } from "@atomist/sdm-pack-spring/lib/spring/inspect/springBootVersionInspection";
 import { AbstractFeatureRegistration } from "../../feature/AbstractFeatureRegistration";
-import { IsJava, IsMaven, setSpringBootVersionTransform, } from "@atomist/sdm-pack-spring";
+import {
+    IsJava,
+    IsMaven,
+    setSpringBootVersionTransform,
+} from "@atomist/sdm-pack-spring";
 import { ProjectFingerprinter } from "../../feature/support/ProjectFingerprinter";
 import { ComparisonPolicy } from "../../feature/FeatureRegistration";
 import { undefinedIsLess } from "../../feature/support/featureUtils";
