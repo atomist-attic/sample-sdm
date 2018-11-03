@@ -84,6 +84,7 @@ import {
     SpringBootVersionFeatureRegistration,
     SpringBootVersionFingerprint,
 } from "./feature/SpringBootVersionFeatureRegistration";
+import { enableButtonRollout } from "../feature/support/enableButtonRollout";
 
 const freezeStore = new InMemoryDeploymentStatusManager();
 
@@ -161,6 +162,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         [new SpringBootVersionFeatureRegistration()],
     );
     featureManager.enable(sdm, { inspectGoal, pushImpactGoal, fingerprintGoal });
+    enableButtonRollout(sdm, featureManager);
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",

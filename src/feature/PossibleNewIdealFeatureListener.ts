@@ -6,25 +6,10 @@ import { FeatureStore } from "./FeatureStore";
 import { Store } from "./Store";
 
 /**
- * Implemented by types that can roll out a version of a feature to many projects.
- */
-export interface FeatureRolloutStrategy<S extends FingerprintData> {
-
-    /**
-     * Listener to respond to feature changes
-     */
-    listener: FeatureListener;
-
-    enableFeature(sdm: SoftwareDeliveryMachine, feature: FeatureRegistration, transformCommandName: string);
-
-}
-
-/**
  * Invocation when we've seen a version of a feature in a project
  * that is better than our present team-wide ideal.
  */
 export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = any> extends FeatureInvocation<S> {
-
 
     /**
      * The current ideal for this feature
@@ -33,9 +18,15 @@ export interface PossibleNewIdealFeatureInvocation<S extends FingerprintData = a
 
 }
 
-
 export type PossibleNewIdealFeatureListener = SdmListener<PossibleNewIdealFeatureInvocation<any>>;
 
+/**
+ * Create a FeatureListener that forwards to the more specific PossibleNewIdealFeatureListener
+ * @param {Store} store
+ * @param {FeatureStore} featureStore
+ * @param {PossibleNewIdealFeatureListener} possibleNewIdealFeatureListeners
+ * @return {FeatureListener}
+ */
 export function rolloutBetterThanIdealFeatureListener(
     store: Store,
     featureStore: FeatureStore,

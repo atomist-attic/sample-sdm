@@ -25,8 +25,6 @@ import { FingerprintData, logger, } from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
 import { Store } from "./Store";
 import { FeatureInvocation, FeatureListener, } from "./FeatureListener";
-import { FeatureRolloutStrategy } from "./FeatureRolloutStrategy";
-import { ButtonFeatureRolloutStrategy } from "./support/ButtonFeatureRolloutStrategy";
 
 /**
  * Integrate a number of features with an SDM. Exposes commands to list features,
@@ -71,6 +69,16 @@ export class FeatureManager {
     }
 
     /**
+     * Return the name of the command registered with the SDM to transform
+     * projects to the ideal state of this feature
+     * @param {FeatureRegistration} feature
+     * @return {string}
+     */
+    public transformToIdealCommandName(feature: FeatureRegistration): string {
+     return `tr-${feature.name.replace(" ", "_")}`;
+    }
+
+    /**
      * Enable this feature on the SDM and well-known goals
      * @param {SoftwareDeliveryMachine} sdm
      * @param {FeatureRegistration} feature
@@ -79,8 +87,7 @@ export class FeatureManager {
     private enableFeature(sdm: SoftwareDeliveryMachine,
                           feature: FeatureRegistration,
                           goals: WellKnownGoals) {
-        const transformCommandName = `tr-${feature.name.replace(" ", "_")}`;
-
+        const transformCommandName = this.transformToIdealCommandName(feature);
         sdm.addCodeTransformCommand({
             name: transformCommandName,
             intent: `ideal ${feature.name}`,
@@ -106,7 +113,6 @@ export class FeatureManager {
             logger.info("Registering fingerprinter");
             goals.fingerprintGoal.with(feature.fingerprinterRegistration);
         }
-        this.rolloutStrategy.enableFeature(sdm, feature, transformCommandName);
     }
 
     /**
@@ -147,13 +153,10 @@ export class FeatureManager {
         };
     }
 
-    constructor(private readonly store: Store,
-                private readonly featureStore: FeatureStore,
-                private readonly features: FeatureRegistration[],
-                private readonly rolloutStrategy: FeatureRolloutStrategy<any> =
-                    new ButtonFeatureRolloutStrategy(store, featureStore),
+    constructor(public readonly store: Store,
+                public readonly featureStore: FeatureStore,
+                public readonly features: FeatureRegistration[],
                 featureListeners: FeatureListener[] = []) {
-        this.addFeatureListener(this.rolloutStrategy.listener);
         featureListeners.forEach(ful =>
             this.addFeatureListener(ful),
         );
