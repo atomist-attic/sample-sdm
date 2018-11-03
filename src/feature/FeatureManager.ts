@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-import { FeatureRegistration, } from "./FeatureRegistration";
+import {
+    FeatureRegistration,
+} from "./FeatureRegistration";
 import {
     CodeInspectionRegistration,
     PushImpactListenerRegistration,
     SoftwareDeliveryMachine,
     WellKnownGoals,
 } from "@atomist/sdm";
-import { FingerprintData, logger, } from "@atomist/automation-client";
+import {
+    FingerprintData,
+    logger,
+} from "@atomist/automation-client";
 import { FeatureStore } from "./FeatureStore";
 import { Store } from "./Store";
-import { FeatureInvocation, FeatureListener, } from "./FeatureListener";
+import {
+    FeatureInvocation,
+    FeatureListener,
+} from "./FeatureListener";
 
 /**
  * Integrate a number of features with an SDM. Exposes commands to list features,
