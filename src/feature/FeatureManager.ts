@@ -69,16 +69,6 @@ export class FeatureManager {
     }
 
     /**
-     * Return the name of the command registered with the SDM to transform
-     * projects to the ideal state of this feature
-     * @param {FeatureRegistration} feature
-     * @return {string}
-     */
-    public transformToIdealCommandName(feature: FeatureRegistration): string {
-     return `tr-${feature.name.replace(" ", "_")}`;
-    }
-
-    /**
      * Enable this feature on the SDM and well-known goals
      * @param {SoftwareDeliveryMachine} sdm
      * @param {FeatureRegistration} feature
@@ -87,7 +77,7 @@ export class FeatureManager {
     private enableFeature(sdm: SoftwareDeliveryMachine,
                           feature: FeatureRegistration,
                           goals: WellKnownGoals) {
-        const transformCommandName = this.transformToIdealCommandName(feature);
+        const transformCommandName = transformToIdealCommandName(feature);
         sdm.addCodeTransformCommand({
             name: transformCommandName,
             intent: `ideal ${feature.name}`,
@@ -162,4 +152,14 @@ export class FeatureManager {
         );
     }
 
+}
+
+/**
+ * Return the name of the command registered with the SDM to transform
+ * projects to the ideal state of this feature
+ * @param {FeatureRegistration} feature
+ * @return {string}
+ */
+export function transformToIdealCommandName(feature: FeatureRegistration): string {
+    return `tr-${feature.name.replace(" ", "_")}`;
 }

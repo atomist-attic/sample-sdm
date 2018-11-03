@@ -23,7 +23,7 @@ import {
     PossibleNewIdealFeatureListener,
     rolloutBetterThanIdealFeatureListener
 } from "../PossibleNewIdealFeatureListener";
-import { FeatureManager } from "../FeatureManager";
+import { FeatureManager, transformToIdealCommandName } from "../FeatureManager";
 
 /**
  * Put a button on each project to add the feature when an update
@@ -58,7 +58,7 @@ export function enableButtonRollout(sdm: SoftwareDeliveryMachine, featureManager
                 return rolloutFeatureToDownstreamProjects({
                     feature,
                     valueToUpgradeTo: ideal,
-                    transformCommandName: featureManager.transformToIdealCommandName(feature),
+                    transformCommandName: transformToIdealCommandName(feature),
                     sdm,
                     i: ci,
                 });
