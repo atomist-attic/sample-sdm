@@ -163,7 +163,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         store, featureStore,
         [new SpringBootVersionFeatureRegistration()],
     );
-    enableButtonRollout(sdm, featureManager);
+    enableButtonRollout(featureManager);
 
     const riffDeploy = suggestAction({
         displayName: "Riff Deploy",

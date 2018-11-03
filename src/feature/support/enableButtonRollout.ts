@@ -46,7 +46,7 @@ import {
  * Put a button on each project to add the feature when an update
  * better than the ideal is detected
  */
-export function enableButtonRollout(sdm: SoftwareDeliveryMachine, featureManager: FeatureManager): void {
+export function enableButtonRollout(featureManager: FeatureManager): void {
 
     featureManager.addFeatureListener(
         rolloutBetterThanIdealFeatureListener(featureManager.store, featureManager.featureStore,
@@ -58,7 +58,7 @@ export function enableButtonRollout(sdm: SoftwareDeliveryMachine, featureManager
         const rolloutCommandName = rolloutName(feature);
 
         // Set the ideal and roll out the feature
-        sdm.addCommand<{ storageKey: string }>({
+        featureManager.sdm.addCommand<{ storageKey: string }>({
             name: rolloutCommandName,
             parameters: {
                 storageKey: { description: "Storage key of the version of this feature we want to roll out" },
@@ -76,7 +76,7 @@ export function enableButtonRollout(sdm: SoftwareDeliveryMachine, featureManager
                     feature,
                     valueToUpgradeTo: ideal,
                     transformCommandName: transformToIdealCommandName(feature),
-                    sdm,
+                    sdm: featureManager.sdm,
                     i: ci,
                 });
             }
