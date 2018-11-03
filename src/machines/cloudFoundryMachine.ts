@@ -147,7 +147,7 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         .plan(mavenDeploy).after(buildGoals);
 
     const StagingDeploymentGoals = goals("StagingDeployment")
-        //.plan(artifactGoal).after(checkGoals)
+    //.plan(artifactGoal).after(checkGoals)
         .plan(mavenDeploy).after(buildGoals);
 
     const ProductionDeploymentGoals = goals("ProdDeployment")
@@ -158,10 +158,11 @@ export function codeRules(sdm: SoftwareDeliveryMachine) {
         // Deliberately make this old
         new SpringBootVersionFingerprint("2.0.0")
     );
-    const featureManager = new FeatureManager(store, featureStore,
+    const featureManager = new FeatureManager(sdm,
+        { inspectGoal, pushImpactGoal, fingerprintGoal },
+        store, featureStore,
         [new SpringBootVersionFeatureRegistration()],
     );
-    featureManager.enable(sdm, { inspectGoal, pushImpactGoal, fingerprintGoal });
     enableButtonRollout(sdm, featureManager);
 
     const riffDeploy = suggestAction({

@@ -42,17 +42,6 @@ export class FeatureManager {
 
     private readonly featureListeners: FeatureListener[] = [];
 
-    /**
-     * Add the capabilities of this FeatureManager to the given SDM
-     */
-    public enable(sdm: SoftwareDeliveryMachine, goals: WellKnownGoals = {}): void {
-        sdm.addCodeInspectionCommand(this.listFeaturesCommand());
-        logger.info("Enabling %d features with goals: %j", this.features.length, goals);
-        this.features
-            .filter(f => !!f.convergenceTransform)
-            .forEach(f => this.enableFeature(sdm, f, goals));
-    }
-
     private listFeaturesCommand(): CodeInspectionRegistration<FingerprintData[]> {
         return {
             name: "feature-list",
@@ -74,6 +63,17 @@ export class FeatureManager {
 
     public addFeatureListener(ful: FeatureListener) {
         this.featureListeners.push(ful);
+    }
+
+    /**
+     * Add the capabilities of this FeatureManager to the given SDM
+     */
+    private enable(wellKnownGoals: WellKnownGoals): void {
+        this.sdm.addCodeInspectionCommand(this.listFeaturesCommand());
+        logger.info("Enabling %d features with goals: %j", this.features.length, wellKnownGoals);
+        this.features
+            .filter(f => !!f.convergenceTransform)
+            .forEach(f => this.enableFeature(this.sdm, f, wellKnownGoals));
     }
 
     /**
@@ -151,13 +151,16 @@ export class FeatureManager {
         };
     }
 
-    constructor(public readonly store: Store,
+    constructor(public readonly sdm: SoftwareDeliveryMachine,
+                wellKnownGoals: WellKnownGoals,
+                public readonly store: Store,
                 public readonly featureStore: FeatureStore,
                 public readonly features: FeatureRegistration[],
                 featureListeners: FeatureListener[] = []) {
         featureListeners.forEach(ful =>
             this.addFeatureListener(ful),
         );
+        this.enable(wellKnownGoals);
     }
 
 }
