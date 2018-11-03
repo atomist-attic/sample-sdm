@@ -20,11 +20,13 @@ import { doWithRepos } from "./doWithRepos";
 import { buttonForCommand, FingerprintData, logger, RepoRef, } from "@atomist/automation-client";
 import { ComparisonPolicy, FeatureRegistration, } from "../FeatureRegistration";
 import {
-    FeatureRolloutStrategy, PossibleNewIdealFeatureListener,
+    FeatureRolloutStrategy,
+    PossibleNewIdealFeatureListener,
     rolloutBetterThanIdealFeatureListener
 } from "../FeatureRolloutStrategy";
 import { Store } from "../Store";
 import { FeatureStore } from "../FeatureStore";
+import { FeatureListener } from "../FeatureListener";
 
 export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any> {
 
@@ -34,36 +36,7 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
      * @return {Promise<void>}
      * @constructor
      */
-    private newIdealListener: PossibleNewIdealFeatureListener = async fui => {
-        logger.info("Better than ideal feature %s found: value is %s vs %s. Stored at %s",
-            fui.newValue.name,
-            fui.feature.summary(fui.newValue),
-            fui.feature.summary(fui.ideal),
-            fui.storageKeyOfNewValue);
-        const attachment: Attachment = {
-            text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
-            fallback: "accept feature",
-            actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}` },
-                rolloutName(fui.feature), {
-                    storageKey: fui.storageKeyOfNewValue,
-                }),
-            ],
-        };
-        const message: SlackMessage = {
-            attachments: [attachment],
-        };
-        logger.info("Slack message structure is %j", message);
-        await fui.addressChannels(message);
-    };
-
-
-    /**
-     * Put a button on each project to add the feature
-     * @param {PossibleNewIdealFeatureInvocation<any>} fui
-     * @return {Promise<void>}
-     * @constructor
-     */
-    public listener: PossibleNewIdealFeatureListener =
+    public listener: FeatureListener =
         rolloutBetterThanIdealFeatureListener(this.store, this.featureStore, this.newIdealListener);
 
     public enableFeature(sdm: SoftwareDeliveryMachine, feature: FeatureRegistration, transformCommandName: string) {
@@ -88,6 +61,36 @@ export class ButtonFeatureRolloutStrategy implements FeatureRolloutStrategy<any>
                 });
             }
         });
+    }
+
+    /**
+     * Put a button on each project to add the feature
+     * @param {PossibleNewIdealFeatureInvocation<any>} fui
+     * @return {Promise<void>}
+     * @constructor
+     */
+    private get newIdealListener(): PossibleNewIdealFeatureListener {
+        return async fui => {
+            logger.info("Better than ideal feature %s found: value is %s vs %s. Stored at %s",
+                fui.newValue.name,
+                fui.feature.summary(fui.newValue),
+                fui.feature.summary(fui.ideal),
+                fui.storageKeyOfNewValue);
+            const attachment: Attachment = {
+                text: `Set new ideal for feature *${fui.feature.name}*: ${fui.feature.summary(fui.newValue)} vs existing ${fui.feature.summary(fui.ideal)}`,
+                fallback: "accept feature",
+                actions: [buttonForCommand({ text: `Accept feature ${fui.feature.name}` },
+                    rolloutName(fui.feature), {
+                        storageKey: fui.storageKeyOfNewValue,
+                    }),
+                ],
+            };
+            const message: SlackMessage = {
+                attachments: [attachment],
+            };
+            logger.info("Slack message structure is %j", message);
+            await fui.addressChannels(message);
+        };
     }
 
     /**
