@@ -22,12 +22,12 @@
     "url": "https://github.com/atomist/sample-sdm/issues"
   },
   "dependencies": {
-    "@atomist/automation-client": "^1.0.0-RC.2",
+    "@atomist/automation-client": "^1.7.0",
     "@atomist/automation-client-ext-dashboard": "^1.0.0-RC.1",
     "@atomist/automation-client-ext-eventlog": "^1.0.0-RC.1",
     "@atomist/microgrammar": "^1.0.0-M.4",
-    "@atomist/sdm": "^1.0.0-RC.2",
-    "@atomist/sdm-core": "^1.0.0-RC.2",
+    "@atomist/sdm": "^1.7.0",
+    "@atomist/sdm-core": "^1.7.0",
     "@atomist/sdm-pack-build": "^1.0.0-RC.2",
     "@atomist/sdm-pack-checkstyle": "^1.0.0-RC.2",
     "@atomist/sdm-pack-cloudfoundry": "^1.0.0-RC.2",
@@ -47,7 +47,7 @@
     "winston-logzio": "^1.0.8"
   },
   "devDependencies": {
-    "@atomist/sdm-local": "^1.0.0-RC.2",
+    "@atomist/sdm-local": "^1.2.1",
     "@types/mocha": "^2.2.48",
     "@types/node": "^8.9.5",
     "@types/power-assert": "^1.4.29",
@@ -61,10 +61,10 @@
     "prettier": "^1.11.1",
     "rimraf": "^2.6.2",
     "supervisor": "^0.12.0",
-    "ts-node": "^3.3.0",
-    "tslint": "^5.9.1",
-    "typedoc": "^0.9.0",
-    "typescript": "^2.8.3"
+    "ts-node": "^8.3.0",
+    "tslint": "^5.19.0",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.6.2"
   },
   "directories": {
     "test": "test"
